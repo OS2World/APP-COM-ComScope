@@ -1,0 +1,422 @@
+Microsoft (R) Macro Assembler Version 6.00     		    05/15/03 17:33:45
+MCA.ASM							     Page 1 - 1
+
+
+				;************************************************************************
+				;
+				; $Revision:   1.3  $
+				;
+				; $Log:   P:/archive/comi/mca.asv  $
+				;  
+				;     Rev 1.3   28 Mar 1996 00:20:18   EMMETT
+				;  Added resource manager.  Began work on VDD support.
+				;  
+				;     Rev 1.2   19 Feb 1996 10:37:16   EMMETT
+				;  Added ring zero IDC access for OEM present tests.
+				;  
+				;     Rev 1.1   25 Apr 1995 22:17:00   EMMETT
+				;  Added Support for DigiBoard PC/16.  Changed interrupt Routine for better adapter independence.
+				;  Changed interrupt routine to allow user to select interrupting device selection algorithim.  Fixed
+				;  ABIOS interaction for better "non.INI" initialization in MCA machines.  Fixed various initialization
+				;  message strings.  COMscope and receive buffer are now allocated from system memory, allowing
+				;  a 32k (word) COMscope buffer and a 64k (byte) receive buffer.
+				;  
+				;     Rev 1.0   03 Dec 1994 14:42:50   EMMETT
+				;  Initial archive.  This file consolodates all ABIOS initialization code.
+				;  
+				;************************************************************************
+
+				  IFNDEF x16_BIT
+				.386P
+				  ELSE
+				  ENDIF
+				.NOLISTMACRO                   ;suppress macro expansion in listing
+
+				.XLIST
+				.LIST
+
+ 0000				RES_DATA SEGMENT
+
+				    EXTRN bSharedInterrupts     :WORD
+				  IFNDEF x16_BIT
+				    EXTRN IDCaccessPM           :DWORD
+				    EXTRN IDCaccessPDS          :WORD
+				  ENDIF
+				    EXTRN device_hlp            :DWORD
+				  IFDEF OEM
+				    EXTRN bOEMpresent          :WORD
+				  ENDIF
+
+ 0000				RES_DATA ENDS
+
+ 0000				_DATA SEGMENT
+
+				.XLIST
+				.LIST
+				    EXTRN _szMessage                     :BYTE
+				    EXTRN _bABIOSpresent        :WORD
+				    EXTRN _wLoadCount           :WORD
+
+				    EXTRN _dwPCIvector          :DWORD
+
+				    EXTRN _ADFtable             :WORD
+				    EXTRN _bIsTheFirst          :WORD
+
+				  IFDEF OEM
+				    EXTRN ISA_bad_msg:             BYTE
+				    EXTRN MCA_bad_msg:             BYTE
+				    EXTRN Contact_msg:             BYTE
+				    EXTRN OS_tools_BLURB:  BYTE
+				  ENDIF
+				.LIST
+
+ 0000				_DATA ENDS
+
+ 0000				RES_CODE SEGMENT
+				    ASSUME CS:RCGROUP, ES:nothing, SS:nothing, DS:RDGROUP, GS:DGROUP
+
+				;-------------------------------------------------------------------------------
+				; Initialization procedures are placed after BEGIN_INIT_CODE so they can go
+				; away once initialization has completed.
+				;-------------------------------------------------------------------------------
+
+				    EXTRN PrintString           :NEAR
+
+				;  Test if MCA by testing if the POS device exists.  If no POS device
+				;  exists then interrupts cannot be shared.
+
+				; assume GS = DGROUP
+ 0000				TestMCA PROC USES ax bx cx dx di si
+
+ 0000  50		   *	    push   ax
+ 0001  53		   *	    push   bx
+ 0002  51		   *	    push   cx
+ 0003  52		   *	    push   dx
+ 0004  57		   *	    push   di
+ 0005  56		   *	    push   si
+ 0006  65: C7 06 0000 E		        mov     GS:_bABIOSpresent,TRUE
+       0001
+ 000D  C7 06 0000 E 0000	        mov     bSharedInterrupts,FALSE
+ 0013  33 DB			        xor     bx,bx
+
+ 0015  B0 06			        mov     al,ASYNC_DEV_ID
+ 0017  B6 00			        mov     dh,NON_DMA_DEV
+ 0019  B2 34			        mov     dl,DevHlp_GetLIDEntry
+ 001B  FF 1E 0000 E		        call    device_hlp
+ 001F  72 08			        jc      test_ASYNC_error
+
+ 0021  B2 35			        mov     dl,DevHlp_FreeLIDEntry
+ 0023  FF 1E 0000 E		        call    device_hlp
+ 0027  EB 0E			        jmp     test_bus
+
+ 0029				test_ASYNC_error:
+ 0029  83 F8 03			        cmp     ax,ERROR_ABIOS_NOT_PRESENT
+ 002C  75 09			        jne     test_bus
+ 002E  65: C7 06 0000 E		        mov     GS:_bABIOSpresent,FALSE
+       0000
+ 0035  EB 27			        jmp     exit
+
+ 0037				test_bus:
+ 0037  33 DB			        xor     bx,bx
+ 0039  B0 10			        mov     al,POS_DEV_ID               ;open POS device?
+ 003B  B6 01			        mov     dh,DMA_POS_DEV
+ 003D  B2 34			        mov     dl,DevHlp_GetLIDEntry
+ 003F  FF 1E 0000 E		        call    device_hlp
+ 0043  72 0E			        jc      test_POS_error              ;error?
+ 0045  C7 06 0000 E 0001	        mov     bSharedInterrupts,TRUE     ; if not then a POS device exists
+ 004B  B2 35			        mov     dl,DevHlp_FreeLIDEntry      ;   and interrupts can be shared
+ 004D  FF 1E 0000 E		        call    device_hlp
+ 0051  EB 0B			        jmp     exit
+
+ 0053				test_POS_error:
+ 0053  83 F8 01			        cmp     ax,ERROR_LID_ALREADY_OWNED  ;if already owned then it exists
+ 0056  75 06			        jne     exit
+ 0058  C7 06 0000 E 0001	        mov     bSharedInterrupts,TRUE     ; and interrupts can be shared
+
+ 005E				exit:
+				        ret
+ 005E  5E		   *	    pop    si
+ 005F  5F		   *	    pop    di
+ 0060  5A		   *	    pop    dx
+ 0061  59		   *	    pop    cx
+ 0062  5B		   *	    pop    bx
+ 0063  58		   *	    pop    ax
+ 0064  C3		   *	    ret    00000h
+
+ 0065				TestMCA ENDP
+
+				;WORD GetLIDentry(WORD _far *pwLID);
+
+				; assume DS = DGROUP
+ 0065				GetLIDentry PROC FAR C USES bx dx ds es, pwLID:DWORD
+
+				    SetDS     RDGROUP
+ 0070  B0 06			        mov     al,ASYNC_DEV_ID
+ 0072  B6 00			        mov     dh,NON_DMA_DEV
+ 0074  C4 5E 06			        les     bx,pwLID
+ 0077  26: 8B 1F		        mov     bx,ES:[bx]
+ 007A  B2 34			        mov     dl,DevHlp_GetLIDEntry
+ 007C  FF 1E 0000 E		        call    device_hlp
+ 0080  72 08			        jc      exit
+ 0082  C4 5E 06			        les     bx,pwLID
+ 0085  26: 89 07		        mov     ES:[bx],ax
+ 0088  33 C0			        xor     ax,ax
+ 008A				exit:
+				        ret
+ 008A  07		   *	    pop    es
+ 008B  1F		   *	    pop    ds
+ 008C  5A		   *	    pop    dx
+ 008D  5B		   *	    pop    bx
+ 008E  5D		   *	    pop    bp
+ 008F  CB		   *	    ret    00000h
+
+ 0090				GetLIDentry ENDP ;returns error code or zero if no error
+
+				    IFNDEF x16_BIT
+				;
+				; push count
+				; push dest off
+				; push dest seg
+				; push src off
+				; push src seg
+				; push function
+				;
+ 0090				Ring0Access PROC FAR uses bx cx si di es ds gs
+				;   int 3
+				        LOCAL dwServiceBytes :DWORD
+				    SetDS     RDGROUP
+				    SetGS     DGROUP
+ 00A7  36: 8B 04		        mov     ax,SS:[si]
+ 00AA  83 F8 08			        cmp     ax,TEST_FOR_PCI_BIOS
+ 00AD  0F 85 008E		        jne     test_get_devblk_len
+
+ 00B1  36: 8B 5C 04		        mov     bx,SS:[si + 4]
+ 00B5  36: 8B 44 02		        mov     ax,SS:[si + 2]
+ 00B9  B9 F000			        mov     cx,0f000h
+ 00BC  B6 03			        mov     dh,3
+ 00BE  B2 17			        mov     dl,DevHlp_PhysToUVirt
+ 00C0  FF 1E 0000 E		        call    device_hlp
+ 00C4  0F 82 010F		        jc      exit
+
+ 00C8  8B FB			        mov     di,bx
+ 00CA  65: 89 1E 0000 E		        mov     WORD PTR GS:[_dwPCIvector],bx
+ 00CF  8C C0			        mov     ax,es
+ 00D1  65: A3 0002 E		        mov     WORD PTR GS:[_dwPCIvector + 2],ax
+ 00D5  66| C7 46 FC		        mov     dwServiceBytes,"ICP$"
+       49435024
+ 00DD  66| 8B 46 FC		        mov     eax,dwServiceBytes
+ 00E1  66| 33 DB		        xor     ebx,ebx
+ 00E4  1E			        push    ds
+ 00E5  06			        push    es
+ 00E6  1F			        pop     ds
+ 00E7  65: FF 1E 0000 E		        call    GS:_dwPCIvector
+ 00EC  1F			        pop     ds
+ 00ED  0A C0			        or      al,al
+ 00EF  75 3D			        jnz     no_PCI_BIOS       
+
+ 00F1				set_PCI_BIOS_vector:
+ 00F1  66| 65: 01 16 0000 E	        add     GS:[_dwPCIvector],edx
+ 00F7  B4 B1			        mov     ah,0b1h
+ 00F9  B0 01			        mov     al,001h
+ 00FB  65: FF 1E 0000 E		        call    GS:_dwPCIvector
+ 0100  73 02			        jnc     BIOS_may_be_present
+ 0102  EB 2A			        jmp     no_PCI_BIOS
+
+ 0104				BIOS_may_be_present:
+ 0104  0A C0			        or      al,al
+ 0106  75 26			        jnz     no_PCI_BIOS
+
+ 0108  66| C7 46 FC		        mov     dwServiceBytes," ICP"
+       20494350
+ 0110  66| 8B 56 FC		        mov     edx,dwServiceBytes
+ 0114  C6 46 FC 50		        mov     BYTE PTR dwServiceBytes,'P'
+ 0118  C6 46 FD 43		        mov     BYTE PTR [dwServiceBytes + 1],'C'
+ 011C  C6 46 FE 49		        mov     BYTE PTR [dwServiceBytes + 2],'I'
+ 0120  C6 46 FF 20		        mov     BYTE PTR [dwServiceBytes + 3],' '
+ 0124  66| 3B 56 FC		        cmp     edx,dwServiceBytes
+ 0128  75 04			        jne     no_PCI_BIOS
+
+ 012A				PCI_BIOS_is_viable:
+				;        mov     ax,es
+				;        mov     dh,2
+				;        mov     dl,DevHlp_PhysToUVirt
+				;        call    device_hlp
+ 012A  F8			        clc 
+ 012B  E9 00A9			        jmp     exit
+
+ 012E				no_PCI_BIOS:
+ 012E  8C C0			        mov     ax,es
+ 0130  B6 02			        mov     dh,2
+ 0132  B2 17			        mov     dl,DevHlp_PhysToUVirt
+ 0134  FF 1E 0000 E		        call    device_hlp
+ 0138  B8 0001			        mov     ax,1
+ 013B  F9			        stc
+ 013C  E9 0098			        jmp     exit
+				        
+ 013F				test_get_devblk_len:
+ 013F  83 F8 03			        cmp     ax,GET_DEVBLK_LEN
+ 0142  75 11			        jne     test_addr
+
+ 0144  36: 8B 44 04		        mov     ax,SS:[si + 4]
+ 0148  8E C0			        mov     es,ax
+ 014A  36: 8B 5C 02		        mov     bx,SS:[si + 2]
+
+ 014E  26: 8B 07		        mov     ax,ES:[bx]
+ 0151  F9			        stc
+ 0152  E9 0082			        jmp     exit
+
+ 0155				test_addr:
+ 0155  83 F8 01			        cmp     ax,GET_BASE_ADDR
+ 0158  75 11			        jne     test_get_blocks
+
+ 015A  36: 8B 44 04		        mov     ax,SS:[si + 4]
+ 015E  8E C0			        mov     es,ax
+ 0160  36: 8B 5C 02		        mov     bx,SS:[si + 2]
+
+ 0164  26: 8B 47 0C		        mov     ax,ES:[bx].s_stABIOSdeviceBlock.wDataArea
+ 0168  F9			        stc
+ 0169  EB 6C			        jmp     exit
+
+ 016B				test_get_blocks:
+ 016B  83 F8 05			        cmp     ax,GET_KERNAL_DATA
+ 016E  75 1F			        jne     test_IDC_access_OEM
+
+ 0170  36: 8B 4C 0A		        mov     cx,SS:[si + 10]         ;count
+ 0174  36: 8B 44 08		        mov     ax,SS:[si + 8]          ;destination        
+ 0178  8E C0			        mov     es,ax
+ 017A  36: 8B 7C 06		        mov     di,SS:[si + 6]
+ 017E  36: 8B 44 04		        mov     ax,SS:[si + 4]          ;source
+ 0182  8E D8			        mov     ds,ax
+ 0184  36: 8B 74 02		        mov     si,SS:[si + 2]
+ 0188  8B C1			        mov     ax,cx
+ 018A  F3/ A4			    rep movsb
+ 018C  F9			        stc
+ 018D  EB 48			        jmp     exit
+
+ 018F				test_IDC_access_OEM:
+ 018F  83 F8 06			        cmp     ax,DO_IDC_ACCESS_OEM
+ 0192  75 1F			        jne     test_IDC_access_IRQ
+ 0194  36: 8B 44 04		        mov     ax,SS:[si + 4]
+ 0198  50			        push    ax
+ 0199  36: 8B 44 02		        mov     ax,SS:[si + 2]
+ 019D  50			        push    ax
+ 019E  B8 0000			        mov     ax,ADD_IS_OEM_PRESENT
+ 01A1  50			        push    ax
+ 01A2  1E			        push    ds
+ 01A3  07			        pop     es
+ 01A4  26: 8E 1E 0000 E		        mov     ds,ES:IDCaccessPDS
+ 01A9  26: FF 1E 0000 E		        call    ES:IDCaccessPM
+ 01AE  59			        pop     cx
+ 01AF  59			        pop     cx
+ 01B0  59			        pop     cx      ; popped instead of SUB SP,6 to preserve carry flag
+ 01B1  EB 24			        jmp     exit
+
+ 01B3				test_IDC_access_IRQ:
+ 01B3  83 F8 07			        cmp     ax,DO_IDC_ACCESS_IRQ
+ 01B6  75 1F			        jne     exit
+ 01B8  36: 8B 44 04		        mov     ax,SS:[si + 4]
+ 01BC  50			        push    ax
+ 01BD  36: 8B 44 02		        mov     ax,SS:[si + 2]
+ 01C1  50			        push    ax
+ 01C2  B8 0001			        mov     ax,ADD_MARK_IRQ_USED
+ 01C5  50			        push    ax
+ 01C6  68 ---- R		        push    RDGROUP
+ 01C9  07			        pop     es
+ 01CA  26: 8E 1E 0000 E		        mov     ds,ES:IDCaccessPDS
+ 01CF  26: FF 1E 0000 E		        call    ES:IDCaccessPM
+ 01D4  59			        pop     cx
+ 01D5  59			        pop     cx
+ 01D6  59			        pop     cx      ; popped instead of SUB SP,6 to preserve carry flag
+
+ 01D7				exit:
+				        ret
+ 01D7  0F A9		   *	    pop    gs
+ 01D9  1F		   *	    pop    ds
+ 01DA  07		   *	    pop    es
+ 01DB  5F		   *	    pop    di
+ 01DC  5E		   *	    pop    si
+ 01DD  59		   *	    pop    cx
+ 01DE  5B		   *	    pop    bx
+ 01DF  8B E5		   *	    mov    sp, bp
+ 01E1  5D		   *	    pop    bp
+ 01E2  CB		   *	    ret    00000h
+
+ 01E3				Ring0Access ENDP
+
+				  IFDEF OEM
+
+ 01E3				CheckPOS PROC NEAR USES ax bx cx dx di
+				   ASSUME DS:RDGROUP, GS:DGROUP
+
+ 01E3  50		   *	    push   ax
+ 01E4  53		   *	    push   bx
+ 01E5  51		   *	    push   cx
+ 01E6  52		   *	    push   dx
+ 01E7  57		   *	    push   di
+ 01E8  B9 0008			        mov     cx,08
+ 01EB  BB 0008			        mov     bx,08
+ 01EE				check_loop:
+ 01EE  8A C3			        mov     al,bl
+				        IOdelay di
+ 01F6  E6 96			        out     96h,al
+ 01F8  BA 0100			        mov     dx,100h
+				        InByteDel di
+ 0202  86 C4			        xchg    al,ah
+ 0204  42			        inc     dx
+				        InByteDel di
+ 020C  86 C4			        xchg    al,ah
+
+ 020E  BF 0000 E		        mov     di,OFFSET _ADFtable  ;assume DGROUP - GS = DGROUP
+
+ 0211				search_loop:
+ 0211  65: 83 3D 00		        cmp     WORD PTR GS:[di],ZERO
+ 0215  74 1D			        je      next_slot
+ 0217  65: 3B 05		        cmp     ax,WORD PTR GS:[di]
+ 021A  74 05			        je      found_valid_board
+ 021C  83 C7 02			        add     di,2
+ 021F  EB F0			        jmp     search_loop
+
+ 0221				found_valid_board:
+ 0221  C7 06 0000 E 0001	        mov     bOEMpresent,TRUE
+ 0227  32 C0			        xor     al,al
+				        IOdelay di
+ 022F  E6 96			        out     96h,al
+ 0231  F8			        clc
+ 0232  EB 0F			        jmp     check_POS_exit
+
+ 0234				next_slot:
+ 0234  FE C3			        inc     bl
+ 0236  E2 B6			        loop    check_loop
+
+ 0238  32 C0			        xor     al,al
+				        IOdelay di
+ 0240  E6 96			        out     96h,al
+ 0242  F9			        stc
+
+ 0243				check_POS_exit:
+				        ret
+ 0243  5F		   *	    pop    di
+ 0244  5A		   *	    pop    dx
+ 0245  59		   *	    pop    cx
+ 0246  5B		   *	    pop    bx
+ 0247  58		   *	    pop    ax
+ 0248  C3		   *	    ret    00000h
+
+ 0249				CheckPOS ENDP
+
+ 0249				BadMCAmessage PROC NEAR
+
+ 0249  B8 0000 E		        mov     ax,OFFSET MCA_bad_msg
+ 024C  E8 0000 E		        call    PrintString
+ 024F  B8 0000 E		        mov     ax,OFFSET Contact_msg
+ 0252  E8 0000 E		        call    PrintString
+ 0255  B8 0000 E		        mov     ax,OFFSET OS_tools_BLURB
+ 0258  E8 0000 E		        call    PrintString
+ 025B  C3			        ret
+
+ 025C				BadMCAmessage ENDP
+				  ENDIF
+				   ENDIF ; NOT x16_BIT
+ 025C				RES_CODE ENDS
+
+				  END

@@ -1,0 +1,146 @@
+
+ Start         Length     Name                   Class
+ 0001:00000000 000001F2CH _TEXT                  CODE
+ 0002:00000000 000000880H _DATA                  DATA
+ 0002:00000880 000000000H _INIT_                 INITDATA
+ 0002:00000880 000000000H _INITEND_              INITDATA
+ 0002:00000880 000000000H _EXIT_                 EXITDATA
+ 0002:00000880 000000000H _EXITEND_              EXITDATA
+ 0002:00000880 000000000H CONST                  CONST
+ 0002:00000880 000000088H _BSS                   BSS
+
+  Address         Publics by Name
+
+ 0001:00001BE2  Idle set_terminate(void(*)())
+ 0001:00001CC3  Idle set_unexpected(void(*)())
+ 0001:00001BD8  Idle terminate()
+ 0001:00001CB9  Idle unexpected()
+ 0001:00001D62  Idle __GetPolymorphicDTC(void*,unsigned int)
+ 0001:00001B98       @__InitExceptBlock
+ 0001:0000139A  Idle _AdjustConfigSys
+ 0001:00000F85  Idle _AppendHLP
+ 0001:00000F05  Idle _AppendINI
+ 0001:00001005  Idle _AppendPath
+ 0001:00000E85  Idle _AppendTMP
+ 0001:0000110B  Idle _AppendTripleDS
+ 0001:00000BCC  Idle _ASCIItoBin
+ 0001:00000175  Idle _atoi
+ 0001:00000110       _atol
+ 0001:00000E13  Idle _CenterDlgBox
+ 0001:00000DA8  Idle _CheckButton
+ 0001:00000C93  Idle _Checked
+ 0001:00001948  Idle _CleanConfigSys
+ 0001:00000DD4  Idle _ControlEnable
+ 0001:00001279  Idle _FindLineWith
+ 0001:00000B10  Idle _GetFileName
+ 0001:00000D63  Idle _GetLongIntDlgItem
+ 0001:000010D9  Idle _MakeDeviceName
+ 0001:00000A94       _memcpy
+ 0001:00000ABC       _memset
+ 0001:00000D11  Idle _MenuItemCheck
+ 0001:00000CBF  Idle _MenuItemEnable
+ 0001:00000DF5  Idle _MessageBox
+ 0001:00001135  Idle _ReadConfigSys
+ 0001:00000BB0  Idle _RemoveSpaces
+ 0001:00001043  Idle _SetSystemMenu
+ 0001:00000A04       _sprintf
+ 0001:00000AEC       _strlen
+ 0001:00000A30       _strnicmp
+ 0001:00000000  Idle __acrtused
+ 0002:0000002B  Idle __c0_heaps
+ 0002:0000002F  Idle __c0_nheaps
+ 0002:0000084C  Idle __DebuggerHookData
+ 0002:00000884       __DestructorCountPtr
+ 0001:00001F20       __dllmain
+ 0001:00001D9E       __ExceptInit
+ 0002:00000848  Idle __ExceptVarsSize
+ 0001:00001D8E       __GetExceptDLLinfo
+ 0001:00001EE2  Idle __GetExceptDLLinfoInternal
+ 0002:00000050  Idle __os2hmod
+ 0001:00001C08  Idle ___call_terminate
+ 0001:00001CE9  Idle ___call_unexpected
+ 0002:000007E4  Idle ___CPPexceptionList
+ 0002:000007F4  Idle ___debuggerHookDataP
+ 0002:000007EC  Idle ___debuggerHookFN
+ 0002:000007F0  Idle ___debuggerWatchingP
+ 0002:000007E8  Idle ___exceptFlags
+ 0002:00000810  Idle ___exceptMemAllocVars
+ 0002:0000080C  Idle ___exceptStaticBuffP
+ 0002:00000888  Idle ___ExceptStaticXbuff
+ 0002:0000003B       ___isDLL
+ 0001:00000060       ___longtoa
+ 0002:000007F8  Idle ___terminatePTR
+ 0002:00000808  Idle ___throwExceptionName
+ 0002:00000800  Idle ___throwFileName
+ 0002:00000804  Idle ___throwLineNumber
+ 0002:000007FC  Idle ___unexpectdPTR
+ 0001:000000E9  Idle ___utoa
+ 0001:0000022D       ___vprinter
+
+  Address         Publics by Value
+
+ 0001:00000000  Idle __acrtused
+ 0001:00000060       ___longtoa
+ 0001:000000E9  Idle ___utoa
+ 0001:00000110       _atol
+ 0001:00000175  Idle _atoi
+ 0001:0000022D       ___vprinter
+ 0001:00000A04       _sprintf
+ 0001:00000A30       _strnicmp
+ 0001:00000A94       _memcpy
+ 0001:00000ABC       _memset
+ 0001:00000AEC       _strlen
+ 0001:00000B10  Idle _GetFileName
+ 0001:00000BB0  Idle _RemoveSpaces
+ 0001:00000BCC  Idle _ASCIItoBin
+ 0001:00000C93  Idle _Checked
+ 0001:00000CBF  Idle _MenuItemEnable
+ 0001:00000D11  Idle _MenuItemCheck
+ 0001:00000D63  Idle _GetLongIntDlgItem
+ 0001:00000DA8  Idle _CheckButton
+ 0001:00000DD4  Idle _ControlEnable
+ 0001:00000DF5  Idle _MessageBox
+ 0001:00000E13  Idle _CenterDlgBox
+ 0001:00000E85  Idle _AppendTMP
+ 0001:00000F05  Idle _AppendINI
+ 0001:00000F85  Idle _AppendHLP
+ 0001:00001005  Idle _AppendPath
+ 0001:00001043  Idle _SetSystemMenu
+ 0001:000010D9  Idle _MakeDeviceName
+ 0001:0000110B  Idle _AppendTripleDS
+ 0001:00001135  Idle _ReadConfigSys
+ 0001:00001279  Idle _FindLineWith
+ 0001:0000139A  Idle _AdjustConfigSys
+ 0001:00001948  Idle _CleanConfigSys
+ 0001:00001B98       @__InitExceptBlock
+ 0001:00001BD8  Idle terminate()
+ 0001:00001BE2  Idle set_terminate(void(*)())
+ 0001:00001C08  Idle ___call_terminate
+ 0001:00001CB9  Idle unexpected()
+ 0001:00001CC3  Idle set_unexpected(void(*)())
+ 0001:00001CE9  Idle ___call_unexpected
+ 0001:00001D62  Idle __GetPolymorphicDTC(void*,unsigned int)
+ 0001:00001D8E       __GetExceptDLLinfo
+ 0001:00001D9E       __ExceptInit
+ 0001:00001EE2  Idle __GetExceptDLLinfoInternal
+ 0001:00001F20       __dllmain
+ 0002:0000002B  Idle __c0_heaps
+ 0002:0000002F  Idle __c0_nheaps
+ 0002:0000003B       ___isDLL
+ 0002:00000050  Idle __os2hmod
+ 0002:000007E4  Idle ___CPPexceptionList
+ 0002:000007E8  Idle ___exceptFlags
+ 0002:000007EC  Idle ___debuggerHookFN
+ 0002:000007F0  Idle ___debuggerWatchingP
+ 0002:000007F4  Idle ___debuggerHookDataP
+ 0002:000007F8  Idle ___terminatePTR
+ 0002:000007FC  Idle ___unexpectdPTR
+ 0002:00000800  Idle ___throwFileName
+ 0002:00000804  Idle ___throwLineNumber
+ 0002:00000808  Idle ___throwExceptionName
+ 0002:0000080C  Idle ___exceptStaticBuffP
+ 0002:00000810  Idle ___exceptMemAllocVars
+ 0002:00000848  Idle __ExceptVarsSize
+ 0002:0000084C  Idle __DebuggerHookData
+ 0002:00000884       __DestructorCountPtr
+ 0002:00000888  Idle ___ExceptStaticXbuff

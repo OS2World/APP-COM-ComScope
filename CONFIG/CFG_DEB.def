@@ -1,0 +1,13 @@
+LIBRARY CFG_DEB INITGLOBAL TERMGLOBAL
+
+DESCRIPTION 'OS/tools COMi configuration library'
+PROTMODE
+
+EXPORTS
+  GetDriverVersion
+  InstallDevice
+  FillDeviceNameList
+  PortSelectDialog
+  GetPortConfig
+  SpoolerSetupDialog
+

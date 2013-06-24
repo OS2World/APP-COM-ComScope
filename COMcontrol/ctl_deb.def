@@ -1,0 +1,14 @@
+LIBRARY CTL_DEB
+
+DESCRIPTION 'OS/tools COM control library (debug)'
+
+EXPORTS
+  HdwFilterDialog
+  HdwFIFOsetupDialog
+  HdwHandshakeDialog
+  HdwTimeoutDialog
+  HdwBaudRateDialog
+  HdwProtocolDialog
+;  SpoolerSetupDialog
+
+

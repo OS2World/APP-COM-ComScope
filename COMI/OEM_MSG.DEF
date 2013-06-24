@@ -1,0 +1,193 @@
+;************************************************************************
+;
+; $Revision:   1.2  $
+;
+; $Log:   P:/archive/comi/OEM_MSG.DEV  $
+;
+;   Rev 1.2   19 Feb 1996 11:33:58   EMMETT
+;Added strings for DFLEX and Globetek OEMs
+;
+;   Rev 1.1   25 Apr 1995 22:01:56   EMMETT
+;Added support for DigiBoard PC/16.  Changed .INI file format to accomodate
+;16 ports per load.  Changed interrupt routine to allow user to select device
+;selection algorithim.  Fixed ABIOS interaction for better "non-.INI" initialization
+;on MCA machines.
+;
+;   Rev 1.0   07 Jun 1994 00:19:26   EMMETT
+;Added support for DigiBoard.
+;Added initialization support for OEM specific loads.
+;Fixed bug in StartWriteStream and ProcessModemSignals that caused handshaking problems.
+;Fixed hardware tests to set baud rate before testing interrupts.
+;Fixed hardware tests off switch to work only for retail version.
+;
+;************************************************************************
+
+;   OEM_MSG.DEF
+
+;   This file contains OEM initialization messages
+
+Other_ISA_bad_msg       BYTE "[1mThis device driver will work only when an interrupt sharing adapter board",0dh,0ah
+                        BYTE "is installed in this machine and ""connected"" to the first load of this",0dh,0ah
+                        BYTE "device driver.  See COMi documentation for configuration information.[0m",0dh,0ah,0
+
+Other_MCA_bad_msg       BYTE 0dh,0ah,"[1mThis device driver will work only when a supported OEM serial adapter",0dh,0ah
+                        BYTE "is installed in any slot.  See documentation for a list of supported boards.[0m",0dh,0ah,0
+
+Other_BLURB             BYTE 0dh,0ah,"[1mFor information on Asynchronous Serial adapters supported contact us at:[0m",0dh,0ah,0dh,0ah,0
+
+_chWrongOEM_ss          BYTE 0dh,0ah,07h,"[1mThe first, and only, load of this device driver must be to access a serial%nadapter by %s.%n"
+                        BYTE "Use INSTALL or COMscope to define %s adapter.%n[0m",0
+  IFDEF Quatech
+_chCompanyName          BYTE "Quatech Incorporated",0
+_chAdapterName          BYTE "a Quatech",0
+ISA_bad_msg             BYTE "[1mThis device driver will work only when a Quatech Incorporated serial adapter",0dh,0ah
+                        BYTE "is: 1) installed in this machine, 2) ""connected"" to the first load of this",0dh,0ah
+                        BYTE "device driver, and 3) correctly configured.  See documentation for",0dh,0ah
+                        BYTE "configuration information.[0m",0dh,0ah,0
+
+MCA_bad_msg             BYTE 0dh,0ah,"[1mThis device driver will work only when a supported Quatech Incorporated adapter",0dh,0ah
+                        BYTE "is installed in any slot.  See documentation for a list of supported boards.[0m",0dh,0ah,0
+
+Contact_msg             BYTE 0dh,0ah,"[1mFor information on Quatech Asynchronous Serial adapter boards contact:",0dh,0ah,0dh,0ah
+                        BYTE "Quatech Incorporated",0dh,0ah
+                        BYTE "Akron, Ohio",0dh,0ah
+                        BYTE "(216)434-3154[0m",0dh,0ah,0dh,0ah,0
+
+  ELSEIFDEF Neotech
+_chCompanyName          BYTE "Neotech Incorporated.",0
+_chAdapterName          BYTE "a Neotech",0
+MCA_bad_msg             BYTE 0dh,0ah,"[1mThis device driver will work only when a supported Neotech serial adapter",0dh,0ah
+                        BYTE "is installed in any slot.[0m",0dh,0ah,0
+
+ISA_bad_msg             BYTE "[1mThis version of the COMi device driver will not work in an ISA machine with "
+                        BYTE "Noetech serial adapters.[0m",0dh,0ah,0
+
+Contact_msg             BYTE 0dh,0ah,"[1mFor information on Neotech Asynchronous Serial adapter boards contact:",0dh,0ah
+                        BYTE "Neotech Incorporated",0dh,0ah
+                        BYTE "Solon, Ohio",0dh,0ah
+                        BYTE "(800)552-1552[0m",0dh,0ah,0
+
+  ELSEIFDEF Sealevel
+_chCompanyName          BYTE "Sealevel Systems",0
+_chAdapterName          BYTE "a Sealevel",0
+Adapter_limit_msg       BYTE "[1mThis device driver will support one Sealevel Systems' serial adapter (up to", 0dh,0ah
+                        BYTE "four ports).  For information on how to support multiple adapters and/or for",0dh,0ah
+                        BYTE "support for more than four ports please, contact OS/tools or Sealevel Systems.[0m",0ah,0dh,0
+
+ISA_bad_msg             BYTE "[1mThis device driver will work only when a Sealevel Systems serial adapter",0dh,0ah
+                        BYTE "is installed in this machine and ""connected"" to the first load of this",0dh,0ah
+                        BYTE "device driver.  See Sealevel documentation for configuration information.[0m",0dh,0ah,0
+
+MCA_bad_msg             BYTE 0dh,0ah,"[1mThis device driver will not work in an MCA machine and is intended for use",0dh,0ah
+                        BYTE "with Sealevel Systems' COMM+4 and TURBO COMM+8 serial adapters in ISA machines.[0m",0dh,0ah,0
+
+Contact_msg             BYTE 0dh,0ah,"[1mFor information on Sealevel Systems serial adapter boards contact:",0dh,0ah,0dh,0ah
+                        BYTE "Sealevel Systems Inc.",0dh,0ah
+                        BYTE "Liberty, South Carolina",0dh,0ah
+                        BYTE "(803)843-4343[0m",0dh,0ah,0dh,0ah,0
+
+  ELSEIFDEF Comtrol
+_chCompanyName          BYTE "Comtrol Corporation",0
+_chAdapterName          BYTE "a Comtrol",0
+Adapter_limit_msg       BYTE "[1mThis device driver will support one Comtrol serial adapter (up to four", 0dh,0ah
+                        BYTE "ports).  For information on how to support multiple adapters and/or for",0dh,0ah
+                        BYTE "support for more than four ports, please contact OS/tools or Comtrol.[0m",0ah,0dh,0
+
+ISA_bad_msg             BYTE "[1mThis device driver will work only when a Comtrol Corporation serial adapter",0dh,0ah
+                        BYTE "is installed in this machine and ""connected"" to the first load of this",0dh,0ah
+                        BYTE "device driver.  See Comtrol documentation for configuration information.[0m",0dh,0ah,0
+
+MCA_bad_msg             BYTE "[1mThis device driver will work only when a supported Comtrol Corporation adapter",0dh,0ah
+                        BYTE "is installed in any slot.  See documentation for a list of supported boards.[0m",0dh,0ah,0
+
+Contact_msg             BYTE "[1mFor information on Comtrol Asynchronous Serial adapter boards contact:",0dh,0ah,0dh,0ah
+                        BYTE "Comtrol Corporation",0dh,0ah
+                        BYTE "St. Paul, Minnesota",0dh,0ah
+                        BYTE "(612)631-7654[0m",0dh,0ah,0dh,0ah,0
+
+  ELSEIFDEF ConnecTech
+_chCompanyName          BYTE "Connect Tech Incorporated",0
+_chAdapterName          BYTE "a Connect Tech",0
+Adapter_limit_msg       BYTE "[1mThis device driver will support one Connect Tech serial adapter (up to four", 0dh,0ah
+                        BYTE "ports).  For information on how to support multiple adapters and/or for support",0dh,0ah
+                        BYTE "for more than four ports, please contact OS/tools or Connect Tech.[0m",0ah,0dh,0
+
+ISA_bad_msg             BYTE "[1mThis device driver will work only when a Connect Tech DFLEX serial adapter",0dh,0ah
+                        BYTE "is installed in this machine and ""connected"" to the first load of this",0dh,0ah
+                        BYTE "device driver.  See Connect Tech documentation for configuration information.[0m",0dh,0ah,0
+
+MCA_bad_msg             BYTE "[1mThis device driver will work only when a supported Connect Tech adapter",0dh,0ah
+                        BYTE "is installed in any slot.  See documentation for a list of supported adapters.[0m",0dh,0ah,0
+
+Contact_msg             BYTE "[1mFor information on Connect Tech Asynchronous Serial adapters contact:",0dh,0ah,0dh,0ah
+                        BYTE "Connect Tech Incorporated",0dh,0ah
+                        BYTE "Guelth, Ontario, Canada",0dh,0ah
+                        BYTE "(519)836-1291[0m",0dh,0ah,0dh,0ah,0
+
+  ELSEIFDEF Globetek
+_chCompanyName          BYTE "Globetek Incorporated",0
+_chAdapterName          BYTE "a Globetek",0
+Adapter_limit_msg       BYTE "[1mThis device driver will support one Globetek serial adapter (up to four", 0dh,0ah
+                        BYTE "ports).  For information on how to support multiple adapters and/or for",0dh,0ah
+                        BYTE "support for more than four ports, please contact OS/tools or Globetek.[0m",0ah,0dh,0
+
+ISA_bad_msg             BYTE "[1mThis device driver will work only when a Globetek Incorporated serial adapter",0dh,0ah
+                        BYTE "is installed in this machine and ""connected"" to the first load of this",0dh,0ah
+                        BYTE "device driver.  See Globetek documentation for configuration information.[0m",0dh,0ah,0
+
+MCA_bad_msg             BYTE "[1mThis device driver will work only when a supported Globetek serial adapter",0dh,0ah
+                        BYTE "is installed in any slot.  See documentation for a list of supported boards.[0m",0dh,0ah,0
+
+Contact_msg             BYTE "[1mFor information on Globetek Asynchronous Serial adapters contact:",0dh,0ah,0dh,0ah
+                        BYTE "Globetek Incorporated",0dh,0ah
+                        BYTE "Broadview, Ohio",0dh,0ah
+                        BYTE "(800)229-4640[0m",0dh,0ah,0dh,0ah,0
+
+  ELSEIFDEF Moxa
+_chCompanyName          BYTE "Moxa Incorporated",0
+_chAdapterName          BYTE "a Moxa",0
+Adapter_limit_msg       BYTE "[1mThis device driver will support one Moxa serial adapter (up to four", 0dh,0ah
+                        BYTE "ports).  For information on how to support multiple adapters and/or for",0dh,0ah
+                        BYTE "support for more than four ports, please contact OS/tools or Moxa.[0m",0ah,0dh,0
+
+ISA_bad_msg             BYTE "[1mThis device driver will work only when a Moxa Incorporated serial adapter",0dh,0ah
+                        BYTE "is installed in this machine and ""connected"" to the first load of this",0dh,0ah
+                        BYTE "device driver.  See Moxa documentation for configuration information.[0m",0dh,0ah,0
+
+MCA_bad_msg             BYTE "[1mThis device driver will work only when a supported Moxa serial adapter",0dh,0ah
+                        BYTE "is installed in any slot.  See documentation for a list of supported boards.[0m",0dh,0ah,0
+
+Contact_msg             BYTE "[1mFor information on Moxa Asynchronous Serial adapters contact:",0dh,0ah,0dh,0ah
+                        BYTE "Moxa Incorporated",0dh,0ah
+                        BYTE "Broadview, Ohio",0dh,0ah
+                        BYTE "(800)229-4640[0m",0dh,0ah,0dh,0ah,0
+
+  ELSEIFDEF DigiBoard
+_chCompanyName          BYTE "DigiBoard",0
+_chAdapterName          BYTE "a DigiBoard",0
+Adapter_limit_msg       BYTE "[1mThis device driver will support one DigiBoard serial adapter (up to four", 0dh,0ah
+                        BYTE "ports).  For information on how to support multiple adapters and/or for",0dh,0ah
+                        BYTE "support for more than four ports, please contact OS/tools or DigiBoard.[0m",0ah,0dh,0
+
+ISA_bad_msg             BYTE "[1mThis device driver will work only when a DigiBoard serial adapter",0dh,0ah
+                        BYTE "is installed in this machine and ""connected"" to a previous load of this",0dh,0ah
+                        BYTE "device driver.  See DigiBoard documentation for configuration information.[0m",0dh,0ah,0
+
+MCA_bad_msg             BYTE 0dh,0ah,"[1mThis device driver will work only when a supported DigiBoard MCA adapter",0dh,0ah
+                        BYTE "is installed in any slot.[0m",0dh,0ah,0
+
+Contact_msg             BYTE 0dh,0ah,"[1mFor information on DigiBoard serial adapter boards contact:",0dh,0ah,0dh,0ah
+                        BYTE "DigiBoard",0dh,0ah
+                        BYTE "Eden Prairie, Minnesota",0dh,0ah
+                        BYTE "(612)943-9020[0m",0dh,0ah,0dh,0ah,0
+  ELSE
+Adapter_limit_msg       BYTE "[1mThis OEM device driver can control a single serial adapter and up to four",0dh,0ah
+                        BYTE "ports.  Please contact the supplier of this software or OS/tools for information",0dh,0ah
+                        BYTE "on support for additional adapters and/or more than four ports.[0m",0dh,0ah,0dh,0ah,0
+
+  ENDIF
+
+OS_tools_BLURB          BYTE 0dh,0ah,"[1mFor information on other versions of this device driver contact:",0dh,0ah
+                        BYTE "OS/tools Incorporated",0dh,0ah
+                        BYTE "San Jose, California",0dh,0ah
+                        BYTE "(408)269-9411[0m",0dh,0ah,0

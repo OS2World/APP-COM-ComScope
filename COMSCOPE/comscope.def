@@ -1,0 +1,10 @@
+NAME    COMscope WINDOWAPI
+
+DESCRIPTION 'OS/2 Presentation Manager COMscope'
+
+DATA    MULTIPLE
+
+STACKSIZE   0xc000
+
+PROTMODE
+

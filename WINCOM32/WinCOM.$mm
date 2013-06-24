@@ -1,0 +1,154 @@
+:TARGET.SUFFIXES
+:TARGET.SUFFIXES
+:DEPENDENCY..c .obj 
+:TARGET.all
+:DEPENDENCY.
+.\WinCOM.exe
+:RULE..c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Fo$*.obj /DDEBUG=1 /Sd /Ss /Q /Wall /Tx /Fi /Si /Gh /Ti /W2 /Gm /Gd /Gs /Tm /Ms /Gf /Gi /Ft- /Gu /C %s
+:RULE.{P:\WINCOM32}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Fo$*.obj /DDEBUG=1 /Sd /Ss /Q /Wall /Tx /Fi /Si /Gh /Ti /W2 /Gm /Gd /Gs /Tm /Ms /Gf /Gi /Ft- /Gu /C %s
+:TARGET..\WinCOM.exe
+:DEPENDENCY.
+.\util.obj
+.\wincom.obj
+.\comm.obj
+.\dialog.obj
+.\init.obj
+.\strtrans.obj
+.\terminal.obj
+.\thread.obj
+P:\WINCOM32\WINCOM32.Res
+{$(LIB)}OS2LS_UT.lib
+{$(LIB)}OS2LS_IO.lib
+{$(LIB)}WinCOM.def
+WinCOM.mak
+:ACTION.Link::Linker
+:COMMAND.
+icc.exe @<<
+ /Q /B" /de /dbgpack /pmtype:pm /nop      /m /l"
+ /FeWinCOM.exe 
+ OS2LS_UT.lib 
+ OS2LS_IO.lib 
+ WinCOM.def
+ .\util.obj
+ .\wincom.obj
+ .\comm.obj
+ .\dialog.obj
+ .\init.obj
+ .\strtrans.obj
+ .\terminal.obj
+ .\thread.obj
+<<
+:ACTION.Bind::Resource Bind
+:COMMAND.
+rc.exe P:\WINCOM32\WINCOM32.Res WinCOM.exe
+:TARGET..\util.obj
+:DEPENDENCY.
+P:\WINCOM32\util.c
+{P:\WINCOM32;$(INCLUDE);}wCommon.h
+{P:\WINCOM32;$(INCLUDE);}dialog.h
+{P:\WINCOM32;$(INCLUDE);}COMDD.H
+{P:\WINCOM32;$(INCLUDE);}Utility.h
+{P:\WINCOM32;$(INCLUDE);}IOCtl.h
+{P:\WINCOM32;$(INCLUDE);}Profile.h
+{P:\WINCOM32;$(INCLUDE);}COMcontrol.h
+{P:\WINCOM32;$(INCLUDE);}Config.h
+{P:\WINCOM32;$(INCLUDE);}WinCOM.h
+WinCOM.mak
+:TARGET..\thread.obj
+:DEPENDENCY.
+P:\WINCOM32\thread.c
+{P:\WINCOM32;$(INCLUDE);}wCommon.h
+{P:\WINCOM32;$(INCLUDE);}dialog.h
+{P:\WINCOM32;$(INCLUDE);}COMDD.H
+{P:\WINCOM32;$(INCLUDE);}Utility.h
+{P:\WINCOM32;$(INCLUDE);}IOCtl.h
+{P:\WINCOM32;$(INCLUDE);}Profile.h
+{P:\WINCOM32;$(INCLUDE);}COMcontrol.h
+{P:\WINCOM32;$(INCLUDE);}Config.h
+{P:\WINCOM32;$(INCLUDE);}WinCOM.h
+WinCOM.mak
+:TARGET..\terminal.obj
+:DEPENDENCY.
+P:\WINCOM32\terminal.c
+{P:\WINCOM32;$(INCLUDE);}wCommon.h
+{P:\WINCOM32;$(INCLUDE);}COMDD.H
+{P:\WINCOM32;$(INCLUDE);}Utility.h
+{P:\WINCOM32;$(INCLUDE);}IOCtl.h
+{P:\WINCOM32;$(INCLUDE);}Profile.h
+{P:\WINCOM32;$(INCLUDE);}COMcontrol.h
+{P:\WINCOM32;$(INCLUDE);}Config.h
+{P:\WINCOM32;$(INCLUDE);}WinCOM.h
+WinCOM.mak
+:TARGET..\strtrans.obj
+:DEPENDENCY.
+P:\WINCOM32\strtrans.c
+{P:\WINCOM32;$(INCLUDE);}wCommon.h
+{P:\WINCOM32;$(INCLUDE);}dialog.h
+{P:\WINCOM32;$(INCLUDE);}COMDD.H
+{P:\WINCOM32;$(INCLUDE);}Utility.h
+{P:\WINCOM32;$(INCLUDE);}IOCtl.h
+{P:\WINCOM32;$(INCLUDE);}Profile.h
+{P:\WINCOM32;$(INCLUDE);}COMcontrol.h
+{P:\WINCOM32;$(INCLUDE);}Config.h
+{P:\WINCOM32;$(INCLUDE);}WinCOM.h
+WinCOM.mak
+:TARGET..\init.obj
+:DEPENDENCY.
+P:\WINCOM32\init.c
+{P:\WINCOM32;$(INCLUDE);}wCommon.h
+{P:\WINCOM32;$(INCLUDE);}dialog.h
+{P:\WINCOM32;$(INCLUDE);}COMDD.H
+{P:\WINCOM32;$(INCLUDE);}Utility.h
+{P:\WINCOM32;$(INCLUDE);}IOCtl.h
+{P:\WINCOM32;$(INCLUDE);}Profile.h
+{P:\WINCOM32;$(INCLUDE);}COMcontrol.h
+{P:\WINCOM32;$(INCLUDE);}Config.h
+{P:\WINCOM32;$(INCLUDE);}WinCOM.h
+WinCOM.mak
+:TARGET..\dialog.obj
+:DEPENDENCY.
+P:\WINCOM32\dialog.c
+{P:\WINCOM32;$(INCLUDE);}wCommon.h
+{P:\WINCOM32;$(INCLUDE);}usermsg.h
+{P:\WINCOM32;$(INCLUDE);}dialog.h
+{P:\WINCOM32;$(INCLUDE);}COMDD.H
+{P:\WINCOM32;$(INCLUDE);}Utility.h
+{P:\WINCOM32;$(INCLUDE);}IOCtl.h
+{P:\WINCOM32;$(INCLUDE);}Profile.h
+{P:\WINCOM32;$(INCLUDE);}COMcontrol.h
+{P:\WINCOM32;$(INCLUDE);}Config.h
+{P:\WINCOM32;$(INCLUDE);}WinCOM.h
+{P:\WINCOM32;$(INCLUDE);}atom.h
+WinCOM.mak
+:TARGET..\comm.obj
+:DEPENDENCY.
+P:\WINCOM32\comm.c
+{P:\WINCOM32;$(INCLUDE);}wCommon.h
+{P:\WINCOM32;$(INCLUDE);}COMDD.H
+{P:\WINCOM32;$(INCLUDE);}Utility.h
+{P:\WINCOM32;$(INCLUDE);}IOCtl.h
+{P:\WINCOM32;$(INCLUDE);}Profile.h
+{P:\WINCOM32;$(INCLUDE);}COMcontrol.h
+{P:\WINCOM32;$(INCLUDE);}Config.h
+{P:\WINCOM32;$(INCLUDE);}WinCOM.h
+WinCOM.mak
+:TARGET..\wincom.obj
+:DEPENDENCY.
+P:\WINCOM32\wincom.c
+{P:\WINCOM32;$(INCLUDE);}wCommon.h
+{P:\WINCOM32;$(INCLUDE);}usermsg.h
+{P:\WINCOM32;$(INCLUDE);}dialog.h
+{P:\WINCOM32;$(INCLUDE);}COMDD.H
+{P:\WINCOM32;$(INCLUDE);}Utility.h
+{P:\WINCOM32;$(INCLUDE);}IOCtl.h
+{P:\WINCOM32;$(INCLUDE);}Profile.h
+{P:\WINCOM32;$(INCLUDE);}COMcontrol.h
+{P:\WINCOM32;$(INCLUDE);}Config.h
+{P:\WINCOM32;$(INCLUDE);}WinCOM.h
+WinCOM.mak

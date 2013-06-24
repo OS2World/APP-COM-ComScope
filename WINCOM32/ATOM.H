@@ -1,0 +1,27 @@
+#define ATM_B115200      3625
+#define ATM_B57600       3624
+#define ATM_B38400       3623
+#define ATM_B19200       3622
+#define ATM_B9600        3621
+#define ATM_B7200        3620
+#define ATM_B4800        3619
+#define ATM_B3600        3618
+#define ATM_B2400        3617
+#define ATM_B1200        3616
+#define ATM_B600         3615
+#define ATM_B300         3614
+#define ATM_B150         3613
+#define ATM_B110         3612
+#define ATM_B75          3611
+#define ATM_B50          3610
+#define ATM_LINEWRT      3609
+#define ATM_LINERD       3608
+#define ATM_DCBWRT       3607
+#define ATM_DCBRD        3606
+#define ATM_BAUDWRT      3605
+#define ATM_BAUDRD       3604
+#define ATM_FXOFF        3603
+#define ATM_FXON         3602
+#define ATM_MDMGET       3601
+#define ATM_MDMSET       3600
+

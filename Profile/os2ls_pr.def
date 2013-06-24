@@ -1,0 +1,16 @@
+LIBRARY    OS2LS_PR
+
+DESCRIPTION 'OS/tools Profile Access Library'
+
+EXPORTS
+  ManageProfile
+  InitializeProfile
+  CloseProfile
+  SaveProfileString
+  GetProfileString
+  SaveProfileData
+  GetProfileData
+  GetProfileWindowPos
+  SaveProfileWindowPos
+
+

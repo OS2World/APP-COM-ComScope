@@ -1,0 +1,10 @@
+#define OEM_OTHER               0
+#define OEM_SEALEVEL         1
+#define OEM_COMTROL          2
+#define OEM_DIGIBOARD08    3
+#define OEM_QUATECH          4
+#define OEM_DIGIBOARD16    5
+#define OEM_NEOTECH          6
+#define OEM_CONNECTECH   7
+#define OEM_GLOBETEK        8
+

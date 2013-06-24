@@ -1,0 +1,48 @@
+LIBRARY    UTIL_DEB INITINSTANCE TERMINSTANCE
+
+DESCRIPTION 'OS/tools Utilities library (multi-threaded)'
+
+PROTMODE
+DATA MULTIPLE NONSHARED READWRITE LOADONCALL
+CODE    LOADONCALL
+
+EXPORTS
+
+; OS/tools utility functions
+
+  MakeDeviceName
+  RemoveSpaces
+  ASCIItoBin
+  AppendTMP
+  AppendHLP
+  AppendINI
+  AppendTripleDS
+  GetFileName
+
+  Checked
+  CheckButton
+  ControlEnable
+  CenterDlgBox
+  MessageBox
+  MenuItemEnable
+  MenuItemCheck
+  GetLongIntDlgItem
+  RemoveSystemMenuItem
+  AppendPath
+
+  CleanConfigSys
+  AdjustConfigSys
+  AdjustConfigFile
+
+  RemoveListItem
+  DestroyList
+  GetNextListItem
+  AddListItem
+  InitializeList
+  FindListByteItem
+  FindListLongItem
+  FindListWordItem
+  FindListStringItem
+  RemoveLeadingSpaces
+
+

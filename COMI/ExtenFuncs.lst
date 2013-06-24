@@ -1,0 +1,314 @@
+Microsoft (R) Macro Assembler Version 6.00     		    05/15/03 17:33:39
+ExtenFuncs.asm						     Page 1 - 1
+
+
+				;************************************************************************
+				;
+				; $Revision:   1.1  $
+				;
+				; $Log:   P:/archive/comi/ExtenFuncs.asv  $
+				;
+				;     Rev 1.1   28 Mar 1996 00:19:16   EMMETT
+				;  Added resource manager.  Began work on VDD support.
+				;
+				;     Rev 1.0   18 Feb 1996 14:16:00   EMMETT
+				;  Added many features.  Notably:
+				;  Tracing application DosDevIOCtl function calls and packets.
+				;  Support for 16650 and 16750 UARTs.
+				;  Streamlined interrupt routine.
+				;
+				;************************************************************************
+
+				.386P
+				.NOLISTMACRO                   ;suppress macro expansion in listing
+
+				.XLIST                       ;Suppress listing of files
+				.LIST
+
+
+				; label for this load's addressability
+
+ 0000				nDDAttachFunction LABEL NEAR
+
+				; DS = this load's data segment
+				; ES = calling load's data segment
+				; param 1 = function
+				; param 2 = modifier
+				; param 3 = offset to calling load's IDC data area
+
+				; return data is in AX if negative response
+
+				; positive response data is in IDCdata of calling load
+
+				; NOTE:
+				;       This function can be called locally by the first load, or from another
+				;       device driver load.  All returns and parameters are treated as if it
+				;       were called from another load.
+
+				; Only LocalIDCaccess should be used to call this function
+
+ 0000				DDAttachFunction PROC FAR C, wFunction:WORD, wModifier:WORD, oDataArea:WORD
+
+ 0000  55		   *	    push   bp
+ 0001  8B EC		   *	    mov    bp, sp
+ 0003  8B 5E 06			        mov     bx,wFunction
+ 0006  83 FB 01			        cmp     bx,LAST_ATTACHDD_FUNCTION
+ 0009  7E 05			        jle     @f
+ 000B  B8 0001			        mov     ax,ADD_ERROR_BAD_FUNCTION
+ 000E  EB 27			        jmp     negative
+ 0010				@@:
+ 0010  D1 E3			        shl     bx,1
+ 0012  2E: FF A7 0043 R		        jmp     CS:AttachDDjumpTable[bx]
+
+				; this function is called at INIT time via the DynamicAPI function.
+				; A positive response is returned only if this is an OEM version AND an OEM
+				; adapter has been initialized by this (the first) load.
+
+ 0017				IsOEMpresent:
+ 0017  B8 2643			        mov     ax,SIGNATURE  ;always return this load's signature
+				 IFDEF OEM
+ 001A  83 3E 0000 E 01		        cmp     bOEMpresent,TRUE
+ 001F  74 19			        je      positive
+				 ENDIF
+ 0021  EB 14			        jmp     negative
+
+				; This function keeps a bit map of interrupts used by all loads of the
+				; device driver.  This is used to prevent the call RegisterStackUsage from
+				; being called more than once for each interrupt requested.
+
+				; Positive means that RegisterStackUsage should be called
+ 0023				MarkInterruptUsed:
+ 0023  8B 4E 08			        mov     cx,wModifier
+ 0026  B8 0001			        mov     ax,1
+ 0029  D3 E0			        shl     ax,cl
+ 002B  85 06 0000 E		        test    wInterruptsUsed,ax
+ 002F  75 06			        jnz     negative
+ 0031  09 06 0000 E		        or      wInterruptsUsed,ax
+ 0035  EB 03			        jmp     positive
+
+				  IFNDEF NO_COMscope
+				  ENDIF ; NOT NO_COMscope
+ 0037				negative:
+ 0037  F9			        stc
+ 0038  EB 07			        jmp     exit
+
+ 003A				positive:
+ 003A  F8			        clc
+ 003B  8B 5E 0A			        mov     bx,oDataArea
+ 003E  26: 89 07		        mov     WORD PTR ES:[BX],ax
+
+ 0041				exit:
+				        ret
+ 0041  5D		   *	    pop    bp
+ 0042  CB		   *	    ret    00000h
+
+ 0043				AttachDDjumpTable LABEL WORD
+ 0043  0017 R			        WORD    IsOEMpresent
+ 0045  0023 R			        WORD    MarkInterruptUsed
+				  IFNDEF NO_COMscope
+				  ENDIF
+
+ 0047				DDAttachFunction ENDP
+
+ 0047				LocalIDCaccess PROC NEAR USES DS ES CX; AX = function, CX = modifier
+
+ 0047  1E		   *	    push   ds
+ 0048  06		   *	    push   es
+ 0049  51		   *	    push   cx
+ 004A  68 0000 E		        push    OFFSET IDCdata
+ 004D  51			        push    cx
+ 004E  50			        push    ax
+ 004F  1E			        push    ds
+ 0050  07			        pop     es  ; IDC function expects this load's data segment in ES
+ 0051  8E 1E 0000 E		        mov     ds,IDCaccessPDS
+ 0055  26: FF 1E 0000 E		        call    ES:IDCaccessPM
+ 005A  59			        pop     cx
+ 005B  59			        pop     cx
+ 005C  59			        pop     cx  ; popped instead of SUB SP,6 to preserve carry flag
+				        ret
+ 005D  59		   *	    pop    cx
+ 005E  07		   *	    pop    es
+ 005F  1F		   *	    pop    ds
+ 0060  C3		   *	    ret    00000h
+
+ 0061				LocalIDCaccess ENDP ;carry set if error, AX = error code if carry set
+
+ 0061				ExtensionFunction PROC NEAR C USES SI BX CX, oErrorCode:WORD
+				              ;AX still contains who was called - COM, OS$tools, or COMscope
+
+				        LOCAL   pDataAddress:DWORD
+				        LOCAL   pParamAddress:DWORD
+				        LOCAL   wSignature:WORD
+				        LOCAL   wTarget:WORD
+				        LOCAL   wDataLength:WORD
+
+ 0061  55		   *	    push   bp
+ 0062  8B EC		   *	    mov    bp, sp
+ 0064  83 C4 F2		   *	    add    sp, 0FFF2h
+ 0067  56		   *	    push   si
+ 0068  53		   *	    push   bx
+ 0069  51		   *	    push   cx
+ 006A  06			        push    es
+ 006B  57			        push    di
+ 006C  89 46 F4			        mov     wTarget,ax       ; save called target
+
+ 006F  33 C9			        xor     cx,cx            ; use GIOpacketLength
+				        VerifyPacketData
+
+ 00A2  83 E9 04			        sub     cx,TYPE s_stExtensionDataHeader   ;adjust for header
+ 00A5  0F 88 00DC		        js      bad_length
+
+ 00A9  89 4E F2			        mov     wDataLength,cx                   ; save count
+
+ 00AC  B9 0008			        mov     cx,TYPE s_stExtensionParams
+				        VerifyPacketParams
+
+ 00E0  83 F9 08			        cmp     cx,TYPE s_stExtensionParams
+ 00E3  0F 85 009E		        jne     bad_length
+
+ 00E7  C4 7E F8			        les     di,pParamAddress
+ 00EA  26: 8B 05		        mov     ax,ES:[di].s_stExtensionParams.wSignature
+ 00ED  89 46 F6			        mov     wSignature,ax
+ 00F0  26: 8B 45 02		        mov     ax,ES:[di].s_stExtensionParams.wCommand
+ 00F4  26: 8B 55 04		        mov     dx,ES:[di].s_stExtensionParams.wModifier
+ 00F8  26: 8B 4D 06		        mov     cx,ES:[di].s_stExtensionParams.wDataCount
+
+ 00FC  3B 4E F2			        cmp     cx,wDataLength
+ 00FF  76 03			        jbe     @f
+ 0101  8B 4E F2			        mov     cx,wDataLength
+ 0104				@@:
+ 0104  83 F8 10			        cmp     ax,MAX_EXT_CMD
+ 0107  0F 87 0081		        ja      bad_command
+ 010B  8B D8			        mov     bx,ax
+ 010D  D1 E3			        shl     bx,1
+ 010F  2E: FF A7 01C2 R		        jmp     CS:ExtensionJumpTable[BX]
+
+ 0114				GetPath:                                                ; function 2
+ 0114  0B C9			        or      cx,cx
+ 0116  74 6D			        jz      bad_length
+ 0118  81 F9 0104		        cmp     cx,CCHMAXPATH
+ 011C  76 03			        jna     @f
+ 011E  B9 0104			        mov     cx,CCHMAXPATH
+ 0121				@@:
+ 0121  33 D2			        xor     dx,dx
+ 0123  BE 0000 E		        lea     si,abyPath
+
+ 0126				find_path_end_loop:
+ 0126  80 3C 00			        cmp     BYTE PTR [si],0
+ 0129  74 04			        je      @f
+ 012B  46			        inc     si
+ 012C  42			        inc     dx
+ 012D  E2 F7			        loop    find_path_end_loop
+ 012F				@@:
+ 012F  0B C9			        or      cx,cx
+ 0131  75 0C			        jnz     @f
+ 0133  80 3C 00			        cmp     BYTE PTR [si],0
+ 0136  74 07			        je      @f
+ 0138  B8 0FFC			        mov     ax,EXT_ERROR_BAD_PATH
+ 013B  8B CA			        mov     cx,dx
+ 013D  EB 52			        jmp     extension_exit
+ 013F				@@:
+ 013F  BE 0000 E		        lea     si,abyPath
+ 0142  8B CA			        mov     cx,dx
+
+ 0144				move_memory:
+ 0144  0B C9			        or      cx,cx
+ 0146  74 0A			        jz      @f
+ 0148  C4 7E FC			        les     di,pDataAddress
+ 014B  83 C7 04			        add     di,TYPE s_stExtensionDataHeader
+ 014E  51			        push    cx
+ 014F  F3/ A4			    rep movsb
+ 0151  59			        pop     cx
+ 0152				@@:
+ 0152  B8 0F00			        mov     ax,EXT_RSP_SUCCESS
+ 0155  EB 3A			        jmp     extension_exit
+
+ 0157				GetSignature:                                           ; function 7
+ 0157  83 F9 02			        cmp     cx,TYPE WORD
+ 015A  72 29			        jb      bad_length
+ 015C  C4 7E FC			        les     di,pDataAddress
+ 015F  B8 2643			        mov     ax,SIGNATURE
+ 0162  83 C7 04			        add     di,TYPE s_stExtensionDataHeader
+ 0165  26: 89 05		        mov     ES:[di],ax
+ 0168  B8 0F00			        mov     ax,EXT_RSP_SUCCESS
+ 016B  EB 2E			        jmp     accept_sig_exit
+
+				  IFNDEF NO_COMscope
+				  ENDIF ;NO_COMscope
+
+ 016D				GetAdapterType:                                             ; function 17
+ 016D  83 F9 02			        cmp     cx,TYPE WORD
+ 0170  72 13			        jb      bad_length
+ 0172  C4 7E FC			        les     di,pDataAddress
+ 0175  33 C0			        xor     ax,ax
+ 0177  A0 0000 E		        mov     al,byAdapterType
+ 017A  83 C7 04			        add     di,TYPE s_stExtensionDataHeader
+ 017D  26: 89 05		        mov     ES:[di],ax
+ 0180  B8 0F00			        mov     ax,EXT_RSP_SUCCESS
+ 0183  EB 16			        jmp     accept_sig_exit
+
+ 0185				bad_length:
+ 0185  B8 0FFB			        mov     ax,EXT_ERROR_BAD_LENGTH
+ 0188  33 C9			        xor     cx,cx
+ 018A  EB 05			        jmp     extension_exit
+
+ 018C				bad_command:
+ 018C  B8 0FFD			        mov     ax,EXT_ERROR_BAD_COMMAND
+ 018F  33 C9			        xor     cx,cx
+
+ 0191				extension_exit:
+ 0191  81 7E F6 2643		        cmp     wSignature,SIGNATURE
+ 0196  74 03			        je      accept_sig_exit
+ 0198  0D F000			        or      ax,EXT_BAD_SIGNATURE
+
+ 019B				accept_sig_exit:
+ 019B  C4 7E FC			        les     di,pDataAddress
+ 019E  26: 89 05		        mov     ES:[di].s_stExtensionDataHeader.wReturnCode,ax
+ 01A1  26: 89 4D 02		        mov     ES:[di].s_stExtensionDataHeader.wByteCount,cx
+ 01A5  83 C1 04			        add     cx,TYPE s_stExtensionDataHeader
+ 01A8  EB 0B			        jmp     exit
+
+ 01AA				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 01B3  33 C9			        xor     cx,cx
+
+ 01B5				exit:
+ 01B5  5F			        pop     di
+ 01B6  07			        pop     es
+ 01B7  26: 89 4D 1B		        mov     ES:[di].s_stPacket.GIOpacket.GIOdataLength,cx ;Length of the data into count
+				        ret
+ 01BB  59		   *	    pop    cx
+ 01BC  5B		   *	    pop    bx
+ 01BD  5E		   *	    pop    si
+ 01BE  8B E5		   *	    mov    sp, bp
+ 01C0  5D		   *	    pop    bp
+ 01C1  C3		   *	    ret    00000h
+
+ 01C2				ExtensionJumpTable LABEL WORD
+				  IFNDEF NO_COMscope
+				  ELSE
+ 01C2  018C R			        WORD    bad_command
+ 01C4  018C R			        WORD    bad_command
+ 01C6  0114 R			        WORD    GetPath
+ 01C8  018C R			        WORD    bad_command
+ 01CA  018C R			        WORD    bad_command
+ 01CC  018C R			        WORD    bad_command
+ 01CE  018C R			        WORD    bad_command
+ 01D0  0157 R			        WORD    GetSignature
+ 01D2  018C R			        WORD    bad_command
+ 01D4  018C R			        WORD    bad_command
+ 01D6  018C R			        WORD    bad_command
+ 01D8  018C R			        WORD    bad_command
+ 01DA  018C R			        WORD    bad_command
+ 01DC  018C R			        WORD    bad_command
+ 01DE  018C R			        WORD    bad_command
+ 01E0  018C R			        WORD    bad_command
+ 01E2  018C R			        WORD    bad_command
+ 01E4  018C R			        WORD    bad_command             ; 18
+				  ENDIF
+
+ 01E6				ExtensionFunction ENDP
+
+ 01E6				RES_CODE ENDS
+
+				    END

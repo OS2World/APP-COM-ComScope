@@ -1,0 +1,3 @@
+#define WIN_OMNISUPPLIER 500
+#define DLG_MODIFYBIN 501
+#define FNT_OMNI 502

@@ -1,0 +1,25 @@
+/* REXX */
+
+SETLOCAL
+
+"set include=f:\ibmcpp\dtools\h;f:\ibmcpp\dtools\inc;f:\ibmcpp\inc;p:\COMi;"
+"set lib=f:\ibmcpp\lib;p:\COMi\lib;"
+"set path=f:\ibmcpp\dtools;"
+
+'p:'
+'cd \COMi'
+'nmake /f debug.mak'
+IF RC <> 0 THEN SIGNAL build_error
+'cd debug'
+'..\mapsym debug'
+'copy debug.sy? \\oc_gilroy\cee\comm'
+'cd ..'
+SIGNAL end_make
+build_error:
+SAY "RC = "RC
+SAY ""
+SAY "failed to build debug"
+SAY ""
+end_make:
+
+ENDLOCAL

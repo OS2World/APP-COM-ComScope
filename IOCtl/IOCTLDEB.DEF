@@ -1,0 +1,42 @@
+LIBRARY    IOCTLDEB
+
+DESCRIPTION 'OS/2 Presentation Manager Device I/O control functions'
+
+DATA    MULTIPLE READWRITE LOADONCALL
+
+CODE    LOADONCALL
+
+PROTMODE
+
+EXPORTS
+  GetFIFOinfo
+  SetFIFO
+
+  SetModemSignals
+  GetModemInputSignals
+  GetModemOutputSignals
+  GetXmitStatus
+
+  GetReceiveQueueLen
+  GetReceiveQueueCounts
+  GetTransmitQueueLen
+  GetTransmitQueueCounts
+
+  BreakOff
+  BreakOn
+  GetCOMerror
+  GetCOMstatus
+  GetCOMevent
+  SendByteImmediate
+  ForceXon
+  ForceXoff
+  GetDCB
+  SendDCB
+  GetLineCharacteristics
+  SetLineCharacteristics
+  SetBaudRate
+  GetBaudRate
+  GetBaudRates
+  FlushComBuffer
+  GetCountsSinceLast
+

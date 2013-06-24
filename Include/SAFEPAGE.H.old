@@ -1,0 +1,197 @@
+/*--------------------------------------------------------------------------*/
+/*           Name: SAFEPAGE.H                                               */
+/*                                                                          */
+/*    Description: Global header file definitions for Telocator             */
+/*                 Alphanumeric Protocol (TAP) to access paging services.   */
+/*                                                                          */
+/*                                                                          */
+/*           Date: Jul 15, 1995                                             */
+/*                                                                          */
+/*      Copyright: OS/tools Incorporated 1995.                              */
+/*                                                                          */
+/*       Comments: This header file can be include on PM and non-PM         */
+/*                 applications.  It can also be used in a multi-threaded   */
+/*                 application, however the calling application should      */
+/*                 provide the semaphore mechanisms.                        */
+/*--------------------------------------------------------------------------*/
+
+#define  INCL_WIN
+#define  INCL_BASE
+#define  INCL_WINWINDOWMGR
+#define  INCL_WINMESSAGEMGR
+#define  INCL_DOSDATETIME
+#define  INCL_DOSFILEMGR
+#define  INCL_DOSDEVICES
+#define  INCL_DOSDEVIOCTL
+#define  INCL_DOSEXCEPTIONS
+
+#include <os2.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <time.h>
+
+/*--------------------------------------------------------------------------*/
+/* Defines                                                                  */
+/*--------------------------------------------------------------------------*/
+#define ID_PAGE_SUCCESS                                         0
+#define ID_PAGE_INVALID_PORT                                    1
+#define ID_PAGE_BAUD_RATE_NOT_SUPPORTED                         6
+#define ID_PAGE_CARRIER_DETECTED                               14
+#define ID_PAGE_NAK_OR_REJECTED                                15
+#define ID_PAGE_RS_RECEIVED                                    16
+#define ID_PAGE_OK                                             ID_PAGE_SUCCESS
+#define ID_PAGE_BUSY_SIGNAL                                    17
+#define ID_PAGE_NO_DIALTONE                                    18
+#define ID_PAGE_NO_CARRIER                                     19
+#define ID_PAGE_NO_ANSWER                                      20
+#define ID_PAGE_MODEM_NOT_RESPONDING                           21
+#define ID_PAGE_REQ_PARMS_MISSING                              22
+#define ID_PAGE_DISCONNECTED                                   23
+#define ID_PAGE_INVALID_PIN                                    24
+#define ID_PAGE_PORT_OUT_OF_RANGE                              25
+#define ID_PAGE_PIN_NOT_SPECIFIED                              26
+
+#define MIN_PAGE_RETRIES                                        3
+#define MAX_CHARACTERS_PER_BLOCK                               80
+#define MODEM_CODE_SIZE                                        16
+#define MAX_PAGES_PER_CALL                                    128
+#define TEXT_MESSAGE_LENGTH                                   234
+
+#define STX                                                     2
+#define ETX                                                     3
+#define ESC                                                    27
+#define ETB                                                    23
+#define RS                                                     30
+#define US                                                     31
+
+#define SOH                                                     1
+#define BREAK                                                   3
+#define EOT                                                     4
+#define ACK                                                     6
+#define BEL                                                     7
+#define LF                                                     10
+#define FF                                                     12
+#define CR                                                     13
+#define DC1                                                    17
+#define XON                                                    17
+#define DC3                                                    19
+#define XOFF                                                   19
+#define NAK                                                    21
+#define ETB                                                    23
+#define CAN                                                    24
+
+#define COM_1                                                   0
+#define COM_2                                                   1
+#define COM_3                                                   2
+#define COM_4                                                   3
+#define COM_5                                                   4
+#define COM_6                                                   5
+#define COM_7                                                   6
+#define COM_8                                                   7
+#define COM_9                                                   8
+#define COM_10                                                  9
+#define COM_11                                                 10
+#define COM_12                                                 11
+#define COM_13                                                 12
+#define COM_14                                                 13
+#define COM_15                                                 14
+#define COM_16                                                 15
+#define COM_17                                                 16
+#define COM_18                                                 17
+#define COM_19                                                 18
+#define COM_20                                                 19
+#define COM_21                                                 20
+#define COM_22                                                 21
+#define COM_23                                                 22
+#define COM_24                                                 23
+#define COM_25                                                 24
+#define COM_26                                                 25
+#define COM_27                                                 26
+#define COM_28                                                 27
+#define COM_29                                                 28
+#define COM_30                                                 29
+#define COM_31                                                 30
+#define COM_32                                                 31
+#define MAX_COM                                                32
+
+/*--------------------------------------------------------------------------*/
+/* Modem information structure                                              */
+/*--------------------------------------------------------------------------*/
+typedef struct _MODEMINFO
+{
+   char ModemName[51];                    /* Modem name                     */
+   char SetupString[41];                  /* Setup string                   */
+   char ResetString[MODEM_CODE_SIZE+1];   /* Reset string                   */
+   char EscapeString[MODEM_CODE_SIZE+1];  /* Escape string sequence         */
+   char DisconnectStr[MODEM_CODE_SIZE+1]; /* Disconnect string              */
+   char CodeBusy[MODEM_CODE_SIZE+1];      /* Busy code                      */
+   char CodeDialTone[MODEM_CODE_SIZE+1];  /* Dial Tone code                 */
+   char CodeCarrier[MODEM_CODE_SIZE+1];   /* No Carrier code                */
+   char CodeAnswer[MODEM_CODE_SIZE+1];    /* No Answer code                 */
+}
+MODEMINFO, *PMODEMINFO;
+
+/*--------------------------------------------------------------------------*/
+/* Subscriber information structure                                         */
+/*--------------------------------------------------------------------------*/
+typedef struct _PINF
+{
+   char PinID[21];                       /* Subscriber's pager ID           */
+   char Pager_Type[2];                   /* (A)lphanumeric or (D)igital     */
+   char Page_Status;                     /* Page status (ACK, NAK, RS, etc) */
+   char Page_Preprocess[9];              /* Reserved                        */
+   int  SkipMsg;                         /* To skip message (default FALSE) */
+}
+PINF, *PPINF;
+
+/*--------------------------------------------------------------------------*/
+/* Page information structure                                               */
+/*--------------------------------------------------------------------------*/
+typedef struct _PAGEMSGINFO
+{
+   BYTE  Port;                           /* Serial port assigned            */
+   int   SinglePage;                     /* TRUE if single, FALSE if group  */
+   char  MessageID[16];                  /* Provided to track messages      */
+   char  GroupName[17];                  /* Group Name to be paged          */
+   char  SenderSignature[9];             /* Sender Identity                 */
+   char  DialPrefix[6];                  /* Dial prefix default = "9,1"     */
+   int   IDStamp;                        /* Sender ID stamped  if TRUE      */
+   int   TimeStamp;                      /* Time stamped HH:MM if TRUE      */
+   int   GrpNameStamp;                   /* Group Name stamped if TRUE      */
+   char  Message[TEXT_MESSAGE_LENGTH+1]; /* Max characters per message      */
+   HMQ   hmqProcess;                     /* Message queue process           */
+   ULONG ulMsgId;                        /* Message ID                      */
+
+   char ServiceId[9];                    /* Reserved.                       */
+   char ServiceName[21];                 /* Messaging Service's Name        */
+   char ServicePNum[13];                 /* Service's primary phone #       */
+   char ServiceSNum[13];                 /* Service's secondary phone #     */
+   char ServiceBaudRate[5];              /* Service's Baud Rate             */
+   char ServiceWordLen[2];               /* Word Length                     */
+   char ServiceParity[2];                /* Parity (E)ven, (O)dd (N)one     */
+   char ServiceStopBits[4];              /* StopBits 1, 1.5, or 2           */
+   char ServiceSpeaker[1];               /* 1=Low, 2=Medium, 3=High         */
+   int  ServiceMultiPage;                /* Reserved.                       */
+   int  ServicePageRetries;              /* # of retries when page fails    */
+   int  ServiceModem;                    /* TRUE turns modem speaker ON     */
+   int  ServicePageLength;               /* Reserved.                       */
+   int  ServiceMaxMsgs;                  /* Max msgs per call default 128   */
+   int  ServiceBlockChars;               /* Max chars per block default 80  */
+   MODEMINFO pModemInfo;                 /* Modem info structure            */
+   PINF 
+   pSubscriberInfo[MAX_PAGES_PER_CALL];  /* Subscribers info                */
+}
+PAGEMSGINFO, *PPAGEMSGINFO;
+
+/*--------------------------------------------------------------------------*/
+/* Exported Functions                                                       */
+/*--------------------------------------------------------------------------*/
+ULONG EXPENTRY SendAlphaMessage( ULONG ulParms );
+int   EXPENTRY IsComPortAvailable( int Port );
+
+/*--------------------------------------------------------------------------*/
+/* End of SafePage header file                                              */
+/*--------------------------------------------------------------------------*/
+

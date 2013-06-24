@@ -1,0 +1,362 @@
+/*
+**    This file is "included" by the client process, the server process, and 
+**    COM process.
+*/
+#ifndef _INCL_CONNECT_H_
+/*
+** File name extensions for COM to/from server communications
+*/
+#define FROM_CLIENT ".FC"
+#define IN_PROCESS ".IP"
+#define TO_CLIENT ".TC"
+/*
+** various maximum definitions
+*/
+#define MAX_SUBSCRIBERS       1024
+#define MAX_GROUPS          100
+
+#define MAX_NAME_LEN          20   // first name and last name field lengths
+#define MAX_GROUP_NAME_LEN    40   
+#define MAX_USER_MSGLEN       1024 
+/*
+**  MAX_MSG_BUF_SIZE is set at compile time by the main process.
+**
+**  This will be changed before production!
+*/
+#define MAX_SUBSCRIBER_LIST (MAX_MSG_BUF_SIZE / sizeof(SUBSCRIBER))
+
+#define MAX_GROUP_LIST (MAX_MSG_BUF_SIZE / sizeof(GROUP))
+/*
+**  User message defininitons.  These are used by the COM server to send 
+**  messages up to the parents window procedure.
+*/
+#define UM_REQUEST                    7001
+#define UM_RESPONSE                   7002
+#define UM_INIT                        7003
+#define UM_COM_THREAD                 7004
+/*
+**  Process error types.  These codes are returned by the COM SendMessage and 
+**  initialization functions.
+*/
+#define ERROR_SOCKET_ERROR            0x80000000
+#define ERROR_API_ERROR               0x40000000
+#define ERROR_LIB_NOT_INIT            0x80000001
+/*
+**  Server message types.  These codes are send to the parent process's window
+**  procedure by the COM server thread.
+*/
+#define MESSAGE                       0
+#define API_ERROR                     1
+#define MSG_ERROR                     2
+#define SOCKET_ERROR                  3
+
+#define COM_THREAD_END                1
+#define CON_ACCEPTED                  2
+#define BUFF_ALLOCATED                3
+#define BUFF_RECEIVED                 4
+/*
+**  Used by the client initialization routine to set the server address type
+**  BY_HOST can only be used when the server name and address has been placed 
+**  in the HOSTS file in the ETC directory.
+*/
+#define BY_ADDR                       0
+#define BY_HOST                       1
+/*
+**  These are request message types.  Requests are from the client to the 
+** server.
+*/
+#define REQ_REGISTER                  0
+#define REQ_LOGON                     1
+#define REQ_QUERY_SUBSCRIBER          2
+#define REQ_QUERY_GROUP               3
+#define REQ_QUERY_SERVER              4
+#define REQ_QUERY_ACCESS              5
+#define REQ_NOTIFY                    6
+#define REQ_TIMEOUT                   7
+
+#define REQ_ERROR_BAD_USERID          1
+#define REQ_ERROR_BAD_PASSWORD        2
+#define REQ_ERROR_BAD_DATASIZE        3
+#define REQ_ERROR_INVALID_SUB         4
+#define REQ_ERROR_INVALID_GROUP       5
+#define REQ_ERROR_INACTIVE_SUB        6
+#define REQ_ERROR_INACTIVE_GROUP      7
+
+#define REQ_ERROR_ALREADY_LOGGED_ON   8
+
+/*
+**  These are response message types.  Responses are from the server to the 
+**  client.
+*/
+#define RSP_SERVER                    1
+#define RSP_ACK_GROUP                 2
+#define RSP_NAK_GROUP                 3
+#define RSP_ACK_SUBSCRIBER            4
+#define RSP_NAK_SUBSCRIBER            5
+#define RSP_ACK_NOTIFY                6
+#define RSP_NAK_NOTIFY                7
+#define RSP_ACK_LOGON                 8
+#define RSP_NAK_LOGON                 9
+#define RSP_TIMEOUT                   10
+/*
+**  Miscellanious error codes sent to the client’s window procedure.  (unused)
+*/
+#define MSG_ERROR_POST_FAILED         1
+#define MSG_ERROR_CONNECTION_CLOSED   2
+/*
+**  main message header.
+*/
+typedef struct
+  {
+  USHORT cbSize;
+  USHORT fMessageType;
+  USHORT cbDataSize;
+  USHORT cbMaxDataSize;
+  ULONG ulMessageNumber;
+  BYTE byReserved[16];
+  BYTE byData;
+  }MSG;
+
+MSG is used for all messages in both directions.  It is to contain all of the 
+information necessary to identify the client for responses from the server.
+
+The "cbSize" field is filled by the COM function before a message is sent.  It 
+contains to total size of the data in the packet.  At this time it is 
+calculated by adding the size of the "MSG" stucture and the  value in the
+cbDataSize field.
+
+The "fMessageType" field is filled by the sending process.  It is usd by the 
+receiving process to determine how to process the incoming message.
+
+The "cbDataSize" field if filled by the sending process.  It is used by the COM 
+function to set the "cbSize" field and by the receiving process to determine 
+the size of any buffers to be allocated.
+
+The "cbMaxDataSize" field is filled by COM send message process.  It is used by 
+the server responding porcess to determine how much data can be returned to a
+particular client.
+
+The "ulMessageNumber" field is filled by the client sending process.  It is 
+used by the client when a response message is received from the server tow
+identify which "sent" message to process.
+
+The "byReserved" field is filled by the COM server thread.  It contains the 
+return address for the packet.  It is not to be disturbed by the server.
+
+The "byData" field is to be used as an offset to any data in the packet.  This 
+field is also used to return an action or error code to a client in the case 
+that no other data is required for a response (i.e., RSP_ACK_NOTIFY).
+
+typedef struct
+  {
+  char szUserName[40];
+  char szPassword[40];
+  USHORT fFlags;
+  }LOGON;
+
+LOGON is filled by the client process.  The "fFlags" will be used to indicate 
+what, if any, encryption technique is being used by the client.
+
+As part of the logon process at the server the return address will be saved so 
+that the access rights of a particular client can be managed.
+
+When a client logs on, the entry for that USERID will be tested.  If the user 
+id is inactive the logon will be acknowledged and the USERID will be marked as 
+active and the clients return address will be saved.  When a client requests 
+certain information (i.e., REQ_QUERY_SERVER), the access rights of the user, 
+as defined by the system administrator, will be used to determine the 
+contents of any response.
+
+In the case of REQ_QUERY_SERVER, only those subscribers and/or groups that are 
+authorized for that user will be returned in any RSP_ACK_SERVER message.
+ 
+typedef struct
+  {
+  char szAddressee[20];
+  ULONG fAddrType;
+  }COMADDR;
+
+COMADDR is filled by the client process,  The "fAddrType" field is used (at 
+this time) to tell the TCP/IP code the type of address that is contained in 
+the "szAddressee" field.  If fFlag = BY_HOST then an entry for the server 
+address must have been previously entered in the HOSTS file.  If fFlag = 
+BY_ADDR then it will be expected that the "szAddressee" field will contain the 
+"dotted decimal" IP address of the server.
+
+APIRET (* _System pfnnInitServer)(HWND);
+APIRET (* _System pfnnInitCOM)(HWND, COMADDR *, LOGON *);
+APIRET (* _System pfnnSendMessage)(MSG *);
+
+extern int iLastCOMerror;   // unused at this time
+/*
+**  
+*/
+typedef struct
+  {
+  char szFirstName[MAX_NAME_LEN];
+  char szLastName[MAX_NAME_LEN];
+  USHORT usMaxMsgLen;
+  ULONG ulSubNumber;
+  USHORT fFlags;
+  }SUBSCRIBER;
+
+SUBSCRIBER is used to define a subscriber.  A SUBSCRIBER structure for each 
+subscriber will be sent to the client, as requested.  See SUBREQLST.
+
+/*
+** Subscriber flags.  Used in the "fFlags" field of both the SUBSCRIBER and 
+** GROUP structures.
+*/
+#define SUB_FLG_ACTIVATED     0x0001
+#define SUB_FLG_ALPHAPAGE     0x0002
+#define SUB_FLG_NUMERICPAGE   0x0004
+#define SUB_FLG_SECONDARY_NUM 0x0008
+#define SUB_FLG_RDU           0x0010
+#define SUB_FLG_VOICE         0x0020
+#define SUB_FLG_GROUP         0x8000  //unused at this time
+/*
+**  
+*/
+typedef struct
+  {
+  char szGroupName[MAX_GROUP_NAME_LEN];
+  ULONG ulGroupNumber;
+  USHORT usMaxMsgLen;
+  USHORT fFlags;
+  }GROUP;
+
+GROUP is used to define a group.  A GROUP structure for each group will be sent
+to the client, as requested.  See GROUPREQLST.
+/*
+**  
+*/
+typedef struct
+  {
+  USHORT usSubCount;
+  USHORT usGroupCount;
+  USHORT usMsgLen;
+  USHORT fFlags;
+  BYTE byMsgCount;
+  BYTE byData;
+  }NOTIFYLST;
+
+NOTIFYLST is used with the REQ_NOTIFY message type to send a notification to one or more 
+subscribers and/or groups to the server
+
+It begins at the "byData" offset in the "MSG" header.  The notification message
+text begins at the offset of the "byData" field in the NOTIFYLST header.  If 
+there is more than one message (i.e., a response number and an alpha message)
+they will be separated by a zero byte.  The "byMsgCount" field will contain the
+number of messages sent (zero separated).
+
+If there are two messages, then the first one is the response number (numeric
+message) for any numeric pager in the notify list.
+
+The list of subscriber and/or group numbers to notify will immediately follow 
+the terminating zero of the last message text.  Use offset of the "byData" 
+field plus the value of the "usMsgLen" field to calculate the begining of the
+subscriber/group list.
+
+/*
+** Notification NAK message header 
+*/
+typedef struct
+   {          
+   USHORT usSubCount;
+   USHORT usGroupCount;
+   BYTE byData;
+   }NOTIFYNAK;
+
+NOTIFYNAK is used with the RSP_NAK_NOTIFY message type to send a list of 
+failed notification destinations (subscribers and/or groups) to a client.
+
+It begins at the "byData" offset in the "MSG" header.  The list of
+subscriber and/or group numbers begin at the offset of the "byData" field. 
+Failed subscribers are listed first then failed groups.  Use "usSubCount" field
+to determine how many subscribers failed and to determine the offset to the
+beginning of any group number list.  Use "usGroupCount" field to determine the
+number of groups that failed.
+
+typedef struct
+   {
+   USHORT usSubCount;
+   ULONG ulSubNumber;
+   }SUBREQLST;
+
+SUBREQLST is used with the REQ_QUERY_SUBSCRIBER message type to send a list of 
+subscribers to query.
+
+The list of subscriber numbers begins at the offset of the "ulSubNumber field". 
+Use the "usSubCount" field to determine the number of subscriber numbers in 
+the list.
+
+typedef struct
+   {
+   USHORT usSubCount;
+   USHORT usMaxMsg;
+   USHORT fFlags;
+   SUBSCRIBER stSubscriber;
+   }SUBRSPLST;
+
+SUBRSPLST is used with the RSP_ACK_SUBSCRIBER message type.  It contains a list
+of SUBSCRIBER structures.
+
+The list of subscriber structures begins at the "stSubscriber" field offset. 
+Use "usSubSount" to determine the number of data items in the message.
+
+The "usMaxMsg" field will contain maximum message length of the subscriber with
+the smallest maximum message length.
+
+The "fFlags" field will contain the logical OR of the "fFlags" of each 
+subscriber in the list.
+
+typedef struct
+   {
+   USHORT usGroupCount;
+   ULONG ulGroupNumber;
+   }GROUPREQLST;
+
+GROUPREQLST is used with the REQ_QUERY_GROUP message type to send a list 
+of groups to query.
+
+The list of group numbers begins at the offset of the "ulGrouoNumber" field.
+Use the "usGroupCount" field to determine the number of group numbers in 
+the list.
+
+typedef struct
+   {
+   USHORT usGroupCount;
+   USHORT usMaxMsg;
+   USHORT fFlags;
+   GROUP stGroup;
+   }GROUPRSPLST;
+
+GROUPRSPLST is used with the RSP_ACK_GROUP message type.  It contains a 
+list of GROUP structures.
+
+The list of group structures begins at the "stGroup" field offset. 
+Use "usGroupSount" to determine the number of data items in the message.
+
+The "usMaxMsg" field will contain maximum message length of the group with
+the smallest maximum message length.
+
+The "fFlags" field will contain the logical OR of the "fFlags" of each 
+group in the list.
+
+typedef struct
+   {
+   USHORT usSubCount;
+   USHORT usGroupCount;
+   BYTE byData;
+   }SERVERLST;
+
+SERVERLST contains a list of all the group and subscriber numbers accessable by
+the currently logged on client.  The list of subscriber numbers begins at the 
+"byData" field offset.  Use the "usSubCount" field to determine where the list
+group numbers begin.
+
+#define _INCL_CONNECT_H_
+
+#endif
+ 
+

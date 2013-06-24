@@ -1,0 +1,668 @@
+
+ Start         Length     Name                   Class
+ 0001:00000000 000017B88H _TEXT                  CODE
+ 0002:00000000 000002AA8H _DATA                  DATA
+ 0002:00002AA8 00000000CH _INIT_                 INITDATA
+ 0002:00002AB4 000000000H _INITEND_              INITDATA
+ 0002:00002AB4 000000000H _EXIT_                 EXITDATA
+ 0002:00002AB4 000000000H _EXITEND_              EXITDATA
+ 0002:00002AB4 000000000H CONST                  CONST
+ 0002:00002AB4 000012170H _BSS                   BSS
+ 0003:00000000 000001000H STACKBASE              
+ 0003:00001000 00000B000H _STACK                 STACK
+
+  Address         Publics by Name
+
+ 0001:00017786  Idle set_terminate(void(*)())
+ 0001:00017867  Idle set_unexpected(void(*)())
+ 0001:0001777C  Idle terminate()
+ 0001:0001785D  Idle unexpected()
+ 0001:00017906  Idle __GetPolymorphicDTC(void*,unsigned int)
+ 0001:0001773C       @__InitExceptBlock
+ 0001:00009681       AboutBoxDlgProc
+ 0001:0001356F       ColumnDisplayThread
+ 0001:000097AE       COMscopeOpenFilterProc
+ 0001:00001FCC  Idle ExitRoutine
+ 0001:00009963       fnwpBufferSizeDlg
+ 0001:00002D16  Idle fnwpClient
+ 0001:00010924       fnwpCOMerrorStatesDlg
+ 0001:0001075F       fnwpCOMeventStatesDlg
+ 0001:0001060E       fnwpCOMstatusStatesDlg
+ 0001:0000BC6E       fnwpDCBpacketDlgProc
+ 0001:00010248       fnwpDeviceAllStatusDlg
+ 0001:00010A72       fnwpDeviceStatusDlg
+ 0001:0000A244       fnwpDisplaySetupDlgProc
+ 0001:0000B338       fnwpEventDispDlgProc
+ 0001:0000A82C       fnwpHdwModemControlDlg
+ 0001:000116FD       fnwpModemInStatusDlg
+ 0001:000119A5       fnwpModemOutStatusDlg
+ 0001:00009E6E       fnwpMonitorSleepDlg
+ 0001:0001134D       fnwpRcvBufferStatusDlg
+ 0001:00000088       fnwpReadColumnClient
+ 0001:0000F4B1       fnwpSearchConfigDlgProc
+ 0001:0000AB1E       fnwpSetColorDlg
+ 0001:0000B8F4       fnwpTraceEventDlgProc
+ 0001:00010F2F       fnwpUpdateStatusDlg
+ 0001:00000ADA       fnwpWriteColumnClient
+ 0001:000110D7       fnwpXmitBufferStatusDlg
+ 0001:000104F7       fnwpXmitStatusStatesDlg
+ 0001:00005B1F  Idle FrameSubProc
+ 0001:000142E6       IPCserverThread
+ 0001:00013E21       MonitorThread
+ 0001:000146F1       RemoteServerThread
+ 0001:0001234C       RowDisplayThread
+ 0001:00005F07  Idle StatusProc
+ 0001:000091B4       _AccessCOMscope
+ 0001:0000E5FE       _AdjustScrollBar
+ 0002:00013ECC       _astFontAttributes
+ 0002:00013A3C  Idle _astFontMetrics
+ 0002:00013DCC  Idle _astFontNames
+ 0002:0000225C  Idle _bAbort
+ 0002:00014578       _bBreakOn
+ 0002:00002268       _bBufferWrapped
+ 0002:000003A4       _bCaptureFileWritten
+ 0002:0000034C       _bCommandLineDataFile
+ 0002:00003018       _bCOMscopeEnabled
+ 0002:00000438       _bDataToView
+ 0002:00002998       _bDDstatusActivated
+ 0002:0000015C       _bDebuggingCOMscope
+ 0002:00001EA4       _bDriverNotLoaded
+ 0002:00000350  Idle _bExternalKill
+ 0002:00000340  Idle _bFirstPosition
+ 0002:000003A8       _bFrameActivated
+ 0002:0000045C       _bIPCpipeOpen
+ 0002:000003AC  Idle _bIsInstall
+ 0002:000002B0       _bIsTheFirst
+ 0002:00000460       _bLaunchShutdownServer
+ 0002:000003BC       _bMaximized
+ 0002:000003C0       _bMinimized
+ 0002:0000299C       _bMIstatusActivated
+ 0002:000029A0       _bMOstatusActivated
+ 0002:0000043C  Idle _bNewFontFile
+ 0002:00000440       _bNoPaint
+ 0002:00000A74       _bPortActive
+ 0002:000029A4       _bRBstatusActivated
+ 0002:00000314  Idle _bRemoteAccess
+ 0002:0000030C  Idle _bRemoteClient
+ 0002:00000310       _bRemoteServer
+ 0002:000020A0  Idle _bScrolling
+ 0002:000020A8       _bSearchInit
+ 0002:00000444  Idle _bSearchProfileApps
+ 0002:000003B0       _bSendNextKeystroke
+ 0002:00000464       _bShowServerProcess
+ 0002:00000344       _bSkipInitPos
+ 0002:000003C4  Idle _bStatusSized
+ 0002:00013FB0       _bStopDisplayThread
+ 0002:00000468       _bStopIPCserverThread
+ 0002:00013FAC       _bStopMonitorThread
+ 0002:00000450       _bStopRemotePipe
+ 0002:000029A8       _bTBstatusActivated
+ 0002:00000448  Idle _bUseProfile
+ 0001:00006C6B       _CalcThreadSleepCount
+ 0001:00001CAA       _CharPrintable
+ 0002:00000454       _chPipeDebug
+ 0001:0000E479       _ClearColScrollBar
+ 0001:0000E21E       _ClearRowScrollBar
+ 0001:0000E4BD       _ColScroll
+ 0001:00001595  Idle _ColumnPaint
+ 0001:00001938  Idle _ColumnSize
+ 0001:0000D824       _CountTraceElement
+ 0001:00001C2D       _CreateColumnWindows
+ 0001:0000577E  Idle _CreatePS
+ 0001:00009641       _DestroyHelpInstance
+ 0001:00008997       _DisplayCharacterInfo
+ 0001:000095FF       _DisplayHelpPanel
+ 0001:0000922F       _EnableCOMscope
+ 0001:00009855  Idle _EnableFilters
+ 0001:000098EB  Idle _EnableNewLine
+ 0001:00006C29       _ErrorNotify
+ 0001:0000B00F  Idle _FillSetColorDlg
+ 0001:00009814  Idle _FindContrastingColor
+ 0002:000020A4       _fLastScroll
+ 0002:00002E1C  Idle _frameproc
+ 0002:00002EE8  Idle _FrameProcess
+ 0001:0000E6F3       _GetColScrollRow
+ 0001:0000DC53       _GetDisplayCount
+ 0001:00007B70       _GetNoClearComEvent_ComError
+ 0001:0000DDE0       _GetRowScrollRow
+ 0002:00002EF4       _habAnchorBlock
+ 0002:000002B4       _hCom
+ 0002:000141D4       _hCOMscopePipe
+ 0002:000139A0  Idle _hdcPs
+ 0001:000095DB  Idle _HelpAbout
+ 0001:00009524  Idle _HelpExtended
+ 0001:000094E8       _HelpHelpForHelp
+ 0001:0000959F       _HelpIndex
+ 0001:00009394  Idle _HelpInit
+ 0001:00009560  Idle _HelpKeys
+ 0002:000141D0       _hevCOMscopeSem
+ 0002:000137C0       _hevDisplayWaitDataSem
+ 0002:000137C8       _hevKillDisplayThreadSem
+ 0002:000137C4       _hevKillMonitorThreadSem
+ 0002:000137B8       _hevWaitCOMiDataSem
+ 0002:000137BC  Idle _hevWaitQueueStartSem
+ 0002:000131DC       _hIPCpipe
+ 0002:000137B0       _hmtxColGioBlockedSem
+ 0002:000141D8       _hmtxIPCpipeBlockedSem
+ 0002:000137B4       _hmtxRowGioBlockedSem
+ 0002:000137AC  Idle _hmtxSigGioBlockedSem
+ 0002:0000044C       _hProfileInstance
+ 0002:000139A4  Idle _hpsPs
+ 0002:00002EFC       _hwndClient
+ 0002:00002F00  Idle _hwndDlg
+ 0002:00002EF8       _hwndFrame
+ 0002:000143D0       _hwndHelpInstance
+ 0002:00002E04       _hwndStatAll
+ 0002:00002E08       _hwndStatDev
+ 0002:00002E0C       _hwndStatModemIn
+ 0002:00002E10       _hwndStatModemOut
+ 0002:00002E14       _hwndStatRcvBuf
+ 0002:00002E00       _hwndStatus
+ 0002:00002E18       _hwndStatXmitBuf
+ 0002:00000458  Idle _iDebugLevel
+ 0002:00014A90  Idle _iDeviceCount
+ 0001:00006D1C       _IncrementFileExt
+ 0001:0000D25B       _InitializeData
+ 0001:0000C304       _InitializeSystem
+ 0001:00014288       _KillDisplayThread
+ 0001:0001422A       _KillMonitorThread
+ 0002:00000068  Idle _lColumnOffset
+ 0002:00003118  Idle _lcxBrdr
+ 0002:00003114  Idle _lcxVSc
+ 0002:00003108  Idle _lcyBrdr
+ 0002:0000311C  Idle _lcyMenu
+ 0002:00003120       _lcyTitleBar
+ 0002:00013A38  Idle _lFontsAvailable
+ 0002:00013FC0  Idle _lLastHeight
+ 0002:00013FC4  Idle _lLastWidth
+ 0002:00013784  Idle _lLeadReadIndex
+ 0002:00013780  Idle _lLeadWriteIndex
+ 0002:00013FC8  Idle _lMinimumHeight
+ 0002:00013FCC  Idle _lMinimumWidth
+ 0002:00002E48  Idle _lMouseButtonCount
+ 0002:00002264  Idle _lReadIndex
+ 0002:00014590       _lScrollCount
+ 0002:000020AC       _lSearchStrLen
+ 0002:00013A34       _lStatusHeight
+ 0002:000021E8  Idle _lStatusWindowCount
+ 0002:00002260       _lWriteIndex
+ 0002:00003110  Idle _lXfullScr
+ 0002:0000310C  Idle _lXScr
+ 0002:00003104  Idle _lYfullScr
+ 0002:00003100  Idle _lYScr
+ 0001:000021DE       _main
+ 0001:000173DF       _MousePosDlgBox
+ 0001:00006890       _OpenPort
+ 0002:00002E40  Idle _pfnCloseProfile
+ 0002:00002E24       _pfnDialog
+ 0002:00002E44       _pfnFillDeviceNameList
+ 0002:00002E2C  Idle _pfnGetProfileData
+ 0002:00002E34       _pfnGetProfileString
+ 0002:00002E3C  Idle _pfnInitializeProfile
+ 0002:00002E20       _pfnInstallDevice
+ 0002:00002E28       _pfnManageProfile
+ 0001:000097E0  Idle _pfnMessageBoxHelpHook
+ 0002:00002E30  Idle _pfnSaveProfileData
+ 0002:00002E38       _pfnSaveProfileString
+ 0001:000020D1  Idle _pfnUpdateProfileOptions
+ 0002:00014254  Idle _pidCSqueueOwner
+ 0002:0001425C       _pidSession
+ 0001:00017390       _PopupMenuItemCheck
+ 0001:000074CE       _ProcessKeystroke
+ 0001:00007BD4  Idle _ProcessPacketData
+ 0002:000002B8  Idle _pstComListHead
+ 0002:0000301C  Idle _pszFileContents
+ 0002:000139B0       _pwCaptureBuffer
+ 0002:0000209C       _pwScrollBuffer
+ 0002:00002F08  Idle _rc
+ 0001:0000719C       _ReadCaptureFile
+ 0002:00002EEC  Idle _ReadFrameProcess
+ 0001:00009148       _ResetHighWater
+ 0001:0000465C  Idle _RowPaint
+ 0001:0000E351       _RowScroll
+ 0001:00017456       _SaveWindowPositions
+ 0001:0000EEE8       _SearchCaptureBuffer
+ 0001:0000ECE0  Idle _SearchTraceEvent
+ 0001:00016F81  Idle _SelectDevice
+ 0001:00006CC7       _SendXonXoff
+ 0001:0000E665       _SetupColScrolling
+ 0001:0000E258       _SetupRowScrolling
+ 0001:0000C773       _StartSystem
+ 0002:0001399C       _stCell
+ 0002:00003020       _stCFG
+ 0002:00013668       _stCharCount
+ 0002:00002B7C       _stColTrack
+ 0002:00002E98       _stComCtl
+ 0002:00002E4C       _stCOMiCFG
+ 0002:00002EDC       _stIOctl
+ 0002:000141DC       _stIPCpipe
+ 0002:00013194       _stPipeCmd
+ 0002:00003188       _stPipeMsg
+ 0002:00014A2C  Idle _stPosition
+ 0002:00013FD4  Idle _stProfile
+ 0002:00002BC8       _stRead
+ 0002:000131A0  Idle _stRemote
+ 0002:000139B4       _stRow
+ 0002:00014218       _stSD
+ 0002:00002C48       _stWrite
+ 0002:00013788       _swpLastPosition
+ 0002:000145A0       _swSearchString
+ 0002:00013678       _szCaptureFileName
+ 0002:00013350       _szCaptureFileSpec
+ 0002:0000017C  Idle _szCOMscopeAppName
+ 0002:00002F0C       _szCOMscopeIniPath
+ 0002:00003124       _szCOMscopePipe
+ 0002:000002BC  Idle _szCOMscopePipeName
+ 0002:00000160  Idle _szCOMscopeProfile
+ 0002:0000016C       _szCOMscopeVersion
+ 0002:0001457C       _szCurrentPortName
+ 0002:00013248       _szDataFileSpec
+ 0002:0001436C  Idle _szDriverVersionString
+ 0002:00013560       _szEntryCaptureFileSpec
+ 0002:00013458       _szEntryDataFileSpec
+ 0002:000137CC       _szErrorMessage
+ 0002:00000418  Idle _szEXEtitle
+ 0002:00000424  Idle _szFontFileName
+ 0002:00013894  Idle _szFontFilePath
+ 0002:000001A8  Idle _szHelpFileName
+ 0002:000131E0       _szIPCpipe
+ 0002:00000354       _szIPCpipeName
+ 0002:00000318  Idle _szNetRun
+ 0002:00000320  Idle _szNetRunParameters
+ 0002:000021E4  Idle _szOff
+ 0002:000021E0  Idle _szOn
+ 0002:000141E8  Idle _szPipeServerName
+ 0002:00013FB4  Idle _szPortName
+ 0002:000149C8  Idle _szServerCommand
+ 0002:00014260  Idle _szServerProgram
+ 0002:00014A94  Idle _szTempPath
+ 0002:000003C8       _szTitle
+ 0001:0000ADBB  Idle _TCColorDlg
+ 0001:000090CC       _TestOUT1
+ 0002:000139AC       _tidDisplayThread
+ 0002:00013244       _tidIPCserverThread
+ 0002:000139A8       _tidMonitorThread
+ 0002:000141CC  Idle _tidRemoteServerThread
+ 0001:00001528  Idle _TrackChildWindow
+ 0002:00014210       _ulBytesRead
+ 0002:000003B8       _ulCalcSleepCount
+ 0002:00003014       _ulCOMscopeBufferSize
+ 0002:00002F04  Idle _ulFileSize
+ 0002:00014214       _ulIPCpipeInstance
+ 0002:000003B4       _ulMonitorSleepCount
+ 0002:0000245C       _ulServerMessage
+ 0002:00014258       _ulSessionID
+ 0001:00011DDA  Idle _UpdateBufferStatusDlg
+ 0001:00011F60  Idle _UpdateDeviceStatusDlg
+ 0001:0001220A  Idle _UpdateModemInputStatusDlg
+ 0001:0001213C  Idle _UpdateModemOutputStatusDlg
+ 0001:00011CE2  Idle _UpdateRcvBufferStatusDlg
+ 0001:00011C1B  Idle _UpdateXmitBufferStatusDlg
+ 0002:00013FD0       _usLastClientPopupItem
+ 0002:00000348       _wASCIIfont
+ 0002:0000034A       _wHEXfont
+ 0001:00014930       _WinCommand
+ 0001:00005C84  Idle _WndSize
+ 0001:00006DB2       _WriteCaptureFile
+ 0002:00002EF0  Idle _WriteFrameProcess
+ 0001:00000038  Idle __acrtused
+ 0002:0000002B  Idle __c0_heaps
+ 0002:0000002F  Idle __c0_nheaps
+ 0001:00017660       __chkstk
+ 0002:00002A38  Idle __DebuggerHookData
+ 0002:00014BA0       __DestructorCountPtr
+ 0001:00017942       __ExceptInit
+ 0002:00002A34  Idle __ExceptVarsSize
+ 0002:000029AC       __fmode
+ 0001:00017932       __GetExceptDLLinfo
+ 0001:00017A86  Idle __GetExceptDLLinfoInternal
+ 0001:00017AC0       __initstk
+ 0001:00017720       __initwild
+ 0001:00017690       __matherr
+ 0001:000176D0       __matherrl
+ 0002:00000050  Idle __os2hmod
+ 0002:000029C8       __setargv__
+ 0001:000177AC  Idle ___call_terminate
+ 0001:0001788D  Idle ___call_unexpected
+ 0002:000029D0  Idle ___CPPexceptionList
+ 0002:000029E0  Idle ___debuggerHookDataP
+ 0002:000029D8  Idle ___debuggerHookFN
+ 0002:000029DC  Idle ___debuggerWatchingP
+ 0002:000029D4  Idle ___exceptFlags
+ 0002:000029FC  Idle ___exceptMemAllocVars
+ 0002:000029F8  Idle ___exceptStaticBuffP
+ 0002:00014BA4  Idle ___ExceptStaticXbuff
+ 0002:0000003B       ___isDLL
+ 0002:000029E4  Idle ___terminatePTR
+ 0002:000029F4  Idle ___throwExceptionName
+ 0002:000029EC  Idle ___throwFileName
+ 0002:000029F0  Idle ___throwLineNumber
+ 0002:000029E8  Idle ___unexpectdPTR
+
+  Address         Publics by Value
+
+ 0001:00000038  Idle __acrtused
+ 0001:00000088       fnwpReadColumnClient
+ 0001:00000ADA       fnwpWriteColumnClient
+ 0001:00001528  Idle _TrackChildWindow
+ 0001:00001595  Idle _ColumnPaint
+ 0001:00001938  Idle _ColumnSize
+ 0001:00001C2D       _CreateColumnWindows
+ 0001:00001CAA       _CharPrintable
+ 0001:00001FCC  Idle ExitRoutine
+ 0001:000020D1  Idle _pfnUpdateProfileOptions
+ 0001:000021DE       _main
+ 0001:00002D16  Idle fnwpClient
+ 0001:0000465C  Idle _RowPaint
+ 0001:0000577E  Idle _CreatePS
+ 0001:00005B1F  Idle FrameSubProc
+ 0001:00005C84  Idle _WndSize
+ 0001:00005F07  Idle StatusProc
+ 0001:00006890       _OpenPort
+ 0001:00006C29       _ErrorNotify
+ 0001:00006C6B       _CalcThreadSleepCount
+ 0001:00006CC7       _SendXonXoff
+ 0001:00006D1C       _IncrementFileExt
+ 0001:00006DB2       _WriteCaptureFile
+ 0001:0000719C       _ReadCaptureFile
+ 0001:000074CE       _ProcessKeystroke
+ 0001:00007B70       _GetNoClearComEvent_ComError
+ 0001:00007BD4  Idle _ProcessPacketData
+ 0001:00008997       _DisplayCharacterInfo
+ 0001:000090CC       _TestOUT1
+ 0001:00009148       _ResetHighWater
+ 0001:000091B4       _AccessCOMscope
+ 0001:0000922F       _EnableCOMscope
+ 0001:00009394  Idle _HelpInit
+ 0001:000094E8       _HelpHelpForHelp
+ 0001:00009524  Idle _HelpExtended
+ 0001:00009560  Idle _HelpKeys
+ 0001:0000959F       _HelpIndex
+ 0001:000095DB  Idle _HelpAbout
+ 0001:000095FF       _DisplayHelpPanel
+ 0001:00009641       _DestroyHelpInstance
+ 0001:00009681       AboutBoxDlgProc
+ 0001:000097AE       COMscopeOpenFilterProc
+ 0001:000097E0  Idle _pfnMessageBoxHelpHook
+ 0001:00009814  Idle _FindContrastingColor
+ 0001:00009855  Idle _EnableFilters
+ 0001:000098EB  Idle _EnableNewLine
+ 0001:00009963       fnwpBufferSizeDlg
+ 0001:00009E6E       fnwpMonitorSleepDlg
+ 0001:0000A244       fnwpDisplaySetupDlgProc
+ 0001:0000A82C       fnwpHdwModemControlDlg
+ 0001:0000AB1E       fnwpSetColorDlg
+ 0001:0000ADBB  Idle _TCColorDlg
+ 0001:0000B00F  Idle _FillSetColorDlg
+ 0001:0000B338       fnwpEventDispDlgProc
+ 0001:0000B8F4       fnwpTraceEventDlgProc
+ 0001:0000BC6E       fnwpDCBpacketDlgProc
+ 0001:0000C304       _InitializeSystem
+ 0001:0000C773       _StartSystem
+ 0001:0000D25B       _InitializeData
+ 0001:0000D824       _CountTraceElement
+ 0001:0000DC53       _GetDisplayCount
+ 0001:0000DDE0       _GetRowScrollRow
+ 0001:0000E21E       _ClearRowScrollBar
+ 0001:0000E258       _SetupRowScrolling
+ 0001:0000E351       _RowScroll
+ 0001:0000E479       _ClearColScrollBar
+ 0001:0000E4BD       _ColScroll
+ 0001:0000E5FE       _AdjustScrollBar
+ 0001:0000E665       _SetupColScrolling
+ 0001:0000E6F3       _GetColScrollRow
+ 0001:0000ECE0  Idle _SearchTraceEvent
+ 0001:0000EEE8       _SearchCaptureBuffer
+ 0001:0000F4B1       fnwpSearchConfigDlgProc
+ 0001:00010248       fnwpDeviceAllStatusDlg
+ 0001:000104F7       fnwpXmitStatusStatesDlg
+ 0001:0001060E       fnwpCOMstatusStatesDlg
+ 0001:0001075F       fnwpCOMeventStatesDlg
+ 0001:00010924       fnwpCOMerrorStatesDlg
+ 0001:00010A72       fnwpDeviceStatusDlg
+ 0001:00010F2F       fnwpUpdateStatusDlg
+ 0001:000110D7       fnwpXmitBufferStatusDlg
+ 0001:0001134D       fnwpRcvBufferStatusDlg
+ 0001:000116FD       fnwpModemInStatusDlg
+ 0001:000119A5       fnwpModemOutStatusDlg
+ 0001:00011C1B  Idle _UpdateXmitBufferStatusDlg
+ 0001:00011CE2  Idle _UpdateRcvBufferStatusDlg
+ 0001:00011DDA  Idle _UpdateBufferStatusDlg
+ 0001:00011F60  Idle _UpdateDeviceStatusDlg
+ 0001:0001213C  Idle _UpdateModemOutputStatusDlg
+ 0001:0001220A  Idle _UpdateModemInputStatusDlg
+ 0001:0001234C       RowDisplayThread
+ 0001:0001356F       ColumnDisplayThread
+ 0001:00013E21       MonitorThread
+ 0001:0001422A       _KillMonitorThread
+ 0001:00014288       _KillDisplayThread
+ 0001:000142E6       IPCserverThread
+ 0001:000146F1       RemoteServerThread
+ 0001:00014930       _WinCommand
+ 0001:00016F81  Idle _SelectDevice
+ 0001:00017390       _PopupMenuItemCheck
+ 0001:000173DF       _MousePosDlgBox
+ 0001:00017456       _SaveWindowPositions
+ 0001:00017660       __chkstk
+ 0001:00017690       __matherr
+ 0001:000176D0       __matherrl
+ 0001:00017720       __initwild
+ 0001:0001773C       @__InitExceptBlock
+ 0001:0001777C  Idle terminate()
+ 0001:00017786  Idle set_terminate(void(*)())
+ 0001:000177AC  Idle ___call_terminate
+ 0001:0001785D  Idle unexpected()
+ 0001:00017867  Idle set_unexpected(void(*)())
+ 0001:0001788D  Idle ___call_unexpected
+ 0001:00017906  Idle __GetPolymorphicDTC(void*,unsigned int)
+ 0001:00017932       __GetExceptDLLinfo
+ 0001:00017942       __ExceptInit
+ 0001:00017A86  Idle __GetExceptDLLinfoInternal
+ 0001:00017AC0       __initstk
+ 0002:0000002B  Idle __c0_heaps
+ 0002:0000002F  Idle __c0_nheaps
+ 0002:0000003B       ___isDLL
+ 0002:00000050  Idle __os2hmod
+ 0002:00000068  Idle _lColumnOffset
+ 0002:0000015C       _bDebuggingCOMscope
+ 0002:00000160  Idle _szCOMscopeProfile
+ 0002:0000016C       _szCOMscopeVersion
+ 0002:0000017C  Idle _szCOMscopeAppName
+ 0002:000001A8  Idle _szHelpFileName
+ 0002:000002B0       _bIsTheFirst
+ 0002:000002B4       _hCom
+ 0002:000002B8  Idle _pstComListHead
+ 0002:000002BC  Idle _szCOMscopePipeName
+ 0002:0000030C  Idle _bRemoteClient
+ 0002:00000310       _bRemoteServer
+ 0002:00000314  Idle _bRemoteAccess
+ 0002:00000318  Idle _szNetRun
+ 0002:00000320  Idle _szNetRunParameters
+ 0002:00000340  Idle _bFirstPosition
+ 0002:00000344       _bSkipInitPos
+ 0002:00000348       _wASCIIfont
+ 0002:0000034A       _wHEXfont
+ 0002:0000034C       _bCommandLineDataFile
+ 0002:00000350  Idle _bExternalKill
+ 0002:00000354       _szIPCpipeName
+ 0002:000003A4       _bCaptureFileWritten
+ 0002:000003A8       _bFrameActivated
+ 0002:000003AC  Idle _bIsInstall
+ 0002:000003B0       _bSendNextKeystroke
+ 0002:000003B4       _ulMonitorSleepCount
+ 0002:000003B8       _ulCalcSleepCount
+ 0002:000003BC       _bMaximized
+ 0002:000003C0       _bMinimized
+ 0002:000003C4  Idle _bStatusSized
+ 0002:000003C8       _szTitle
+ 0002:00000418  Idle _szEXEtitle
+ 0002:00000424  Idle _szFontFileName
+ 0002:00000438       _bDataToView
+ 0002:0000043C  Idle _bNewFontFile
+ 0002:00000440       _bNoPaint
+ 0002:00000444  Idle _bSearchProfileApps
+ 0002:00000448  Idle _bUseProfile
+ 0002:0000044C       _hProfileInstance
+ 0002:00000450       _bStopRemotePipe
+ 0002:00000454       _chPipeDebug
+ 0002:00000458  Idle _iDebugLevel
+ 0002:0000045C       _bIPCpipeOpen
+ 0002:00000460       _bLaunchShutdownServer
+ 0002:00000464       _bShowServerProcess
+ 0002:00000468       _bStopIPCserverThread
+ 0002:00000A74       _bPortActive
+ 0002:00001EA4       _bDriverNotLoaded
+ 0002:0000209C       _pwScrollBuffer
+ 0002:000020A0  Idle _bScrolling
+ 0002:000020A4       _fLastScroll
+ 0002:000020A8       _bSearchInit
+ 0002:000020AC       _lSearchStrLen
+ 0002:000021E0  Idle _szOn
+ 0002:000021E4  Idle _szOff
+ 0002:000021E8  Idle _lStatusWindowCount
+ 0002:0000225C  Idle _bAbort
+ 0002:00002260       _lWriteIndex
+ 0002:00002264  Idle _lReadIndex
+ 0002:00002268       _bBufferWrapped
+ 0002:0000245C       _ulServerMessage
+ 0002:00002998       _bDDstatusActivated
+ 0002:0000299C       _bMIstatusActivated
+ 0002:000029A0       _bMOstatusActivated
+ 0002:000029A4       _bRBstatusActivated
+ 0002:000029A8       _bTBstatusActivated
+ 0002:000029AC       __fmode
+ 0002:000029C8       __setargv__
+ 0002:000029D0  Idle ___CPPexceptionList
+ 0002:000029D4  Idle ___exceptFlags
+ 0002:000029D8  Idle ___debuggerHookFN
+ 0002:000029DC  Idle ___debuggerWatchingP
+ 0002:000029E0  Idle ___debuggerHookDataP
+ 0002:000029E4  Idle ___terminatePTR
+ 0002:000029E8  Idle ___unexpectdPTR
+ 0002:000029EC  Idle ___throwFileName
+ 0002:000029F0  Idle ___throwLineNumber
+ 0002:000029F4  Idle ___throwExceptionName
+ 0002:000029F8  Idle ___exceptStaticBuffP
+ 0002:000029FC  Idle ___exceptMemAllocVars
+ 0002:00002A34  Idle __ExceptVarsSize
+ 0002:00002A38  Idle __DebuggerHookData
+ 0002:00002B7C       _stColTrack
+ 0002:00002BC8       _stRead
+ 0002:00002C48       _stWrite
+ 0002:00002E00       _hwndStatus
+ 0002:00002E04       _hwndStatAll
+ 0002:00002E08       _hwndStatDev
+ 0002:00002E0C       _hwndStatModemIn
+ 0002:00002E10       _hwndStatModemOut
+ 0002:00002E14       _hwndStatRcvBuf
+ 0002:00002E18       _hwndStatXmitBuf
+ 0002:00002E1C  Idle _frameproc
+ 0002:00002E20       _pfnInstallDevice
+ 0002:00002E24       _pfnDialog
+ 0002:00002E28       _pfnManageProfile
+ 0002:00002E2C  Idle _pfnGetProfileData
+ 0002:00002E30  Idle _pfnSaveProfileData
+ 0002:00002E34       _pfnGetProfileString
+ 0002:00002E38       _pfnSaveProfileString
+ 0002:00002E3C  Idle _pfnInitializeProfile
+ 0002:00002E40  Idle _pfnCloseProfile
+ 0002:00002E44       _pfnFillDeviceNameList
+ 0002:00002E48  Idle _lMouseButtonCount
+ 0002:00002E4C       _stCOMiCFG
+ 0002:00002E98       _stComCtl
+ 0002:00002EDC       _stIOctl
+ 0002:00002EE8  Idle _FrameProcess
+ 0002:00002EEC  Idle _ReadFrameProcess
+ 0002:00002EF0  Idle _WriteFrameProcess
+ 0002:00002EF4       _habAnchorBlock
+ 0002:00002EF8       _hwndFrame
+ 0002:00002EFC       _hwndClient
+ 0002:00002F00  Idle _hwndDlg
+ 0002:00002F04  Idle _ulFileSize
+ 0002:00002F08  Idle _rc
+ 0002:00002F0C       _szCOMscopeIniPath
+ 0002:00003014       _ulCOMscopeBufferSize
+ 0002:00003018       _bCOMscopeEnabled
+ 0002:0000301C  Idle _pszFileContents
+ 0002:00003020       _stCFG
+ 0002:00003100  Idle _lYScr
+ 0002:00003104  Idle _lYfullScr
+ 0002:00003108  Idle _lcyBrdr
+ 0002:0000310C  Idle _lXScr
+ 0002:00003110  Idle _lXfullScr
+ 0002:00003114  Idle _lcxVSc
+ 0002:00003118  Idle _lcxBrdr
+ 0002:0000311C  Idle _lcyMenu
+ 0002:00003120       _lcyTitleBar
+ 0002:00003124       _szCOMscopePipe
+ 0002:00003188       _stPipeMsg
+ 0002:00013194       _stPipeCmd
+ 0002:000131A0  Idle _stRemote
+ 0002:000131DC       _hIPCpipe
+ 0002:000131E0       _szIPCpipe
+ 0002:00013244       _tidIPCserverThread
+ 0002:00013248       _szDataFileSpec
+ 0002:00013350       _szCaptureFileSpec
+ 0002:00013458       _szEntryDataFileSpec
+ 0002:00013560       _szEntryCaptureFileSpec
+ 0002:00013668       _stCharCount
+ 0002:00013678       _szCaptureFileName
+ 0002:00013780  Idle _lLeadWriteIndex
+ 0002:00013784  Idle _lLeadReadIndex
+ 0002:00013788       _swpLastPosition
+ 0002:000137AC  Idle _hmtxSigGioBlockedSem
+ 0002:000137B0       _hmtxColGioBlockedSem
+ 0002:000137B4       _hmtxRowGioBlockedSem
+ 0002:000137B8       _hevWaitCOMiDataSem
+ 0002:000137BC  Idle _hevWaitQueueStartSem
+ 0002:000137C0       _hevDisplayWaitDataSem
+ 0002:000137C4       _hevKillMonitorThreadSem
+ 0002:000137C8       _hevKillDisplayThreadSem
+ 0002:000137CC       _szErrorMessage
+ 0002:00013894  Idle _szFontFilePath
+ 0002:0001399C       _stCell
+ 0002:000139A0  Idle _hdcPs
+ 0002:000139A4  Idle _hpsPs
+ 0002:000139A8       _tidMonitorThread
+ 0002:000139AC       _tidDisplayThread
+ 0002:000139B0       _pwCaptureBuffer
+ 0002:000139B4       _stRow
+ 0002:00013A34       _lStatusHeight
+ 0002:00013A38  Idle _lFontsAvailable
+ 0002:00013A3C  Idle _astFontMetrics
+ 0002:00013DCC  Idle _astFontNames
+ 0002:00013ECC       _astFontAttributes
+ 0002:00013FAC       _bStopMonitorThread
+ 0002:00013FB0       _bStopDisplayThread
+ 0002:00013FB4  Idle _szPortName
+ 0002:00013FC0  Idle _lLastHeight
+ 0002:00013FC4  Idle _lLastWidth
+ 0002:00013FC8  Idle _lMinimumHeight
+ 0002:00013FCC  Idle _lMinimumWidth
+ 0002:00013FD0       _usLastClientPopupItem
+ 0002:00013FD4  Idle _stProfile
+ 0002:000141CC  Idle _tidRemoteServerThread
+ 0002:000141D0       _hevCOMscopeSem
+ 0002:000141D4       _hCOMscopePipe
+ 0002:000141D8       _hmtxIPCpipeBlockedSem
+ 0002:000141DC       _stIPCpipe
+ 0002:000141E8  Idle _szPipeServerName
+ 0002:00014210       _ulBytesRead
+ 0002:00014214       _ulIPCpipeInstance
+ 0002:00014218       _stSD
+ 0002:00014254  Idle _pidCSqueueOwner
+ 0002:00014258       _ulSessionID
+ 0002:0001425C       _pidSession
+ 0002:00014260  Idle _szServerProgram
+ 0002:0001436C  Idle _szDriverVersionString
+ 0002:000143D0       _hwndHelpInstance
+ 0002:00014578       _bBreakOn
+ 0002:0001457C       _szCurrentPortName
+ 0002:00014590       _lScrollCount
+ 0002:000145A0       _swSearchString
+ 0002:000149C8  Idle _szServerCommand
+ 0002:00014A2C  Idle _stPosition
+ 0002:00014A90  Idle _iDeviceCount
+ 0002:00014A94  Idle _szTempPath
+ 0002:00014BA0       __DestructorCountPtr
+ 0002:00014BA4  Idle ___ExceptStaticXbuff

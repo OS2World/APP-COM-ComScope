@@ -1,0 +1,17 @@
+
+CODEPAGE 437
+STRINGTABLE
+BEGIN
+    3840,                               "Sealevel (no ID reg)"
+    3841,                               "Sealevel (ID reg)"
+    3842,                               "Sealevel Systems"
+    3843,                               "Comtrol Hostess"
+    3844,                               "DigiBoard PC/4-8"
+    3845,                               "Quatech"
+    3846,                               "DigiBoard PC/16"
+    3847,                               "Neotech"
+    3848,                               "Connect Tech"
+    3849,                               "Globetek"
+    3850,                               "Error Opening "
+END
+

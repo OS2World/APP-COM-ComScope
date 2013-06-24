@@ -1,0 +1,80 @@
+:TARGET.SUFFIXES
+:DEPENDENCY..c .obj 
+:TARGET.all
+:DEPENDENCY.
+.\connect.exe
+:RULE..c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Tl10 /Sp1 /Ss /Q /Wall /Ti /N40 /W2 /Gm /Gs /Gx /Fb /Ft- /C %s
+:RULE.{p:\connect}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Tl10 /Sp1 /Ss /Q /Wall /Ti /N40 /W2 /Gm /Gs /Gx /Fb /Ft- /C %s
+:TARGET..\connect.exe
+:DEPENDENCY.
+.\main.obj
+.\request.obj
+.\connect.obj
+.\conn_dlg.obj
+.\data.obj
+p:\connect\CONNECT.Res
+{$(LIB)}os2ls_ut.lib
+{$(LIB)}OS2386.lib
+{$(LIB)}CPPOM30O.lib
+{$(LIB)}connect.def
+connect.mak
+:ACTION.Link::Linker
+:COMMAND.
+icc.exe @<<
+ /B" /de /pmtype:pm /optfunc /nologo /noe /m /nod"
+ /Feconnect.exe 
+ os2ls_ut.lib 
+ OS2386.lib 
+ CPPOM30O.lib 
+ connect.def
+ .\main.obj
+ .\request.obj
+ .\connect.obj
+ .\conn_dlg.obj
+ .\data.obj
+<<
+:ACTION.Bind::Resource Bind
+:COMMAND.
+rc.exe p:\connect\CONNECT.Res connect.exe
+:TARGET..\main.obj
+:DEPENDENCY.
+p:\connect\main.c
+{p:\connect;$(INCLUDE);}aerial.h
+connect.mak
+:TARGET..\data.obj
+:DEPENDENCY.
+p:\connect\data.c
+{p:\connect;$(INCLUDE);}conn_dlg.h
+{p:\connect;$(INCLUDE);}menu.h
+{p:\connect;$(INCLUDE);}comm.h
+{p:\connect;$(INCLUDE);}connect.h
+connect.mak
+:TARGET..\conn_dlg.obj
+:DEPENDENCY.
+p:\connect\conn_dlg.c
+{p:\connect;$(INCLUDE);}conn_dlg.h
+{p:\connect;$(INCLUDE);}comm.h
+{p:\connect;$(INCLUDE);}connect.h
+connect.mak
+:TARGET..\connect.obj
+:DEPENDENCY.
+p:\connect\connect.c
+{p:\connect;$(INCLUDE);}conn_dlg.h
+{p:\connect;$(INCLUDE);}menu.h
+{p:\connect;$(INCLUDE);}comm.h
+{p:\connect;$(INCLUDE);}connect.h
+connect.mak
+:TARGET..\request.obj
+:DEPENDENCY.
+p:\connect\request.c
+{p:\connect;$(INCLUDE);}conn_dlg.h
+{p:\connect;$(INCLUDE);}menu.h
+{p:\connect;$(INCLUDE);}comm.h
+{p:\connect;$(INCLUDE);}connect.h
+connect.mak

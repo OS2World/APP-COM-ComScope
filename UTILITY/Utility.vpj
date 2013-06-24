@@ -1,0 +1,41 @@
+[COMPILER]
+INCLUDEDIRS=%(INCLUDE)
+compile=concur|capture|:Compile:&Compile,nmake %n.obj
+make=concur|capture|:Build:&Build,nmake
+rebuild=concur|capture|:Rebuild:&Rebuild,nmake /A
+debug=:Debug:&Debug,ipmd OS2LS_UT.dll
+execute=:Execute:E&xecute,OS2LS_UT.dll
+user1=hide|:User 1:User 1,
+user2=hide|:User 2:User 2,
+usertool_resource_editor=hide|:Resource Editor:Resource Editor,dlgedit
+workingdir=
+includedirs=%(INCLUDE)
+tagfiles=
+reffile=
+MACRO=\n
+FILTEREXPANSION=0 0 0 0 0
+[ASSOCIATION]
+[FILES]
+P:\utility\cfg_sys.c
+P:\utility\list.c
+P:\utility\OS2LSRTL.C
+P:\utility\resource.H
+P:\utility\utility.c
+P:\utility\extra\sprintf.c
+[STATE]
+SCREEN: 1600 1200 110 57 1400 965 0 0 N 0 0 0 0 1147 616
+CWD: P:\utility
+BUFFER: BN="P:\utility\utility.c"
+BI: MA=1 74 1  TABS=1 5  WWS=1 IWT=0 ST=0 IN=2 BW=0 US=32000 RO=0 SE=1 SN=0 BIN=0 MN=C	HM=0 MF=288
+VIEW: LN=.0 CL=1 LE=0 CX=1 CY=1 WI=5 BI=17 HT=0 HN=0 HF=0 HC=4
+WINDOW: 0 0 729 415 -1 -1 N  WF=0 WT=2 "System VIO,6,0"
+BUFFER: BN="P:\utility\utility.c"
+VIEW: LN=.0 CL=1 LE=0 CX=1 CY=1 WI=110 BI=17 HT=0 HN=0 HF=0 HC=4
+FILEHIST: 4
+P:\IOCtl\ioctl.c
+P:\COMSCOPE\comscope.h
+P:\utility\utility.c
+F:\APPS\VSLICK\macros\asciitab
+PRINTER: 2
+
+

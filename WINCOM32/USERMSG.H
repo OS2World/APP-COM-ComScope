@@ -1,0 +1,10 @@
+#define UM_INITMENUS    8000
+#define UM_INITMLE      8001
+#define UM_INITLS       8002
+#define UM_INIT1        8003
+#define UM_INIT2        8004
+#define UM_INIT3        8005
+#define UM_INIT4        8006
+#define UM_RESETTIMER   8007
+#define UM_SHOWBITS     8008
+#define UM_KILLTHREAD   8009

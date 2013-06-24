@@ -1,0 +1,85 @@
+#define INCL_NLS
+#define INCL_WIN
+#include <os2.h>
+
+#include "p:\include\profile.h"
+
+DLGTEMPLATE PROF_DLG
+BEGIN
+    DIALOG "", PROF_DLG, 44, 107, 205, 120, FS_NOBYTEALIGN | FS_DLGBORDER |
+                WS_CLIPSIBLINGS | WS_SAVEBITS | WS_VISIBLE
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    PRESPARAMS PP_USER, "10.System Proportional"
+    BEGIN
+        CONTROL "A~vailable configuration sets", -1, 10, 99, 101, 7, WC_STATIC,
+                                            SS_TEXT | DT_LEFT | DT_BOTTOM |
+                                            DT_MNEMONIC | WS_GROUP | WS_VISIBLE
+        CONTROL "",                    PROF_LIST, 9, 65, 122, 32, WC_LISTBOX,
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "~Save",               PROF_SAVE, 141, 83, 51, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "~Load",               PROF_LOAD, 141, 57, 51, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "~Delete",             PROF_DELETE, 141, 31, 51, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | WS_GROUP |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "~New",                PROF_NEW, 141, 6, 51, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | WS_GROUP |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Help",                PROF_HELP, 77, 6, 51, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_NOPOINTERFOCUS |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "E~xit",               PROF_OK, 12, 6, 51, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_DEFAULT |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "~Automatically save on exit", PROF_AUTOSAVE, 14, 53, 110, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Load process ~configuration", PROF_LOADPROCESS,
+                                        14, 37, 116, 10, WC_BUTTON,
+                                            BS_AUTOCHECKBOX | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "Load last ~window position", PROF_LOADWINPOS, 14, 27, 116, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "On Startup",          -1, 7, 26, 126, 27, WC_STATIC,
+                                            SS_GROUPBOX | WS_VISIBLE
+        CONTROL "COMscope configuration management", PROF_HEADER,
+                                        8, 107, 190, 8, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_VCENTER | WS_GROUP |
+                                            WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE PROF_APPNAME_DLG
+BEGIN
+    DIALOG "", PROF_APPNAME_DLG, 140, 103, 171, 67, FS_NOBYTEALIGN |
+                FS_SCREENALIGN | FS_DLGBORDER | WS_CLIPSIBLINGS | WS_SAVEBITS |
+                WS_VISIBLE
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    PRESPARAMS PP_USER, "10.System Proportional"
+    BEGIN
+        CONTROL "OK",                  PROF_OK, 6, 4, 51, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_DEFAULT |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Cancel",              PROF_CANCEL, 60, 4, 51, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "Help",                PROF_HELP, 114, 4, 51, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_NOPOINTERFOCUS |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Select Name for New Configuration Profile", -1, 9, 53, 153, 8,
+                                            WC_STATIC, SS_TEXT | DT_CENTER |
+                                            DT_VCENTER | WS_VISIBLE
+        CONTROL "",                    PROF_APPNAME, 17, 26, 137, 9,
+                                            WC_ENTRYFIELD, ES_AUTOSCROLL |
+                                            ES_MARGIN | ES_SBCS | ES_MIXED |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Enter Profile Name",  -1, 16, 37, 137, 8, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_VCENTER | WS_VISIBLE
+    END
+END
+
+

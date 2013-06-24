@@ -1,0 +1,42 @@
+option ProjectOptions = gen(call, "system"), gen(pack, "1"),
+                        incl(searchpath, "p:\\include"), incl(searchpath, "p:\\COMi"),
+                        incl(searchpathfirst, "yes")
+{
+   option  link(pmtype, pm), link(linkwithmultithreadlib), link(linkwithsharedlib),
+          link(debug), gen(pack, "1")
+   {
+      target "f:\\work\\COMscope.exe"
+      {
+         source type(rc) "COMscope.Rc"
+         source type(lib) "F:\\work\\lib\\CFG_DEB.LIB"
+         source type(lib) "F:\\work\\lib\\IOCTLDEB.LIB"
+         source type(lib) "F:\\work\\lib\\OS2LSRTL.LIB"
+         source type(lib) "F:\\work\\lib\\PROFDEB.LIB"
+         source type(lib) "F:\\work\\lib\\UTIL_DEB.LIB"
+         source type(c) "column.c"
+         source type(c) "comscope.c"
+         source type(c) "cs_help.c"
+         source type(c) "csutil.c"
+         source type(c) "dialog.c"
+         source type(c) "init.c"
+         source type(c) "scroll.c"
+         source type(c) "search.c"
+         source type(c) "stat_dlg.c"
+         source type(c) "thread.c"
+         source type(c) "win_util.c"
+         source type(c) "wincmd.c"
+      }
+   }
+   option  link(linkwithmultithreadlib), link(linkwithsharedlib),
+          link(debug), gen(pack, "1"), gen(call, "system"), link(map, "Yes"), 
+          link(defaultlibs, "no"), link(extdictionary, "no"), 
+          link(pmtype, "novio"), define("DEBUG", "1")
+   {
+   target type(dll) "f:\\work\\lib\\UTIL_DEB.dll"
+   {
+      source "p:\\UTILITY\\cfg_sys.c"
+      source "p:\\UTILITY\\list.c"
+      source "p:\\UTILITY\\utility.c"
+   }
+   }
+}

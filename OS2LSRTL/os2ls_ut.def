@@ -1,0 +1,41 @@
+LIBRARY    OS2LS_UT
+
+DESCRIPTION 'OS/tools Utilities library'
+
+DATA    MULTIPLE READWRITE LOADONCALL
+
+CODE    LOADONCALL
+
+PROTMODE
+
+EXPORTS
+  _sprintf
+  _memcpy
+  _memset
+  _strnicmp
+  _atol
+  _strlen
+
+  _MakeDeviceName
+  _RemoveSpaces
+  _ASCIItoBin
+  _AppendTMP
+  _AppendHLP
+  _AppendINI
+  _AppendTripleDS
+  _GetFileName
+
+  _Checked
+  _CheckButton
+  _ControlEnable
+  _CenterDlgBox
+  _MessageBox
+  _MenuItemEnable
+  _MenuItemCheck
+  _GetLongIntDlgItem
+  _SetSystemMenu
+  _CleanConfigSys
+  _AdjustConfigSys
+  _AppendPath
+
+

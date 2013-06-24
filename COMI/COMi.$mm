@@ -1,0 +1,143 @@
+:TARGET.SUFFIXES
+:TARGET.SUFFIXES
+:DEPENDENCY..C .asm .obj 
+:TARGET.all
+:DEPENDENCY.
+.\COMDD.SYS
+:RULE..asm.obj
+:ACTION.Compile::Assembler (ml)
+:COMMAND.
+ml.exe /Cp /DxVDD_support /nologo /Zp1 /Sn /Zf /Fl %s
+:RULE.{P:\COMi}.asm.obj
+:ACTION.Compile::Assembler (ml)
+:COMMAND.
+ml.exe /Cp /DxVDD_support /nologo /Zp1 /Sn /Zf /Fl %s
+:RULE..C.obj
+:ACTION.Compile::C Compiler (cl)
+:COMMAND.
+cl.exe /Alfw /G2 /DxVDD_support /Zp /BATCH /nologo /NT_TEXT /Fc /Od /Gs %s
+:RULE.{P:\COMi}.C.obj
+:ACTION.Compile::C Compiler (cl)
+:COMMAND.
+cl.exe /Alfw /G2 /DxVDD_support /Zp /BATCH /nologo /NT_TEXT /Fc /Od /Gs %s
+:TARGET..\COMDD.SYS
+:DEPENDENCY.
+.\va_large.obj
+.\VDDUTIL.obj
+.\MESSAGE.obj
+.\PRELOAD.obj
+.\PROTECT.obj
+.\RMHELP.obj
+.\SPRINTF_large.obj
+.\UTILITY.obj
+.\VDD.obj
+.\COMDD.obj
+.\C_INIT.obj
+.\DATA_SEG.obj
+.\ExtenFuncs.obj
+.\HDW_TEST.obj
+.\INIT.obj
+.\INITUTIL.obj
+.\INT.obj
+.\IOCTL.obj
+.\MCA.obj
+.\ProcessFlags.obj
+.\UTIL.obj
+{$(LIB)}OS2LSRTL.lib
+{$(LIB)}CPPOM30O.lib
+{$(LIB)}OS2386.lib
+{$(LIB)}COMDD.def
+:ACTION.Link::Linker
+:COMMAND.
+icc.exe @<<
+ /B" /noe /m /nod"
+ /FeCOMDD.SYS 
+ OS2LSRTL.lib 
+ CPPOM30O.lib 
+ OS2386.lib 
+ COMDD.def
+ .\va_large.obj
+ .\VDDUTIL.obj
+ .\MESSAGE.obj
+ .\PRELOAD.obj
+ .\PROTECT.obj
+ .\RMHELP.obj
+ .\SPRINTF_large.obj
+ .\UTILITY.obj
+ .\VDD.obj
+ .\COMDD.obj
+ .\C_INIT.obj
+ .\DATA_SEG.obj
+ .\ExtenFuncs.obj
+ .\HDW_TEST.obj
+ .\INIT.obj
+ .\INITUTIL.obj
+ .\INT.obj
+ .\IOCTL.obj
+ .\MCA.obj
+ .\ProcessFlags.obj
+ .\UTIL.obj
+<<
+:TARGET..\va_large.obj
+:DEPENDENCY.
+P:\COMi\va_large.asm
+:TARGET..\UTIL.obj
+:DEPENDENCY.
+P:\COMi\UTIL.ASM
+:TARGET..\ProcessFlags.obj
+:DEPENDENCY.
+P:\COMi\ProcessFlags.asm
+:TARGET..\MCA.obj
+:DEPENDENCY.
+P:\COMi\MCA.ASM
+:TARGET..\IOCTL.obj
+:DEPENDENCY.
+P:\COMi\IOCTL.ASM
+:TARGET..\INT.obj
+:DEPENDENCY.
+P:\COMi\INT.ASM
+:TARGET..\INITUTIL.obj
+:DEPENDENCY.
+P:\COMi\INITUTIL.ASM
+:TARGET..\INIT.obj
+:DEPENDENCY.
+P:\COMi\INIT.ASM
+:TARGET..\HDW_TEST.obj
+:DEPENDENCY.
+P:\COMi\HDW_TEST.ASM
+:TARGET..\ExtenFuncs.obj
+:DEPENDENCY.
+P:\COMi\ExtenFuncs.asm
+:TARGET..\DATA_SEG.obj
+:DEPENDENCY.
+P:\COMi\DATA_SEG.ASM
+:TARGET..\C_INIT.obj
+:DEPENDENCY.
+P:\COMi\C_INIT.ASM
+:TARGET..\COMDD.obj
+:DEPENDENCY.
+P:\COMi\COMDD.ASM
+:TARGET..\VDD.obj
+:DEPENDENCY.
+P:\COMi\VDD.ASM
+:TARGET..\UTILITY.obj
+:DEPENDENCY.
+P:\COMi\UTILITY.C
+:TARGET..\SPRINTF_large.obj
+:DEPENDENCY.
+P:\COMi\SPRINTF_large.C
+:TARGET..\RMHELP.obj
+:DEPENDENCY.
+P:\COMi\RMHELP.C
+:TARGET..\PROTECT.obj
+:DEPENDENCY.
+P:\COMi\PROTECT.C
+:TARGET..\PRELOAD.obj
+:DEPENDENCY.
+P:\COMi\PRELOAD.C
+:TARGET..\MESSAGE.obj
+:DEPENDENCY.
+P:\COMi\MESSAGE.c
+:TARGET..\VDDUTIL.obj
+:DEPENDENCY.
+P:\COMi\VDDUTIL.C

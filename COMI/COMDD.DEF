@@ -1,0 +1,32 @@
+LIBRARY
+
+DESCRIPTION "OS/tools COMi Asynchronous Serial Device driver v4.00"
+
+PROTMODE
+STACKSIZE 8192
+
+DATA PRELOAD
+CODE PRELOAD
+
+SEGMENTS
+  RES_DATA  CLASS 'RESDATA'
+  RES_CODE  CLASS 'RESCODE'
+  _DATA    CLASS 'DATA'
+  CONST    CLASS 'CONST'
+  c_common CLASS 'BSS'
+  _BSS     CLASS 'BSS'
+  _TEXT    CLASS 'CODE'
+  RMCode   CLASS 'CODE'
+
+;  _DATA    CLASS 'DATA'         IOPL DISCARDABLE
+;  CONST    CLASS 'CONST'        IOPL DISCARDABLE
+;  c_common CLASS 'BSS'          IOPL DISCARDABLE
+;  _BSS     CLASS 'BSS'          IOPL DISCARDABLE
+;  _TEXT    CLASS 'CODE'         IOPL DISCARDABLE
+;  RMCode   CLASS 'CODE'         IOPL DISCARDABLE
+
+
+IMPORTS
+    DOSIODELAYCNT = DOSCALLS.427
+
+;******************************************************************************

@@ -1,0 +1,23 @@
+;************************************************************************
+;
+; $Revision:   1.0  $
+;
+; $Log:   V:\comi\comdd.dev  $
+;
+;   Rev 1.0   16 Apr 1994 08:34:56   EMMETT
+;Initial version control archive.
+;
+;************************************************************************
+
+;******** Module Definition File for COMi Device Driver ********
+
+LIBRARY
+
+DESCRIPTION "OS/tools COMi Asynchronous Serial Device driver"
+
+PROTMODE
+
+CODE    PRELOAD
+DATA    PRELOAD
+
+;******************************************************************************

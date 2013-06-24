@@ -1,0 +1,270 @@
+;************************************************************************
+;
+; $Revision:   1.8  $
+;
+; $Log:   P:/archive/comi/MESSAGE.DEV  $
+;
+;   Rev 1.8   28 Mar 1996 00:19:24   EMMETT
+;Added resource manager.  Began work on VDD support.
+;
+;   Rev 1.7   19 Feb 1996 11:30:10   EMMETT
+;Moved stringd to _MSG segment (except 16 bit version).
+;Added strings for new OEM versions.  Moved first signon message and last "logo"
+;message to fixed 512 byte blocks so the messages could be changed after build
+;and link.
+;
+;   Rev 1.6   25 Apr 1995 22:01:52   EMMETT
+;Added support for DigiBoard PC/16.  Changed .INI file format to accomodate
+;16 ports per load.  Changed interrupt routine to allow user to select device
+;selection algorithim.  Fixed ABIOS interaction for better "non-.INI" initialization
+;on MCA machines.
+;
+;   Rev 1.5   03 Jul 1994 15:59:42   EMMETT
+;Fixed so that evaluation version would compile.
+;
+;   Rev 1.4   28 Jun 1994 09:06:08   EMMETT
+;Removed ".VER" includes and placed common version string.
+;
+;   Rev 1.3   07 Jun 1994 00:19:20   EMMETT
+;Added support for DigiBoard.
+;Added initialization support for OEM specific loads.
+;Fixed bug in StartWriteStream and ProcessModemSignals that caused handshaking problems.
+;Fixed hardware tests to set baud rate before testing interrupts.
+;Fixed hardware tests off switch to work only for retail version.
+;
+;   Rev 1.2   27 Apr 1994 22:56:38   EMMETT
+;FIxed ABIOS stuff to work better than before.
+;
+;   Rev 1.1   18 Apr 1994 23:18:22   EMMETT
+;Changed ABIOS processing and added ability to disallow a port to initialize.
+;
+;   Rev 1.0   16 Apr 1994 08:35:26   EMMETT
+;Initial version control archive.
+;
+;************************************************************************
+
+;   MESSAGE.DEF
+
+;   This file contains initialization messages
+
+logo_message            BYTE  "[36mInstalling OS/tools' COMi Asynchronous Communications device driver[0m"
+  IFDEF OEM
+   IFDEF Comtrol
+                        BYTE  0dh,0ah,"For Comtrol Hostess serial adapters"
+   ELSEIFDEF Sealevel
+                        BYTE  0dh,0ah,"For Sealevel Systems Incorporated serial adapters"
+   ELSEIFDEF Quatech
+                        BYTE  0dh,0ah,"For Quatech Incorporated serial adapters"
+   ELSEIFDEF Neotech
+                        BYTE  0dh,0ah,"For Neotech Incorporated MCA serial adapters"
+   ELSEIFDEF DigiBoard
+                        BYTE  0dh,0ah,"For DigiBoard PC/4, PC/8, and PC/16 serial adapters"
+   ELSEIFDEF ConnecTech
+                        BYTE  0dh,0ah,"For Connect Tech DFLEX serial adapters"
+   ELSEIFDEF Globetek
+                        BYTE  0dh,0ah,"For Globetek serial adapters"
+   ENDIF
+  ELSEIFDEF x16_BIT
+                        BYTE  0dh,0ah,"[1mThis is COM/8 for OS/2 1.x, a subset of COMi for OS/2 2.x and Warp 3.x[0m"
+  ELSEIFDEF SHARE
+   IFDEF SHARE_NO_COMscope
+                        BYTE  0dh,0ah,"[1mPersonal COMi is for personal use only, and is not for sale or resale.[0m"
+   ELSE
+                        BYTE  0dh,0ah,"[1mPersonal COMi is for personal use only, and is not for sale or resale.",0dh,0ah
+                        BYTE  "COMscope support included[0m"
+   ENDIF
+  ENDIF
+                        BYTE  0dh,0ah,0dh,0ah,0
+
+                        BYTE (512 - ($ - logo_message)) dup(0)
+
+copyright_message       BYTE  0dh,0ah
+                        BYTE  "OS/tools' COMi Asynchronous Communications device driver installed",0dh,0ah
+                        BYTE  "Copyright (c) [36mOS/tools Incorporated[0m 1989-96 -- All rights reserved",0dh,0ah
+                        BYTE  "Voice: (500)446-7257, FAX: (408)269-9434, BBS: (408)269-9435",0dh,0ah
+                        BYTE  "Internet: products@os-tools.com",0dh,0ah,0
+
+                        BYTE (512 - ($ - copyright_message)) dup(0)
+
+CreditHeader            BYTE  "Copyright (c) 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996"
+                        BYTE  "OS/tools Incorporated"
+                        BYTE  "San Jose, California"
+                        BYTE  "(500)446-7257"
+                        BYTE  "Written By Emmett S. Culley Jr.",0
+
+version_message LABEL BYTE
+ IFNDEF OEM
+ IFDEF SHARE
+ IFNDEF x16_BIT
+                        BYTE "Personal "
+ ENDIF
+ ENDIF
+ ENDIF
+                        BYTE "Version 3.75 "
+ IFNDEF OEM
+ IFDEF SHARE
+ IFNDEF SHARE_NO_COMscope
+                        BYTE "CS"
+ ENDIF
+ ENDIF
+ ENDIF
+
+ IFDEF DigiBoard
+                        BYTE "D"
+ ELSEIFDEF Comtrol
+                        BYTE "C"
+ ELSEIFDEF Quatech
+                        BYTE "Q"
+ ELSEIFDEF Neotech
+                        BYTE "N"
+ ELSEIFDEF ConnecTech
+                        BYTE "T"
+ ELSEIFDEF Globetek
+                        BYTE "G"
+ ELSEIFDEF Sealevel
+                        BYTE "S"
+ ELSEIFDEF DEMO
+                        BYTE "E"
+ ELSEIFDEF x16_BIT
+                        BYTE  "1.x"
+ ENDIF
+                        BYTE  ' ',0,0,0
+
+highlight_on            BYTE  "[1m",0
+highlight_off           BYTE  "[0m",0
+beep_character          BYTE  07h,0
+noise                   BYTE  07h,".",0
+CR_2x                   BYTE  0dh,0ah
+CR                      BYTE  0dh,0ah,0
+CR_ONLY                 BYTE  0dh,0
+
+wait_key_message        BYTE  0dh,0ah,"Press Enter to continue.",0
+
+debug_message           BYTE  0dh,0ah,07h,"[1mHit CTRL+C to cause debug trap.[0m",0
+
+load_number_msg         BYTE  "Load Number "
+load_number             BYTE  "                                       ",0dh,0ah,0
+
+CodeLocationMessage     BYTE  "C@ "
+CodeLocation            BYTE  "    :"
+CLextent                BYTE  "      I-"
+CLinitExtent            BYTE  "    ",0dh,0ah
+DataLocationMessage     BYTE  "D@ "
+DataLocation            BYTE  "    :"
+DLextent                BYTE  "      I-"
+DLinitExtent            BYTE  "      B-"
+DLbuffExtent            BYTE  "    ",0dh,0ah,0
+
+clock_rate_msg          BYTE  "[1mSystem clock rate expected to be "
+clock_rate              BYTE  "    h milliseconds for this OS/2 session[0m",0dh,0ah,0
+
+  IFDEF DEMO
+evaluation_msg          BYTE  "[1mThis version is for [5mEVALUATION ONLY[0m[1m and has had some features disabled.",0dh,0ah
+                        BYTE  "See documentation for a description of the limitations of this version.  You",0dh,0ah
+                        BYTE  "may copy and distribute this version freely.  You may not modify this device",0dh,0ah
+                        BYTE  "driver in any way.",0dh,0ah,0dh,0ah
+                        BYTE  "For an undiminished version of this device driver contact:",0dh,0ah,0dh,0ah
+                        BYTE  "OS/tools Incorporated",0dh,0ah
+                        BYTE  "San Jose, California",0dh,0ah
+                        BYTE  "(500)446-7257  FAX (408)269-9434[0m",0dh,0ah,0dh,0ah,0
+  ENDIF
+com_message             BYTE "COM"
+port_number             BYTE "   installed at address "
+port_address            BYTE "    h       hardware interrupt level = "
+int_level               BYTE "  ",0dh,0ah,0
+
+Ibuffer_message         BYTE "      input buffer length = "
+RdBuffLen               BYTE "    h    ",0
+
+Obuffer_message         BYTE "      output buffer length = "
+WrtBuffLen              BYTE "    h",0
+
+Iqueue_message          BYTE "      input packet queue = "
+RdQueueCount            BYTE "  ",0
+
+Oqueue_message          BYTE "      output packet queue = "
+WrtQueueCount           BYTE "  ",0
+
+UART_is_msg             BYTE "UART is ",0
+
+and_message             BYTE " -  ",0
+and_4x_message          BYTE "[32;1m and 4x baud rate clock.[0m",0 ; green
+
+blank_pad               BYTE "      ",0
+period_msg              BYTE ".[0m",0
+
+extended_16550_msg      BYTE "[34;1m16550 with 16 byte FIFOs",0     ; blue
+extended_16650_msg      BYTE "[33;1m16650 with 32 byte FIFOs",0     ; yellow
+extended_16654_msg      BYTE "[35;1m16654 with 64 byte FIFOs",0     ;
+extended_16750_msg      BYTE "[31;1m16750 with 64 byte FIFOs",0     ; red
+
+; error messages
+
+ABIOS_addr_invalid      BYTE "[1mCOM"
+ABIOS_addr_invalid_num  BYTE "   not installed because a valid device was not detected at the specified",0dh,0ah
+                        BYTE "      base I/O address[0m",0dh,0ah,0
+
+ABIOS_addr_taken        BYTE "[1mCOM"
+ABIOS_addr_taken_num    BYTE "   not installed because a previously loaded device driver owns the device",0dh,0ah
+                        BYTE "      under a different device name[0m",0dh,0ah,0
+
+ABIOS_name_message      BYTE "[1mCOM"
+ABIOS_name_number       BYTE "   not installed because name is taken by a previously loaded device driver[0m",0dh,0ah,0
+
+ABIOS_owned_message     BYTE "[1mCOM"
+ABIOS_owned_number      BYTE "   not installed because device is owned by a previously loaded process[0m",0dh,0ah,0
+
+RM_owned_message        BYTE "[1mCOM"
+RM_owned_number         BYTE  "   not installed because IRQ or I/O address resource is not available.[0m",0dh,0ah,0
+
+skipped_port_message    BYTE "COM"
+skipped_port_number     BYTE "   not installed at users request[0m",0dh,0ah,0
+
+bad_install_msg         BYTE "[1mYou must use either COMscope or Install to install the COMi device drvier.",0dh,0ah
+                        BYTE "See documentation for instructions on installation and configuration of COMi.[0m",0dh,0ah,0dh,0ah,0
+
+hdw_int_error_msg       BYTE "[1mCOM"
+hdw_err_int_port        BYTE "   device is not connected to interrupt "
+hdw_err_int_level       BYTE "   as expected and was not installed[0m",0dh,0ah,0
+
+hdw_error_msg           BYTE "[1mNo supported device was found at base address "
+hdw_err_addr            BYTE "    h - COM"
+hdw_err_port            BYTE "   was not installed.[0m",0dh,0ah,0
+
+int_error_msg           BYTE "[1mInterrupt "
+err_int_level           BYTE "   is unavailable - COM"
+err_int_port            BYTE "   was not intalled.[0m",0dh,0ah,0
+
+base_addr_err_msg       BYTE "[1mInvalid base I/O address was specified - COM"
+base_addr_port          BYTE "   was not installed.[0m",0dh,0ah,0
+
+int_level_err_msg       BYTE "[1mInvalid or no interrupt level was specified - COM"
+int_level_port          BYTE "   was not installed.[0m",0dh,0ah,0
+
+int_ID_err_msg          BYTE "[1mCOM"
+int_ID_err_msg_num      BYTE "   device does not support an Interrupt Status register as installed.[0m",0dh,0ah,0
+
+fin_err_msg             BYTE 0dh,0ah,"[1mAt least one installed device was not configured correctly.  See adapter",0dh,0ah
+                        BYTE "and/or COMi documentation for explanation.[0m",0dh,0ah,0
+
+Alloc_message           BYTE "[1mUnable to allocate memory or selectors for device driver buffers.  Your",0dh,0ah
+                        BYTE "system is unable to support the memory requested[0m",0dh,0ah,0
+
+Memory_message          BYTE "[1mSegment Overflow, decrease transmit buffer sizes  - COM"
+COM_number              BYTE "   was not installed[0m",0dh,0ah,0
+
+no_port_available       BYTE "[1mThere are no serial devices available for COMi access.  Either there are no",0dh,0ah
+                        BYTE "standard serial devices installed, or all standard devices are already owned",0dh,0ah
+                        BYTE "by one, or more, previously loaded device drivers (i.e., COM.SYS).[0m",0dh,0ah,0
+
+int2_error_msg          BYTE "[1mNo stack available for interrupt level "
+int2_int_level          BYTE "   - COM"
+int2_port_number        BYTE "   was not installed[0m",0dh,0ah,0
+
+  IFDEF x16_BIT
+_chFailedOpen           BYTE 0dh,0ah,"[1mFailed to open response file[0m",0dh,0ah,0
+_chFailedRead           BYTE 0dh,0ah,"[1mFailed to read response file[0m",0dh,0ah,0
+_chProcessing           BYTE 0dh,0ah,"[1mProcessing Response File[0m",0dh,0ah,0
+_chResponseFileBad      BYTE 0dh,0ah,"[1mResponse file does not properly define devices.[0m",0dh,0ah,0
+bad_response_file_msg   BYTE 0dh,0ah,"[1mBad response file, unable to configure COM/8.[0m",0dh,0ah,0
+  ENDIF

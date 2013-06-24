@@ -1,0 +1,11 @@
+
+ HEXFONTS
+
+ Start     Length     Name                   Class
+ 0001:0000 00002H     _TEXT                  CODE
+ 0002:0000 00000H     _DATA                  DATA
+ 0002:0000 00000H     CONST                  CONST
+ 0002:0000 00000H     _BSS                   BSS
+
+ Origin   Group
+ 0002:0   DGROUP

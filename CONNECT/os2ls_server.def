@@ -1,0 +1,10 @@
+LIBRARY OS2LS_TCPIP_SERVER
+
+DESCRIPTION 'OS/tools TCP/IP server library'
+
+EXPORTS
+   InitServer
+   SendResponse
+   StopServer
+
+

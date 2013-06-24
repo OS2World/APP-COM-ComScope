@@ -1,0 +1,315 @@
+#define INCL_NLS
+#define INCL_PM
+#include <os2.h>
+
+#include "p:\install\resource.h"
+
+ICON IDM_INSTALL p:\install\INSTALL.ICO
+
+MENU IDM_INSTALL PRELOAD MOVEABLE DISCARDABLE
+BEGIN
+	SUBMENU "~Installation", IDM_FILES
+	BEGIN
+		MENUITEM "~Install...", IDM_SELECT, MIS_TEXT
+		MENUITEM "~Uninstall...", IDM_UNINSTALL, MIS_TEXT
+		MENUITEM SEPARATOR
+		MENUITEM "E~xit\tF3", IDM_EXIT
+	END
+
+	SUBMENU "~Configuration", IDM_SETUP, MIS_TEXT
+	BEGIN
+		MENUITEM "~COMi...", IDM_CONFIG_DD, MIS_TEXT
+		MENUITEM "~QuickPage...", IDM_CONFIG_APP, MIS_TEXT
+	END
+
+	SUBMENU "~Help", IDM_HELP, MIS_TEXT
+	BEGIN
+		MENUITEM "Help ~Index", IDM_HELPINDEX, MIS_TEXT
+		MENUITEM "~General Help", IDM_HELPEXTEND, MIS_TEXT
+		MENUITEM "~Keys Help", IDM_HELPKEYS, MIS_TEXT
+		MENUITEM "~Using Help", IDM_HELPFORHELP, MIS_TEXT
+		MENUITEM SEPARATOR
+		MENUITEM "~About Installation", IDM_HELPABOUT, MIS_TEXT
+	END
+
+END
+
+ACCELTABLE IDM_INSTALL  PRELOAD
+BEGIN
+   VK_F3, IDM_EXIT,   VIRTUALKEY
+END
+
+DLGTEMPLATE TRAN_DLG 850
+BEGIN
+    DIALOG "Installation options", TRAN_DLG, 110, 44, 226, 173, FS_NOBYTEALIGN |
+                FS_DLGBORDER | WS_CLIPSIBLINGS | WS_SAVEBITS | WS_VISIBLE,
+                FCF_TITLEBAR
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    PRESPARAMS PP_USER, "12.System Proportional"
+    BEGIN
+        CONTROL "Transfer drivers, programs, and/or utilities to:", TRAN_APPST,
+                                        5, 142, 217, 25, WC_STATIC, SS_GROUPBOX |
+                                            WS_VISIBLE
+        CONTROL "",                    TRAN_APPS, 11, 147, 205, 9,
+                                            WC_ENTRYFIELD, ES_AUTOSCROLL |
+                                            ES_MARGIN | ES_SBCS | ES_MIXED |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Transfer libraries to:", TRAN_DLLT, 5, 115, 217, 25, WC_STATIC,
+                                            SS_GROUPBOX | WS_VISIBLE
+        CONTROL "",                    TRAN_DLL, 11, 120, 205, 9, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_MARGIN | ES_SBCS |
+                                            ES_MIXED | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Transfer",            DID_NULL, 5, 54, 217, 60, WC_STATIC,
+                                            SS_GROUPBOX | WS_VISIBLE
+        CONTROL "COMi device driver",  TRAN_ONE, 16, 96, 130, 9, WC_BUTTON,
+                                            BS_CHECKBOX | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "0 Bytes",             TRAN_ONESIZE, 167, 96, 44, 10, WC_STATIC,
+                                            SS_TEXT | DT_RIGHT | DT_VCENTER |
+                                            WS_VISIBLE
+                PRESPARAMS PP_FOREGROUNDCOLOR, 0x00000000
+        CONTROL "COMscope",            TRAN_TWO, 16, 86, 130, 10, WC_BUTTON,
+                                            BS_CHECKBOX | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "0 Bytes",             TRAN_TWOSIZE, 166, 86, 45, 10, WC_STATIC,
+                                            SS_TEXT | DT_RIGHT | DT_VCENTER |
+                                            WS_VISIBLE
+                PRESPARAMS PP_FOREGROUNDCOLOR, 0x00000000
+        CONTROL "Print spooler utilities", TRAN_THREE, 16, 76, 133, 10,
+                                            WC_BUTTON, BS_CHECKBOX | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "0 Bytes",             TRAN_THREESIZE, 165, 76, 46, 10,
+                                            WC_STATIC, SS_TEXT | DT_RIGHT |
+                                            DT_VCENTER | WS_VISIBLE
+                PRESPARAMS PP_FOREGROUNDCOLOR, 0x00000000
+        CONTROL "Multi-session control utility", TRAN_FOUR, 16, 66, 134, 10,
+                                            WC_BUTTON, BS_CHECKBOX | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "0 Bytes",             TRAN_FOURSIZE, 165, 66, 46, 10,
+                                            WC_STATIC, SS_TEXT | DT_RIGHT |
+                                            DT_VCENTER | WS_VISIBLE
+                PRESPARAMS PP_FOREGROUNDCOLOR, 0x00000000
+        CONTROL "Install",             TRAN_FIVE, 16, 56, 133, 10, WC_BUTTON,
+                                            BS_CHECKBOX | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "0 Bytes",             TRAN_FIVESIZE, 165, 56, 46, 10,
+                                            WC_STATIC, SS_TEXT | DT_RIGHT |
+                                            DT_VCENTER | WS_VISIBLE
+                PRESPARAMS PP_FOREGROUNDCOLOR, 0x00000000
+        CONTROL "Disk Space Required", DID_NULL, 5, 35, 217, 18, WC_STATIC,
+                                            SS_GROUPBOX | WS_VISIBLE
+        CONTROL "0 bytes",             TRAN_SPACE, 10, 38, 206, 8, WC_STATIC,
+                                            SS_TEXT | DT_CENTER | DT_VCENTER |
+                                            WS_VISIBLE
+                PRESPARAMS PP_FOREGROUNDCOLOR, 0x00000000
+        CONTROL "Create Desktop Folder and Program Oblects", TRAN_CREATEOBJ,
+                                        17, 23, 191, 10, WC_BUTTON,
+                                            BS_AUTOCHECKBOX | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "~Transfer Files",     DID_OK, 17, 5, 54, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_DEFAULT |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "~Cancel",             DID_CANCEL, 86, 5, 54, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "~Help",               DID_HELP, 155, 5, 54, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_NOPOINTERFOCUS |
+                                            WS_TABSTOP | WS_VISIBLE
+    END
+END
+
+
+
+DLGTEMPLATE INST_MSG
+BEGIN
+    DIALOG "Attention!", INST_MSG, 40, 62, 313, 125, FS_NOBYTEALIGN |
+                FS_SCREENALIGN | FS_DLGBORDER | WS_CLIPSIBLINGS | WS_SAVEBITS |
+                WS_VISIBLE, FCF_TITLEBAR
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    PRESPARAMS PP_USER, "12.System Proportional"
+    BEGIN
+        CONTROL "",                    INST_INFO_MLE, 1, 22, 310, 101, WC_MLE,
+                                            MLS_BORDER | MLS_READONLY |
+                                            MLS_VSCROLL | MLS_WORDWRAP |
+                                            WS_VISIBLE
+                CTLDATA 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+                PRESPARAMS PP_FONTNAMESIZE, "10.System Monospaced"
+        CONTROL "Continue  Installation", INST_CONTINUE, 43, 4, 81, 14,
+                                            WC_BUTTON, BS_PUSHBUTTON |
+                                            BS_DEFAULT | WS_GROUP | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "Abort  Installation", INST_ABORT, 188, 4, 81, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | WS_GROUP |
+                                            WS_TABSTOP | WS_VISIBLE
+    END
+END
+
+
+DLGTEMPLATE VER_DLG
+BEGIN
+    DIALOG "", VER_DLG, 175, 133, 187, 117, FS_NOBYTEALIGN | FS_DLGBORDER |
+                WS_CLIPSIBLINGS | WS_SAVEBITS | WS_VISIBLE
+    PRESPARAMS PP_BACKGROUNDCOLOR, 0x003cc8c8
+    PRESPARAMS PP_USER, "12.System Proportional"
+    BEGIN
+        CONTROL "You are installing",  VER_TEXT1, 4, 104, 180, 7, WC_STATIC,
+                                            SS_TEXT | DT_CENTER | DT_VCENTER |
+                                            WS_VISIBLE
+                PRESPARAMS PP_FOREGROUNDCOLOR, 0x00000000
+        CONTROL "COMi version 3.30 R", VER_ONE, 4, 93, 181, 7, WC_STATIC,
+                                            SS_TEXT | DT_CENTER | DT_VCENTER |
+                                            WS_VISIBLE
+        CONTROL "",                    VER_TWO, 4, 81, 180, 7, WC_STATIC,
+                                            SS_TEXT | DT_CENTER | DT_VCENTER |
+                                            WS_VISIBLE
+        CONTROL "",                    VER_THREE, 4, 69, 180, 7, WC_STATIC,
+                                            SS_TEXT | DT_CENTER | DT_VCENTER |
+                                            WS_VISIBLE
+        CONTROL "using",               VER_USING, 4, 61, 180, 7, WC_STATIC,
+                                            SS_TEXT | DT_CENTER | DT_TOP |
+                                            WS_VISIBLE
+                PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        CONTROL "O~K",                 DID_OK, 74, 5, 39, 13, WC_BUTTON,
+                                            BS_PUSHBUTTON | WS_GROUP |
+                                            WS_TABSTOP | WS_VISIBLE
+                PRESPARAMS PP_FOREGROUNDCOLORINDEX, CLR_BLACK
+                PRESPARAMS PP_BACKGROUNDCOLORINDEX, CLR_PALEGRAY
+        CONTROL "OS/tools' Install, version 1.40", VER_INSTALL, 4, 53, 179, 8,
+                                            WC_STATIC, SS_TEXT | DT_CENTER |
+                                            DT_VCENTER | WS_VISIBLE
+        CONTROL "OS/tools Incorporated", DID_NULL, 8, 42, 174, 11, WC_STATIC,
+                                            SS_TEXT | DT_CENTER | DT_VCENTER |
+                                            DT_MNEMONIC | WS_VISIBLE
+                PRESPARAMS PP_FOREGROUNDCOLOR, 0x00ffffff
+                PRESPARAMS PP_FONTNAMESIZE, "14.Helv"
+        CONTROL "Gilroy, California, USA      408-847-7487", DID_NULL,
+                                        12, 32, 162, 9, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_VCENTER | WS_VISIBLE
+                PRESPARAMS PP_FOREGROUNDCOLOR, 0x00000000
+                PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        CONTROL "support@os-tools.com or http://www.os-tools.com", DID_NULL,
+                                        5, 22, 178, 9, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_VCENTER | WS_VISIBLE
+                PRESPARAMS PP_FOREGROUNDCOLOR, 0x00000000
+                PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    END
+END
+
+
+DLGTEMPLATE UNINST_DLG 850
+BEGIN
+    DIALOG "Uninstall Options", UNINST_DLG, 108, 41, 170, 114, FS_NOBYTEALIGN |
+                FS_DLGBORDER | WS_CLIPSIBLINGS | WS_SAVEBITS | WS_VISIBLE,
+                FCF_TITLEBAR
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    PRESPARAMS PP_USER, "12.System Proportional"
+    BEGIN
+        CONTROL "Remove Emptied Directories", UNINST_REM_DIR, 24, 96, 138, 11,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Current Device Driver Configuration File", DID_NULL,
+                                        6, 71, 157, 21, WC_STATIC, SS_GROUPBOX |
+                                            WS_VISIBLE
+        CONTROL "Re-use",              UNINST_REUSE_INI, 16, 74, 35, 10,
+                                            WC_BUTTON, BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_GROUP |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Save",                UNINST_SAVE_INI, 67, 74, 41, 10,
+                                            WC_BUTTON, BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Delete",              UNINST_DELETE_INI, 116, 74, 43, 10,
+                                            WC_BUTTON, BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Desktop Objects",     DID_NULL, 6, 26, 157, 43, WC_STATIC,
+                                            SS_GROUPBOX | DT_MNEMONIC |
+                                            WS_VISIBLE
+        CONTROL "Remove Objects and Folder", UNINST_REM_ALL, 17, 51, 135, 10,
+                                            WC_BUTTON, BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_GROUP |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Remove Objects Only", UNINST_REM_OBJ, 17, 40, 128, 10,
+                                            WC_BUTTON, BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Remove None",         UNINST_NO_OBJ, 17, 29, 122, 10,
+                                            WC_BUTTON, BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Uninstall",           DID_OK, 6, 7, 51, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_DEFAULT |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Cancel",              DID_CANCEL, 60, 7, 51, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "Help",                DID_HELP, 114, 7, 51, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_NOPOINTERFOCUS |
+                                            WS_TABSTOP | WS_VISIBLE
+    END
+END
+
+
+DLGTEMPLATE EVAL_MSG
+BEGIN
+    DIALOG "Attention!", EVAL_MSG, 40, 63, 313, 124, FS_NOBYTEALIGN |
+                FS_SCREENALIGN | FS_DLGBORDER | WS_CLIPSIBLINGS | WS_SAVEBITS |
+                WS_VISIBLE, FCF_TITLEBAR
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    PRESPARAMS PP_USER, "12.System Proportional"
+    BEGIN
+        CONTROL "",                    INST_INFO_MLE, 1, 21, 310, 101, WC_MLE,
+                                            MLS_BORDER | MLS_READONLY |
+                                            MLS_VSCROLL | MLS_WORDWRAP |
+                                            WS_VISIBLE
+                CTLDATA 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+                PRESPARAMS PP_FONTNAMESIZE, "10.System Monospaced"
+        CONTROL "OK",                  DID_OK, 28, 3, 40, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | WS_GROUP |
+                                            WS_TABSTOP | WS_VISIBLE
+    END
+END
+
+ICON        5000                               "p:\\install\\INSTALL.ICO"
+MENU 5000
+BEGIN
+END
+
+MENU 5000
+BEGIN
+END
+
+CODEPAGE 850
+ACCELTABLE 5000 PRELOAD
+BEGIN
+    VK_F3,      5011, VIRTUALKEY
+END
+
+MENU WIN_INSTALL
+BEGIN
+
+    SUBMENU "~Installation",           IDM_INSTALL, MIS_TEXT
+    BEGIN
+        MENUITEM "~Install",           IDM_TRANSFER, MIS_TEXT
+        MENUITEM "~Uninstall",         IDM_UNINSTALL, MIS_TEXT
+        MENUITEM SEPARATOR
+        MENUITEM "E~xit\tF3",          IDM_EXIT, MIS_TEXT
+    END
+
+    SUBMENU "~Configuration",          IDM_SETUP, MIS_TEXT
+    BEGIN
+        MENUITEM "~COMi",              IDM_CONFIG_DD, MIS_TEXT
+        MENUITEM "~QuickPage",         IDM_CONFIG_APP, MIS_TEXT
+    END
+
+    SUBMENU "~Help",                   IDM_HELP, MIS_TEXT
+    BEGIN
+        MENUITEM "Help ~index",        IDM_HELPINDEX, MIS_TEXT
+        MENUITEM "~General help",      IDM_GENERALHELP, MIS_TEXT
+        MENUITEM "~Using help",        IDM_USINGHELP, MIS_TEXT
+        MENUITEM "~Keys help",         IDM_KEYSHELP, MIS_TEXT
+        MENUITEM SEPARATOR
+        MENUITEM "~Product information...", IDM_PRODUCTINFORMATION, MIS_TEXT
+    END
+END
+
+ACCELTABLE WIN_INSTALL PRELOAD
+BEGIN
+    VK_F3,      IDM_EXIT, VIRTUALKEY
+END

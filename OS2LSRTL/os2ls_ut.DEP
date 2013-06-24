@@ -1,0 +1,48 @@
+
+.\profile.obj: \
+    p:\utility\profile.c \
+    {p:\utility;p:\;$(INCLUDE);}profile.h \
+    {p:\utility;p:\;$(INCLUDE);}UTILITY.H
+
+.\ioctl.obj: \
+    p:\utility\ioctl.c \
+    {p:\utility;p:\;$(INCLUDE);}ioctl.h
+
+.\utility.obj: \
+    p:\utility\utility.c
+
+.\OS2LS_PR.sym: \
+    p:\utility\OS2LS_PR.MAP
+
+.\OS2LS_PR.sym: \
+    p:\utility\OS2LS_PR.DLL
+
+.\OS2LS_IO.sym: \
+    p:\utility\OS2LS_IO.MAP
+
+.\OS2LS_IO.sym: \
+    p:\utility\OS2LS_IO.DLL
+
+.\os2ls_ut.sym: \
+    .\os2ls_ut.dll
+
+.\OS2LS_UT.sym: \
+    p:\utility\OS2LS_UT.MAP
+
+p:\utility\OS2LS_PR.LIB: \
+    p:\utility\OS2LS_PR.MAP
+
+p:\utility\OS2LS_PR.LIB: \
+    p:\utility\OS2LS_PR.DLL
+
+p:\utility\OS2LS_IO.LIB: \
+    p:\utility\OS2LS_IO.MAP
+
+p:\utility\OS2LS_IO.LIB: \
+    p:\utility\OS2LS_IO.DLL
+
+.\os2ls_ut.LIB: \
+    .\os2ls_ut.dll
+
+p:\utility\OS2LS_UT.LIB: \
+    p:\utility\OS2LS_UT.MAP

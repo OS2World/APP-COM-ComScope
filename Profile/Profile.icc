@@ -1,0 +1,22 @@
+option ProjectOptions = link(map, "Yes"), link(pmtype, "pm"),
+                        incl(searchpath, "p:\\include"), incl(searchpath, "p:\\comi"), debug(maxerrors, 30),
+                        info(all, "yes"), info(cmp, "yes"), info(cns, "yes"),
+                        info(cnv, "yes"), info(cpy, "yes"), info(dcl, "yes"),
+                        info(eff, "yes"), info(enu, "yes"), info(ext, "yes"),
+                        info(gen, "yes"), info(gnr, "yes"), info(got, "yes"),
+                        info(ini, "yes"), info(inl, "yes"), info(lan, "yes"),
+                        info(obs, "yes"), info(ord, "yes"), info(par, "yes"),
+                        info(por, "yes"), info(ppc, "yes"), info(ppt, "yes"),
+                        info(rea, "yes"), info(trd, "yes"), info(tru, "yes"),
+                        info(uni, "yes"), info(use, "yes")
+{
+   option link(libsearchpath, "p:\\lib")
+   {
+      source type("lib") "P:\\lib\\os2ls_ut.lib"
+   }
+   source type("rc") "Profile.rc"
+   target type("dll") "os2ls_pr.dll"
+   {
+      source type("rc") "profile.c"
+   }
+}

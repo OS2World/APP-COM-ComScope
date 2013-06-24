@@ -1,0 +1,13 @@
+LIBRARY COMi_CTL
+
+DESCRIPTION 'OS/tools COMi control dialog library'
+
+EXPORTS
+  HdwFilterDialog
+  HdwFIFOsetupDialog
+  HdwHandshakeDialog
+  HdwTimeoutDialog
+  HdwBaudRateDialog
+  HdwProtocolDialog
+
+

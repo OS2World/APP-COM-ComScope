@@ -1,0 +1,71 @@
+IRE.XCP : 16.230 07-Jan-98
+Access violation occurred at CS:EIP = 0x005B:000B6BFE
+Invalid Read Access occurred at 0x0053:00000188
+
+Register dump:
+EAX = 0x00000057    EBX = 0x00000000    ECX = 0x014C20E8    EDX = 0x13E8AFA0
+EBP = 0x0011FD0C    EDI = 0x00000001    ESI = 0x00000005    ESP = 0x0011FBA8
+ CS = 0x005B         DS = 0x0053         ES = 0x0053         FS = 0x150B
+ GS = 0x08B3         SS = 0x0053
+
+Jun-26-1999 19:04:15.03
+PID: 47  TID: 1
+
+Component: IRE.Exe
+Module: @(#)windowsupport.c:2.78 Function: QueryTextWidth
+Function start: 0x000B6A50
+Function end:   0x000B6D10
+
+Tracing back through stack
+Module: @(#)storage.c:2.74 Function: SaveAlignment
+Function start: 0x0009F38C
+Function end:   0x0009FF30
+
+Tracing back through stack
+Module: @(#)toolbarwnd.c:5.38 Function: ToolBarWndProc
+Function start: 0x000AD5E0
+Function end:   0x000AFB20
+
+Tracing back through stack
+Module: @(#)ire.c:2.80 Function: main
+Function start: 0x00010180
+Function end:   0x00010DF0
+
+main( )                     : 0x00010180
+IREExceptionHandler( )      : 0x000B9D66
+-----
+
+IRE.XCP : 16.230 07-Jan-98
+Access violation occurred at CS:EIP = 0x005B:1E946B1D
+Invalid Read Access occurred at 0x0053:040E3FB0
+
+Register dump:
+EAX = 0x1CBAFCB4    EBX = 0x00000004    ECX = 0x00000001    EDX = 0x1CBAFC9C
+EBP = 0x00000004    EDI = 0x1CBAFCB4    ESI = 0x040E3FB0    ESP = 0x0011FB3C
+ CS = 0x005B         DS = 0x0053         ES = 0x0053         FS = 0x150B
+ GS = 0x08B3         SS = 0x0053
+
+May-06-2000 16:46:04.81
+PID: 62  TID: 1
+
+main( )                     : 0x00010180
+IREExceptionHandler( )      : 0x000B9D66
+-----
+
+IRE.XCP : 16.230 07-Jan-98
+Access violation occurred at CS:EIP = 0x005B:1E946B1D
+Invalid Read Access occurred at 0x0053:040E3FB0
+
+Register dump:
+EAX = 0x1CBADCC0    EBX = 0x00000004    ECX = 0x00000001    EDX = 0x1CBADCA8
+EBP = 0x00000004    EDI = 0x1CBADCC0    ESI = 0x040E3FB0    ESP = 0x0011FB3C
+ CS = 0x005B         DS = 0x0053         ES = 0x0053         FS = 0x150B
+ GS = 0x08B3         SS = 0x0053
+
+May-06-2000 16:47:30.76
+PID: 64  TID: 1
+
+main( )                     : 0x00010180
+IREExceptionHandler( )      : 0x000B9D66
+-----
+

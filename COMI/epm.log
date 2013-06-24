@@ -1,0 +1,7 @@
+[2001-10-02 20:04:59] thread abandoned2
+[2001-10-02 20:05:11] thread abandoned2
+[2001-10-02 20:05:21] Priority Msg=0x1523 failed 2
+[2001-10-02 20:05:21] EIQEIOT: EIQEM failed, msg=0x1526
+[2001-10-02 20:05:29] thread abandoned2
+[2001-10-02 20:05:47] thread abandoned2
+[2002-03-06  9:47:52] In STATWND, GpiCreateLogFont(Hps=0x1000071, NULL, LCID_STATWND=0x1, ...) caused GPI_ERROR 0x82033

@@ -1,0 +1,48 @@
+:TARGET.SUFFIXES
+:DEPENDENCY..DLL .LIB .c .obj 
+:TARGET.all
+:DEPENDENCY.
+.\OS2LS_TCPIP_SERVER.LIB
+:RULE..c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Tl10 /Sp1 /Ss /Q /Wall /Ti /N40 /W2 /Gm /Ge- /Gs /Gx /Fb /Ft- /C %s
+:RULE.{p:\connect}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Tl10 /Sp1 /Ss /Q /Wall /Ti /N40 /W2 /Gm /Ge- /Gs /Gx /Fb /Ft- /C %s
+:RULE..DLL.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe %|dpfF.LIB %s
+:RULE.{p:\connect}.DLL.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe %|dpfF.LIB %s
+:TARGET..\OS2LS_TCPIP_SERVER.DLL
+:DEPENDENCY.
+.\server.obj
+{$(LIB)}tcp32dll.lib
+{$(LIB)}so32dll.lib
+{$(LIB)}os2ls_server.def
+OS2LS_TCPIP_SERVER.mak
+:ACTION.Link::Linker
+:COMMAND.
+icc.exe @<<
+ /B" /de /optfunc /nologo /m"
+ /FeOS2LS_TCPIP_SERVER.DLL 
+ tcp32dll.lib 
+ so32dll.lib 
+ os2ls_server.def
+ .\server.obj
+<<
+:TARGET..\server.obj
+:DEPENDENCY.
+p:\connect\server.c
+{p:\connect;$(INCLUDE);}aerial.h
+{p:\connect;$(INCLUDE);}comm.h
+OS2LS_TCPIP_SERVER.mak
+:TARGET..\OS2LS_TCPIP_SERVER.LIB
+:DEPENDENCY.
+.\OS2LS_TCPIP_SERVER.DLL
+OS2LS_TCPIP_SERVER.mak

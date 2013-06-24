@@ -1,0 +1,50 @@
+[COMPILER]
+INCLUDEDIRS=%(INCLUDE)
+MACRO=\n
+FILTEREXPANSION=0 0 0 0 0
+compile=concur|capture|hide|:Compile:&Compile,
+make=concur|capture|clear|saveall|:Build:&Build,p:\config\MakeGA.cmd A
+rebuild=concur|capture|hide|:Rebuild:&Rebuild,
+debug=hide|savenone|:Debug:&Debug,
+execute=hide|:Execute:E&xecute,
+user1=hide|:User 1:User 1,
+user2=hide|:User 2:User 2,
+usertool_resource_editor=hide|:Resource Editor:Resource Editor,
+usertool_build_debug=concur|capture|hide|clear|saveall|:Build debug:Build &debug,p:\Config\MakeDebug.cmd A
+usertool_make_ga=concur|capture|hide|clear|saveall|:Make GA:Make GA &1,p:\Config\MakeGA.cmd
+usertool_make_debug=concur|capture|hide|clear|saveall|:Make debug:Make debug &2,p:\config\MakeDebug.cmd
+workingdir=
+includedirs=%(INCLUDE)
+tagfiles=
+reffile=
+[ASSOCIATION]
+[FILES]
+P:\COMI\comdd.h
+P:\Config\cfg_dev_dlg.c
+P:\Config\cfg_dlg.c
+P:\Config\cfg_hlp.c
+P:\Config\cfg_prot_dlg.c
+P:\Config\cfg_prot_hlp.c
+P:\Config\comddini.c
+P:\Config\COMi_CFG.H
+P:\Config\ddbufdlg.c
+P:\Config\dev_notebk.c
+P:\Config\fifo_dlg.c
+P:\Config\resource.H
+P:\Include\config.h
+[STATE]
+SCREEN: 1600 1200 166 86 1083 1002 0 0 N 0 0 0 0 877 663
+CWD: P:\CONFIG
+FILEHIST: 9
+P:\CONFIG\dev_notebk.c
+p:\config\comddini.c
+W:\DIST\BETA\_Sealevel\VERSION.TXT
+W:\DIST\BETA\_Sealevel\MAKE.PRF
+W:\DIST\BETA\_Globetek\MAKE.PRF
+P:\CONFIG\resource.H
+P:\Config\cfg_dlg.c
+P:\COMI\comdd.h
+P:\CONFIG\Config.Rc
+PRINTER: 2
+
+

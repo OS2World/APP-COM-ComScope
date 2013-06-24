@@ -1,0 +1,19 @@
+;************************************************************************
+;
+; $Revision$
+;
+; $Log$
+;
+;************************************************************************
+
+;******** Module Definition File for COM Device Driver ********
+
+LIBRARY
+
+PROTMODE                ;Runs only in protect mode
+
+CODE    PRELOAD         ;Device driver - preload
+
+DATA    PRELOAD         ;Device driver - preload
+
+;******************************************************************************

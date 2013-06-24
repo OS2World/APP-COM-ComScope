@@ -1,0 +1,89 @@
+:TARGET.SUFFIXES
+:DEPENDENCY..c .obj 
+:TARGET.all
+:DEPENDENCY.
+.\Install.exe
+:RULE..c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Tl10 /DINCLUDE_COMDD /Sp1 /Sd /Ss /Q /Wall /O /N40 /W2 /Gm /Gd /Gs /Gn /Ms /Ft- /Gu /C %s
+:RULE.{p:\include}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Tl10 /DINCLUDE_COMDD /Sp1 /Sd /Ss /Q /Wall /O /N40 /W2 /Gm /Gd /Gs /Gn /Ms /Ft- /Gu /C %s
+:RULE.{p:\Install\results}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Tl10 /DINCLUDE_COMDD /Sp1 /Sd /Ss /Q /Wall /O /N40 /W2 /Gm /Gd /Gs /Gn /Ms /Ft- /Gu /C %s
+:RULE.{p:\Install}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Tl10 /DINCLUDE_COMDD /Sp1 /Sd /Ss /Q /Wall /O /N40 /W2 /Gm /Gd /Gs /Gn /Ms /Ft- /Gu /C %s
+:TARGET..\Install.exe
+:DEPENDENCY.
+.\inst_dlg.obj
+.\winstall.obj
+.\help.obj
+.\instutil.obj
+p:\Install\INSTALL.RES
+{$(LIB)}OS2LSRTL.lib
+{$(LIB)}OS2LS_UT.lib
+{$(LIB)}CPPOM30O.lib
+{$(LIB)}OS2386.lib
+{$(LIB)}Install.def
+Install.MAK
+:ACTION.Link::Linker
+:COMMAND.
+icc.exe @<<
+ /B" /optfunc /nologo /noe /m /nod"
+ /FeInstall.exe 
+ OS2LSRTL.lib 
+ OS2LS_UT.lib 
+ CPPOM30O.lib 
+ OS2386.lib 
+ Install.def
+ .\inst_dlg.obj
+ .\winstall.obj
+ .\help.obj
+ .\instutil.obj
+<<
+:ACTION.Bind::Resource Bind
+:COMMAND.
+rc.exe p:\Install\INSTALL.RES Install.exe
+:TARGET..\inst_dlg.obj
+:DEPENDENCY.
+p:\Install\inst_dlg.c
+{p:\Install;$(INCLUDE);}COMMON.H
+{p:\Install;$(INCLUDE);}UTILITY.H
+{p:\Install;$(INCLUDE);}CONFIG.H
+{p:\Install;$(INCLUDE);}help.h
+{p:\Install;$(INCLUDE);}install.h
+{p:\Install;$(INCLUDE);}resource.h
+Install.MAK
+:TARGET..\instutil.obj
+:DEPENDENCY.
+p:\Install\instutil.c
+{p:\Install;$(INCLUDE);}COMMON.H
+{p:\Install;$(INCLUDE);}UTILITY.H
+{p:\Install;$(INCLUDE);}CONFIG.H
+{p:\Install;$(INCLUDE);}install.h
+Install.MAK
+:TARGET..\help.obj
+:DEPENDENCY.
+p:\Install\help.c
+{p:\Install;$(INCLUDE);}COMMON.H
+{p:\Install;$(INCLUDE);}UTILITY.H
+{p:\Install;$(INCLUDE);}install.h
+{p:\Install;$(INCLUDE);}resource.h
+Install.MAK
+:TARGET..\winstall.obj
+:DEPENDENCY.
+p:\Install\winstall.c
+{p:\Install;$(INCLUDE);}COMMON.H
+{p:\Install;$(INCLUDE);}UTILITY.H
+{p:\Install;$(INCLUDE);}CONFIG.H
+{p:\Install;$(INCLUDE);}help.h
+{p:\Install;$(INCLUDE);}install.h
+{p:\Install;$(INCLUDE);}instpage.h
+{p:\Install;$(INCLUDE);}resource.h
+Install.MAK

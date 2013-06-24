@@ -1,0 +1,1880 @@
+
+/* OS/2 Warp 3.0 Resource Script File - Created by Prominare Designer */
+
+#define INCL_WINSYS
+#define INCL_WINBIDI
+#define INCL_WINSTDDLGS
+#define INCL_WINSTDSPIN
+#define INCL_NLS
+#define INCL_SW
+
+#include <os2.h>
+
+#include "\comscope\resource.h"
+
+MENU IDMPU_ROW_DISP_POPUP
+BEGIN
+    MENUITEM "Display ~Setup...",      IDMPU_EVENT_DISP, MIS_TEXT
+
+    SUBMENU "Display ~Colors",         IDMPU_COLORS, MIS_TEXT
+    BEGIN
+        MENUITEM "~Receive...",        IDMPU_READ_COLOR, MIS_TEXT
+        MENUITEM "~Transmit...",       IDMPU_WRITE_COLOR, MIS_TEXT
+        MENUITEM "Modem ~in...",       IDMPU_MODEMIN_COLOR, MIS_TEXT
+        MENUITEM "Modem ~out...",      IDMPU_MODEMOUT_COLOR, MIS_TEXT
+        MENUITEM "Open/~Close...",     IDMPU_OPEN_COLOR, MIS_TEXT
+        MENUITEM "~Write requests...", IDMPU_WRITEREQ_COLOR, MIS_TEXT
+        MENUITEM "Read Re~quests...",  IDMPU_READREQ_COLOR, MIS_TEXT
+        MENUITEM "~Device I/O Control calls...", IDMPU_DEVIOCTL_COLOR, MIS_TEXT
+        MENUITEM "Comm ~Errors",       IDMPU_ERROR_COLOR, MIS_TEXT
+    END
+
+    SUBMENU "Display ~Font\tF9 ",      IDMPU_FONT, MIS_TEXT
+    BEGIN
+        MENUITEM "~ASCII",             IDMPU_ASCII_FONT, MIS_TEXT
+        MENUITEM "~Hexidecimal",       IDMPU_HEX_FONT, MIS_TEXT
+    END
+END
+
+ICON        IDM_COMSCOPE "P:\\COMSCOPE\\COMSCOPE.ICO"
+ICON        ABT_ICON "P:\\COMSCOPE\\COMSCOPE.ICO"
+MENU IDM_COMSCOPE
+BEGIN
+
+    SUBMENU "~File",                   IDM_FILE, MIS_TEXT
+    BEGIN
+        MENUITEM "~Load Data",         IDM_LOADDAT, MIS_TEXT
+        MENUITEM "~Save Data",         IDM_SAVEDAT, MIS_TEXT
+        MENUITEM "Save Data ~As...",   IDM_SAVEDATAS, MIS_TEXT
+        MENUITEM SEPARATOR
+        MENUITEM "E~xit \tF3",         IDM_EXIT, MIS_TEXT
+    END
+
+    SUBMENU "~Action",                 IDM_ACTION, MIS_TEXT
+    BEGIN
+        MENUITEM "~Capture Stream \tF5", IDM_MSTREAM, MIS_TEXT
+        MENUITEM "~Display Stream \tF6", IDM_MDISPLAY, MIS_TEXT
+        MENUITEM "~Examine Stream \tF4", IDM_VIEWDAT, MIS_TEXT
+        MENUITEM SEPARATOR
+        MENUITEM "~Search Stream \tAlt-F2", IDM_SEARCH, MIS_TEXT
+        MENUITEM "Find ~Next \tF2",    IDM_SEARCH_NEXT, MIS_TEXT
+        MENUITEM "~Query Event \tCtl-F2", IDM_QUERY_INDEX, MIS_TEXT
+        MENUITEM SEPARATOR
+
+        SUBMENU "~Surface Sessions",   IDM_SURFACE, MIS_TEXT
+        BEGIN
+            MENUITEM "~This Session \tF11", IDM_SURFACE_THIS, MIS_TEXT
+            MENUITEM "~All Sessions \tF12", IDM_SURFACE_ALL, MIS_TEXT
+        END
+    END
+
+    SUBMENU "~Capture",                IDM_TRIGGER, MIS_TEXT
+    BEGIN
+        MENUITEM "~Events...",         IDM_CAP_EVENT, MIS_TEXT
+        MENUITEM "~Process...",        IDM_BUFFSIZE, MIS_TEXT
+        MENUITEM "~Update Frequency...", IDM_MSLEEP, MIS_TEXT
+
+        SUBMENU "~Display",            IDM_DISPLAY_OPT, MIS_TEXT
+        BEGIN
+
+            SUBMENU "Stream ~Display Format\tF8 ", IDM_DISP_TYPE, MIS_TEXT
+            BEGIN
+                MENUITEM "~Lexical",   IDM_COLUMNS, MIS_TEXT
+                MENUITEM "~Time-relational", IDM_ROWS, MIS_TEXT
+            END
+            MENUITEM "Toggle ~Font Size \tF10", IDM_TOGGLE_FONT_SIZE, MIS_TEXT
+            MENUITEM SEPARATOR
+
+            SUBMENU "~Time-relational", IDM_ROW_DISPLAY, MIS_TEXT
+            BEGIN
+                MENUITEM "~Setup...",  IDMPU_EVENT_DISP, MIS_TEXT
+
+                SUBMENU "~Colors",     IDMPU_COLORS, MIS_TEXT
+                BEGIN
+                    MENUITEM "~Receive...", IDMPU_READ_COLOR, MIS_TEXT
+                    MENUITEM "~Transmit...", IDMPU_WRITE_COLOR, MIS_TEXT
+                    MENUITEM "Modem ~in...", IDMPU_MODEMIN_COLOR, MIS_TEXT
+                    MENUITEM "Modem ~out...", IDMPU_MODEMOUT_COLOR, MIS_TEXT
+                    MENUITEM "Open/~Close...", IDMPU_OPEN_COLOR, MIS_TEXT
+                    MENUITEM "~Write requests...", IDMPU_WRITEREQ_COLOR,
+                             MIS_TEXT
+                    MENUITEM "Read Re~quests...", IDMPU_READREQ_COLOR, MIS_TEXT
+                    MENUITEM "~Device I/O Control calls...",
+                              IDMPU_DEVIOCTL_COLOR, MIS_TEXT
+                    MENUITEM "Communications ~Errors...", IDMPU_ERROR_COLOR,
+                             MIS_TEXT
+                END
+
+                SUBMENU "~Font\tF9 ",  IDMPU_FONT, MIS_TEXT
+                BEGIN
+                    MENUITEM "~ASCII", IDMPU_ASCII_FONT, MIS_TEXT
+                    MENUITEM "~Hexidecimal", IDMPU_HEX_FONT, MIS_TEXT
+                    MENUITEM "~ASCII", IDMPU_LEX_ASCII_FONT, MIS_TEXT
+                    MENUITEM "~Hexidecimal", IDMPU_LEX_HEX_FONT, MIS_TEXT
+                END
+            END
+
+            SUBMENU "~Lexical",        IDM_COL_DISPLAY, MIS_TEXT
+            BEGIN
+                MENUITEM "~Sync receive", IDMPU_SYNC_RX, MIS_TEXT
+                MENUITEM "S~ync transmit", IDMPU_SYNC_TX, MIS_TEXT
+                MENUITEM "Setup ~receive...", IDMPU_RX_DISP_FILTERS, MIS_TEXT
+                MENUITEM "Setup ~transmit...", IDMPU_TX_DISP_FILTERS, MIS_TEXT
+                MENUITEM "Receive ~colors...", IDMPU_RX_COLORS, MIS_TEXT
+                MENUITEM "Transmit co~lors...", IDMPU_TX_COLORS, MIS_TEXT
+                MENUITEM "~Lock receive width", IDMPU_LOCK_WIDTH, MIS_TEXT
+                MENUITEM "Lock transmit ~width", IDMPU_LOCK_WIDTH, MIS_TEXT
+
+                SUBMENU "~Font\tF9 ",  IDMPU_FONT, MIS_TEXT
+                BEGIN
+                    MENUITEM "~ASCII", IDMPU_ASCII_FONT, MIS_TEXT
+                    MENUITEM "~Hexidecimal", IDMPU_HEX_FONT, MIS_TEXT
+                    MENUITEM "~ASCII", IDMPU_LEX_ASCII_FONT, MIS_TEXT
+                    MENUITEM "~Hexidecimal", IDMPU_LEX_HEX_FONT, MIS_TEXT
+                END
+            END
+
+            SUBMENU "~Status Bar",     IDM_STATUS_DISPLAY, MIS_TEXT
+            BEGIN
+                MENUITEM "Show Last ~Message", IDMPU_LAST_MSG, MIS_TEXT
+                MENUITEM "~Colors...", IDMPU_COLORS, MIS_TEXT
+                MENUITEM "Show Captured Co~unts", IDMPU_LAST_COUNT, MIS_TEXT
+                MENUITEM "~Silent Status", IDMPU_SILENT_STATUS, MIS_TEXT
+            END
+        END
+    END
+
+    SUBMENU "~Options",                IDM_OPTION, MIS_TEXT
+    BEGIN
+        MENUITEM "Stic~ky Pop-up Menus", IDM_STICKY_MENUS, MIS_TEXT
+        MENUITEM "~Silent Status \tF7", IDM_SILENT_STATUS, MIS_TEXT
+        MENUITEM SEPARATOR
+        MENUITEM "~Manage Profile...", IDM_MANAGE_CFG, MIS_TEXT
+    END
+
+    SUBMENU "~Device",                 IDM_DEVICE, MIS_TEXT
+    BEGIN
+        MENUITEM "Select ~Device...",  IDM_SSELECT, MIS_TEXT
+        MENUITEM "~Install Device...", IDM_INSTALL, MIS_TEXT
+
+        SUBMENU "~Status",             IDM_STATUS, MIS_TEXT
+        BEGIN
+            MENUITEM "~Device Driver Status", IDM_STDEVDRV, MIS_TEXT
+            MENUITEM "~Input MODEM Signals", IDM_STINMDM, MIS_TEXT
+            MENUITEM "~Output MODEM Signals", IDM_STOUTMDM, MIS_TEXT
+            MENUITEM "~Receive Buffer Status", IDM_STRCVBUFF, MIS_TEXT
+            MENUITEM "~Transmit Buffer Status", IDM_STXMITBUF, MIS_TEXT
+            MENUITEM "Character ~Counts...", IDM_SHOWCOUNTS, MIS_TEXT
+            MENUITEM SEPARATOR
+            MENUITEM "Set ~Update Frequency...", IDM_STUPDATE, MIS_TEXT
+            MENUITEM SEPARATOR
+            MENUITEM "Show ~All...",   IDM_STALL, MIS_TEXT
+        END
+
+        SUBMENU "~Control",            IDM_IOCTL, MIS_TEXT
+        BEGIN
+            MENUITEM "Transmit Next ~Keystroke", IDM_SENDIMM, MIS_TEXT
+
+            SUBMENU "~Force Xon/Xoff", IDM_FORCEXX, MIS_TEXT
+            BEGIN
+                MENUITEM "Act Like Xo~n Received", IDM_FXON, MIS_TEXT
+                MENUITEM "Act Like Xo~ff Received", IDM_FXOFF, MIS_TEXT
+            END
+
+            SUBMENU "Transmit ~Xon/Xoff Now!", IDM_SENDXX, MIS_TEXT
+            BEGIN
+                MENUITEM "Send Xo~n",  IDM_SXON, MIS_TEXT
+                MENUITEM "Send Xo~ff", IDM_SXOFF, MIS_TEXT
+            END
+            MENUITEM "Transmit ~Break", IDM_SENDBRK, MIS_TEXT
+
+            SUBMENU "~Flush Buffers",  IDM_FLUSH, MIS_TEXT
+            BEGIN
+                MENUITEM "Flush ~Input", IDM_FINPUT, MIS_TEXT
+                MENUITEM "Flush ~Output", IDM_FOUTPUT, MIS_TEXT
+                MENUITEM "Flush ~Both", IDM_FBOTH, MIS_TEXT
+            END
+            MENUITEM "Output Modem Signals...", IDM_OUT1, MIS_TEXT
+        END
+
+        SUBMENU "~Protocol",           IDM_SETUP, MIS_TEXT
+        BEGIN
+            MENUITEM "~Baud Rate...",  IDM_BAUDRATE, MIS_TEXT
+            MENUITEM "~Line Protocol...", IDM_PROTO, MIS_TEXT
+            MENUITEM "~Time-outs...",  IDM_TIMEOUT, MIS_TEXT
+            MENUITEM "~Handshaking...", IDM_HANDSHAKE, MIS_TEXT
+            MENUITEM "~Stream Filters...", IDM_FILTER, MIS_TEXT
+            MENUITEM "~FIFO Control...", IDM_FIFO, MIS_TEXT
+        END
+    END
+
+    SUBMENU "~Help",                   IDM_HELP, MIS_TEXT
+    BEGIN
+        MENUITEM "Help ~Index",        IDM_HELPINDEX, MIS_TEXT
+        MENUITEM "~General Help",      IDM_HELPEXTEND, MIS_TEXT
+        MENUITEM "~Keys Help",         IDM_HELPKEYS, MIS_TEXT
+        MENUITEM "~Using Help",        IDM_HELPFORHELP, MIS_TEXT
+        MENUITEM SEPARATOR
+        MENUITEM "~About COMscope",    IDM_HELPABOUT, MIS_TEXT
+    END
+END
+
+MENU IDMPU_STATUS_POPUP
+BEGIN
+    MENUITEM "Show Last ~Message",     IDMPU_LAST_MSG, MIS_TEXT
+    MENUITEM "Status Line ~Colors...", IDMPU_COLORS, MIS_TEXT
+    MENUITEM "Show Captured Co~unts",  IDMPU_LAST_COUNT, MIS_TEXT
+    MENUITEM "~Silent Status",         IDMPU_SILENT_STATUS, MIS_TEXT
+END
+
+MENU IDMPU_COL_DISP_POPUP
+BEGIN
+    MENUITEM "~Synchronize",           IDMPU_SYNC, MIS_TEXT
+    MENUITEM "~Display Process...",    IDMPU_DISP_FILTERS, MIS_TEXT
+    MENUITEM "Display ~Colors...",     IDMPU_COLORS, MIS_TEXT
+    MENUITEM "~Lock Window Width",     IDMPU_LOCK_WIDTH, MIS_TEXT
+
+    SUBMENU "Display ~Font\tF9 ",      IDMPU_FONT, MIS_TEXT
+    BEGIN
+        MENUITEM "~ASCII",             IDMPU_ASCII_FONT, MIS_TEXT
+        MENUITEM "~Hexidecimal",       IDMPU_HEX_FONT, MIS_TEXT
+    END
+END
+
+MENU IDMPU_SIG_DISP_POPUP
+BEGIN
+    MENUITEM "~Move Window",           IDMPU_MOVE_WIN, MIS_TEXT
+    MENUITEM "~Display Setup...",      IDMPU_EVENT_DISP, MIS_TEXT
+    MENUITEM "Display ~Colors...",     IDMPU_COLORS, MIS_TEXT
+END
+
+ACCELTABLE IDM_COMSCOPE PRELOAD
+BEGIN
+    VK_F2,      IDM_QUERY_INDEX, VIRTUALKEY, CONTROL
+    VK_F2,      IDM_SEARCH, VIRTUALKEY, ALT
+    VK_F2,      IDM_SEARCH_NEXT, VIRTUALKEY
+    VK_F3,      IDM_EXIT, VIRTUALKEY
+    VK_F4,      IDM_VIEWDAT, VIRTUALKEY
+    VK_F5,      IDM_MSTREAM, VIRTUALKEY
+    VK_F6,      IDM_MDISPLAY, VIRTUALKEY
+    VK_F7,      IDM_SILENT_STATUS, VIRTUALKEY
+    VK_F8,      IDM_TOGGLE_FORMAT, VIRTUALKEY
+    VK_F9,      IDM_TOGGLE_FONT, VIRTUALKEY
+    VK_F10,     IDM_TOGGLE_FONT_SIZE, VIRTUALKEY
+    VK_F11,     IDM_SURFACE_THIS, VIRTUALKEY
+    VK_F12,     IDM_SURFACE_ALL, VIRTUALKEY
+END
+
+WINDOWTEMPLATE IDM_COMSCOPE
+BEGIN
+    WINDOW "", IDM_COMSCOPE, 8, 30, 200, 91, WC_FRAME, FS_NOBYTEALIGN |
+                FS_SIZEBORDER | WS_CLIPSIBLINGS | WS_SAVEBITS | WS_VISIBLE,
+                FCF_TITLEBAR | FCF_SYSMENU | FCF_MENU | FCF_ACCELTABLE
+    BEGIN
+    END
+END
+
+DLGTEMPLATE BSZ_DLG
+BEGIN
+    DIALOG "Trace Buffer Configuration", BSZ_DLG, 282, 225, 166, 121,
+                FS_NOBYTEALIGN | FS_SCREENALIGN | FS_DLGBORDER |
+                WS_CLIPSIBLINGS | WS_SAVEBITS | WS_VISIBLE, FCF_TITLEBAR
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        CONTROL "Buffer ~Size",        BSZ_LENGTHT, 94, 104, 59, 8, WC_STATIC,
+                                            SS_TEXT | DT_CENTER | DT_VCENTER |
+                                            DT_MNEMONIC | WS_GROUP | WS_VISIBLE
+        CONTROL "0000000",             BSZ_LENGTH, 93, 60, 61, 43, WC_COMBOBOX,
+                                            CBS_SIMPLE | ES_MIXED | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "Buffer ~Processing",  0, 8, 19, 150, 45, WC_STATIC,
+                                            SS_GROUPBOX | DT_MNEMONIC |
+                                            WS_GROUP | WS_VISIBLE
+        CONTROL "Write Captured Data to  a File", BSZ_FILE, 11, 42, 143, 10,
+                                            WC_BUTTON, BS_AUTORADIOBUTTON |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Stop Capture at End of Buffer", BSZ_STOP, 11, 31, 143, 10,
+                                            WC_BUTTON, BS_AUTORADIOBUTTON |
+                                            WS_VISIBLE
+        CONTROL "Wrap Around at End of Buffer", BSZ_WRAP, 11, 21, 143, 11,
+                                            WC_BUTTON, BS_AUTORADIOBUTTON |
+                                            WS_VISIBLE
+        CONTROL "O~K",                 DID_OK, 11, 3, 40, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | WS_GROUP |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Cancel",              DID_CANCEL, 62, 3, 40, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | WS_GROUP |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Help",                DID_HELP, 114, 3, 40, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_NOPOINTERFOCUS |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Minimum Length",      0, 15, 97, 73, 10, WC_STATIC, SS_TEXT |
+                                            DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "2048 characters",     BSZ_MINLEN, 5, 88, 85, 8, WC_STATIC,
+                                            SS_TEXT | DT_CENTER | DT_VCENTER |
+                                            DT_WORDBREAK | WS_VISIBLE
+        CONTROL "Maximum Length",      0, 13, 74, 73, 9, WC_STATIC, SS_TEXT |
+                                            DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "1048576 characters",  BSZ_MAXLEN, 6, 65, 85, 8, WC_STATIC,
+                                            SS_TEXT | DT_CENTER | DT_VCENTER |
+                                            DT_WORDBREAK | WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE IDM_DISPLAY_OPT
+BEGIN
+    DIALOG "Device driver trace buffer read frequency", IDM_DISPLAY_OPT, 276, 186, 215, 113,
+                FS_NOBYTEALIGN | FS_SCREENALIGN | FS_DLGBORDER |
+                WS_CLIPSIBLINGS | WS_SAVEBITS | WS_VISIBLE, FCF_TITLEBAR
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        CONTROL "Update Frequency to Use", 0, 20, 41, 175, 42, WC_STATIC,
+                                            SS_GROUPBOX | WS_GROUP | WS_VISIBLE
+        CONTROL "~COMscope Calculated", IDM_STATUS_DISPLAY, 42, 64, 113, 10,
+                                            WC_BUTTON, BS_RADIOBUTTON |
+                                            WS_VISIBLE
+        CONTROL "~User Defined",       MSLEEP_USER, 42, 54, 94, 10, WC_BUTTON,
+                                            BS_RADIOBUTTON | WS_VISIBLE
+        CONTROL "",                    MSLEEP_USER_COUNT, 61, 44, 34, 8,
+                                            WC_ENTRYFIELD, ES_RIGHT | ES_MARGIN |
+                                            ES_MIXED | WS_TABSTOP | WS_VISIBLE
+        CONTROL "O~k",                 DID_OK, 17, 4, 51, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_DEFAULT |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Cancel",              DID_CANCEL, 87, 4, 51, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | WS_GROUP |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Help",                DID_HELP, 151, 4, 51, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_NOPOINTERFOCUS |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "milliseconds",        MSLEEP_USER_COUNTT, 97, 44, 61, 8,
+                                            WC_STATIC, SS_TEXT | DT_LEFT |
+                                            DT_BOTTOM | WS_VISIBLE
+        CONTROL "Device Driver Trace Buffer = 512 Bytes", MSLEEP_BUFF_SIZE,
+                                        9, 101, 188, 8, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_VCENTER | WS_VISIBLE
+        CONTROL "Calculated Update Frequency = 500 milliseconds",
+                                       MSLEEP_CALC_RATE, 5, 89, 207, 8,
+                                            WC_STATIC, SS_TEXT | DT_CENTER |
+                                            DT_VCENTER | WS_VISIBLE
+        CONTROL "",                    MSLEEP_WARNING1, 2, 19, 166, 7,
+                                            WC_STATIC, SS_TEXT | DT_CENTER |
+                                            DT_VCENTER | DT_WORDBREAK |
+                                            WS_VISIBLE
+                PRESPARAMS PP_FOREGROUNDCOLOR, 0x00ff0000
+        CONTROL "",                    MSLEEP_WARNING, 11, 20, 191, 19,
+                                            WC_STATIC, SS_TEXT | DT_LEFT |
+                                            DT_TOP | DT_WORDBREAK | WS_VISIBLE
+                PRESPARAMS PP_FOREGROUNDCOLOR, 0x00ff0000
+    END
+END
+
+DLGTEMPLATE CLR_DLG
+BEGIN
+    DIALOG "Set display colors", CLR_DLG, 210, 157, 327, 138, FS_NOBYTEALIGN |
+                FS_DLGBORDER | WS_CLIPSIBLINGS | WS_SAVEBITS | WS_VISIBLE,
+                FCF_TITLEBAR
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        CONTROL "~Foreground",         0, 7, 24, 150, 94, WC_STATIC,
+                                            SS_GROUPBOX | DT_MNEMONIC |
+                                            WS_GROUP | WS_VISIBLE
+        CONTROL "White",               CLR_FWHITE, 13, 98, 38, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "Black",               CLR_FBLACK, 78, 98, 56, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Blue",                CLR_FBLUE, 13, 88, 38, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Dark Blue",           CLR_FDBLUE, 78, 88, 58, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Red",                 CLR_FRED, 13, 78, 38, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Dark Red",            CLR_FDRED, 78, 78, 72, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Green",               CLR_FGREEN, 13, 68, 38, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Dark Green",          CLR_FDGREEN, 78, 68, 70, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Magenta",             CLR_FPINK, 13, 58, 55, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Pink",                CLR_FDPINK, 78, 58, 44, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Turquois",            CLR_FCYAN, 13, 48, 55, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Cyan",                CLR_FDCYAN, 78, 48, 41, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Yellow",              CLR_FYELLOW, 13, 38, 55, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Brown",               CLR_FBROWN, 78, 38, 45, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Gray",                CLR_FGRAY, 13, 28, 43, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Dark Gray",           CLR_FDGRAY, 78, 28, 69, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "A~uto",               DID_AUTOFOREGRND, 127, 43, 26, 14,
+                                            WC_BUTTON, BS_PUSHBUTTON | WS_GROUP |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "~Background",         0, 169, 24, 150, 94, WC_STATIC,
+                                            SS_GROUPBOX | DT_MNEMONIC |
+                                            WS_GROUP | WS_VISIBLE
+        CONTROL "White",               CLR_BWHITE, 177, 98, 38, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "Black",               CLR_BBLACK, 244, 98, 42, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Blue",                CLR_BBLUE, 177, 88, 38, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Dark Blue",           CLR_BDBLUE, 244, 88, 55, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Red",                 CLR_BRED, 177, 78, 38, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Dark Red",            CLR_BDRED, 244, 78, 54, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Green",               CLR_BGREEN, 177, 68, 38, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Dark Green",          CLR_BDGREEN, 244, 68, 66, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Magenta",             CLR_BPINK, 177, 58, 51, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Pink",                CLR_BDPINK, 244, 58, 38, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Turquois",            CLR_BCYAN, 177, 48, 52, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Cyan",                CLR_BDCYAN, 244, 48, 38, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Yellow",              CLR_BYELLOW, 177, 38, 52, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Brown",               CLR_BBROWN, 244, 38, 38, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Gray",                CLR_BGRAY, 177, 28, 45, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Dark Gray",           CLR_BDGRAY, 244, 28, 60, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "Aut~o",               DID_AUTOBACKGRND, 289, 43, 26, 14,
+                                            WC_BUTTON, BS_PUSHBUTTON | WS_GROUP |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "O~k",                 DID_OK, 60, 5, 38, 13, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_DEFAULT |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Cancel",              DID_CANCEL, 143, 5, 42, 13, WC_BUTTON,
+                                            BS_PUSHBUTTON | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "Help",                DID_HELP, 231, 5, 42, 13, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_NOPOINTERFOCUS |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "S A M P L E  D I S P L A Y", CLR_SAMPLE, 40, 122, 245, 10,
+                                            WC_STATIC, SS_TEXT | DT_CENTER |
+                                            DT_VCENTER | WS_VISIBLE
+                PRESPARAMS PP_FONTNAMESIZE, "10.System Monospaced"
+    END
+END
+
+DLGTEMPLATE DISP_FILTER_DLG
+BEGIN
+    DIALOG "Column display setup", DISP_FILTER_DLG, 280, 122, 188, 157,
+                FS_NOBYTEALIGN | FS_DLGBORDER | WS_CLIPSIBLINGS | WS_SAVEBITS |
+                WS_VISIBLE, FCF_TITLEBAR
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        CONTROL "Begin New ~Line On Charcter", DISP_NL, 18, 144, 157, 10,
+                                            WC_BUTTON, BS_CHECKBOX | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "~New Line Character", DISP_NLT, 57, 135, 117, 8, WC_STATIC,
+                                            SS_TEXT | DT_LEFT | DT_VCENTER |
+                                            DT_MNEMONIC | WS_GROUP | WS_VISIBLE
+                PRESPARAMS PP_FOREGROUNDCOLOR, 0x00000000
+        CONTROL "0D",                  DISP_NL_CHAR, 38, 135, 12, 8,
+                                            WC_ENTRYFIELD, ES_CENTER | ES_MIXED |
+                                            WS_TABSTOP | WS_VISIBLE
+                CTLDATA 8, 2, 0, 0
+                PRESPARAMS PP_FOREGROUNDCOLOR, 0x00000000
+                PRESPARAMS PP_BACKGROUNDCOLOR, 0x00ffffc8
+                PRESPARAMS PP_DISABLEDBACKGROUNDCOLOR, 0x00ffffc8
+                PRESPARAMS PP_FONTNAMESIZE, "11.System VIO"
+        CONTROL "Skip ~Blank Lines",   DISP_SKP, 29, 123, 136, 10, WC_BUTTON,
+                                            BS_AUTOCHECKBOX | WS_VISIBLE
+        CONTROL "~Synchronize to Other Column", DISP_SYNC, 29, 113, 141, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_VISIBLE
+        CONTROL "~Wrap Long Lines",    DISP_WRAP, 29, 103, 147, 9, WC_BUTTON,
+                                            BS_AUTOCHECKBOX | WS_VISIBLE
+        CONTROL "~FilterTransmit Stream", DISP_FILTER, 19, 90, 121, 10,
+                                            WC_BUTTON, BS_CHECKBOX | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "Filters Options",     DISP_FILTERT, 10, 25, 167, 63, WC_STATIC,
+                                            SS_GROUPBOX | WS_GROUP | WS_VISIBLE
+        CONTROL "Exclude ~Alpha",      DISP_ALPHA, 17, 71, 149, 10, WC_BUTTON,
+                                            BS_AUTOCHECKBOX | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "Exclude N~umbers",    DISP_NUMS, 17, 60, 152, 10, WC_BUTTON,
+                                            BS_AUTOCHECKBOX | WS_VISIBLE
+        CONTROL "Exclude ~Punctuation", DISP_PUNCT, 17, 49, 151, 10, WC_BUTTON,
+                                            BS_AUTOCHECKBOX | WS_VISIBLE
+        CONTROL "Exclude N~on-Print Characters", DISP_NPRINT, 17, 38, 156, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_VISIBLE
+        CONTROL "Character ~Mask",     DISP_CHAR_MASKTT, 47, 29, 125, 8,
+                                            WC_STATIC, SS_TEXT | DT_LEFT |
+                                            DT_VCENTER | DT_MNEMONIC | WS_GROUP |
+                                            WS_VISIBLE
+                PRESPARAMS PP_FOREGROUNDCOLOR, 0x00000000
+        CONTROL "FF",                  DISP_CHAR_MASK, 29, 29, 11, 8,
+                                            WC_ENTRYFIELD, ES_CENTER | ES_MIXED |
+                                            WS_TABSTOP | WS_VISIBLE
+                CTLDATA 8, 2, 0, 0
+                PRESPARAMS PP_FOREGROUNDCOLOR, 0x00000000
+                PRESPARAMS PP_BACKGROUNDCOLOR, 0x00ffffc8
+                PRESPARAMS PP_DISABLEDBACKGROUNDCOLOR, 0x00ffffc8
+                PRESPARAMS PP_FONTNAMESIZE, "11.System VIO"
+        CONTROL "O~k",                 DID_OK, 18, 4, 44, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_DEFAULT |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Cancel",              DID_CANCEL, 69, 4, 44, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | WS_GROUP |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Help",                DID_HELP, 121, 4, 44, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_NOPOINTERFOCUS |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "'",                   DISP_NLTT, 49, 135, 5, 8, WC_STATIC,
+                                            SS_TEXT | DT_LEFT | DT_BOTTOM |
+                                            WS_VISIBLE
+                PRESPARAMS PP_FOREGROUNDCOLOR, 0x00000000
+                PRESPARAMS PP_BACKGROUNDCOLOR, 0x00ffffc8
+                PRESPARAMS PP_DISABLEDBACKGROUNDCOLOR, 0x00ffffc8
+                PRESPARAMS PP_FONTNAMESIZE, "11.System VIO"
+        CONTROL "'",                   DISP_NLTTT, 22, 135, 16, 8, WC_STATIC,
+                                            SS_TEXT | DT_RIGHT | DT_BOTTOM |
+                                            WS_VISIBLE
+                PRESPARAMS PP_FOREGROUNDCOLOR, 0x00000000
+                PRESPARAMS PP_BACKGROUNDCOLOR, 0x00ffffc8
+                PRESPARAMS PP_DISABLEDBACKGROUNDCOLOR, 0x00ffffc8
+                PRESPARAMS PP_FONTNAMESIZE, "11.System VIO"
+        CONTROL "'",                   DISP_CHAR_MASKT, 40, 29, 5, 8, WC_STATIC,
+                                            SS_TEXT | DT_LEFT | DT_BOTTOM |
+                                            WS_VISIBLE
+                PRESPARAMS PP_FOREGROUNDCOLOR, 0x00000000
+                PRESPARAMS PP_BACKGROUNDCOLOR, 0x00ffffc8
+                PRESPARAMS PP_DISABLEDBACKGROUNDCOLOR, 0x00ffffc8
+                PRESPARAMS PP_FONTNAMESIZE, "11.System VIO"
+        CONTROL "'",                   DISP_CHAR_MASKTTT, 13, 29, 16, 8,
+                                            WC_STATIC, SS_TEXT | DT_RIGHT |
+                                            DT_BOTTOM | WS_VISIBLE
+                PRESPARAMS PP_FOREGROUNDCOLOR, 0x00000000
+                PRESPARAMS PP_BACKGROUNDCOLOR, 0x00ffffc8
+                PRESPARAMS PP_DISABLEDBACKGROUNDCOLOR, 0x00ffffc8
+                PRESPARAMS PP_FONTNAMESIZE, "11.System VIO"
+    END
+END
+
+DLGTEMPLATE HWM_DLG
+BEGIN
+    DIALOG "", HWM_DLG, 374, 299, 140, 70, FS_NOBYTEALIGN | FS_DLGBORDER |
+                WS_CLIPSIBLINGS | WS_SAVEBITS | WS_VISIBLE, FCF_TITLEBAR
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        CONTROL "~RTS",                HWM_RTST, 7, 21, 39, 32, WC_STATIC,
+                                            SS_GROUPBOX | DT_MNEMONIC |
+                                            WS_GROUP | WS_VISIBLE
+        CONTROL "On",                  HWM_RTS_ON, 13, 34, 27, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "Off",                 HWM_RTS_OFF, 13, 24, 26, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "~DTR",                HWM_DTRT, 51, 21, 39, 32, WC_STATIC,
+                                            SS_GROUPBOX | DT_MNEMONIC |
+                                            WS_GROUP | WS_VISIBLE
+        CONTROL "On",                  HWM_DTR_ON, 57, 34, 26, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "Off",                 HWM_DTR_OFF, 57, 24, 26, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "~OUT1",               HWM_OUT1T, 95, 21, 39, 32, WC_STATIC,
+                                            SS_GROUPBOX | DT_MNEMONIC |
+                                            WS_GROUP | WS_VISIBLE
+        CONTROL "On",                  HWM_OUT1_ON, 101, 34, 29, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "Off",                 HWM_OUT1_OFF, 101, 24, 28, 10, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON |
+                                            BS_NOCURSORSELECT | WS_VISIBLE
+        CONTROL "O~k",                 DID_OK, 7, 4, 39, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_DEFAULT |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Cancel",              DID_CANCEL, 51, 4, 39, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | WS_GROUP |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Help",                DID_HELP, 95, 4, 39, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | WS_GROUP |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Output Modem Signals", 0, 9, 57, 121, 8, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_VCENTER | WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE TRIG_DLG
+BEGIN
+    DIALOG "", TRIG_DLG, 189, 94, 312, 168, FS_NOBYTEALIGN | FS_DLGBORDER |
+                WS_CLIPSIBLINGS | WS_SAVEBITS | WS_VISIBLE, FCF_TITLEBAR
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        CONTROL "Enable Capture Tri~ggers", TRIG_ENABLE, 30, 143, 123, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "~Begin Capture Trigger Description", 0, 4, 82, 304, 59,
+                                            WC_STATIC, SS_GROUPBOX |
+                                            DT_MNEMONIC | WS_GROUP | WS_VISIBLE
+        CONTROL "~Modem Signal Events", 0, 7, 84, 98, 48, WC_STATIC,
+                                            SS_GROUPBOX | DT_MNEMONIC |
+                                            WS_GROUP | WS_VISIBLE
+        CONTROL "RTS",                 TRIG_BEG_RTS, 15, 113, 34, 10, WC_BUTTON,
+                                            BS_AUTO3STATE | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "CTS",                 TRIG_BEG_CTS, 15, 100, 33, 10, WC_BUTTON,
+                                            BS_AUTO3STATE | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "DCD",                 TRIG_BEG_DCD, 15, 87, 33, 10, WC_BUTTON,
+                                            BS_AUTO3STATE | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "DTR",                 TRIG_BEG_DTR, 62, 113, 33, 10, WC_BUTTON,
+                                            BS_AUTO3STATE | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "DSR",                 TRIG_BEG_DSR, 62, 99, 34, 10, WC_BUTTON,
+                                            BS_AUTO3STATE | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "RI",                  TRIG_BEG_RI, 62, 86, 32, 10, WC_BUTTON,
+                                            BS_AUTO3STATE | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "HEX",                 TRIG_BEG_HEX, 132, 123, 29, 10,
+                                            WC_BUTTON, BS_RADIOBUTTON |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "ASCII",               TRIG_, 170, 123, 35, 10, WC_BUTTON,
+                                            BS_RADIOBUTTON | WS_VISIBLE
+        CONTROL "~Transmit Stream Pattern", TRIG_BEG_TXT, 109, 115, 109, 8,
+                                            WC_STATIC, SS_TEXT | DT_CENTER |
+                                            DT_VCENTER | DT_MNEMONIC | WS_GROUP |
+                                            WS_VISIBLE
+        CONTROL "",                    TRIG_BEG_TX_ENAB, 111, 104, 8, 10,
+                                            WC_BUTTON, BS_CHECKBOX | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "",                    TRIG_BEG_TX, 124, 105, 90, 8,
+                                            WC_ENTRYFIELD, ES_AUTOSCROLL |
+                                            ES_MARGIN | ES_MIXED | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "~Receive Stream Pattern", TRIG_BEG_RXT, 110, 96, 106, 7,
+                                            WC_STATIC, SS_TEXT | DT_CENTER |
+                                            DT_BOTTOM | DT_MNEMONIC | WS_GROUP |
+                                            WS_VISIBLE
+        CONTROL "",                    TRIG_BEG_RX_ENAB, 111, 85, 8, 10,
+                                            WC_BUTTON, BS_CHECKBOX | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "",                    TRIG_BEG_RX, 124, 86, 90, 8,
+                                            WC_ENTRYFIELD, ES_AUTOSCROLL |
+                                            ES_MARGIN | ES_MIXED | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "Event ~Process",      0, 227, 84, 73, 49, WC_STATIC,
+                                            SS_GROUPBOX | DT_MNEMONIC |
+                                            WS_GROUP | WS_VISIBLE
+        CONTROL "Sample",              TRIG_BEG_COUNT, 233, 103, 33, 10,
+                                            WC_SPINBUTTON, SPBS_MASTER |
+                                            SPBS_JUSTRIGHT | SPBS_NUMERICONLY |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Re-arm",              TRIG_BEG_RESTART, 231, 94, 51, 9,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "~End Capture Trigger Description", 0, 4, 21, 304, 60,
+                                            WC_STATIC, SS_GROUPBOX |
+                                            DT_MNEMONIC | WS_GROUP | WS_VISIBLE
+        CONTROL "~Modem Signal Events", 105, 7, 24, 98, 48, WC_STATIC,
+                                            SS_GROUPBOX | DT_MNEMONIC |
+                                            WS_GROUP | WS_VISIBLE
+        CONTROL "RTS",                 TRIG_END_RTS, 15, 53, 29, 10, WC_BUTTON,
+                                            BS_AUTO3STATE | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "CTS",                 TRIG_END_CTS, 15, 40, 29, 10, WC_BUTTON,
+                                            BS_AUTO3STATE | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "DCD",                 TRIG_END_DCD, 15, 27, 29, 10, WC_BUTTON,
+                                            BS_AUTO3STATE | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "DTR",                 TRIG_END_DTR, 62, 53, 29, 10, WC_BUTTON,
+                                            BS_AUTO3STATE | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "DSR",                 TRIG_END_DSR, 62, 40, 29, 10, WC_BUTTON,
+                                            BS_AUTO3STATE | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "RI",                  PB_ALL, 62, 27, 29, 10, WC_BUTTON,
+                                            BS_AUTO3STATE | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "HEX",                 TRIG_END_HEX, 132, 62, 29, 10, WC_BUTTON,
+                                            BS_RADIOBUTTON | WS_GROUP |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "ASCII",               TRIG_END_ASCII, 170, 62, 35, 10,
+                                            WC_BUTTON, BS_RADIOBUTTON |
+                                            WS_VISIBLE
+        CONTROL "~Transmit Stream Pattern", TRIG_END_TXT, 108, 53, 110, 8,
+                                            WC_STATIC, SS_TEXT | DT_CENTER |
+                                            DT_VCENTER | DT_MNEMONIC | WS_GROUP |
+                                            WS_VISIBLE
+        CONTROL "",                    TRIG_END_TX_ENAB, 111, 43, 8, 10,
+                                            WC_BUTTON, BS_CHECKBOX | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "",                    TRIG_END_TX, 124, 44, 90, 8,
+                                            WC_ENTRYFIELD, ES_AUTOSCROLL |
+                                            ES_MARGIN | ES_MIXED | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "~Receive Stream Pattern", TRIG_END_RXT, 106, 35, 115, 7,
+                                            WC_STATIC, SS_TEXT | DT_CENTER |
+                                            DT_BOTTOM | DT_MNEMONIC | WS_GROUP |
+                                            WS_VISIBLE
+        CONTROL "",                    TRIG_END_RX_ENAB, 111, 24, 8, 10,
+                                            WC_BUTTON, BS_CHECKBOX | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "",                    TRIG_END_RX, 124, 25, 90, 8,
+                                            WC_ENTRYFIELD, ES_AUTOSCROLL |
+                                            ES_MARGIN | ES_MIXED | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "Event ~Process",      101, 227, 25, 73, 50, WC_STATIC,
+                                            SS_GROUPBOX | DT_MNEMONIC |
+                                            WS_GROUP | WS_VISIBLE
+        CONTROL "Sample",              TRIG_END_COUNT, 231, 46, 33, 10,
+                                            WC_SPINBUTTON, SPBS_MASTER |
+                                            SPBS_JUSTRIGHT | SPBS_NUMERICONLY |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Re-arm",              TRIG_END_REARM, 231, 34, 46, 9,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "OK",                  DID_OK, 39, 3, 51, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_DEFAULT |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Cancel",              DID_CANCEL, 141, 3, 51, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | WS_GROUP |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Help",                DID_HELP, 230, 3, 51, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_NOPOINTERFOCUS |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Capture Event Trigger Configuration", 0, 20, 155, 257, 8,
+                                            WC_STATIC, SS_TEXT | DT_CENTER |
+                                            DT_VCENTER | WS_VISIBLE
+        CONTROL "Trigger After",       0, 231, 115, 64, 9, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_VCENTER | WS_VISIBLE
+        CONTROL "Events",              0, 265, 105, 31, 7, WC_STATIC, SS_TEXT |
+                                            DT_LEFT | DT_VCENTER | DT_MNEMONIC |
+                                            WS_VISIBLE
+        CONTROL "After Trigger",       0, 243, 86, 57, 9, WC_STATIC, SS_TEXT |
+                                            DT_LEFT | DT_VCENTER | WS_VISIBLE
+                PRESPARAMS PP_FOREGROUNDCOLOR, 0x00000000
+        CONTROL "Trigger After",       103, 232, 57, 65, 8, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_VCENTER | WS_VISIBLE
+        CONTROL "Events",              104, 265, 47, 31, 9, WC_STATIC, SS_TEXT |
+                                            DT_LEFT | DT_VCENTER | DT_MNEMONIC |
+                                            WS_VISIBLE
+        CONTROL "After Trigger",       107, 243, 26, 55, 9, WC_STATIC, SS_TEXT |
+                                            DT_LEFT | DT_VCENTER | WS_VISIBLE
+                PRESPARAMS PP_FOREGROUNDCOLOR, 0x00000000
+    END
+END
+
+DLGTEMPLATE TRACE_DLG
+BEGIN
+    DIALOG "Capture event configuration", TRACE_DLG, 171, 77, 265, 99,
+                FS_NOBYTEALIGN | FS_DLGBORDER | WS_CLIPSIBLINGS | WS_SAVEBITS |
+                WS_VISIBLE, FCF_TITLEBAR
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        CONTROL "Capture",             0, 3, 23, 257, 72, WC_STATIC,
+                                            SS_GROUPBOX | WS_GROUP | WS_VISIBLE
+        CONTROL "~Receive stream",     TRACE_RCV, 8, 74, 85, 10, WC_BUTTON,
+                                            BS_AUTOCHECKBOX | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "Modem ~inputs signals", TRACE_MODEM_IN, 137, 74, 107, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "~Transmit stream",    TRACE_XMIT, 8, 64, 93, 10, WC_BUTTON,
+                                            BS_AUTOCHECKBOX | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "Modem ~output signals", TRACE_MODEM_OUT, 137, 64, 105, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "T~X immediate (Xon/Xoff)", TRACE_IMM, 8, 55, 123, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "~Application open/close", TRACE_OPEN_CLOSE, 137, 55, 109, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Read req~uests",      TRACE_READ_REQ, 8, 45, 75, 10, WC_BUTTON,
+                                            BS_AUTOCHECKBOX | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "Communications ~errors", TRACE_ERRORS, 137, 45, 110, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Write re~quests",     TRACE_WRITE_REQ, 8, 36, 83, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "~Device I/O control calls", TRACE_DEVIOCTL, 137, 36, 116, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Trace function ~parameters", TRACE_FUNC_PARAMS,
+                                        21, 25, 128, 10, WC_BUTTON,
+                                            BS_AUTOCHECKBOX | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "O~k",                 DID_OK, 27, 4, 49, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_DEFAULT |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Cancel",              DID_CANCEL, 111, 4, 49, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | WS_GROUP |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Help",                DID_HELP, 190, 4, 49, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_NOPOINTERFOCUS |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "~Check all",          PB_ALL, 167, 25, 50, 11, WC_BUTTON,
+                                            BS_PUSHBUTTON | WS_TABSTOP |
+                                            WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE EVENT_DISP_DLG
+BEGIN
+    DIALOG "Time-relational display selection", EVENT_DISP_DLG, 286, 227, 277, 126,
+                FS_NOBYTEALIGN | FS_DLGBORDER | WS_CLIPSIBLINGS | WS_SAVEBITS |
+                WS_VISIBLE, FCF_TITLEBAR
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        CONTROL "Display Event",       0, 6, 46, 265, 72, WC_STATIC,
+                                            SS_GROUPBOX | WS_GROUP | WS_VISIBLE
+        CONTROL "~Receive stream",     EVENT_RCV, 11, 98, 101, 10, WC_BUTTON,
+                                            BS_AUTOCHECKBOX | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "Modem ~input signals", EVENT_MODEMIN, 146, 98, 101, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "~Transmit stream",    EVENT_XMIT, 11, 89, 101, 10, WC_BUTTON,
+                                            BS_AUTOCHECKBOX | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "Modem ~output signals", EVENT_MODEMOUT, 146, 89, 109, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "~Xon/Xoff and TX immediate", EVENT_IMM, 11, 79, 133, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "~Application open/close", EVENT_OPEN, 146, 80, 110, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Read req~uests",      EVENT_READ_REQ, 11, 70, 85, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Communications ~errors", EVENT_ERRORS, 146, 70, 110, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Write re~quests",     EVENT_WRITE_REQ, 11, 60, 98, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "~Device I/O control calls", EVENT_DEVIOCTL, 146, 60, 117, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "~Pop-up packet details", EVENT_POPUP_PARAMS, 30, 48, 109, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "~Check all",          PB_ALL, 173, 48, 50, 11, WC_BUTTON,
+                                            BS_PUSHBUTTON | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "Stream Display",      EVENT_DISP_STREAMT, 7, 23, 263, 22,
+                                            WC_STATIC, SS_GROUPBOX | WS_GROUP |
+                                            WS_VISIBLE
+        CONTROL "~Highlight Xon/Xoff", EVENT_DISP_HILIGHT, 17, 27, 110, 9,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "~Mark current line",  EVENT_DISP_COMPRESS, 171, 26, 92, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "O~k",                 DID_OK, 50, 5, 48, 13, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_DEFAULT |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Cancel",              DID_CANCEL, 116, 5, 49, 13, WC_BUTTON,
+                                            BS_PUSHBUTTON | WS_GROUP |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Help",                DID_HELP, 183, 5, 48, 13, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_NOPOINTERFOCUS |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE V_HWSDS_DLG
+BEGIN
+    DIALOG "99", V_HWSDS_DLG, 490, 287, 41, 82, FS_NOBYTEALIGN | FS_BORDER |
+                WS_CLIPSIBLINGS | WS_SAVEBITS, FCF_TITLEBAR | FCF_SYSMENU
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        CONTROL "CE~vent",             0, 2, 70, 35, 8, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_BOTTOM | DT_MNEMONIC |
+                                            WS_GROUP | WS_VISIBLE
+        CONTROL "",                    HWS_COMEVENT, 10, 60, 20, 9,
+                                            WC_ENTRYFIELD, ES_AUTOSCROLL |
+                                            ES_CENTER | ES_MARGIN | ES_READONLY |
+                                            ES_MIXED | WS_TABSTOP | WS_VISIBLE
+        CONTROL "C~Status",            0, 2, 51, 35, 8, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_BOTTOM | DT_MNEMONIC |
+                                            WS_GROUP | WS_VISIBLE
+        CONTROL "",                    HWS_COMST, 10, 41, 20, 9, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_CENTER |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "CE~rror",             0, 3, 32, 34, 8, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_BOTTOM | DT_MNEMONIC |
+                                            WS_GROUP | WS_VISIBLE
+        CONTROL "",                    HWS_COMERROR, 10, 22, 20, 9,
+                                            WC_ENTRYFIELD, ES_AUTOSCROLL |
+                                            ES_CENTER | ES_MARGIN | ES_READONLY |
+                                            ES_ANY | WS_TABSTOP | WS_VISIBLE
+        CONTROL "~TxStatus",           0, 1, 13, 38, 8, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_BOTTOM | DT_MNEMONIC |
+                                            WS_GROUP | WS_VISIBLE
+        CONTROL "",                    HWS_XMITST, 10, 3, 20, 9, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_CENTER |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_TABSTOP | WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE V_HWSIS_DLG
+BEGIN
+    DIALOG "99", V_HWSIS_DLG, 231, 168, 41, 80, FS_NOBYTEALIGN | FS_DLGBORDER |
+                WS_CLIPSIBLINGS | WS_SAVEBITS, FCF_TITLEBAR | FCF_SYSMENU
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        CONTROL "DSR",                 0, 8, 68, 25, 8, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_BOTTOM | WS_VISIBLE
+        CONTROL "",                    HWS_DSR, 11, 59, 19, 8, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_CENTER |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_VISIBLE
+        CONTROL "CTS",                 0, 9, 50, 23, 8, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_BOTTOM | WS_VISIBLE
+        CONTROL "",                    HWS_CTS, 11, 41, 19, 8, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_CENTER |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_VISIBLE
+        CONTROL "CD",                  0, 8, 32, 25, 8, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_BOTTOM | WS_VISIBLE
+        CONTROL "",                    HWS_DCD, 11, 23, 19, 8, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_CENTER |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_VISIBLE
+        CONTROL "RING",                0, 8, 14, 25, 8, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_BOTTOM | WS_VISIBLE
+        CONTROL "",                    HWS_RING, 11, 5, 19, 8, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_CENTER |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE V_HWSOS_DLG
+BEGIN
+    DIALOG "99", V_HWSOS_DLG, 301, 220, 41, 44, FS_NOBYTEALIGN | FS_DLGBORDER |
+                WS_CLIPSIBLINGS | WS_SAVEBITS, FCF_TITLEBAR | FCF_SYSMENU
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        CONTROL "RTS",                 0, 9, 30, 21, 8, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_BOTTOM | WS_VISIBLE
+        CONTROL "",                    HWS_RTS, 11, 22, 19, 8, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_CENTER |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_VISIBLE
+        CONTROL "DTR",                 0, 9, 13, 21, 7, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_BOTTOM | WS_VISIBLE
+        CONTROL "",                    HWS_DTR, 11, 4, 18, 8, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_CENTER |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE V_HWS_BUFF_DLG
+BEGIN
+    DIALOG "T99", V_HWS_BUFF_DLG, 306, 168, 40, 64, FS_NOBYTEALIGN | FS_BORDER |
+                WS_CLIPSIBLINGS | WS_SAVEBITS, FCF_TITLEBAR | FCF_SYSMENU
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        CONTROL "~High",               0, 5, 12, 28, 8, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_BOTTOM | DT_MNEMONIC |
+                                            WS_GROUP | WS_VISIBLE
+        CONTROL "65535",               HWS_BUFHIGH, 6, 2, 27, 9, WC_ENTRYFIELD,
+                                            ES_CENTER | ES_MARGIN | ES_READONLY |
+                                            ES_MIXED | WS_TABSTOP | WS_VISIBLE
+        CONTROL "65535",               HWS_BUFLEN, 6, 42, 27, 9, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_CENTER |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_VISIBLE
+        CONTROL "100",                 CLR_BBACK, 7, 22, 15, 9, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_RIGHT |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_VISIBLE
+        CONTROL "Contains",            0, 1, 53, 38, 8, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_BOTTOM | WS_VISIBLE
+        CONTROL "bytes",               0, 7, 34, 26, 8, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_TOP | WS_VISIBLE
+        CONTROL "%",                   0, 23, 23, 11, 8, WC_STATIC, SS_TEXT |
+                                            DT_LEFT | DT_BOTTOM | WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE HWS_TX_BUFF_DLG
+BEGIN
+    DIALOG "", HWS_TX_BUFF_DLG, 236, 226, 160, 15, FS_NOBYTEALIGN | FS_BORDER |
+                WS_CLIPSIBLINGS | WS_SAVEBITS, FCF_TITLEBAR | FCF_SYSMENU
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        CONTROL "",                    HWS_BUFLEN, 48, 4, 24, 7, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_RIGHT |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_VISIBLE
+        CONTROL "",                    CLR_BBACK, 112, 4, 13, 7, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_RIGHT |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_VISIBLE
+        CONTROL "Contains",            0, 7, 4, 37, 7, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_BOTTOM | WS_VISIBLE
+        CONTROL "bytes",               0, 75, 4, 27, 7, WC_STATIC, SS_TEXT |
+                                            DT_LEFT | DT_BOTTOM | WS_VISIBLE
+        CONTROL "% full",              0, 127, 3, 31, 8, WC_STATIC, SS_TEXT |
+                                            DT_LEFT | DT_BOTTOM | WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE V_HWS_TX_BUFF_DLG
+BEGIN
+    DIALOG "T99", V_HWS_TX_BUFF_DLG, 462, 327, 41, 46, FS_NOBYTEALIGN |
+                FS_BORDER | WS_CLIPSIBLINGS | WS_SAVEBITS, FCF_TITLEBAR |
+                FCF_SYSMENU
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        CONTROL "65535",               HWS_BUFLEN, 8, 26, 25, 9, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_CENTER |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_VISIBLE
+        CONTROL "100",                 CLR_BBACK, 6, 3, 17, 9, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_RIGHT |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_VISIBLE
+                CTLDATA 8, 32, 0, 0
+        CONTROL "Contains",            0, 3, 36, 37, 8, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_BOTTOM | WS_VISIBLE
+        CONTROL "bytes",               0, 8, 17, 26, 8, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_TOP | WS_VISIBLE
+        CONTROL "%",                   0, 25, 3, 10, 8, WC_STATIC, SS_TEXT |
+                                            DT_LEFT | DT_BOTTOM | WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE FIND_DLG
+BEGIN
+    DIALOG "Stream search configuration", FIND_DLG, 244, 277, 233, 172,
+                FS_NOBYTEALIGN | FS_DLGBORDER | WS_CLIPSIBLINGS | WS_SAVEBITS |
+                WS_VISIBLE, FCF_TITLEBAR
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        CONTROL "Search for Stream Events", 0, 6, 88, 221, 71, WC_STATIC,
+                                            SS_GROUPBOX | WS_VISIBLE
+        CONTROL "Communications ~Errors", FIND_ERRORS, 11, 137, 109, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "App O~pen/Close",     FIND_OPEN, 132, 138, 79, 10, WC_BUTTON,
+                                            BS_AUTOCHECKBOX | WS_VISIBLE
+        CONTROL "~Device I/O Control Calls", FIND_DEVIOCTL, 11, 127, 117, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_VISIBLE
+        CONTROL "Write Re~quest",      FIND_WRITE_REQ, 132, 127, 73, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_VISIBLE
+        CONTROL "~Xon/Xoff, TX immediate", FIND_IMM, 11, 117, 119, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_VISIBLE
+        CONTROL "Read Req~uest",       FIND_READ_REQ, 132, 118, 69, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_VISIBLE
+        CONTROL "Any ~TX Character",   FIND_XMIT, 11, 107, 89, 10, WC_BUTTON,
+                                            BS_AUTOCHECKBOX | WS_VISIBLE
+        CONTROL "Any ~RX Character",   FIND_RCV, 132, 108, 87, 10, WC_BUTTON,
+                                            BS_AUTOCHECKBOX | WS_VISIBLE
+        CONTROL "Modem ~In",           FIND_MODEMIN, 11, 98, 79, 8, WC_BUTTON,
+                                            BS_AUTOCHECKBOX | WS_VISIBLE
+        CONTROL "Modem ~Out",          FIND_MODEMOUT, 132, 99, 61, 8, WC_BUTTON,
+                                            BS_AUTOCHECKBOX | WS_VISIBLE
+        CONTROL "Search for Character Sequence", 0, 6, 43, 221, 43, WC_STATIC,
+                                            SS_GROUPBOX | WS_VISIBLE
+        CONTROL "~None",               FIND_STR_NONE, 18, 68, 39, 8, WC_BUTTON,
+                                            BS_RADIOBUTTON | WS_GROUP |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "TX ~Stream",          FIND_STR_TX, 71, 68, 60, 8, WC_BUTTON,
+                                            BS_RADIOBUTTON | WS_VISIBLE
+        CONTROL "RX Strea~m",          FIND_STR_RX, 147, 68, 59, 8, WC_BUTTON,
+                                            BS_RADIOBUTTON | WS_VISIBLE
+        CONTROL "",                    FIND_STR, 13, 58, 195, 8, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_MARGIN |
+                                            ES_MIXED | WS_GROUP | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "~Hexadecimal",        FIND_STR_HEX, 18, 45, 65, 10, WC_BUTTON,
+                                            BS_RADIOBUTTON | WS_GROUP |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "~ASCII",              FIND_STR_ASCII, 93, 45, 44, 10,
+                                            WC_BUTTON, BS_RADIOBUTTON |
+                                            WS_VISIBLE
+        CONTROL "Ignore ~Case",        FIND_STR_NO_CASE, 147, 45, 61, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "~Search Direction",   0, 6, 22, 221, 21, WC_STATIC,
+                                            SS_GROUPBOX | DT_MNEMONIC |
+                                            WS_GROUP | WS_VISIBLE
+        CONTROL "~Forward",            FIND_NEXT, 20, 25, 56, 8, WC_BUTTON,
+                                            BS_AUTORADIOBUTTON | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "Re~verse",            FIND_PREVIOUS, 108, 23, 50, 10,
+                                            WC_BUTTON, BS_AUTORADIOBUTTON |
+                                            WS_VISIBLE
+        CONTROL "~Wrap",               FIND_WRAP, 178, 23, 37, 10, WC_BUTTON,
+                                            BS_AUTOCHECKBOX | WS_GROUP |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "~Begin Search",       DID_OK, 15, 3, 65, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_DEFAULT |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Cancel",              DID_CANCEL, 93, 3, 51, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | WS_GROUP |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Help",                DID_HELP, 158, 3, 51, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_NOPOINTERFOCUS |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "RTS and DTR",         0, 135, 90, 61, 8, WC_STATIC, SS_TEXT |
+                                            DT_LEFT | DT_TOP | DT_MNEMONIC |
+                                            WS_GROUP | WS_VISIBLE
+                PRESPARAMS PP_FOREGROUNDCOLOR, 0x00000000
+        CONTROL "CTS, DSR, RI, and CD", 0, 23, 90, 99, 8, WC_STATIC, SS_TEXT |
+                                            DT_LEFT | DT_TOP | DT_MNEMONIC |
+                                            WS_GROUP | WS_VISIBLE
+                PRESPARAMS PP_FOREGROUNDCOLOR, 0x00000000
+    END
+END
+
+DLGTEMPLATE DCB_PACKET_DLG
+BEGIN
+    DIALOG "Device control block packet contents", DCB_PACKET_DLG, 248, 106, 313, 184,
+                FS_NOBYTEALIGN | FS_BORDER | WS_CLIPSIBLINGS | WS_SAVEBITS |
+                WS_VISIBLE, FCF_TITLEBAR
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        CONTROL "~Done",               DID_OK, 41, 2, 111, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_DEFAULT |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Help",                DID_HELP, 209, 2, 51, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_NOPOINTERFOCUS |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "read timeout processing", DCB_READ_TOPROCT, 88, 170, 103, 8,
+                                            WC_STATIC, SS_TEXT | DT_LEFT |
+                                            DT_TOP | WS_GROUP | WS_VISIBLE
+        CONTROL "Wait for something",  DCB_READ_TOPROC, 7, 170, 81, 8,
+                                            WC_STATIC, SS_TEXT | DT_RIGHT |
+                                            DT_TOP | WS_GROUP | WS_VISIBLE
+        CONTROL "read timeout  ->",    0, 209, 170, 74, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_TOP | WS_VISIBLE
+        CONTROL "6",                   DCB_READ_TO, 286, 170, 18, 8, WC_STATIC,
+                                            SS_TEXT | DT_RIGHT | DT_TOP |
+                                            DT_MNEMONIC | WS_GROUP | WS_VISIBLE
+        CONTROL "Normal",              DCB_WRT_TOPROC, 18, 159, 67, 8,
+                                            WC_STATIC, SS_TEXT | DT_RIGHT |
+                                            DT_TOP | WS_GROUP | WS_VISIBLE
+        CONTROL "write timeout processing", 0, 87, 159, 108, 8, WC_STATIC,
+                                            SS_TEXT | DT_LEFT | DT_TOP |
+                                            WS_VISIBLE
+        CONTROL "write timeout  ->",   0, 205, 159, 77, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_TOP | WS_VISIBLE
+        CONTROL "60",                  DCB_WRT_TO, 286, 159, 18, 8, WC_STATIC,
+                                            SS_TEXT | DT_RIGHT | DT_TOP |
+                                            WS_VISIBLE
+        CONTROL "Disable",             DCB_CTS_OUT_HS, 8, 111, 39, 9, WC_STATIC,
+                                            SS_TEXT | DT_RIGHT | DT_TOP |
+                                            WS_VISIBLE
+        CONTROL "Disable",             DCB_DSR_OUT_HS, 7, 101, 40, 9, WC_STATIC,
+                                            SS_TEXT | DT_RIGHT | DT_TOP |
+                                            WS_VISIBLE
+        CONTROL "Disable",             DCB_DCD_OUT_HS, 8, 90, 39, 9, WC_STATIC,
+                                            SS_TEXT | DT_RIGHT | DT_TOP |
+                                            WS_VISIBLE
+        CONTROL "Disable",             DCB_DSR_IN_SENSE, 141, 90, 35, 9,
+                                            WC_STATIC, SS_TEXT | DT_RIGHT |
+                                            DT_TOP | WS_VISIBLE
+        CONTROL "RTS toggling on transmit", DCB_RTS_HS, 178, 101, 119, 9,
+                                            WC_STATIC, SS_TEXT | DT_LEFT |
+                                            DT_TOP | WS_VISIBLE
+        CONTROL "DTR input handshaking", DCB_DTR_HS, 178, 111, 118, 9,
+                                            WC_STATIC, SS_TEXT | DT_LEFT |
+                                            DT_TOP | WS_VISIBLE
+        CONTROL "error replacement character", 0, 49, 65, 120, 8, WC_STATIC,
+                                            SS_TEXT | DT_LEFT | DT_TOP |
+                                            WS_VISIBLE
+        CONTROL "break replacement character", 0, 49, 54, 123, 8, WC_STATIC,
+                                            SS_TEXT | DT_LEFT | DT_TOP |
+                                            WS_VISIBLE
+        CONTROL "Disable",             DCB_ERR_REP, 10, 65, 37, 8, WC_STATIC,
+                                            SS_TEXT | DT_RIGHT | DT_TOP |
+                                            WS_VISIBLE
+        CONTROL "Disable",             DCB_BRK_REP, 7, 54, 40, 8, WC_STATIC,
+                                            SS_TEXT | DT_RIGHT | DT_TOP |
+                                            WS_VISIBLE
+        CONTROL "null striping",       0, 49, 76, 53, 8, WC_STATIC, SS_TEXT |
+                                            DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "Disable",             DCB_NULL_STRIP, 8, 76, 39, 8, WC_STATIC,
+                                            SS_TEXT | DT_RIGHT | DT_TOP |
+                                            WS_VISIBLE
+        CONTROL "( replace with",      0, 171, 65, 68, 9, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_TOP | WS_VISIBLE
+        CONTROL "( replace with",      101, 174, 54, 65, 9, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_TOP | WS_VISIBLE
+        CONTROL "Xon character  ->",   0, 22, 126, 79, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_VCENTER | WS_VISIBLE
+        CONTROL "Xoff character  ->",  0, 142, 126, 80, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_VCENTER | WS_VISIBLE
+        CONTROL "transmit Xon/Xoff handshaking", 0, 55, 148, 149, 7, WC_STATIC,
+                                            SS_TEXT | DT_LEFT | DT_TOP |
+                                            WS_VISIBLE
+        CONTROL "receive Xon/Xoff handshaking", 0, 55, 136, 135, 8, WC_STATIC,
+                                            SS_TEXT | DT_LEFT | DT_TOP |
+                                            WS_VISIBLE
+        CONTROL "Enable",              DCB_TX_XON_HS, 11, 147, 43, 8, WC_STATIC,
+                                            SS_TEXT | DT_RIGHT | DT_TOP |
+                                            WS_VISIBLE
+        CONTROL "Enable",              DCB_RX_XON_HS, 11, 136, 43, 8, WC_STATIC,
+                                            SS_TEXT | DT_RIGHT | DT_TOP |
+                                            WS_VISIBLE
+        CONTROL "( full duplex )",     DCB_FULLDUP, 197, 136, 65, 8, WC_STATIC,
+                                            SS_TEXT | DT_LEFT | DT_TOP |
+                                            WS_VISIBLE
+        CONTROL "'",                   DCB_XON_CHAR, 104, 126, 30, 8, WC_STATIC,
+                                            SS_TEXT | DT_LEFT | DT_VCENTER |
+                                            WS_VISIBLE
+        CONTROL "'",                   DCB_XOFF_CHAR, 224, 126, 29, 8,
+                                            WC_STATIC, SS_TEXT | DT_LEFT |
+                                            DT_VCENTER | WS_VISIBLE
+        CONTROL "'",                   DCB_ERR_CHAR, 243, 65, 33, 9, WC_STATIC,
+                                            SS_TEXT | DT_LEFT | DT_TOP |
+                                            WS_VISIBLE
+        CONTROL "'",                   DCB_BRK_CHAR, 242, 54, 33, 9, WC_STATIC,
+                                            SS_TEXT | DT_LEFT | DT_TOP |
+                                            WS_VISIBLE
+        CONTROL "CTS handshaking",     0, 49, 111, 73, 9, WC_STATIC, SS_TEXT |
+                                            DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "DSR handshaking",     0, 49, 101, 75, 9, WC_STATIC, SS_TEXT |
+                                            DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "DCD handshankig",     0, 49, 90, 80, 9, WC_STATIC, SS_TEXT |
+                                            DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "DSR input sensitivity", 0, 178, 90, 107, 9, WC_STATIC, SS_TEXT |
+                                            DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "Enable FIFOs",        DCB_FIFO, 17, 32, 170, 9, WC_STATIC,
+                                            SS_TEXT | DT_LEFT | DT_TOP |
+                                            WS_VISIBLE
+        CONTROL "",                    DCB_RX_FIFO, 17, 41, 153, 9, WC_STATIC,
+                                            SS_TEXT | DT_LEFT | DT_TOP |
+                                            WS_VISIBLE
+        CONTROL "",                    DCB_TX_FIFO, 17, 21, 162, 9, WC_STATIC,
+                                            SS_TEXT | DT_LEFT | DT_TOP |
+                                            WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE HWS_DLG
+BEGIN
+    DIALOG "", HWS_DLG, 142, 70, 198, 167, FS_NOBYTEALIGN | FS_DLGBORDER |
+                WS_CLIPSIBLINGS | WS_SAVEBITS, FCF_TITLEBAR
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        CONTROL "millisecond ~Rate",   0, 101, 22, 71, 8, WC_STATIC, SS_TEXT |
+                                            DT_LEFT | DT_BOTTOM | DT_MNEMONIC |
+                                            WS_GROUP | WS_VISIBLE
+        CONTROL "",                    HWS_UPDATE, 67, 21, 32, 8, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_RIGHT |
+                                            ES_MARGIN | ES_MIXED | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "~Close",              DID_OK, 13, 3, 38, 13, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_DEFAULT |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "~Update Rate",        DID_UPDATE, 69, 3, 65, 13, WC_BUTTON,
+                                            BS_PUSHBUTTON | WS_GROUP |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Help",                DID_HELP, 146, 3, 38, 13, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_NOPOINTERFOCUS |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Current Device Status", 0, 13, 154, 167, 8, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_TOP | WS_VISIBLE
+        CONTROL "Receive Buffer",      0, 4, 131, 189, 24, WC_STATIC,
+                                            SS_GROUPBOX | WS_VISIBLE
+        CONTROL "Transmit Buffer",     0, 4, 107, 189, 23, WC_STATIC,
+                                            SS_GROUPBOX | WS_VISIBLE
+        CONTROL "Modem Signals",       0, 5, 58, 188, 48, WC_STATIC,
+                                            SS_GROUPBOX | WS_VISIBLE
+        CONTROL "Input",               0, 12, 61, 116, 37, WC_STATIC,
+                                            SS_GROUPBOX | WS_VISIBLE
+        CONTROL "Output",              0, 136, 61, 50, 38, WC_STATIC,
+                                            SS_GROUPBOX | WS_VISIBLE
+        CONTROL "Device Status",       0, 4, 35, 185, 23, WC_STATIC,
+                                            SS_GROUPBOX | WS_VISIBLE
+        CONTROL "Update at",           0, 21, 21, 43, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_BOTTOM | WS_VISIBLE
+        CONTROL "bytes,",              0, 78, 135, 27, 8, WC_STATIC, SS_TEXT |
+                                            DT_LEFT | DT_BOTTOM | WS_VISIBLE
+        CONTROL "65536",               HWS_RCVBUFLEN, 49, 135, 26, 9,
+                                            WC_ENTRYFIELD, ES_AUTOSCROLL |
+                                            ES_RIGHT | ES_MARGIN | ES_READONLY |
+                                            ES_MIXED | WS_VISIBLE
+                CTLDATA 8, 32, 0, 0
+        CONTROL "% full",              0, 162, 135, 28, 8, WC_STATIC, SS_TEXT |
+                                            DT_LEFT | DT_BOTTOM | WS_VISIBLE
+        CONTROL "100",                 HWS_RCVBUFLEV, 145, 135, 15, 9,
+                                            WC_ENTRYFIELD, ES_AUTOSCROLL |
+                                            ES_RIGHT | ES_MARGIN | ES_READONLY |
+                                            ES_MIXED | WS_VISIBLE
+                CTLDATA 8, 32, 0, 0
+        CONTROL "Contains",            0, 9, 135, 37, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_BOTTOM | WS_VISIBLE
+        CONTROL "bytes,",              0, 78, 110, 26, 8, WC_STATIC, SS_TEXT |
+                                            DT_LEFT | DT_BOTTOM | WS_VISIBLE
+        CONTROL "65536",               HWS_XMITBUFLEN, 49, 110, 26, 9,
+                                            WC_ENTRYFIELD, ES_AUTOSCROLL |
+                                            ES_RIGHT | ES_MARGIN | ES_READONLY |
+                                            ES_MIXED | WS_VISIBLE
+                CTLDATA 8, 32, 0, 0
+        CONTROL "% full",              0, 163, 110, 27, 8, WC_STATIC, SS_TEXT |
+                                            DT_LEFT | DT_BOTTOM | WS_VISIBLE
+        CONTROL "100",                 HWS_XMITBUFLEV, 146, 110, 15, 9,
+                                            WC_ENTRYFIELD, ES_AUTOSCROLL |
+                                            ES_RIGHT | ES_MARGIN | ES_READONLY |
+                                            ES_MIXED | WS_VISIBLE
+                CTLDATA 8, 32, 0, 0
+        CONTROL "Contains",            0, 10, 110, 36, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_BOTTOM | WS_VISIBLE
+        CONTROL "DTR",                 0, 141, 79, 21, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_BOTTOM | WS_VISIBLE
+        CONTROL "RTS",                 0, 139, 65, 23, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_BOTTOM | WS_VISIBLE
+        CONTROL "",                    HWS_DTR, 164, 79, 14, 9, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_CENTER |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_VISIBLE
+        CONTROL "",                    HWS_RTS, 164, 65, 14, 9, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_CENTER |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_VISIBLE
+        CONTROL "DSR",                 0, 24, 79, 22, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_BOTTOM | WS_VISIBLE
+        CONTROL "CTS",                 0, 24, 65, 22, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_BOTTOM | WS_VISIBLE
+        CONTROL "CD",                  0, 81, 79, 17, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_BOTTOM | WS_VISIBLE
+        CONTROL "RI",                  0, 81, 65, 18, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_BOTTOM | WS_VISIBLE
+        CONTROL "",                    HWS_DSR, 50, 79, 14, 8, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_CENTER |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_VISIBLE
+        CONTROL "",                    HWS_CTS, 50, 65, 14, 8, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_CENTER |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_VISIBLE
+        CONTROL "",                    HWS_DCD, 102, 79, 14, 8, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_CENTER |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_VISIBLE
+        CONTROL "",                    HWS_RING, 102, 65, 14, 8, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_CENTER |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_VISIBLE
+        CONTROL "CEv",                 0, 7, 39, 18, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_BOTTOM | WS_VISIBLE
+        CONTROL "",                    HWS_COMEVENT, 30, 39, 24, 8,
+                                            WC_ENTRYFIELD, ES_AUTOSCROLL |
+                                            ES_CENTER | ES_MARGIN | ES_READONLY |
+                                            ES_MIXED | WS_VISIBLE
+        CONTROL "CS",                  0, 61, 39, 14, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_BOTTOM | WS_VISIBLE
+        CONTROL "",                    HWS_COMST, 78, 39, 12, 8, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_CENTER |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_VISIBLE
+        CONTROL "CEr",                 0, 99, 39, 16, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_BOTTOM | WS_VISIBLE
+        CONTROL "",                    HWS_COMERROR, 118, 39, 24, 8,
+                                            WC_ENTRYFIELD, ES_AUTOSCROLL |
+                                            ES_CENTER | ES_MARGIN | ES_READONLY |
+                                            ES_MIXED | WS_VISIBLE
+        CONTROL "TS",                  0, 150, 39, 17, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_BOTTOM | WS_VISIBLE
+        CONTROL "",                    HWS_XMITST, 170, 39, 12, 8,
+                                            WC_ENTRYFIELD, ES_AUTOSCROLL |
+                                            ES_CENTER | ES_MARGIN | ES_READONLY |
+                                            ES_MIXED | WS_VISIBLE
+        CONTROL "and is",              ST_ANDIS, 114, 110, 27, 8, WC_STATIC,
+                                            SS_TEXT | DT_RIGHT | DT_BOTTOM |
+                                            WS_GROUP | WS_VISIBLE
+        CONTROL "and is",              ST_ANDIS, 113, 135, 28, 8, WC_STATIC,
+                                            SS_TEXT | DT_RIGHT | DT_BOTTOM |
+                                            WS_GROUP | WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE HWSIS_DLG
+BEGIN
+    DIALOG "", HWSIS_DLG, 130, 193, 154, 17, FS_NOBYTEALIGN | FS_DLGBORDER |
+                WS_CLIPSIBLINGS | WS_SAVEBITS, FCF_TITLEBAR | FCF_SYSMENU
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        CONTROL "",                    HWS_DSR, 93, 4, 14, 8, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_CENTER |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "",                    HWS_CTS, 135, 4, 14, 8, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_CENTER |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "",                    HWS_DCD, 18, 4, 14, 8, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_CENTER |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "",                    HWS_RING, 52, 4, 14, 8, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_CENTER |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "DSR",                 0, 71, 4, 19, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_BOTTOM | WS_GROUP |
+                                            WS_VISIBLE
+        CONTROL "CTS",                 0, 115, 4, 17, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_BOTTOM | WS_VISIBLE
+        CONTROL "CD",                  0, 3, 4, 13, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_BOTTOM | WS_VISIBLE
+        CONTROL "RI",                  0, 38, 4, 11, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_BOTTOM | WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE HWSOS_DLG
+BEGIN
+    DIALOG "", HWSOS_DLG, 258, 238, 97, 17, FS_NOBYTEALIGN | FS_DLGBORDER |
+                WS_CLIPSIBLINGS | WS_SAVEBITS, FCF_TITLEBAR | FCF_SYSMENU
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        CONTROL "",                    HWS_DTR, 78, 3, 14, 8, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_CENTER |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "",                    HWS_RTS, 30, 3, 14, 8, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_CENTER |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "DTR",                 0, 54, 3, 21, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_BOTTOM | WS_VISIBLE
+        CONTROL "RTS",                 0, 7, 3, 20, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_BOTTOM | WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE HWS_BUFF_DLG
+BEGIN
+    DIALOG "", HWS_BUFF_DLG, 188, 182, 174, 17, FS_NOBYTEALIGN | FS_BORDER |
+                WS_CLIPSIBLINGS | WS_SAVEBITS, FCF_TITLEBAR | FCF_SYSMENU
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        CONTROL "~High",               0, 125, 5, 19, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_BOTTOM | DT_MNEMONIC |
+                                            WS_GROUP | WS_VISIBLE
+        CONTROL "",                    HWS_BUFHIGH, 146, 5, 24, 8,
+                                            WC_ENTRYFIELD, ES_AUTOSCROLL |
+                                            ES_CENTER | ES_MARGIN | ES_READONLY |
+                                            ES_MIXED | WS_TABSTOP | WS_VISIBLE
+        CONTROL "",                    HWS_BUFLEN, 41, 6, 24, 7, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_RIGHT |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_VISIBLE
+        CONTROL "",                    CLR_BBACK, 94, 5, 13, 8, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_RIGHT |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_VISIBLE
+        CONTROL "Contains",            0, 2, 5, 36, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_BOTTOM | WS_VISIBLE
+        CONTROL "bytes",               0, 65, 6, 23, 7, WC_STATIC, SS_TEXT |
+                                            DT_LEFT | DT_BOTTOM | WS_VISIBLE
+        CONTROL "%",                   0, 109, 5, 13, 8, WC_STATIC, SS_TEXT |
+                                            DT_LEFT | DT_BOTTOM | WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE HWSDS_DLG
+BEGIN
+    DIALOG "", HWSDS_DLG, 193, 231, 174, 17, FS_NOBYTEALIGN | FS_DLGBORDER |
+                WS_CLIPSIBLINGS | WS_SAVEBITS, FCF_TITLEBAR | FCF_SYSMENU
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        CONTROL "CE~v",                0, 3, 4, 17, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_BOTTOM | DT_MNEMONIC |
+                                            WS_GROUP | WS_VISIBLE
+        CONTROL "",                    HWS_COMEVENT, 24, 4, 24, 8,
+                                            WC_ENTRYFIELD, ES_AUTOSCROLL |
+                                            ES_CENTER | ES_MARGIN | ES_READONLY |
+                                            ES_MIXED | WS_TABSTOP | WS_VISIBLE
+        CONTROL "C~S",                 0, 56, 4, 13, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_BOTTOM | DT_MNEMONIC |
+                                            WS_GROUP | WS_VISIBLE
+        CONTROL "",                    HWS_COMST, 72, 4, 12, 8, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_CENTER |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "CE~r",                0, 91, 4, 17, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_BOTTOM | DT_MNEMONIC |
+                                            WS_GROUP | WS_VISIBLE
+        CONTROL "",                    HWS_COMERROR, 111, 4, 24, 8,
+                                            WC_ENTRYFIELD, ES_AUTOSCROLL |
+                                            ES_CENTER | ES_MARGIN | ES_READONLY |
+                                            ES_ANY | WS_TABSTOP | WS_VISIBLE
+        CONTROL "~TS",                 0, 140, 4, 13, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_BOTTOM | DT_MNEMONIC |
+                                            WS_GROUP | WS_VISIBLE
+        CONTROL "",                    HWS_XMITST, 156, 4, 12, 8, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_CENTER |
+                                            ES_MARGIN | ES_READONLY | ES_MIXED |
+                                            WS_TABSTOP | WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE HWSUD_DLG
+BEGIN
+    DIALOG "", HWSUD_DLG, 0, 0, 178, 45, FS_NOBYTEALIGN | FS_MOUSEALIGN |
+                FS_DLGBORDER | WS_CLIPSIBLINGS | WS_SAVEBITS, FCF_TITLEBAR
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        CONTROL "millisecond ~Rate",   0, 99, 20, 76, 8, WC_STATIC, SS_TEXT |
+                                            DT_LEFT | DT_BOTTOM | DT_MNEMONIC |
+                                            WS_GROUP | WS_VISIBLE
+        CONTROL "",                    HWS_UPDATE, 64, 20, 32, 8, WC_ENTRYFIELD,
+                                            ES_AUTOSCROLL | ES_RIGHT |
+                                            ES_MARGIN | ES_MIXED | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "O~K",                 DID_OK, 11, 2, 38, 13, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_DEFAULT |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Cancel",              DID_CANCEL, 71, 2, 42, 13, WC_BUTTON,
+                                            BS_PUSHBUTTON | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "Help",                DID_HELP, 133, 2, 38, 13, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_NOPOINTERFOCUS |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Update at",           0, 15, 20, 48, 8, WC_STATIC, SS_TEXT |
+                                            DT_RIGHT | DT_BOTTOM | WS_VISIBLE
+        CONTROL "Status Window Update Rate", 0, 4, 33, 170, 8, WC_STATIC,
+                                            SS_TEXT | DT_CENTER | DT_TOP |
+                                            WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE CER_DLG
+BEGIN
+    DIALOG "", CER_DLG, 0, 0, 163, 84, FS_NOBYTEALIGN | FS_MOUSEALIGN |
+                FS_DLGBORDER | WS_CLIPSIBLINGS | WS_SAVEBITS | WS_VISIBLE,
+                FCF_TITLEBAR
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        CONTROL "Bit",                 0, 14, 62, 16, 7, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_BOTTOM | WS_VISIBLE
+        CONTROL " 0 - Recevie Queue Overrun", CER_BIT0, 7, 51, 149, 9,
+                                            WC_BUTTON, BS_RADIOBUTTON |
+                                            BS_NOPOINTERFOCUS | WS_VISIBLE
+        CONTROL " 1 - Receive Hardware Overrun", CER_BIT1, 7, 41, 149, 10,
+                                            WC_BUTTON, BS_RADIOBUTTON |
+                                            BS_NOPOINTERFOCUS | WS_VISIBLE
+        CONTROL " 2 - Parity Error Detected", CER_BIT2, 7, 31, 149, 10,
+                                            WC_BUTTON, BS_RADIOBUTTON |
+                                            BS_NOPOINTERFOCUS | WS_VISIBLE
+        CONTROL " 3 - Framing Error Detected", CER_BIT3, 7, 21, 149, 10,
+                                            WC_BUTTON, BS_RADIOBUTTON |
+                                            BS_NOPOINTERFOCUS | WS_VISIBLE
+        CONTROL "~Done",               DID_CANCEL, 19, 3, 40, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_DEFAULT |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "~Clear",              DID_CLEAR, 63, 3, 40, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | WS_TABSTOP |
+                                            WS_VISIBLE
+        CONTROL "Help",                DID_HELP, 105, 3, 40, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_NOPOINTERFOCUS |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Comm Error States",   0, 31, 72, 108, 7, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_VCENTER |
+                                            DT_MNEMONIC | WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE CEV_DLG
+BEGIN
+    DIALOG "", CEV_DLG, 0, 0, 224, 134, FS_NOBYTEALIGN | FS_MOUSEALIGN |
+                FS_DLGBORDER | WS_CLIPSIBLINGS | WS_SAVEBITS | WS_VISIBLE,
+                FCF_TITLEBAR
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        CONTROL "~Done",               DID_CANCEL, 37, 2, 40, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_DEFAULT |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "~Clear",              DID_CLEAR, 92, 2, 40, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | WS_GROUP |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Help",                DID_HELP, 148, 2, 40, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_NOPOINTERFOCUS |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "COM Event States",    0, 34, 121, 154, 8, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_TOP | WS_VISIBLE
+        CONTROL "Bit",                 0, 9, 114, 21, 8, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_BOTTOM | WS_VISIBLE
+        CONTROL " 0 - Received Character Written to Queue", CEV_BIT0,
+                                        5, 102, 193, 10, WC_BUTTON,
+                                            BS_RADIOBUTTON | WS_VISIBLE
+        CONTROL " 1 - FIFO Receive Timeout Interrupt Occurred", CEV_BIT1,
+                                        5, 92, 211, 10, WC_BUTTON,
+                                            BS_RADIOBUTTON | WS_VISIBLE
+        CONTROL " 2 - Last Character in Queue was Transmitted", CEV_BIT2,
+                                        5, 82, 213, 10, WC_BUTTON,
+                                            BS_RADIOBUTTON | WS_VISIBLE
+        CONTROL " 3 - CTS Changed State", CEV_BIT3, 5, 72, 158, 10, WC_BUTTON,
+                                            BS_RADIOBUTTON | WS_VISIBLE
+        CONTROL " 4 - DSR Changed State", CEV_BIT4, 5, 62, 158, 10, WC_BUTTON,
+                                            BS_RADIOBUTTON | WS_VISIBLE
+        CONTROL " 5 - DCD Changed State", CEV_BIT5, 5, 52, 158, 10, WC_BUTTON,
+                                            BS_RADIOBUTTON | WS_VISIBLE
+        CONTROL " 6 - Break Detected", CEV_BIT6, 5, 42, 158, 10, WC_BUTTON,
+                                            BS_RADIOBUTTON | WS_VISIBLE
+        CONTROL " 7 - Parity, Framing, or Overrun Error Occurred", CEV_BIT7,
+                                        5, 32, 215, 10, WC_BUTTON,
+                                            BS_RADIOBUTTON | WS_VISIBLE
+        CONTROL " 8 - Trailing Edge of Ring Indicator Detected", CEV_BIT8,
+                                        5, 22, 215, 10, WC_BUTTON,
+                                            BS_RADIOBUTTON | WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE CST_DLG
+BEGIN
+    DIALOG "", CST_DLG, 0, 0, 239, 122, FS_NOBYTEALIGN | FS_MOUSEALIGN |
+                FS_DLGBORDER | WS_CLIPSIBLINGS | WS_SAVEBITS | WS_VISIBLE,
+                FCF_TITLEBAR
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        CONTROL "~Done",               DID_CANCEL, 61, 3, 41, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_DEFAULT |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Help",                DID_HELP, 139, 3, 40, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_NOPOINTERFOCUS |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "COM Status States",   0, 36, 109, 173, 8, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_TOP | WS_GROUP |
+                                            WS_VISIBLE
+        CONTROL "Bit",                 0, 12, 102, 19, 8, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_BOTTOM | WS_VISIBLE
+        CONTROL " 0 - Transmit Waiting for CTS to Become Active", CST_BIT0,
+                                        6, 91, 224, 10, WC_BUTTON,
+                                            BS_RADIOBUTTON | WS_VISIBLE
+        CONTROL " 1 - Transmit Waiting for DSR to Become Active", CST_BIT1,
+                                        6, 81, 225, 10, WC_BUTTON,
+                                            BS_RADIOBUTTON | WS_VISIBLE
+        CONTROL " 2 - Transmit Waiting for DCD to Become Active", CST_BIT2,
+                                        6, 71, 224, 10, WC_BUTTON,
+                                            BS_RADIOBUTTON | WS_VISIBLE
+        CONTROL " 3 - Transmit Waiting Because Xoff Received", CST_BIT3,
+                                        6, 61, 209, 10, WC_BUTTON,
+                                            BS_RADIOBUTTON | WS_VISIBLE
+        CONTROL " 4 - Transmit Waiting Because Xoff Transmitted", CST_BIT4,
+                                        6, 51, 222, 10, WC_BUTTON,
+                                            BS_RADIOBUTTON | WS_VISIBLE
+        CONTROL " 5 - Transmit Waiting Because Transmitting Break", CST_BIT5,
+                                        6, 41, 231, 10, WC_BUTTON,
+                                            BS_RADIOBUTTON | WS_VISIBLE
+        CONTROL " 6 - Character Waiting to Transmit Immedialely", CST_BIT6,
+                                        6, 31, 220, 10, WC_BUTTON,
+                                            BS_RADIOBUTTON | WS_VISIBLE
+        CONTROL " 7 - Receive Waiting for DSR to Become Active", CST_BIT7,
+                                        6, 21, 219, 10, WC_BUTTON,
+                                            BS_RADIOBUTTON | WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE TST_DLG
+BEGIN
+    DIALOG "", TST_DLG, 0, 0, 257, 98, FS_NOBYTEALIGN | FS_MOUSEALIGN |
+                FS_DLGBORDER | WS_CLIPSIBLINGS | WS_SAVEBITS | WS_VISIBLE,
+                FCF_TITLEBAR
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        CONTROL "~Done",               DID_CANCEL, 64, 3, 40, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_DEFAULT |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Help",                DID_HELP, 167, 2, 40, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_NOPOINTERFOCUS |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Transmit Status States", 0, 43, 86, 174, 8, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_TOP | WS_VISIBLE
+        CONTROL "Bit",                 0, 11, 81, 21, 8, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_BOTTOM | WS_VISIBLE
+        CONTROL " 0 - Write Request Packets in Progress or Queued", TST_BIT0,
+                                        7, 70, 233, 10, WC_BUTTON,
+                                            BS_RADIOBUTTON | BS_NOPOINTERFOCUS |
+                                            WS_VISIBLE
+        CONTROL " 1 - Data in Device Driver Transmit Queue", TST_BIT1,
+                                        7, 61, 240, 10, WC_BUTTON,
+                                            BS_RADIOBUTTON | BS_NOPOINTERFOCUS |
+                                            WS_VISIBLE
+        CONTROL " 2 - The Hardware is Currently Transmitting Data", TST_BIT2,
+                                        7, 50, 237, 10, WC_BUTTON,
+                                            BS_RADIOBUTTON | BS_NOPOINTERFOCUS |
+                                            WS_VISIBLE
+        CONTROL " 3 - Character Waiting to be Transmitted Immediately",
+                                       TST_BIT3, 7, 41, 248, 10, WC_BUTTON,
+                                            BS_RADIOBUTTON | BS_NOPOINTERFOCUS |
+                                            WS_VISIBLE
+        CONTROL " 4 - Waiting to Automatically Transmit Xon", TST_BIT4,
+                                        7, 30, 231, 10, WC_BUTTON,
+                                            BS_RADIOBUTTON | BS_NOPOINTERFOCUS |
+                                            WS_VISIBLE
+        CONTROL " 5 - Waiting to Automatically Transmit Xoff", TST_BIT5,
+                                        7, 21, 209, 10, WC_BUTTON,
+                                            BS_RADIOBUTTON | BS_NOPOINTERFOCUS |
+                                            WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE DLG_COUNTS
+BEGIN
+    DIALOG "", DLG_COUNTS, 298, 232, 204, 71, FS_NOBYTEALIGN | FS_DLGBORDER |
+                WS_CLIPSIBLINGS | WS_SAVEBITS | WS_VISIBLE, FCF_TITLEBAR
+    PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+    BEGIN
+        CONTROL "Display character ~counts", CB_DISPCOUNTS, 20, 44, 175, 10,
+                                            WC_BUTTON, BS_AUTOCHECKBOX |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Display characters ~per second", CB_DISPCPS, 20, 33, 173, 10,
+                                            WC_BUTTON, BS_CHECKBOX | WS_GROUP |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Smoothing ~samples",  ST_SAMPLES, 30, 23, 88, 8, WC_STATIC,
+                                            SS_TEXT | DT_RIGHT | DT_TOP |
+                                            DT_MNEMONIC | WS_GROUP | WS_VISIBLE
+        CONTROL "Sample",              SPB_SAMPLES, 120, 23, 36, 8,
+                                            WC_SPINBUTTON, SPBS_MASTER |
+                                            SPBS_JUSTRIGHT | SPBS_NUMERICONLY |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "OK",                  DID_OK, 124, 3, 42, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_DEFAULT |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Cancel",              DID_CANCEL, 77, 3, 42, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | WS_GROUP |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Help",                998, 31, 3, 42, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_HELP | WS_GROUP |
+                                            WS_TABSTOP | WS_VISIBLE
+        CONTROL "Captured character count display configuration", ST_TITLE,
+                                        4, 57, 196, 10, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_TOP | WS_GROUP |
+                                            WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE DLG_ABOUTBOX
+BEGIN
+    DIALOG "", DLG_ABOUTBOX, 282, 226, 251, 102, FS_NOBYTEALIGN |
+                FS_SCREENALIGN | FS_DLGBORDER | WS_CLIPSIBLINGS | WS_SAVEBITS |
+                WS_VISIBLE, FCF_TITLEBAR
+    BEGIN
+        CONTROL "O~K",                 DID_OK, 96, 7, 51, 14, WC_BUTTON,
+                                            BS_PUSHBUTTON | BS_DEFAULT |
+                                            WS_GROUP | WS_TABSTOP | WS_VISIBLE
+                PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        CONTROL "COMscope Communications Monitor", 0, 3, 86, 245, 12, WC_STATIC,
+                                            SS_TEXT | DT_CENTER | DT_VCENTER |
+                                            WS_VISIBLE
+                PRESPARAMS PP_FONTNAMESIZE, "12.Helv"
+        CONTROL "Copyright (c) 1992-99 OS/tools Incorporated", ST_COPYRIGHT,
+                                        5, 59, 243, 8, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_VCENTER | WS_VISIBLE
+        CONTROL "e-mail: products@os-tools.com, URL: www.os-tools.com",
+                                       ST_INTERNETPRODUCTS, 3, 38, 243, 9,
+                                            WC_STATIC, SS_TEXT | DT_CENTER |
+                                            DT_VCENTER | WS_VISIBLE
+                PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        CONTROL "Gilroy, California",  ST_GILROYCALIFORNIA, 32, 48, 177, 8,
+                                            WC_STATIC, SS_TEXT | DT_CENTER |
+                                            DT_VCENTER | WS_VISIBLE
+        CONTROL ABT_ICON,              ABT_ICON, 18, 10, 37, 27, WC_STATIC,
+                                            SS_ICON | WS_VISIBLE
+        CONTROL "Version 2.xx 95000",  COMSCOPE_VERSION, 3, 76, 243, 8,
+                                            WC_STATIC, SS_TEXT | DT_CENTER |
+                                            DT_VCENTER | WS_VISIBLE
+                PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        CONTROL "The COMi device driver is not Loaded", COMI_VERSION,
+                                        4, 68, 241, 8, WC_STATIC, SS_TEXT |
+                                            DT_CENTER | DT_VCENTER | WS_VISIBLE
+                PRESPARAMS PP_FONTNAMESIZE, "8.Helv"
+        CONTROL "(408)874-7487",       ST_TELEPHONENUM, 79, 26, 77, 9,
+                                            WC_STATIC, SS_TEXT | DT_CENTER |
+                                            DT_VCENTER | WS_VISIBLE
+    END
+END
+
+MENU IDM_ROW_POPUP MOVEABLE DISCARDABLE
+BEGIN
+    MENUITEM "Display ~Setup...",      IDMPU_EVENT_DISP, MIS_TEXT
+
+    SUBMENU "Display ~Colors",         IDMPU_COLORS, MIS_TEXT
+    BEGIN
+        MENUITEM "~Receive...",        IDMPU_READ_COLOR, MIS_TEXT
+        MENUITEM "~Transmit...",       IDMPU_WRITE_COLOR, MIS_TEXT
+        MENUITEM "Modem ~in...",       IDMPU_MODEMIN_COLOR, MIS_TEXT
+        MENUITEM "Modem ~out...",      IDMPU_MODEMOUT_COLOR, MIS_TEXT
+        MENUITEM "Open/~Close...",     IDMPU_OPEN_COLOR, MIS_TEXT
+        MENUITEM "~Write requests...", IDMPU_WRITEREQ_COLOR, MIS_TEXT
+        MENUITEM "Read Re~quests...",  IDMPU_READREQ_COLOR, MIS_TEXT
+        MENUITEM "~Device I/O Control calls...", IDMPU_DEVIOCTL_COLOR, MIS_TEXT
+        MENUITEM "Comm ~Errors",       IDMPU_ERROR_COLOR, MIS_TEXT
+    END
+
+    SUBMENU "Display ~Font\tF9 ",      IDMPU_FONT, MIS_TEXT
+    BEGIN
+        MENUITEM "~ASCII",             IDMPU_ASCII_FONT, MIS_TEXT
+        MENUITEM "~Hexidecimal",       IDMPU_HEX_FONT, MIS_TEXT
+    END
+END

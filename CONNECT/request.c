@@ -1,0 +1,304 @@
+#include <COMMON.H>
+#include <UTILITY.H>
+#include "conn_dlg.h"
+#include "menu.h"
+#include "comm.h"
+#include "connect.h"
+
+extern char szMessage[];
+
+extern MSG stTestAddressee;
+
+extern SUBSCRIBER astSubList[];
+extern USHORT usSubscriberListCount;
+
+extern GROUP astGroupList[];
+extern USHORT usGroupListCount;
+
+extern LOGON stLogon;
+
+void ErrorNotify(char szMessage[]);
+void PrintString(char szMessage[],ULONG ulPos);
+void DisplayProcessError(APIRET rcErrorCode);
+void DisplayMessageError(ULONG ulErrorType,ULONG ulErrorCode);
+BOOL SendMessage(MSG *pMsg);
+
+void ProcessRequest(HWND hwnd,MSG *pMessage)
+  {
+  NOTIFYLST *pNotifyList;
+  USHORT usMsgLen;
+  LOGON *pLogon;
+  USHORT usSubCount;
+  ULONG *pulSubNum;
+  SUBSCRIBER *pSubResponse;
+  SUBSCRIBER *pSub;
+  SUBREQLST *pSubList;
+  SERVERLST *pServerList;
+  SUBRSPLST *pSubResponseList;
+  USHORT usGroupCount;
+  ULONG *pulGroupNum;
+  GROUP *pGroupResponse;
+  GROUP *pGroup;
+  GROUPREQLST *pGroupList;
+  GROUPRSPLST *pGroupResponseList;
+  USHORT usCount;
+  char *pData;
+  ULONG ulPostCount;
+  int iIndex;
+
+  sprintf(szMessage,"Request received <%u>",pMessage->ulMessageNumber);
+  PrintString(szMessage,9);
+  switch (pMessage->fMessageType)
+    {
+    case REQ_TIMEOUT:
+      break;
+    case REQ_NOTIFY:
+      pNotifyList = (NOTIFYLST *)&pMessage->byData;
+      usSubCount = (pNotifyList->usSubCount + pNotifyList->usGroupCount);
+      pData = (BYTE *)&pNotifyList->byData;
+      usMsgLen = pNotifyList->usMsgLen;
+      pulSubNum = (ULONG *)(pData + usMsgLen);
+      pMessage->cbSize = sizeof(MSG);
+      if (pNotifyList->usSubCount != 0)
+        {
+        if (pNotifyList->usSubCount == 1)
+          sprintf(szMessage,"Notify subscriber %u",*pulSubNum);
+        else
+          sprintf(szMessage,"Notify %u subscribers",pNotifyList->usSubCount);
+        PrintString(szMessage,10);
+        if (*pulSubNum >= usSubscriberListCount)
+          {
+          pMessage->fMessageType = RSP_NAK_NOTIFY;
+          pMessage->byData = REQ_ERROR_INVALID_SUB;
+          SendMessage(pMessage);
+          sprintf(szMessage,"Invalid Subscribers notified");
+          PrintString(szMessage,11);
+          break;
+          }
+        if (!astSubList[*pulSubNum].fFlags & SUB_FLG_ACTIVATED)
+          {
+          pMessage->fMessageType = RSP_NAK_NOTIFY;
+          pMessage->byData = REQ_ERROR_INACTIVE_SUB;
+          SendMessage(pMessage);
+          sprintf(szMessage,"Inactive Subscribers notified");
+          PrintString(szMessage,11);
+          break;
+          }
+        }
+      else
+        PrintString("No Subscribers to notify",10);
+      if (pNotifyList->usGroupCount != 0)
+        {
+        pulSubNum = &pulSubNum[pNotifyList->usSubCount];
+        if (pNotifyList->usGroupCount == 1)
+          sprintf(szMessage,"Notify group %u",*pulSubNum);
+        else
+          sprintf(szMessage,"Notify %u groups",pNotifyList->usGroupCount);
+        PrintString(szMessage,12);
+        if (*pulSubNum >= usGroupListCount)
+          {
+          pMessage->fMessageType = RSP_NAK_NOTIFY;
+          pMessage->byData = REQ_ERROR_INVALID_GROUP;
+          SendMessage(pMessage);
+          sprintf(szMessage,"Invalid Group notified");
+          PrintString(szMessage,12);
+          break;
+          }
+        if (!astGroupList[*pulSubNum].fFlags & SUB_FLG_ACTIVATED)
+          {
+          pMessage->fMessageType = RSP_NAK_NOTIFY;
+          pMessage->byData = REQ_ERROR_INACTIVE_GROUP;
+          SendMessage(pMessage);
+          sprintf(szMessage,"Invalid Group notified");
+          PrintString(szMessage,12);
+          break;
+          }
+        }
+      else
+        PrintString("No Groups to notify",11);
+
+      PrintString(pData,7);
+      if (pNotifyList->byMsgCount == 2)
+         PrintString(&pData[strlen(pData) + 1],8);
+      pMessage->fMessageType = RSP_ACK_NOTIFY;
+      SendMessage(pMessage);
+      break;
+    case REQ_LOGON:
+      pLogon = (LOGON *)&pMessage->byData;
+      if (stricmp(pLogon->szUserName,stLogon.szUserName) != 0)
+        {
+        pMessage->fMessageType = RSP_NAK_LOGON;
+        pMessage->byData = REQ_ERROR_BAD_USERID;
+        pMessage->cbSize = sizeof(MSG);
+        SendMessage(pMessage);
+        break;
+        }
+      if (stricmp(pLogon->szPassword,stLogon.szPassword) != 0)
+        {
+        pMessage->fMessageType = RSP_NAK_LOGON;
+        pMessage->byData = REQ_ERROR_BAD_PASSWORD;
+        pMessage->cbSize = sizeof(MSG);
+        SendMessage(pMessage);
+        break;
+        }
+      memcpy(&stTestAddressee,pMessage,sizeof(MSG));
+      sprintf(szMessage,"User %s logged on successfully",pLogon->szUserName);
+      PrintString(szMessage,10);
+      pMessage->fMessageType = RSP_ACK_LOGON;
+      pMessage->cbSize = sizeof(MSG);
+      SendMessage(pMessage);
+      break;
+    case REQ_QUERY_ACCESS:
+      break;
+    case REQ_QUERY_SUBSCRIBER:
+      pSubList = (SUBREQLST *)&pMessage->byData;
+      usSubCount = pSubList->usSubCount;
+      if ((pulSubNum = (ULONG *)malloc(sizeof(ULONG) * usSubCount)) == 0)
+        {
+        ErrorNotify("Failed to allocate memory for REQ_QUERY_SUBSCRIBER message");
+        break;
+        }
+      memcpy(pulSubNum,&pSubList->ulSubNumber,(sizeof(ULONG) * usSubCount));
+      if (usSubCount == 1)
+        sprintf(szMessage,"Query subscriber %u",*pulSubNum);
+      else
+        sprintf(szMessage,"Query %u subscribers",usSubCount);
+      PrintString(szMessage,10);
+      pSubResponseList = (SUBRSPLST *)&pMessage->byData;
+      pSubResponse = &pSubResponseList->stSubscriber;
+      usCount = 0;
+      for (iIndex = 0;iIndex < usSubCount;iIndex++)
+        {
+        pSub = &astSubList[pulSubNum[usCount]];
+        if ((pulSubNum[usCount] < MAX_SUBSCRIBERS) && (pSub->fFlags & SUB_FLG_ACTIVATED))
+          {
+          memcpy(pSubResponse,pSub,sizeof(SUBSCRIBER));
+          usCount++;
+          pSubResponse++;
+          }
+        }
+      free(pulSubNum);
+      if (usCount == 0)
+        {
+        pMessage->fMessageType = RSP_NAK_SUBSCRIBER;
+        pMessage->byData = REQ_ERROR_INVALID_SUB;
+        pMessage->cbSize = sizeof(MSG);
+        SendMessage(pMessage);
+        sprintf(szMessage,"No active Subscribers queried");
+        PrintString(szMessage,11);
+        }
+      else
+        {
+        pSubResponseList->usSubCount = usCount;
+        pMessage->fMessageType = RSP_ACK_SUBSCRIBER;
+        pMessage->cbDataSize = (sizeof(SUBRSPLST) + (sizeof(SUBSCRIBER) * (usSubCount -1)));
+        pMessage->cbSize = (sizeof(MSG) + pMessage->cbDataSize - 1);
+        SendMessage(pMessage);
+        sprintf(szMessage,"Returned %u Subscribers of %u queried",usCount,usSubCount);
+        PrintString(szMessage,11);
+        }
+      break;
+    case REQ_QUERY_GROUP:
+      pGroupList = (GROUPREQLST *)&pMessage->byData;
+      usGroupCount = pGroupList->usGroupCount;
+      if ((pulGroupNum = (ULONG *)malloc(sizeof(ULONG) * usSubCount)) == 0)
+        {
+        ErrorNotify("Failed to allocate memory for REQ_QUERY_GROUP message");
+        break;
+        }
+      memcpy(pulGroupNum,&pGroupList->ulGroupNumber,(sizeof(ULONG) * usGroupCount));
+      if (usGroupCount == 1)
+        sprintf(szMessage,"Query Group %u",*pulGroupNum);
+      else
+        sprintf(szMessage,"Query %u Groups",usGroupCount);
+      PrintString(szMessage,10);
+      pGroupResponseList = (GROUPRSPLST *)&pMessage->byData;
+      pGroupResponse = &pGroupResponseList->stGroup;
+      usCount = 0;
+      for (iIndex = 0;iIndex < usGroupCount;iIndex++)
+        {
+        pGroup = &astGroupList[pulGroupNum[usCount]];
+        if ((pulGroupNum[usCount] < MAX_GROUPS) && (pGroup->fFlags & SUB_FLG_ACTIVATED))
+          {
+          memcpy(pGroupResponse,pGroup,sizeof(GROUP));
+          usCount++;
+          pGroupResponse++;
+          }
+        }
+      free(pulGroupNum);
+      if (usCount == 0)
+        {
+        pMessage->fMessageType = RSP_NAK_GROUP;
+        pMessage->byData = REQ_ERROR_INVALID_GROUP;
+        pMessage->cbSize = sizeof(MSG);
+        SendMessage(pMessage);
+        sprintf(szMessage,"No active Groups queried");
+        PrintString(szMessage,11);
+        }
+      else
+        {
+        pGroupResponseList->usGroupCount = usCount;
+        pMessage->fMessageType = RSP_ACK_GROUP;
+        pMessage->cbDataSize = (sizeof(GROUPRSPLST) + (sizeof(GROUP) *(usGroupCount - 1)));
+        pMessage->cbSize = (sizeof(MSG) + pMessage->cbDataSize - 1);
+        SendMessage(pMessage);
+        sprintf(szMessage,"Returned %u Groups of %u queried",usCount,usGroupCount);
+        PrintString(szMessage,11);
+        }
+      break;
+    case REQ_QUERY_SERVER:
+      pServerList = (SERVERLST *)&pMessage->byData;
+      pulSubNum = (ULONG *)&pServerList->byData;
+      /*
+      ** need to make sure that data will fit in buffer
+      ** will have to break response up into multiple packets if too much data for one packet
+      */
+      usSubCount = 0;
+      usCount = 0;
+      for (iIndex = 0;iIndex < usSubscriberListCount;iIndex++)
+        {
+        pSub = &astSubList[iIndex];
+        if (pSub->fFlags & SUB_FLG_ACTIVATED)
+          {
+          usSubCount++;
+          usCount++;
+          *pulSubNum = pSub->ulSubNumber;
+          pulSubNum++;
+          }
+        }
+      pServerList->usSubCount = usSubCount;
+      usSubCount = 0;
+      for (iIndex = 0;iIndex < usGroupListCount;iIndex++)
+        {
+        pGroup = &astGroupList[iIndex];
+        if (pGroup->fFlags & SUB_FLG_ACTIVATED)
+          {
+          usSubCount++;
+          usCount++;
+          *pulSubNum = pGroup->ulGroupNumber;
+          pulSubNum++;
+          }
+        }
+      pServerList->usGroupCount = usSubCount;
+      if (usCount == 0)
+        {
+        pMessage->cbDataSize = 0;
+        pMessage->cbSize = sizeof(MSG);
+        sprintf(szMessage,"No activated subscribers or groups to return");
+        PrintString(szMessage,11);
+        }
+      else
+        {
+        pMessage->cbDataSize = (sizeof(SERVERLST) + (sizeof(ULONG) * (pServerList->usSubCount + pServerList->usGroupCount)) - 1);
+        pMessage->cbSize = (sizeof(MSG) + pMessage->cbDataSize - 1);
+        sprintf(szMessage,"Returned %u Subscribers and %u Groups",pServerList->usSubCount,pServerList->usGroupCount);
+        PrintString(szMessage,11);
+        }
+      pMessage->fMessageType = RSP_SERVER;
+      SendMessage(pMessage);
+      break;
+    default:
+      break;
+    }
+  DosFreeMem(pMessage);
+  }

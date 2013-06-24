@@ -1,0 +1,126 @@
+/*******************************************************************************
+*
+*       Copyright (c) 1988-94 OS/tools Incorporated -- All rights reserved
+*
+*       This code is supplied on an As-is basis.  No garantees, no promises.
+*       Use as you see fit.
+*
+*******************************************************************************/
+/*
+**  Bit definitions for SetDCB and GetDCB structure DCB, flags 1, 2, and 3
+*/
+#define F1_ENABLE_DTR                   '\x01'
+#define F1_ENABLE_DTR_INPUT_HS          '\x02'
+#define F1_DTR_MASK                     '\x03'
+#define F1_ENABLE_DSR_INPUT_HS          '\x40'
+#define F1_ENABLE_DCD_OUTPUT_HS         '\x20'
+#define F1_ENABLE_DSR_OUTPUT_HS         '\x10'
+#define F1_ENABLE_CTS_OUTPUT_HS         '\x08'
+
+#define F1_DEFAULT                      F1_ENABLE_DTR
+
+#define F2_ENABLE_RTS                   '\x40'
+#define F2_ENABLE_RTS_INPUT_HS          '\x80'
+#define F2_ENABLE_RTS_TOG_ON_XMIT       '\xc0'
+#define F2_RTS_MASK                     '\xc0'
+
+#define F2_ENABLE_FULL_DUPLEX           '\x20'
+
+#define F2_ENABLE_BREAK_REPL            '\x10'
+#define F2_ENABLE_NULL_STRIP            '\x08'
+#define F2_ENABLE_ERROR_REPL            '\x04'
+
+#define F2_ENABLE_RCV_XON_XOFF_FLOW     '\x02'
+#define F2_ENABLE_XMIT_XON_XOFF_FLOW    '\x01'
+
+#define F2_DEFAULT                      F2_ENABLE_RTS
+
+#define F3_USE_TX_BUFFER                '\x80'
+#define F3_4_CHARACTER_FIFO             '\x20'
+#define F3_8_CHARACTER_FIFO             '\x40'
+#define F3_14_CHARACTER_FIFO            '\x60'
+#define F3_HDW_BUFFER_DISABLE           '\x08'
+#define F3_HDW_BUFFER_ENABLE            '\x10'
+#define F3_HDW_BUFFER_APO               '\x18'
+#define F3_FIFO_MASK                    '\xf8'
+#define F3_WAIT_NORM                    '\x02'
+#define F3_WAIT_NONE                    '\x06'
+#define F3_WAIT_SOMETHING               '\x04'
+#define F3_RTO_MASK                     '\x06'
+#define F3_INFINITE_WRT_TIMEOUT         '\x01'
+
+#define F3_DEFAULT                     (F3_USE_TX_BUFFER |
+                                        F3_14_CHARACTER_FIFO |
+                                        F3_HDW_BUFFER_ENABLE |
+                                        F3_WAIT_NORM)
+/*
+** DCB used for functions 53h and 73h
+*/
+typedef struct 
+  {
+  WORD wWrtTimeout;
+  WORD wReadTimeout;
+  BYTE byFlags1;
+  BYTE byFlags2;
+  BYTE byFlags3;
+  BYTE byErrChar;
+  BYTE byBrkChar;
+  BYTE byXonChar;
+  BYTE byXoffChar;
+  }DCB;
+
+/*
+** Declaration:
+**
+**  DCB stComDCB;
+**
+** Usage:
+**
+**  GetDCB(hCom,&stComDCB);
+**
+**  stComDCB.byFlags1 = F1_DEFAULT;
+**
+**  stComDCB.byFlags2 = F2_DEFAULT;
+**
+**  stComDCB.byFlags3 = F3_DEFAULT;
+**
+**  SetDCB(hCom,&stComDCB);
+**
+** Output Modem Signals - Notes:
+**
+**      The state of the DTR and RTS modem signals can be changed by
+**      both the SetDCB (0x53) function and the SetModemSignals (0x46)
+**      function.
+**
+**      Changing either, or both, of these signals with SetDCB will
+**      cause the respective bits to be set, or reset, in the device
+**      driver's DCB for that device, and the state of those signals
+**      to be set as requested.  Any subsequent call to the 
+**      QueryModemOutputSignals (0x66) function will return the state(s)
+**      set by the call to SetDCB.
+**
+**      Changing either signal with the SetModemSignals (0x46) function
+**      will cause state of those signals to be set as requested, and
+**      the respective bits to be set, or reset, in the device driver's
+**      DCB for that device.  Any subsequent call to the GetDCB (0x73)
+**      function will return the flags bits showing that change.
+**
+**      An exception is when the DCB flags are set so that a signal is to
+**      be used for some handshaking function (i.e., RTS toggling on
+**      transmit, RTS input handshaking, or DTR input handshaking).  In
+**      this case the device driver will not allow the SetModemSignals
+**      (0x66) function to change the state of that signal.
+**
+**      Always read the DCB, set the flag bits and/or fields you need
+**      to change, then write the DCB.  If you read the DCB then change
+**      any output modem signal with the SetModemSignals (0x66) function,
+**      then write the DCB without changing it, the states of the output
+**      modem signals will be returned to the state they were in when the
+**      DCB was read.  Reading the DCB first will also insure that any
+**      DCB "reserved" bits and/or fields your application is unaware of
+**      will be left in a valid state.
+**
+** See the file "IOCTL.C" on the distribution diskette for more detail
+** on the SetDCB, GetDCB, and other device I/O control functions.
+*/
+
