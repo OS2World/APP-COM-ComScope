@@ -1,0 +1,152 @@
+
+ Start         Length     Name                   Class
+ 0001:00000000 000001C28H _TEXT                  CODE
+ 0002:00000000 0000006BCH _DATA                  DATA
+ 0002:000006BC 000000006H _INIT_                 INITDATA
+ 0002:000006C2 000000000H _INITEND_              INITDATA
+ 0002:000006C2 000000000H _EXIT_                 EXITDATA
+ 0002:000006C2 000000000H _EXITEND_              EXITDATA
+ 0002:000006C4 000000000H CONST                  CONST
+ 0002:000006C4 000000A94H _BSS                   BSS
+
+  Address         Publics by Name
+
+ 0001:0000180E  Idle set_terminate(void(*)())
+ 0001:000018EF  Idle set_unexpected(void(*)())
+ 0001:00001804  Idle terminate()
+ 0001:000018E5  Idle unexpected()
+ 0001:0000198E  Idle __GetPolymorphicDTC(void*,unsigned int)
+ 0001:000017C4       @__InitExceptBlock
+ 0001:00000058  Idle InstallPager
+ 0002:00000120  Idle _bK
+ 0002:0000011C  Idle _bLibsDirCreated
+ 0001:000012CF  Idle _ClearReadOnly
+ 0001:00001523  Idle _CompareFileDate
+ 0001:00001237  Idle _CopyFile
+ 0001:000014A5  Idle _CreatePath
+ 0001:000016AE  Idle _DisplayCopyError
+ 0001:00001303  Idle _MakePath
+ 0002:00000F48  Idle _stFileStatus
+ 0002:00000BC4  Idle _szCaption
+ 0002:00000714  Idle _szCOMiINFname
+ 0002:00000BEC  Idle _szDestSpec
+ 0002:00000B60  Idle _szFileKey
+ 0002:00000DF4  Idle _szFileName
+ 0002:000010AC  Idle _szFileNumber
+ 0002:000000C0  Idle _szFolderID
+ 0002:00000068  Idle _szFolderName
+ 0002:000000A4  Idle _szFolderSetup
+ 0002:000000EC  Idle _szINFobjectSetup
+ 0002:00000E44  Idle _szInstalledIniPath
+ 0002:000006EC  Idle _szInstallEXEname
+ 0002:00000B74  Idle _szMessage
+ 0002:00001070  Idle _szObjectName
+ 0002:000006C4  Idle _szPagerEXEname
+ 0002:00000F6C  Idle _szPath
+ 0002:00000A5C  Idle _szPDRpath
+ 0002:000000D0  Idle _szProgramObjectSetup
+ 0002:0000073C  Idle _szSetupString
+ 0002:00000CF0  Idle _szSourceSpec
+ 0002:00000F68  Idle _ulAttr
+ 0002:00000F60  Idle _ulInstalledFileStart
+ 0002:00000F64  Idle _ulInstalledObjectStart
+ 0001:00000000  Idle __acrtused
+ 0002:0000002B  Idle __c0_heaps
+ 0002:0000002F  Idle __c0_nheaps
+ 0001:000017AC       __chkstk
+ 0002:0000064C  Idle __DebuggerHookData
+ 0002:000010D4       __DestructorCountPtr
+ 0001:00001B50       __dllmain
+ 0001:000019CA       __ExceptInit
+ 0002:00000648  Idle __ExceptVarsSize
+ 0001:000019BA       __GetExceptDLLinfo
+ 0001:00001B0E  Idle __GetExceptDLLinfoInternal
+ 0001:00001B60       __initstk
+ 0002:00000050  Idle __os2hmod
+ 0001:00001834  Idle ___call_terminate
+ 0001:00001915  Idle ___call_unexpected
+ 0002:000005E4  Idle ___CPPexceptionList
+ 0002:000005F4  Idle ___debuggerHookDataP
+ 0002:000005EC  Idle ___debuggerHookFN
+ 0002:000005F0  Idle ___debuggerWatchingP
+ 0002:000005E8  Idle ___exceptFlags
+ 0002:00000610  Idle ___exceptMemAllocVars
+ 0002:0000060C  Idle ___exceptStaticBuffP
+ 0002:000010D8  Idle ___ExceptStaticXbuff
+ 0002:0000003B       ___isDLL
+ 0002:000005F8  Idle ___terminatePTR
+ 0002:00000608  Idle ___throwExceptionName
+ 0002:00000600  Idle ___throwFileName
+ 0002:00000604  Idle ___throwLineNumber
+ 0002:000005FC  Idle ___unexpectdPTR
+
+  Address         Publics by Value
+
+ 0001:00000000  Idle __acrtused
+ 0001:00000058  Idle InstallPager
+ 0001:00001237  Idle _CopyFile
+ 0001:000012CF  Idle _ClearReadOnly
+ 0001:00001303  Idle _MakePath
+ 0001:000014A5  Idle _CreatePath
+ 0001:00001523  Idle _CompareFileDate
+ 0001:000016AE  Idle _DisplayCopyError
+ 0001:000017AC       __chkstk
+ 0001:000017C4       @__InitExceptBlock
+ 0001:00001804  Idle terminate()
+ 0001:0000180E  Idle set_terminate(void(*)())
+ 0001:00001834  Idle ___call_terminate
+ 0001:000018E5  Idle unexpected()
+ 0001:000018EF  Idle set_unexpected(void(*)())
+ 0001:00001915  Idle ___call_unexpected
+ 0001:0000198E  Idle __GetPolymorphicDTC(void*,unsigned int)
+ 0001:000019BA       __GetExceptDLLinfo
+ 0001:000019CA       __ExceptInit
+ 0001:00001B0E  Idle __GetExceptDLLinfoInternal
+ 0001:00001B50       __dllmain
+ 0001:00001B60       __initstk
+ 0002:0000002B  Idle __c0_heaps
+ 0002:0000002F  Idle __c0_nheaps
+ 0002:0000003B       ___isDLL
+ 0002:00000050  Idle __os2hmod
+ 0002:00000068  Idle _szFolderName
+ 0002:000000A4  Idle _szFolderSetup
+ 0002:000000C0  Idle _szFolderID
+ 0002:000000D0  Idle _szProgramObjectSetup
+ 0002:000000EC  Idle _szINFobjectSetup
+ 0002:0000011C  Idle _bLibsDirCreated
+ 0002:00000120  Idle _bK
+ 0002:000005E4  Idle ___CPPexceptionList
+ 0002:000005E8  Idle ___exceptFlags
+ 0002:000005EC  Idle ___debuggerHookFN
+ 0002:000005F0  Idle ___debuggerWatchingP
+ 0002:000005F4  Idle ___debuggerHookDataP
+ 0002:000005F8  Idle ___terminatePTR
+ 0002:000005FC  Idle ___unexpectdPTR
+ 0002:00000600  Idle ___throwFileName
+ 0002:00000604  Idle ___throwLineNumber
+ 0002:00000608  Idle ___throwExceptionName
+ 0002:0000060C  Idle ___exceptStaticBuffP
+ 0002:00000610  Idle ___exceptMemAllocVars
+ 0002:00000648  Idle __ExceptVarsSize
+ 0002:0000064C  Idle __DebuggerHookData
+ 0002:000006C4  Idle _szPagerEXEname
+ 0002:000006EC  Idle _szInstallEXEname
+ 0002:00000714  Idle _szCOMiINFname
+ 0002:0000073C  Idle _szSetupString
+ 0002:00000A5C  Idle _szPDRpath
+ 0002:00000B60  Idle _szFileKey
+ 0002:00000B74  Idle _szMessage
+ 0002:00000BC4  Idle _szCaption
+ 0002:00000BEC  Idle _szDestSpec
+ 0002:00000CF0  Idle _szSourceSpec
+ 0002:00000DF4  Idle _szFileName
+ 0002:00000E44  Idle _szInstalledIniPath
+ 0002:00000F48  Idle _stFileStatus
+ 0002:00000F60  Idle _ulInstalledFileStart
+ 0002:00000F64  Idle _ulInstalledObjectStart
+ 0002:00000F68  Idle _ulAttr
+ 0002:00000F6C  Idle _szPath
+ 0002:00001070  Idle _szObjectName
+ 0002:000010AC  Idle _szFileNumber
+ 0002:000010D4       __DestructorCountPtr
+ 0002:000010D8  Idle ___ExceptStaticXbuff

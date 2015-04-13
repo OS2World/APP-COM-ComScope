@@ -1,0 +1,91 @@
+# IBM Developer's Workframe/2 Make File Creation run at 14:12:43 on 05/03/95
+
+# Make File Creation run in directory:
+#   P:\CONFIG;
+
+# Assumed INCLUDE environment variable path:
+#   w:\TOOLKIT30\SOM\INCLUDE;
+#   w:\TOOLKIT30\H;
+#   P:\CONFIG;
+#   w:\TOOLKIT30\INC;
+#   W:\IBMCPP\INCLUDE;
+#   W:\IBMCPP\IBMCLASS;
+
+
+INCLUDE001=.
+INCLUDE001=$(INCLUDE001);$(INCLUDE)
+
+INCLUDE000=w:\toolkit30\H
+INCLUDE000=$(INCLUDE000);w:\ibmcpp\include
+INCLUDE000=$(INCLUDE000);p:\config
+INCLUDE000=$(INCLUDE000);p:\comscope\include
+INCLUDE000=$(INCLUDE000);p:\utility
+INCLUDE000=$(INCLUDE000);p:\comi
+INCLUDE000=$(INCLUDE000);p:\
+
+
+ddconfig.RES:  ddconfig.rc  \
+   {$(INCLUDE001)}CFG_DLG.H  \
+   {$(INCLUDE001)}ATOM.H  \
+   OEM.ICO  \
+   OEM1.BMP  \
+   PORTCFG.DLG  \
+   STRINGS.RC  \
+   MAKEFILE
+
+cfg_dlg.OBJ:  cfg_dlg.c  \
+   {$(INCLUDE000)}COMi_CFG.H  \
+#    {$(INCLUDE000)}COMMON.H  \
+#    {$(INCLUDE000)}linklist.h  \
+#    {$(INCLUDE000)}ioctl.h  \
+     {$(INCLUDE000)}atom.h  \
+#    {$(INCLUDE000)}help.h  \
+     {$(INCLUDE000)}CONFIG.H  \
+     {$(INCLUDE000)}CFG_DLG.H  \
+#    {$(INCLUDE000)}dummy.h  \
+#  {$(INCLUDE000)}dummy.h  \
+#  {$(INCLUDE000)}util.h  \
+#  {$(INCLUDE000)}remote.h  \
+   MAKEFILE
+
+comddini.OBJ:  comddini.c  \
+   {$(INCLUDE000)}COMi_CFG.H  \
+#    {$(INCLUDE000)}COMMON.H  \
+#    {$(INCLUDE000)}linklist.h  \
+#    {$(INCLUDE000)}ioctl.h  \
+     {$(INCLUDE000)}atom.h  \
+#    {$(INCLUDE000)}help.h  \
+     {$(INCLUDE000)}CONFIG.H  \
+     {$(INCLUDE000)}CFG_DLG.H  \
+#    {$(INCLUDE000)}dummy.h  \
+#  {$(INCLUDE000)}dummy.h  \
+#  {$(INCLUDE000)}util.h  \
+   MAKEFILE
+
+ddbufdlg.OBJ:  ddbufdlg.c  \
+   {$(INCLUDE000)}COMi_CFG.H  \
+#    {$(INCLUDE000)}COMMON.H  \
+#    {$(INCLUDE000)}linklist.h  \
+#    {$(INCLUDE000)}ioctl.h  \
+     {$(INCLUDE000)}atom.h  \
+#    {$(INCLUDE000)}help.h  \
+     {$(INCLUDE000)}CONFIG.H  \
+     {$(INCLUDE000)}CFG_DLG.H  \
+#    {$(INCLUDE000)}dummy.h  \
+#  {$(INCLUDE000)}dummy.h  \
+#  {$(INCLUDE000)}util.h  \
+   MAKEFILE
+
+protocol.OBJ:  protocol.c  \
+   {$(INCLUDE000)}COMi_CFG.H  \
+#    {$(INCLUDE000)}COMMON.H  \
+#    {$(INCLUDE000)}linklist.h  \
+#    {$(INCLUDE000)}ioctl.h  \
+     {$(INCLUDE000)}atom.h  \
+#    {$(INCLUDE000)}help.h  \
+     {$(INCLUDE000)}CONFIG.H  \
+     {$(INCLUDE000)}CFG_DLG.H  \
+#    {$(INCLUDE000)}dummy.h  \
+#  {$(INCLUDE000)}dummy.h  \
+#  {$(INCLUDE000)}util.h  \
+   MAKEFILE

@@ -1,0 +1,4 @@
+
+.\makeprof.obj: \
+    P:\install\makeprofile\makeprof.c \
+    MakeProf.mak

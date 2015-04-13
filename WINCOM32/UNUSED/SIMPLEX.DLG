@@ -1,0 +1,71 @@
+DLGINCLUDE 1 "WINCOM.H"
+
+DLGTEMPLATE PSTR_DLG LOADONCALL MOVEABLE DISCARDABLE 
+BEGIN
+    DIALOG "", PSTR_DLG, 21, 64, 303, 124, FS_NOBYTEALIGN | FS_DLGBORDER | 
+                WS_VISIBLE | WS_CLIPSIBLINGS | WS_SAVEBITS
+    BEGIN
+        CONTROL "Read Mode", DID_NULL, 7, 71, 94, 40, WC_STATIC, SS_GROUPBOX | 
+                WS_GROUP | WS_VISIBLE
+        CONTROL "Enable Reads", 1004, 11, 92, 76, 10, WC_BUTTON, BS_AUTOCHECKBOX | 
+                WS_TABSTOP | WS_VISIBLE
+        CONTROL "Character Reads", 0, 11, 72, 88, 10, WC_BUTTON, BS_AUTORADIOBUTTON | 
+                WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "String Reads", 0, 11, 82, 70, 10, WC_BUTTON, BS_AUTORADIOBUTTON | 
+                WS_TABSTOP | WS_VISIBLE
+        CONTROL "Write Mode", DID_NULL, 107, 71, 94, 40, WC_STATIC, SS_GROUPBOX | 
+                WS_GROUP | WS_VISIBLE
+        CONTROL "Enable Writes", 1004, 111, 92, 74, 10, WC_BUTTON, BS_AUTOCHECKBOX | 
+                WS_TABSTOP | WS_VISIBLE
+        CONTROL "String Writes", PSPX_DLG, 111, 82, 72, 10, WC_BUTTON, 
+                BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Character Writes", PSPX_DLG, 111, 72, 86, 10, WC_BUTTON, 
+                BS_AUTORADIOBUTTON | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Write Message Definition", PSPX_DLG, 7, 3, 286, 64, WC_STATIC, 
+                SS_GROUPBOX | WS_GROUP | WS_VISIBLE
+        CONTROL "Make Long String", PSPX_DLG, 17, 49, 90, 10, WC_BUTTON, 
+                BS_AUTORADIOBUTTON | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Type String to write", PSPX_DLG, 173, 49, 96, 10, WC_BUTTON, 
+                BS_AUTORADIOBUTTON | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Use Alpha Characters", PSPX_DLG, 23, 39, 107, 10, WC_BUTTON, 
+                BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Use Number Characters", PSPX_DLG, 23, 29, 118, 10, WC_BUTTON, 
+                BS_AUTORADIOBUTTON | WS_TABSTOP | WS_VISIBLE
+        CONTROL "String Length", PSPX_DLG, 15, 11, 61, 8, WC_STATIC, SS_TEXT | 
+                DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "", PSPX_DLG, 81, 11, 28, 8, WC_ENTRYFIELD, ES_LEFT | ES_MARGIN | 
+                WS_TABSTOP | WS_VISIBLE
+        CONTROL "This is the default string 
+", PSPX_DLG, 157, 36, 124, 8, WC_ENTRYFIELD, 
+                ES_LEFT | ES_AUTOSCROLL | ES_MARGIN | WS_VISIBLE
+        CONTROL "Delay after each cycle?", PSPX_DLG, 161, 21, 112, 10, 
+                WC_BUTTON, BS_CHECKBOX | WS_TABSTOP | WS_VISIBLE
+        CONTROL "100", PSPX_DLG, 187, 10, 39, 8, WC_ENTRYFIELD, ES_LEFT | 
+                ES_MARGIN | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Delay ", DID_NULL, 156, 11, 25, 8, WC_STATIC, SS_TEXT | 
+                DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "milliseconds", DID_NULL, 229, 11, 56, 8, WC_STATIC, SS_TEXT | 
+                DT_LEFT | DT_TOP | WS_GROUP | WS_VISIBLE
+        CONTROL "String Transfer Mode Definition", DID_NULL, 1, 114, 299, 8, 
+                WC_STATIC, SS_TEXT | DT_CENTER | DT_TOP | WS_VISIBLE
+        CONTROL "Start Mode", PSPX_STRLEN, 206, 73, 87, 32, WC_STATIC, 
+                SS_GROUPBOX | WS_GROUP | WS_VISIBLE
+        CONTROL "Wait for data", PSPX_STRLEN, 210, 86, 68, 10, WC_BUTTON, 
+                BS_AUTORADIOBUTTON | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Start Immediate", PSPX_STRLEN, 210, 76, 80, 10, WC_BUTTON, 
+                BS_AUTORADIOBUTTON | WS_TABSTOP | WS_VISIBLE
+    END
+END
+DLGTEMPLATE PSPX_DLG LOADONCALL MOVEABLE DISCARDABLE 
+BEGIN
+    DIALOG "", PSPX_DLG, 111, 109, 157, 27, FS_NOBYTEALIGN | FS_DLGBORDER | 
+                WS_VISIBLE | WS_CLIPSIBLINGS | WS_SAVEBITS
+    BEGIN
+        CONTROL "Simplex Simulation Setup", DID_NULL, 3, 18, 152, 8, WC_STATIC, 
+                SS_TEXT | DT_CENTER | DT_TOP | WS_GROUP | WS_VISIBLE
+        CONTROL "1000", PSPX_STRLEN, 119, 5, 27, 8, WC_ENTRYFIELD, ES_LEFT | 
+                ES_MARGIN | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Length of string to return", DID_NULL, 6, 5, 109, 8, WC_STATIC, 
+                SS_TEXT | DT_LEFT | DT_TOP | WS_GROUP | WS_VISIBLE
+    END
+END

@@ -1,0 +1,11 @@
+LIBRARY CLIENT
+
+DESCRIPTION 'OS/tools TPC/IP Client Messaging library'
+
+EXPORTS
+  InitCOM
+  SendRequest
+  StopCOM
+  EnableDebug
+
+

@@ -1,0 +1,21 @@
+
+.\main.obj: \
+    p:\connect\main.c \
+    {p:\connect;$(INCLUDE);}aerial.h \
+    OS2LS_NC.mak
+
+.\client.obj: \
+    p:\connect\client.c \
+    {p:\connect;$(INCLUDE);}aerial.h \
+    {p:\connect;$(INCLUDE);}comm.h \
+    OS2LS_NC.mak
+
+.\server.obj: \
+    p:\connect\server.c \
+    {p:\connect;$(INCLUDE);}aerial.h \
+    {p:\connect;$(INCLUDE);}comm.h \
+    OS2LS_NC.mak
+
+.\OS2LS_NC.LIB: \
+    .\OS2LS_NC.DLL \
+    OS2LS_NC.mak

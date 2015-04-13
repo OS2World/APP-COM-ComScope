@@ -1,0 +1,230 @@
+
+ SERIAL
+
+ Start         Length     Name                   Class
+ 0001:00000000 000002BD4H CODE32                 CODE 32-bit
+ 0002:00000000 000000010H DDE4_DATA32            DATA 32-bit
+ 0003:00000000 0000004B0H DATA32                 DATA 32-bit
+ 0003:000004B0 000000000H CTOR_DTOR1             DATA 32-bit
+ 0003:000004B0 000000000H CTOR_DTOR2             DATA 32-bit
+ 0003:000004B0 000000000H CTOR_DTOR3             DATA 32-bit
+ 0003:000004B0 000000030H CONST32                CONST 32-bit
+ 0003:000004E0 000000000H BSS32                  BSS 32-bit
+ 0003:000004E0 000000024H c_common               BSS 32-bit
+
+ Origin   Group
+ 0000:0   FLAT
+ 0003:0   DGROUP
+
+ Address       Export                  Alias
+
+ 0001:00000000 SplPdEnumPort           SplPdEnumPort
+ 0001:000004E0 SplPdGetPortIcon        SplPdGetPortIcon
+ 0001:000001B8 SplPdInitPort           SplPdInitPort
+ 0001:000002A4 SplPdInstallPort        SplPdInstallPort
+ 0001:00000500 SplPdQueryPort          SplPdQueryPort
+ 0001:000007C4 SplPdRemovePort         SplPdRemovePort
+ 0001:0000068C SplPdSetPort            SplPdSetPort
+ 0001:0000087C SplPdTermPort           SplPdTermPort
+
+  Address         Publics by Name
+
+ 0001:000020C8       AsciiToBin
+ 0001:00002874       atoi
+ 0001:00002938       atol
+ 0001:00000888       CalcBufLength
+ 0001:000008E4       CalcStructLength
+ 0001:0000224C       CALLAssociateHelpInstance
+ 0001:00002308       CALLCreateHelpInstance
+ 0001:000023E0       CALLDestroyHelpInstance
+ 0001:00002498       CALLQueryHelpInstance
+ 0001:00000C50       CommDlg
+ 0001:000009F8       CopyNPorts
+ 0001:00000A74       CopyStruct
+ 0001:00002140       DE
+ 0001:00002168       DisplayError
+ 0000:00000000  Imp  DosClose             (DOSCALLS.257)
+ 0000:00000000  Imp  DosDevIOCtl          (DOSCALLS.284)
+ 0000:00000000  Imp  DosError             (DOSCALLS.212)
+ 0000:00000000  Imp  DosFreeModule        (DOSCALLS.322)
+ 0000:00000000  Imp  DosLoadModule        (DOSCALLS.318)
+ 0000:00000000  Imp  DosOpen              (DOSCALLS.273)
+ 0000:00000000  Imp  DosQueryModuleHandle (DOSCALLS.319)
+ 0000:00000000  Imp  DosQueryProcAddr     (DOSCALLS.321)
+ 0000:00000000  Imp  DosQuerySysInfo      (DOSCALLS.348)
+ 0001:0000119C       GetDialogValues
+ 0001:00001B84       GetPortDefaultSettings
+ 0001:00000B44       GetPortDescription
+ 0001:00001A9C       GetPortSettings
+ 0003:000004E0       HelpAlreadyInitialized
+ 0001:000025C4       HelpStubHook
+ 0003:000004F8       HelpStubHookIsSet
+ 0003:000004F0       hvHelpmgrModule
+ 0003:00000500       hwndHelp
+ 0001:00000F94       InitCommDialogBox
+ 0001:00001DEC       InitializeCommPort
+ 0001:000025D8       InitializeHelp
+ 0001:00002B88       memcpy
+ 0001:00002BA8       memset
+ 0001:00000980       NumPortsCanFit
+ 0001:00000BD8       OpenSerialPortDlg
+ 0003:000004FC       pfnWinAssociateHelpInstance
+ 0003:000004E4       pfnWinCreateHelpInstance
+ 0003:000004EC       pfnWinDestroyHelpInstance
+ 0003:000004E8       pfnWinQueryHelpInstance
+ 0000:00000000  Imp  PrfQueryProfileString (PMSHAPI.115)
+ 0000:00000000  Imp  PrfWriteProfileString (PMSHAPI.116)
+ 0001:00002594       ReleaseHelpStubHook
+ 0001:00001D34       RemoveLeadTrailBlanks
+ 0001:00001958       SavePortSettings
+ 0001:00001410       SetDialogValues
+ 0001:00002548       SetHelpStubHook
+ 0001:00000000       SplPdEnumPort
+ 0001:000004E0       SplPdGetPortIcon
+ 0001:000001B8       SplPdInitPort
+ 0001:000002A4       SplPdInstallPort
+ 0001:00000500       SplPdQueryPort
+ 0001:000007C4       SplPdRemovePort
+ 0001:0000068C       SplPdSetPort
+ 0001:0000087C       SplPdTermPort
+ 0001:00002AA0       strcat
+ 0001:00002AD4       strchr
+ 0001:00002AF4       strcmp
+ 0001:00002B10       strcpy
+ 0001:00002B3C       strlen
+ 0003:00000000       szBaudRateAra
+ 0003:00000054       szDefaultPortDrvPath
+ 0000:00000000  Imp  WinDefDlgProc        (PMWIN.910)
+ 0000:00000000  Imp  WinDismissDlg        (PMWIN.729)
+ 0000:00000000  Imp  WinDlgBox            (PMWIN.923)
+ 0000:00000000  Imp  WinGetLastError      (PMWIN.753)
+ 0000:00000000  Imp  WinLoadString        (PMWIN.781)
+ 0000:00000000  Imp  WinMessageBox        (PMWIN.789)
+ 0000:00000000  Imp  WinQueryActiveWindow (PMWIN.799)
+ 0000:00000000  Imp  WinQueryAnchorBlock  (PMWIN.800)
+ 0000:00000000  Imp  WinQueryWindow       (PMWIN.834)
+ 0000:00000000  Imp  WinQueryWindowText   (PMWIN.841)
+ 0000:00000000  Imp  WinQueryWindowULong  (PMWIN.843)
+ 0000:00000000  Imp  WinReleaseHook       (PMWIN.927)
+ 0000:00000000  Imp  WinSendDlgItemMsg    (PMWIN.903)
+ 0000:00000000  Imp  WinSendMsg           (PMWIN.920)
+ 0000:00000000  Imp  WinSetHook           (PMWIN.928)
+ 0000:00000000  Imp  WinSetWindowText     (PMWIN.877)
+ 0000:00000000  Imp  WinSetWindowULong    (PMWIN.878)
+ 0000:00000000  Imp  WinWindowFromID      (PMWIN.899)
+ 0002:00000000       _dllentry
+ 0001:0000273C       _DLL_InitTerm
+ 0003:000004E0       _edata
+ 0003:00000504       _end
+ 0001:00002870       _fpninit
+ 0001:000029FC       _itoa
+ 0003:000004A0       __ctdtused
+ 0003:000004F4       __ctordtorCurrent
+ 0003:000004B0       __ctordtorEnd
+ 0001:0000278C       __ctordtorInit
+ 0003:000004B0       __ctordtorStart
+ 0001:0000275C       __ctordtorTerm
+ 0001:00002B50       __isdigit
+ 0001:00002B6C       __isspace
+
+  Address         Publics by Value
+
+ 0000:00000000  Imp  WinQueryWindowULong  (PMWIN.843)
+ 0000:00000000  Imp  WinWindowFromID      (PMWIN.899)
+ 0000:00000000  Imp  DosClose             (DOSCALLS.257)
+ 0000:00000000  Imp  DosQuerySysInfo      (DOSCALLS.348)
+ 0000:00000000  Imp  WinQueryActiveWindow (PMWIN.799)
+ 0000:00000000  Imp  PrfQueryProfileString (PMSHAPI.115)
+ 0000:00000000  Imp  PrfWriteProfileString (PMSHAPI.116)
+ 0000:00000000  Imp  WinGetLastError      (PMWIN.753)
+ 0000:00000000  Imp  WinSetWindowULong    (PMWIN.878)
+ 0000:00000000  Imp  DosQueryProcAddr     (DOSCALLS.321)
+ 0000:00000000  Imp  DosError             (DOSCALLS.212)
+ 0000:00000000  Imp  DosDevIOCtl          (DOSCALLS.284)
+ 0000:00000000  Imp  DosOpen              (DOSCALLS.273)
+ 0000:00000000  Imp  WinSetWindowText     (PMWIN.877)
+ 0000:00000000  Imp  DosQueryModuleHandle (DOSCALLS.319)
+ 0000:00000000  Imp  WinSetHook           (PMWIN.928)
+ 0000:00000000  Imp  WinQueryWindowText   (PMWIN.841)
+ 0000:00000000  Imp  WinLoadString        (PMWIN.781)
+ 0000:00000000  Imp  WinDefDlgProc        (PMWIN.910)
+ 0000:00000000  Imp  DosLoadModule        (DOSCALLS.318)
+ 0000:00000000  Imp  WinQueryWindow       (PMWIN.834)
+ 0000:00000000  Imp  WinMessageBox        (PMWIN.789)
+ 0000:00000000  Imp  DosFreeModule        (DOSCALLS.322)
+ 0000:00000000  Imp  WinDismissDlg        (PMWIN.729)
+ 0000:00000000  Imp  WinSendMsg           (PMWIN.920)
+ 0000:00000000  Imp  WinSendDlgItemMsg    (PMWIN.903)
+ 0000:00000000  Imp  WinQueryAnchorBlock  (PMWIN.800)
+ 0000:00000000  Imp  WinDlgBox            (PMWIN.923)
+ 0000:00000000  Imp  WinReleaseHook       (PMWIN.927)
+ 0001:00000000       SplPdEnumPort
+ 0001:000001B8       SplPdInitPort
+ 0001:000002A4       SplPdInstallPort
+ 0001:000004E0       SplPdGetPortIcon
+ 0001:00000500       SplPdQueryPort
+ 0001:0000068C       SplPdSetPort
+ 0001:000007C4       SplPdRemovePort
+ 0001:0000087C       SplPdTermPort
+ 0001:00000888       CalcBufLength
+ 0001:000008E4       CalcStructLength
+ 0001:00000980       NumPortsCanFit
+ 0001:000009F8       CopyNPorts
+ 0001:00000A74       CopyStruct
+ 0001:00000B44       GetPortDescription
+ 0001:00000BD8       OpenSerialPortDlg
+ 0001:00000C50       CommDlg
+ 0001:00000F94       InitCommDialogBox
+ 0001:0000119C       GetDialogValues
+ 0001:00001410       SetDialogValues
+ 0001:00001958       SavePortSettings
+ 0001:00001A9C       GetPortSettings
+ 0001:00001B84       GetPortDefaultSettings
+ 0001:00001D34       RemoveLeadTrailBlanks
+ 0001:00001DEC       InitializeCommPort
+ 0001:000020C8       AsciiToBin
+ 0001:00002140       DE
+ 0001:00002168       DisplayError
+ 0001:0000224C       CALLAssociateHelpInstance
+ 0001:00002308       CALLCreateHelpInstance
+ 0001:000023E0       CALLDestroyHelpInstance
+ 0001:00002498       CALLQueryHelpInstance
+ 0001:00002548       SetHelpStubHook
+ 0001:00002594       ReleaseHelpStubHook
+ 0001:000025C4       HelpStubHook
+ 0001:000025D8       InitializeHelp
+ 0001:0000273C       _DLL_InitTerm
+ 0001:0000275C       __ctordtorTerm
+ 0001:0000278C       __ctordtorInit
+ 0001:00002870       _fpninit
+ 0001:00002874       atoi
+ 0001:00002938       atol
+ 0001:000029FC       _itoa
+ 0001:00002AA0       strcat
+ 0001:00002AD4       strchr
+ 0001:00002AF4       strcmp
+ 0001:00002B10       strcpy
+ 0001:00002B3C       strlen
+ 0001:00002B50       __isdigit
+ 0001:00002B6C       __isspace
+ 0001:00002B88       memcpy
+ 0001:00002BA8       memset
+ 0002:00000000       _dllentry
+ 0003:00000000       szBaudRateAra
+ 0003:00000054       szDefaultPortDrvPath
+ 0003:000004A0       __ctdtused
+ 0003:000004B0       __ctordtorStart
+ 0003:000004B0       __ctordtorEnd
+ 0003:000004E0       _edata
+ 0003:000004E0       HelpAlreadyInitialized
+ 0003:000004E4       pfnWinCreateHelpInstance
+ 0003:000004E8       pfnWinQueryHelpInstance
+ 0003:000004EC       pfnWinDestroyHelpInstance
+ 0003:000004F0       hvHelpmgrModule
+ 0003:000004F4       __ctordtorCurrent
+ 0003:000004F8       HelpStubHookIsSet
+ 0003:000004FC       pfnWinAssociateHelpInstance
+ 0003:00000500       hwndHelp
+ 0003:00000504       _end
+
+Program entry point at 0001:0000273C

@@ -1,0 +1,82 @@
+OS/COM Installation and Configuration
+
+NOTE on ISA adapters:
+  All adapter(s) must be setup with the "interrupt status register" set for
+  "SWITCH" mode, not the "PAL" mode.  Up to eight ports per interrupt level is
+  supported.  See your adapter's documentation on how to set it up for shared
+  interrupts.
+  
+  This version of the device driver is for use with Sealevel Systems serial 
+  adapters that have an interrupt ID/status register only.
+
+To install the Sealevel Systems OS/COM asynchronous serial device driver, do
+one of the following:
+
+Method One:
+
+1. Open the OS/2 System folder
+
+2. Open the Drives folder
+
+3. Double click on the drive you inserted the distribution
+   diskette.
+
+4. Double click on the INSTALL.EXE icon.
+
+5. Once INSTALL is loaded, use the "Install..." menu item to setup the
+   installation for your system requirements and transfer the required
+   files to your system.
+
+    Select "Installation | Install..."
+
+6. Use the "Configuration | OS/COM..." menu item to configure the OS/COM 
+   device driver. The configuration process has plenty of on-line help
+   to help with setting up OS/COM.
+
+7. Shutdown and re-boot your system.
+
+Method Two:
+
+1. Open an OS/2 command prompt session.
+
+2. Make the disk drive containing the distribution diskette the default drive.
+
+    Example:  [C:\]A: [ENTER)
+              (assuming the distribution diskette is in drive A:)
+
+3. Start INSTALL.EXE by typing INSTALL [ENTER]
+
+4. Follow the instructions from item five, above.
+
+OS/COM, COMi, and INSTALL are the property of OS/tools Incorporated and are
+copyrighted (c) 1989-95 by OS/tools Incorporated, with all rights reserved.
+
+These programs are licensed to you on a per CPU basis.  One license is 
+required for each CPU on which they are installed.  
+
+We know nothing and are responsible for nothing, except for any increased 
+productivity and/or pleasure brought about by the use of these programs.  This
+is the only disclaimer you have to read.
+
+For additional information about the OS/COM device driver and other OS/tools
+products please contact:  
+
+OS/tools Incorporated
+P.O.Box 246
+Gilroy, CA   95021
+Phone: (500)446-7257, FAX: (408)847-7480, BBS: (408)847-7484
+Internet: products@os-tools.com or URL: http://www.os-tools.com
+
+For more information on products from Sealevel Systems Incorporated please 
+contact:  
+
+Sealevel Systems Incorporated
+P.O.  Box 830
+Liberty, SC 29657
+Phone (864)843-4343 FAX (864)843-3067 
+
+OS/tools, COMscope, COMspool, and COMi are trademarks of OS/tools Incorporated.
+
+OS/2 is a trademark of International Business Machines, Incorporated.
+
+

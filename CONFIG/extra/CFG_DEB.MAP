@@ -1,0 +1,430 @@
+
+ Start         Length     Name                   Class
+ 0001:00000000 00000C828H _TEXT                  CODE
+ 0002:00000000 000002224H _DATA                  DATA
+ 0002:00002224 000000006H _INIT_                 INITDATA
+ 0002:0000222A 000000000H _INITEND_              INITDATA
+ 0002:0000222A 000000000H _EXIT_                 EXITDATA
+ 0002:0000222A 000000000H _EXITEND_              EXITDATA
+ 0002:0000222C 000000000H CONST                  CONST
+ 0002:0000222C 000000E2CH _BSS                   BSS
+
+
+Detailed map of segments
+
+ 0001:00000000 00000055 C=CODE    S=_TEXT    G=(none)   M=clib\c02d.ASM ACBP=A9
+ 0001:00000058 00001141 C=CODE    S=_TEXT    G=(none)   M=..\cfg_dev_dlg.c ACBP=A9
+ 0001:0000119C 00000979 C=CODE    S=_TEXT    G=(none)   M=..\cfg_prot_dlg.c ACBP=A9
+ 0001:00001B18 000017D0 C=CODE    S=_TEXT    G=(none)   M=..\cfg_prot_hlp.c ACBP=A9
+ 0001:000032E8 00000D9A C=CODE    S=_TEXT    G=(none)   M=..\dev_notebk.c ACBP=A9
+ 0001:00004084 00003686 C=CODE    S=_TEXT    G=(none)   M=..\cfg_dlg.c ACBP=A9
+ 0001:0000770C 00000686 C=CODE    S=_TEXT    G=(none)   M=..\fifo_dlg.c ACBP=A9
+ 0001:00007D94 000003C2 C=CODE    S=_TEXT    G=(none)   M=..\cfg_hlp.c ACBP=A9
+ 0001:00008158 00002845 C=CODE    S=_TEXT    G=(none)   M=..\comddini.c ACBP=A9
+ 0001:0000A9A0 00000956 C=CODE    S=_TEXT    G=(none)   M=..\ddbufdlg.c ACBP=A9
+ 0001:0000B2F8 00000DFE C=CODE    S=_TEXT    G=(none)   M=..\cfg_sys.c ACBP=A9
+ 0001:0000C0F8 000002CF C=CODE    S=_TEXT    G=(none)   M=..\list.c  ACBP=A9
+ 0001:0000C3C8 00000017 C=CODE    S=_TEXT    G=(none)   M=..\common\chkstk.ASM ACBP=A9
+ 0001:0000C3E0 0000003F C=CODE    S=_TEXT    G=(none)   M=..\common\xxa.cpp ACBP=A9
+ 0001:0000C420 00000340 C=CODE    S=_TEXT    G=(none)   M=..\common\xxv.cpp ACBP=A9
+ 0001:0000C760 000000C8 C=CODE    S=_TEXT    G=(none)   M=clib\initstk.c ACBP=69
+ 0002:00000000 00000068 C=DATA    S=_DATA    G=DGROUP   M=clib\c02d.ASM ACBP=A9
+ 0002:00000068 00000385 C=DATA    S=_DATA    G=DGROUP   M=..\cfg_dev_dlg.c ACBP=A9
+ 0002:000003F0 00000020 C=DATA    S=_DATA    G=DGROUP   M=..\cfg_prot_dlg.c ACBP=A9
+ 0002:00000410 00000064 C=DATA    S=_DATA    G=DGROUP   M=..\cfg_prot_hlp.c ACBP=A9
+ 0002:00000474 00000176 C=DATA    S=_DATA    G=DGROUP   M=..\dev_notebk.c ACBP=A9
+ 0002:000005EC 00000564 C=DATA    S=_DATA    G=DGROUP   M=..\cfg_dlg.c ACBP=A9
+ 0002:00000B50 00000000 C=DATA    S=_DATA    G=DGROUP   M=..\fifo_dlg.c ACBP=A9
+ 0002:00000B50 00000174 C=DATA    S=_DATA    G=DGROUP   M=..\cfg_hlp.c ACBP=A9
+ 0002:00000CC4 000009DD C=DATA    S=_DATA    G=DGROUP   M=..\comddini.c ACBP=A9
+ 0002:000016A4 0000004B C=DATA    S=_DATA    G=DGROUP   M=..\ddbufdlg.c ACBP=A9
+ 0002:000016F0 00000A58 C=DATA    S=_DATA    G=DGROUP   M=..\cfg_sys.c ACBP=A9
+ 0002:00002148 00000000 C=DATA    S=_DATA    G=DGROUP   M=..\list.c  ACBP=A9
+ 0002:00002148 00000000 C=DATA    S=_DATA    G=DGROUP   M=..\common\chkstk.ASM ACBP=A9
+ 0002:00002148 00000004 C=DATA    S=_DATA    G=DGROUP   M=..\common\xxa.cpp ACBP=A9
+ 0002:0000214C 0000009C C=DATA    S=_DATA    G=DGROUP   M=..\common\xxv.cpp ACBP=A9
+ 0002:000021E8 0000003C C=DATA    S=_DATA    G=DGROUP   M=clib\initstk.c ACBP=A9
+ 0002:00002224 00000000 C=INITDATA S=_INIT_   G=DGROUP   M=clib\c02d.ASM ACBP=49
+ 0002:00002224 00000006 C=INITDATA S=_INIT_   G=DGROUP   M=..\common\chkstk.ASM ACBP=49
+ 0002:0000222A 00000000 C=INITDATA S=_INITEND_ G=DGROUP   M=clib\c02d.ASM ACBP=49
+ 0002:0000222A 00000000 C=EXITDATA S=_EXIT_   G=DGROUP   M=clib\c02d.ASM ACBP=49
+ 0002:0000222A 00000000 C=EXITDATA S=_EXITEND_ G=DGROUP   M=clib\c02d.ASM ACBP=49
+ 0002:0000222C 00000000 C=CONST   S=CONST    G=DGROUP   M=clib\c02d.ASM ACBP=A9
+ 0002:0000222C 00000000 C=BSS     S=_BSS     G=DGROUP   M=clib\c02d.ASM ACBP=A9
+ 0002:0000222C 00000099 C=BSS     S=_BSS     G=DGROUP   M=..\cfg_dev_dlg.c ACBP=A9
+ 0002:000022C8 00000058 C=BSS     S=_BSS     G=DGROUP   M=..\cfg_prot_dlg.c ACBP=A9
+ 0002:00002320 00000000 C=BSS     S=_BSS     G=DGROUP   M=..\cfg_prot_hlp.c ACBP=A9
+ 0002:00002320 00000299 C=BSS     S=_BSS     G=DGROUP   M=..\dev_notebk.c ACBP=A9
+ 0002:000025BC 00000434 C=BSS     S=_BSS     G=DGROUP   M=..\cfg_dlg.c ACBP=A9
+ 0002:000029F0 0000000C C=BSS     S=_BSS     G=DGROUP   M=..\fifo_dlg.c ACBP=A9
+ 0002:000029FC 0000000C C=BSS     S=_BSS     G=DGROUP   M=..\cfg_hlp.c ACBP=A9
+ 0002:00002A08 000005B0 C=BSS     S=_BSS     G=DGROUP   M=..\comddini.c ACBP=A9
+ 0002:00002FB8 0000001C C=BSS     S=_BSS     G=DGROUP   M=..\ddbufdlg.c ACBP=A9
+ 0002:00002FD4 00000000 C=BSS     S=_BSS     G=DGROUP   M=..\cfg_sys.c ACBP=A9
+ 0002:00002FD4 00000000 C=BSS     S=_BSS     G=DGROUP   M=..\list.c  ACBP=A9
+ 0002:00002FD4 00000000 C=BSS     S=_BSS     G=DGROUP   M=..\common\chkstk.ASM ACBP=A9
+ 0002:00002FD4 00000000 C=BSS     S=_BSS     G=DGROUP   M=..\common\xxa.cpp ACBP=A9
+ 0002:00002FD4 00000084 C=BSS     S=_BSS     G=DGROUP   M=..\common\xxv.cpp ACBP=A9
+ 0002:00003058 00000000 C=BSS     S=_BSS     G=DGROUP   M=clib\initstk.c ACBP=A9
+
+  Address         Publics by Name
+
+ 0001:0000C42A  Idle set_terminate(void(*)())
+ 0001:0000C50B  Idle set_unexpected(void(*)())
+ 0001:0000C420  Idle terminate()
+ 0001:0000C501  Idle unexpected()
+ 0001:0000C5AA  Idle __GetPolymorphicDTC(void*,unsigned int)
+ 0001:0000C3E0       @__InitExceptBlock
+ 0001:00008D68       FillDeviceNameList
+ 0001:0000B464  Idle FindLineWith
+ 0001:0000177E       fnwpCfgASCIIhandshakeDlg
+ 0001:00001480       fnwpCfgBaudRateDlg
+ 0001:0000119C       fnwpCfgFilterDlg
+ 0001:00001663       fnwpCfgHDWhandshakeDlg
+ 0001:00001391       fnwpCfgProtocolDlg
+ 0001:00001288       fnwpCfgTimeoutDlg
+ 0001:0000AD11       fnwpCOMscopeBuffDlgProc
+ 0001:00001887       fnwpDefThresholdDlg
+ 0001:000032E8       fnwpDeviceSetupDlgProc
+ 0001:0000770C       fnwpHdwDefFIFOsetupDlg
+ 0001:00006C54  Idle fnwpOEMIntAlgorithimDlgProc
+ 0001:00000058       fnwpPortConfigDeviceDlgProc
+ 0001:000043A2       fnwpPortConfigDlgProc
+ 0001:00000BBD       fnwpPortExtensionsDlgProc
+ 0001:000060C0  Idle fnwpPortOEMconfigDlgProc
+ 0001:00006DBE  Idle fnwpPortSelectDlg
+ 0001:000070A8       fnwpPortSimpleDlgProc
+ 0001:0000A9A0       fnwpReceiveBuffDlgProc
+ 0001:0000ABDE       fnwpTransmitBuffDlgProc
+ 0001:0000A3FF  Idle GetDriverVersion
+ 0001:00009927  Idle GetPortConfig
+ 0001:00008264  Idle InstallDevice
+ 0001:000076E3  Idle PortSelectDialog
+ 0001:00003E4C  Idle SpoolerSetupDialog
+ 0001:000028AD  Idle TCCfgFIFOsetupDlg
+ 0001:00001C51       UnloadCfgFilterDlg
+ 0001:0000889E       _AddIniConfigHeader
+ 0001:0000C126       _AddListItem
+ 0001:0000B61E       _AdjustConfigSys
+ 0002:00000CD4       _astConfigDeviceList
+ 0002:00000638  Idle _astISAdeviceDefinition
+ 0002:00000668  Idle _astMCAdeviceDefinition
+ 0002:00002334  Idle _astPages
+ 0002:00000410       _aulCfgExtBaudTable
+ 0002:00000CD0  Idle _bCOMiLoaded
+ 0002:00001264  Idle _bDeviceIniFileSelected
+ 0002:00000770  Idle _bEmptyINI
+ 0002:00000744  Idle _bInsert
+ 0002:0000126C  Idle _bInstallInUse
+ 0002:0000125C       _bLimitLoad
+ 0002:00000CCC       _bNoDEBUGhelp
+ 0002:00000634       _bNonExAccessWarning
+ 0002:00001260  Idle _bPDRinstalled
+ 0002:00000630       _bShareAccessWarning
+ 0002:00001268       _bSpoolSetupInUse
+ 0002:00002F50       _byDDOEMtype
+ 0002:0000075C       _byLastIntLevel
+ 0001:0000BE79       _CleanConfigSys
+ 0001:00009544       _ClearAllIntDCBheader
+ 0001:000080E4       _DestroyHelpInstance
+ 0001:0000C1C6       _DestroyList
+ 0001:00007D94       _DisplayHelpPanel
+ 0001:00002EF2       _FillASCIIhandshakingDlg
+ 0001:0000253F  Idle _FillCfgFIFOsetupDlg
+ 0001:00001B18       _FillCfgFilterDlg
+ 0001:00002242       _FillCfgProtocolDlg
+ 0001:00001E5E       _FillCfgTimeoutDlg
+ 0001:00005D44  Idle _FillDeviceCfgListBox
+ 0001:0000A159       _FillDeviceDialogNameListBox
+ 0001:00008B39       _FillDeviceLists
+ 0001:00002C73       _FillHDWhandshakDlg
+ 0001:0000C2E3       _FindListByteItem
+ 0001:0000C359  Idle _FindListStringItem
+ 0001:0000C31D       _FindListWordItem
+ 0002:00002DE0       _fIsMCAmachine
+ 0001:0000A42D  Idle _GetDriverInfo
+ 0001:0000A281       _GetNextAvailableAddress
+ 0001:0000A339       _GetNextAvailableInterrupt
+ 0001:0000C1AA       _GetNextListItem
+ 0001:00007E6B       _HelpInit
+ 0002:00002FB4       _hThisModule
+ 0002:000029EC  Idle _hwndDeviceList
+ 0002:00002B0C  Idle _hwndHelpInstance
+ 0002:00002578       _hwndNoteBookDlg
+ 0002:0000077C  Idle _iDeviceCount
+ 0002:00000774  Idle _iLoadMaxDevice
+ 0001:0000B165  Idle _InitCOMscopeBufferSize
+ 0001:000087E5       _InitializeCFGheader
+ 0001:0000882D       _InitializeDCBheader
+ 0001:0000C0F8       _InitializeList
+ 0001:0000AE44  Idle _InitReadBufferSize
+ 0001:0000AFD5  Idle _InitWriteBufferSize
+ 0001:00003D83  Idle _InsertNotebookPage
+ 0002:00000778  Idle _iOEMloadMaxDevice
+ 0002:00002FA8       _lXbutton
+ 0002:00002FAC  Idle _lXScr
+ 0002:00002FA4       _lYbutton
+ 0002:00002FB0  Idle _lYScr
+ 0002:0000074C       _pAddressList
+ 0001:00007E24  Idle _pfnMessageBoxHelpHook
+ 0002:00000750       _pInterruptList
+ 0001:0000910B       _PlaceIniCFGheader
+ 0001:00009252       _PlaceIniDCBheader
+ 0002:00000754       _pLoadAddressList
+ 0002:00000758       _pLoadInterruptList
+ 0002:00000748       _pSpoolList
+ 0001:000096A3       _QueryIniCFGheader
+ 0001:000097A2       _QueryIniDCBheader
+ 0001:00009A85       _QueryIniDCBheaderName
+ 0001:0000B2F8  Idle _ReadConfigFile
+ 0001:00009C21       _RemoveIniCFGheader
+ 0001:00009EC0       _RemoveIniDCBheader
+ 0001:0000C24B       _RemoveListItem
+ 0002:000027B8  Idle _stConfigDeviceCount
+ 0002:00002924       _stGlobalCFGheader
+ 0002:000028E8       _stGlobalDCBheader
+ 0002:000029A0       _stTempCFGheader
+ 0002:00002964       _stTempDCBheader
+ 0002:00002A08  Idle _szConfigHelpFile
+ 0002:000029E0       _szCurrentConfigDeviceName
+ 0002:00000704  Idle _szDeviceDefFormat
+ 0002:00002288       _szDeviceDescription
+ 0002:00000083  Idle _szDeviceDescriptionFormat
+ 0002:00002BD8       _szDriverIniPath
+ 0002:00002EE8       _szDriverVersionString
+ 0002:000006C8  Idle _szHeaderString
+ 0002:00000068       _szInitDeviceDescription
+ 0002:00000764       _szLastName
+ 0002:000006E4  Idle _szListFormat
+ 0002:000027BC  Idle _szListString
+ 0002:000006F8  Idle _szLoadFormat
+ 0002:00002B10  Idle _szMessage
+ 0002:00002F54       _szOEMname
+ 0002:00002CDC       _szPDRlibrarySpec
+ 0002:00000724  Idle _szSkipFormat
+ 0002:00002DE4  Idle _szTempFilePath
+ 0001:00003086       _TCASCIIhandshakeDlg
+ 0001:00001D11       _TCCfgFilterDlg
+ 0001:0000246E       _TCCfgProtocolDlg
+ 0001:00002099       _TCCfgTimeoutDlg
+ 0002:00000CC4  Idle _ulCOMiSignature
+ 0002:00002F4C  Idle _ulDriverSignature
+ 0001:00003203       _UnloadASCIIhandshakeDlg
+ 0001:00002753  Idle _UnloadCfgFIFOsetupDlg
+ 0001:000023A5       _UnloadCfgProtocolDlg
+ 0001:00001FDC       _UnloadCfgTimeoutDlg
+ 0001:00002D9E       _UnloadHDWhandshakDlg
+ 0002:00000CC8  Idle _wDDmaxDeviceCount
+ 0002:0000075E       _wLastAddress
+ 0002:00000760  Idle _wLastDelayCount
+ 0001:0000BC64  Idle _WriteConfigFile
+ 0001:00000000  Idle __acrtused
+ 0002:0000002B  Idle __c0_heaps
+ 0002:0000002F  Idle __c0_nheaps
+ 0001:0000C3C8       __chkstk
+ 0002:000021B4  Idle __DebuggerHookData
+ 0002:00002FD4       __DestructorCountPtr
+ 0001:00008158       __dllmain
+ 0001:0000C5E6       __ExceptInit
+ 0002:000021B0  Idle __ExceptVarsSize
+ 0001:0000C5D6       __GetExceptDLLinfo
+ 0001:0000C72A  Idle __GetExceptDLLinfoInternal
+ 0001:0000C760       __initstk
+ 0002:00000050  Idle __os2hmod
+ 0001:0000C450  Idle ___call_terminate
+ 0001:0000C531  Idle ___call_unexpected
+ 0002:0000214C  Idle ___CPPexceptionList
+ 0002:0000215C  Idle ___debuggerHookDataP
+ 0002:00002154  Idle ___debuggerHookFN
+ 0002:00002158  Idle ___debuggerWatchingP
+ 0002:00002150  Idle ___exceptFlags
+ 0002:00002178  Idle ___exceptMemAllocVars
+ 0002:00002174  Idle ___exceptStaticBuffP
+ 0002:00002FD8  Idle ___ExceptStaticXbuff
+ 0002:0000003B       ___isDLL
+ 0002:00002160  Idle ___terminatePTR
+ 0002:00002170  Idle ___throwExceptionName
+ 0002:00002168  Idle ___throwFileName
+ 0002:0000216C  Idle ___throwLineNumber
+ 0002:00002164  Idle ___unexpectdPTR
+
+  Address         Publics by Value
+
+ 0001:00000000  Idle __acrtused
+ 0001:00000058       fnwpPortConfigDeviceDlgProc
+ 0001:00000BBD       fnwpPortExtensionsDlgProc
+ 0001:0000119C       fnwpCfgFilterDlg
+ 0001:00001288       fnwpCfgTimeoutDlg
+ 0001:00001391       fnwpCfgProtocolDlg
+ 0001:00001480       fnwpCfgBaudRateDlg
+ 0001:00001663       fnwpCfgHDWhandshakeDlg
+ 0001:0000177E       fnwpCfgASCIIhandshakeDlg
+ 0001:00001887       fnwpDefThresholdDlg
+ 0001:00001B18       _FillCfgFilterDlg
+ 0001:00001C51       UnloadCfgFilterDlg
+ 0001:00001D11       _TCCfgFilterDlg
+ 0001:00001E5E       _FillCfgTimeoutDlg
+ 0001:00001FDC       _UnloadCfgTimeoutDlg
+ 0001:00002099       _TCCfgTimeoutDlg
+ 0001:00002242       _FillCfgProtocolDlg
+ 0001:000023A5       _UnloadCfgProtocolDlg
+ 0001:0000246E       _TCCfgProtocolDlg
+ 0001:0000253F  Idle _FillCfgFIFOsetupDlg
+ 0001:00002753  Idle _UnloadCfgFIFOsetupDlg
+ 0001:000028AD  Idle TCCfgFIFOsetupDlg
+ 0001:00002C73       _FillHDWhandshakDlg
+ 0001:00002D9E       _UnloadHDWhandshakDlg
+ 0001:00002EF2       _FillASCIIhandshakingDlg
+ 0001:00003086       _TCASCIIhandshakeDlg
+ 0001:00003203       _UnloadASCIIhandshakeDlg
+ 0001:000032E8       fnwpDeviceSetupDlgProc
+ 0001:00003D83  Idle _InsertNotebookPage
+ 0001:00003E4C  Idle SpoolerSetupDialog
+ 0001:000043A2       fnwpPortConfigDlgProc
+ 0001:00005D44  Idle _FillDeviceCfgListBox
+ 0001:000060C0  Idle fnwpPortOEMconfigDlgProc
+ 0001:00006C54  Idle fnwpOEMIntAlgorithimDlgProc
+ 0001:00006DBE  Idle fnwpPortSelectDlg
+ 0001:000070A8       fnwpPortSimpleDlgProc
+ 0001:000076E3  Idle PortSelectDialog
+ 0001:0000770C       fnwpHdwDefFIFOsetupDlg
+ 0001:00007D94       _DisplayHelpPanel
+ 0001:00007E24  Idle _pfnMessageBoxHelpHook
+ 0001:00007E6B       _HelpInit
+ 0001:000080E4       _DestroyHelpInstance
+ 0001:00008158       __dllmain
+ 0001:00008264  Idle InstallDevice
+ 0001:000087E5       _InitializeCFGheader
+ 0001:0000882D       _InitializeDCBheader
+ 0001:0000889E       _AddIniConfigHeader
+ 0001:00008B39       _FillDeviceLists
+ 0001:00008D68       FillDeviceNameList
+ 0001:0000910B       _PlaceIniCFGheader
+ 0001:00009252       _PlaceIniDCBheader
+ 0001:00009544       _ClearAllIntDCBheader
+ 0001:000096A3       _QueryIniCFGheader
+ 0001:000097A2       _QueryIniDCBheader
+ 0001:00009927  Idle GetPortConfig
+ 0001:00009A85       _QueryIniDCBheaderName
+ 0001:00009C21       _RemoveIniCFGheader
+ 0001:00009EC0       _RemoveIniDCBheader
+ 0001:0000A159       _FillDeviceDialogNameListBox
+ 0001:0000A281       _GetNextAvailableAddress
+ 0001:0000A339       _GetNextAvailableInterrupt
+ 0001:0000A3FF  Idle GetDriverVersion
+ 0001:0000A42D  Idle _GetDriverInfo
+ 0001:0000A9A0       fnwpReceiveBuffDlgProc
+ 0001:0000ABDE       fnwpTransmitBuffDlgProc
+ 0001:0000AD11       fnwpCOMscopeBuffDlgProc
+ 0001:0000AE44  Idle _InitReadBufferSize
+ 0001:0000AFD5  Idle _InitWriteBufferSize
+ 0001:0000B165  Idle _InitCOMscopeBufferSize
+ 0001:0000B2F8  Idle _ReadConfigFile
+ 0001:0000B464  Idle FindLineWith
+ 0001:0000B61E       _AdjustConfigSys
+ 0001:0000BC64  Idle _WriteConfigFile
+ 0001:0000BE79       _CleanConfigSys
+ 0001:0000C0F8       _InitializeList
+ 0001:0000C126       _AddListItem
+ 0001:0000C1AA       _GetNextListItem
+ 0001:0000C1C6       _DestroyList
+ 0001:0000C24B       _RemoveListItem
+ 0001:0000C2E3       _FindListByteItem
+ 0001:0000C31D       _FindListWordItem
+ 0001:0000C359  Idle _FindListStringItem
+ 0001:0000C3C8       __chkstk
+ 0001:0000C3E0       @__InitExceptBlock
+ 0001:0000C420  Idle terminate()
+ 0001:0000C42A  Idle set_terminate(void(*)())
+ 0001:0000C450  Idle ___call_terminate
+ 0001:0000C501  Idle unexpected()
+ 0001:0000C50B  Idle set_unexpected(void(*)())
+ 0001:0000C531  Idle ___call_unexpected
+ 0001:0000C5AA  Idle __GetPolymorphicDTC(void*,unsigned int)
+ 0001:0000C5D6       __GetExceptDLLinfo
+ 0001:0000C5E6       __ExceptInit
+ 0001:0000C72A  Idle __GetExceptDLLinfoInternal
+ 0001:0000C760       __initstk
+ 0002:0000002B  Idle __c0_heaps
+ 0002:0000002F  Idle __c0_nheaps
+ 0002:0000003B       ___isDLL
+ 0002:00000050  Idle __os2hmod
+ 0002:00000068       _szInitDeviceDescription
+ 0002:00000083  Idle _szDeviceDescriptionFormat
+ 0002:00000410       _aulCfgExtBaudTable
+ 0002:00000630       _bShareAccessWarning
+ 0002:00000634       _bNonExAccessWarning
+ 0002:00000638  Idle _astISAdeviceDefinition
+ 0002:00000668  Idle _astMCAdeviceDefinition
+ 0002:000006C8  Idle _szHeaderString
+ 0002:000006E4  Idle _szListFormat
+ 0002:000006F8  Idle _szLoadFormat
+ 0002:00000704  Idle _szDeviceDefFormat
+ 0002:00000724  Idle _szSkipFormat
+ 0002:00000744  Idle _bInsert
+ 0002:00000748       _pSpoolList
+ 0002:0000074C       _pAddressList
+ 0002:00000750       _pInterruptList
+ 0002:00000754       _pLoadAddressList
+ 0002:00000758       _pLoadInterruptList
+ 0002:0000075C       _byLastIntLevel
+ 0002:0000075E       _wLastAddress
+ 0002:00000760  Idle _wLastDelayCount
+ 0002:00000764       _szLastName
+ 0002:00000770  Idle _bEmptyINI
+ 0002:00000774  Idle _iLoadMaxDevice
+ 0002:00000778  Idle _iOEMloadMaxDevice
+ 0002:0000077C  Idle _iDeviceCount
+ 0002:00000CC4  Idle _ulCOMiSignature
+ 0002:00000CC8  Idle _wDDmaxDeviceCount
+ 0002:00000CCC       _bNoDEBUGhelp
+ 0002:00000CD0  Idle _bCOMiLoaded
+ 0002:00000CD4       _astConfigDeviceList
+ 0002:0000125C       _bLimitLoad
+ 0002:00001260  Idle _bPDRinstalled
+ 0002:00001264  Idle _bDeviceIniFileSelected
+ 0002:00001268       _bSpoolSetupInUse
+ 0002:0000126C  Idle _bInstallInUse
+ 0002:0000214C  Idle ___CPPexceptionList
+ 0002:00002150  Idle ___exceptFlags
+ 0002:00002154  Idle ___debuggerHookFN
+ 0002:00002158  Idle ___debuggerWatchingP
+ 0002:0000215C  Idle ___debuggerHookDataP
+ 0002:00002160  Idle ___terminatePTR
+ 0002:00002164  Idle ___unexpectdPTR
+ 0002:00002168  Idle ___throwFileName
+ 0002:0000216C  Idle ___throwLineNumber
+ 0002:00002170  Idle ___throwExceptionName
+ 0002:00002174  Idle ___exceptStaticBuffP
+ 0002:00002178  Idle ___exceptMemAllocVars
+ 0002:000021B0  Idle __ExceptVarsSize
+ 0002:000021B4  Idle __DebuggerHookData
+ 0002:00002288       _szDeviceDescription
+ 0002:00002334  Idle _astPages
+ 0002:00002578       _hwndNoteBookDlg
+ 0002:000027B8  Idle _stConfigDeviceCount
+ 0002:000027BC  Idle _szListString
+ 0002:000028E8       _stGlobalDCBheader
+ 0002:00002924       _stGlobalCFGheader
+ 0002:00002964       _stTempDCBheader
+ 0002:000029A0       _stTempCFGheader
+ 0002:000029E0       _szCurrentConfigDeviceName
+ 0002:000029EC  Idle _hwndDeviceList
+ 0002:00002A08  Idle _szConfigHelpFile
+ 0002:00002B0C  Idle _hwndHelpInstance
+ 0002:00002B10  Idle _szMessage
+ 0002:00002BD8       _szDriverIniPath
+ 0002:00002CDC       _szPDRlibrarySpec
+ 0002:00002DE0       _fIsMCAmachine
+ 0002:00002DE4  Idle _szTempFilePath
+ 0002:00002EE8       _szDriverVersionString
+ 0002:00002F4C  Idle _ulDriverSignature
+ 0002:00002F50       _byDDOEMtype
+ 0002:00002F54       _szOEMname
+ 0002:00002FA4       _lYbutton
+ 0002:00002FA8       _lXbutton
+ 0002:00002FAC  Idle _lXScr
+ 0002:00002FB0  Idle _lYScr
+ 0002:00002FB4       _hThisModule
+ 0002:00002FD4       __DestructorCountPtr
+ 0002:00002FD8  Idle ___ExceptStaticXbuff

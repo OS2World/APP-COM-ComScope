@@ -1,0 +1,11 @@
+
+.\serialt.obj: \
+    P:\spooler\extra\serialt.c \
+    {P:\spooler\extra;$(INCLUDE);}menu.h \
+    spooltest.mak
+
+.\serialt.res: \
+    P:\spooler\extra\serialt.rc \
+    {P:\spooler\extra;$(INCLUDE)}COMspool.ICO \
+    {P:\spooler\extra;$(INCLUDE)}menu.h \
+    spooltest.mak

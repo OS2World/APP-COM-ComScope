@@ -1,0 +1,44 @@
+LIBRARY    UTIL_DEB
+
+DESCRIPTION 'OStools Utilities library'
+
+DATA    MULTIPLE READWRITE LOADONCALL
+
+CODE    LOADONCALL
+
+PROTMODE
+
+EXPORTS
+
+  MakeDeviceName
+  RemoveSpaces
+  ASCIItoBin
+  AppendTMP
+  AppendHLP
+  AppendINI
+  AppendTripleDS
+  GetFileName
+
+  Checked
+  CheckButton
+  ControlEnable
+  CenterDlgBox
+  MessageBox
+  MenuItemEnable
+  MenuItemCheck
+  GetLongIntDlgItem
+  SetSystemMenu
+  AppendPath
+
+  AdjustConfigSys
+  CleanConfigSys
+
+  RemoveListItem
+  DestroyList
+  GetNextListItem
+  AddListItem
+  InitializeList
+  FindListByteItem
+  FindListWordItem
+  FindListStringItem
+

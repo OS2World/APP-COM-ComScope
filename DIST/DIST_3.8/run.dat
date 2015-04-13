@@ -1,0 +1,47 @@
+Debug Enabled
+Parameters are: comi d:\test debug 
+Using file list: COMI\FILES.LST
+Destination is: D:\TEST
+Setting attributes to un-hide source initialization files
+Setting attributes to delete all files at destination D:\TEST
+del D:\TEST\*.* < yes.ans > CON
+Press any key when ready . . . 
+File list is: COMI\FILES.LST
+Processing COMi\README.1st
+copy COMi\README.1st D:\TEST\README.1st > CON
+Processing INSTALL.EXE
+copy INSTALL.EXE D:\TEST\INSTALL.EXE > CON
+Processing \HELP\COMi.INF
+copy \HELP\COMi.INF D:\TEST\COMi.INF > CON
+Processing COMi\VERSION.TXT
+copy COMi\VERSION.TXT D:\TEST\VERSION.TXT > CON
+Processing \HELP\INSTALL.HLP
+copy \HELP\INSTALL.HLP D:\TEST\INSTALL.HLP > CON
+Processing \HELP\CONFIG.HLP
+copy \HELP\CONFIG.HLP D:\TEST\CONFIG.HLP > CON
+Processing OS2LSRTL.DLL
+copy OS2LSRTL.DLL D:\TEST\OS2LSRTL.DLL > CON
+Processing OS2LS_UT.DLL
+copy OS2LS_UT.DLL D:\TEST\OS2LS_UT.DLL > CON
+Processing COMi_CFG.DLL
+copy COMi_CFG.DLL D:\TEST\COMi_CFG.DLL > CON
+Processing LICENSE.TXT
+copy LICENSE.TXT D:\TEST\LICENSE.TXT > CON
+Processing COMDD.SYS
+copy COMDD.SYS D:\TEST\COMDD.SYS > CON
+Processing PDA_INST.DLL
+copy PDA_INST.DLL D:\TEST\PDA_INST.DLL > CON
+Processing IOCTL.C
+copy IOCTL.C D:\TEST\IOCTL.C > CON
+Processing IOCTL.H
+copy IOCTL.H D:\TEST\IOCTL.H > CON
+Processing INIDUMP.EXE
+copy INIDUMP.EXE D:\TEST\INIDUMP.EXE > CON
+Processing INSTALL.ICO
+copy INSTALL.ICO D:\TEST\INSTALL.ICO > CON
+Processing COMi\OS_tools.ini
+copy COMi\OS_tools.ini D:\TEST\OS_tools.ini > CON
+Processing 
+Setting attributes to hide initialization files
+Setting attributes to hide icon files
+Press any key when ready . . . 

@@ -1,0 +1,206 @@
+PWB-GENERATED FILE: DO NOT MODIFY
+[shared-]
+	version=3
+	project="P:\SERIAL\IBM\serial.mak"
+	buildmode=3
+[edit-]
+	srch=
+	fSrchRe=0
+	rpl=
+	src=
+	fRplRe=0
+[pwb]
+	screen=60 80
+	winstyle=1
+	file="<COMPILE>Build Results" 1 1 1 1
+	wnd=c 0 0 0 0 0 0
+	file="<SEARCH>Search Results" 1 1 1 1
+	wnd=c 0 0 0 0 0 0
+	file="<PRINT>Print Results" 1 1 1 1
+	wnd=c 0 0 0 0 0 0
+	file="<RECORD>Record" 1 1 1 1
+	wnd=c 0 0 0 0 0 0
+	file="<CLIPBOARD>Clipboard" 1 1 1 1
+	wnd=c 0 0 0 0 0 0
+	file="<pwbhelp>Help" 1 1 1 1
+	wnd=c 0 0 0 0 0 0
+	file="<browse>Browser Output" 1 1 1 1
+	wnd=c 0 0 0 0 0 0
+[environ]
+	WP_OBJHANDLE=156226
+	USER_INI=C:\OS2\OS2.INI
+	SYSTEM_INI=C:\OS2\OS2SYS.INI
+	OS2_SHELL=C:\OS2\CMD.EXE
+	AUTOSTART=PROGRAMS,TASKLIST,FOLDERS,CONNECTIONS
+	RESTARTOBJECTS=StartupFoldersOnly
+	RUNWORKPLACE=C:\OS2\PMSHELL.EXE
+	COMSPEC=C:\OS2\CMD.EXE
+	PATH=w:\v70\binp;w:\v60\masm\binp;c:\os2;
+	DPATH=D:\ibmcom;w:\TOOLKIT30\BOOK;D:\IBMLAN\NETPROG;D:\IBMLAN;D:\MUGLIB;C:\OS2;C:\OS2\SYSTEM;C:\OS2\MDOS\WINOS2;C:\OS2\INSTALL;C:\;C:\OS2\BITMAP;C:\OS2\MDOS;C:\OS2\APPS;C:\MMOS2;C:\MMOS2\INSTALL;;W:\IPFEDEMO;W:\IBMCPP\LOCALE;W:\IBMCPP\HELP \
+;W:\IBMCPP\SYS;
+	PROMPT=$i[$p]
+	HELP=w:\TOOLKIT30\HELP;C:\OS2\HELP;C:\OS2\HELP\TUTORIAL;C:\MMOS2\HELP;W:\BCOS2\BIN;d:\IBMWORKS;d:\internet\help;d:\INTERNET\UMAIL;D:\Fastback\Help;;W:\IPFEDEMO;W:\IBMWF\HELP;W:\IBMCPP\HELP;
+	GLOSSARY=C:\OS2\HELP\GLOSS;
+	IPF_KEYS=SBCS
+	KEYS=ON
+	BOOKSHELF=w:\TOOLKIT30\BOOK;D:\IBMLAN\NETPROG;C:\OS2\BOOK;C:\MMOS2;W:\BCOS2\BIN;;W:\IPFEDEMO;W:\IBMWF\HELP;W:\IBMCPP\HELP
+	SOMIR=C:\OS2\ETC\SOM.IR;C:\OS2\ETC\WPSH.IR;C:\OS2\ETC\WPDSERV.IR
+	SOMDDIR=C:\OS2\ETC\DSOM
+	EPMPATH=C:\OS2\APPS;
+	MMBASE=C:\MMOS2;
+	DSPPATH=C:\MMOS2\DSP;
+	NCDEBUG=4000
+	HOSTNAME=DEVELOP
+	NWDBPATH=D:\IBMLAN\NETPROG
+	DLSINI=D:\IBMLAN\NETPROG\NETGUI.INI
+	INIT_FILE_NAMES=netgui
+	INIT_FILE_RANGES=200
+	WPS_COMMUNICATION=YES
+	LOCPATH=D:\IBMLAN\XPG4\LOCALE
+	LANG=ENUS437
+	IPFC=w:\TOOLKIT30\IPFC;W:\BCOS2\IPFC
+	VIDEO_DEVICES=VIO_SVGA
+	VIO_SVGA=DEVICE(BVHVGA,BVHP9100)
+	IBMWORKS_INI=d:\IBMWORKS
+	ETC=d:\internet\etc
+	TMP=d:\temp
+	TEMP=d:\temp
+	HELPNDX=EPMKWHLP.NDX+DDE4LRM.NDX+DDE4SCL.NDX+DDE4UIL.NDX+DDE4CCL.NDX+DDE4CLIB.NDX
+	CPREF=CP1.INF+CP2.INF+CP3.INF
+	GPIREF=GPI1.INF+GPI2.INF+GPI3.INF
+	PMREF=PM1.INF+PM2.INF+PM3.INF+PM4.INF+PM5.INF
+	WPSREF=WPS1.INF+WPS2.INF+WPS3.INF
+	MMREF=MMREF1.INF+MMREF2.INF+MMREF3.INF
+	INCLUDE=w:\v60\include;
+	SMINCLUDE=w:\TOOLKIT30\IDL;w:\TOOLKIT30\H;.;w:\TOOLKIT30\SOM\INCLUDE;
+	SMADDSTAR=1
+	SMEMIT=h;ih;c
+	SMNOTC=1
+	SOMBASE=w:\TOOLKIT30\SOM
+	SMTMP=w:\TOOLKIT30\TMP
+	LIB=w:\v60\libp;
+	SMCLASSES=WPTYPES.IDL
+	WORKPLACE__PROCESS=NO
+[build]
+    build: language "C"
+    build: template "None"
+    build: macro DEBUG "0"
+    build: macro PWBRMAKE "pwbrmake"
+    build: macro NMAKEBSC1 "set"
+    build: macro NMAKEBSC2 "nmake"
+    build: macro CC "cl"
+    build: macro CFLAGS_G "/W2 /Zp /ML /ALw /G2 /D_MT /BATCH"
+    build: macro CFLAGS_D "/Gs /Gi$(PROJ).mdt /Zi /Od /FPa"
+    build: macro CFLAGS_R "/Ot /Oi /Ol /Oe /Og /Gs /FPa"
+    build: macro ASM "ml"
+    build: macro AFLAGS_G "/Cx /W2 /WX"
+    build: macro AFLAGS_D "/Zi"
+    build: macro AFLAGS_R "/nologo"
+    build: macro MAPFILE_D "NUL"
+    build: macro MAPFILE_R "NUL"
+    build: macro LFLAGS_G "/STACK:8192 /NOI /BATCH"
+    build: macro LFLAGS_D "/CO /INC /FAR /PACKC /PACKD /PMTYPE:PM"
+    build: macro LFLAGS_R "/EXE /FAR /PACKC /PACKD /PMTYPE:PM"
+    build: macro LINKER "link"
+    build: macro ILINK "ilink"
+    build: macro LRF "echo > NUL"
+    build: macro RC "rc"
+    build: macro IMPLIB "implib"
+    build: macro LLIBS_R "/NOD:LLIBCA LLIBCDLL"
+    build: macro LLIBS_D "/NOD:LLIBCA LLIBCDLL"
+    build: all $(PROJ).dll
+    build: target $(PROJ).bsc pwbrmake
+    build: target $(PROJ).dll lrf_dll link_dll res_dll implib_dll
+    build: inference .c.sbr cc_c_sbr
+    build: inference .asm.sbr asm_asm_sbr
+    build: inference .c.obj cc_c_obj
+    build: inference .asm.obj asm_asm_obj
+    build: inference .h.inc h2inc_h_inc
+    build: inference .rc.res rc_rc_res
+    build: command pwbrmake "$(PWBRMAKE) @<<\n$(BRFLAGS) $(SBRS)\n<<"
+    build: command nmakebsc1 "$(NMAKEBSC1) MAKEFLAGS="
+    build: command nmakebsc2 "$(NMAKEBSC2) $(NMFLAGS) -f $(PROJFILE) $(PROJ).bsc"
+    build: release command cc_c_sbr "$(CC) /Zs $(CFLAGS_G) $(CFLAGS_R) /FR$@ $<"
+    build: debug command cc_c_sbr "$(CC) /Zs $(CFLAGS_G) $(CFLAGS_D) /FR$@ $<"
+    build: release command asm_asm_sbr "$(ASM) /Zs $(AFLAGS_G) $(AFLAGS_R) /FR$@ $<"
+    build: debug command asm_asm_sbr "$(ASM) /Zs $(AFLAGS_G) $(AFLAGS_D) /FR$@ $<"
+    build: release command cc_c_obj "$(CC) /c $(CFLAGS_G) $(CFLAGS_R) /Fo$@ $<"
+    build: debug command cc_c_obj "$(CC) /c $(CFLAGS_G) $(CFLAGS_D) /Fo$@ $<"
+    build: release command asm_asm_obj "$(ASM) /c $(AFLAGS_G) $(AFLAGS_R) /Fo$@ $<"
+    build: debug command asm_asm_obj "$(ASM) /c $(AFLAGS_G) $(AFLAGS_D) /Fo$@ $<"
+    build: release command h2inc_h_inc "$(H2INC) /c $(CFLAGS_G) $(CFLAGS_R) $<"
+    build: debug command h2inc_h_inc "$(H2INC) /c $(CFLAGS_G) $(CFLAGS_D) $<"
+    build: release command lrf_dll "$(LRF) @<<$(PROJ).lrf\n$(RT_OBJS: = +^\n) $(OBJS: = +^\n)\n$@\n$(MAPFILE_R)\n$(LLIBS_G: = +^\n) +\n$(LLIBS_R: = +^\n) +\n$(LIBS: = +^\n)\n$(DEF_FILE) $(LFLAGS_G) $(LFLAGS_R);\n<<"
+    build: debug command lrf_dll "$(LRF) @<<$(PROJ).lrf\n$(RT_OBJS: = +^\n) $(OBJS: = +^\n)\n$@\n$(MAPFILE_D)\n$(LLIBS_G: = +^\n) +\n$(LLIBS_D: = +^\n) +\n$(LIBS: = +^\n)\n$(DEF_FILE) $(LFLAGS_G) $(LFLAGS_D);\n<<"
+    build: release command link_dll "$(LINKER) @$(PROJ).lrf"
+    build: debug command link_dll "$(ILINK) -a -e \"$(LINKER) @$(PROJ).lrf\" $@"
+    build: command rc_dll "$(RC) $(RESS) $@"
+    build: command implib_dll "$(IMPLIB) $*.lib $@"
+    build: command rc_rc_res "$(RC) /r $< $@"
+    build: command run ""
+    build: command debug ""
+    build: suffixes
+    build: include dependencies
+    build: include no system
+    build: include .bas "^[ \t]*'[ \t]*\\$include:[ \t]*'\\([^']+\\)'"
+    build: include .bas "^[ \t]*rem[ \t]*\\$include:[ \t]*'\\([^']+\\)'"
+    build: include .bi "^[ \t]*'[ \t]*\\$include:[ \t]*'\\([^']+\\)'"
+    build: include .bi "^[ \t]*rem[ \t]*\\$include:[ \t]*'\\([^']+\\)'"
+    build: include .c "^[ \t]*#[ \t]*include[ \t]*\"[ \t]*\\(\\:p\\)[ \t]*\"" case
+    build: include .c "^[ \t]*#[ \t]*include[ \t]*<[ \t]*\\(\\:p\\)[ \t]*>" case system
+    build: include .h "^[ \t]*#[ \t]*include[ \t]*\"[ \t]*\\(\\:p\\)[ \t]*\"" case
+    build: include .h "^[ \t]*#[ \t]*include[ \t]*<[ \t]*\\(\\:p\\)[ \t]*>" case system
+    build: include .cxx "^[ \t]*#[ \t]*include[ \t]*\"[ \t]*\\(\\:p\\)[ \t]*\"" case
+    build: include .cxx "^[ \t]*#[ \t]*include[ \t]*<[ \t]*\\(\\:p\\)[ \t]*>" case system
+    build: include .cpp "^[ \t]*#[ \t]*include[ \t]*\"[ \t]*\\(\\:p\\)[ \t]*\"" case
+    build: include .cpp "^[ \t]*#[ \t]*include[ \t]*<[ \t]*\\(\\:p\\)[ \t]*>" case system
+    build: include .hxx "^[ \t]*#[ \t]*include[ \t]*\"[ \t]*\\(\\:p\\)[ \t]*\"" case
+    build: include .hxx "^[ \t]*#[ \t]*include[ \t]*<[ \t]*\\(\\:p\\)[ \t]*>" case system
+    build: include .hpp "^[ \t]*#[ \t]*include[ \t]*\"[ \t]*\\(\\:p\\)[ \t]*\"" case
+    build: include .hpp "^[ \t]*#[ \t]*include[ \t]*<[ \t]*\\(\\:p\\)[ \t]*>" case system
+    build: include .for "^[ \t$][ \t]*[iI][nN][cC][lL][uU][dD][eE][ \t:]*'[ \t]*\\(\\:p\\)[ \t]*'" case
+    build: include .fi "^[ \t$][ \t]*[iI][nN][cC][lL][uU][dD][eE][ \t:]*'[ \t]*\\(\\:p\\)[ \t]*'" case system
+    build: include .fd "^[ \t$][ \t]*[iI][nN][cC][lL][uU][dD][eE][ \t:]*'[ \t]*\\(\\:p\\)[ \t]*'" case system
+    build: include .inc "^[ \t$][ \t]*[iI][nN][cC][lL][uU][dD][eE][ \t:]*'[ \t]*\\(\\:p\\)[ \t]*'" case
+    build: include .asm "^[ \t]*include[ \t]+\\([^ \t]+\\)"
+    build: include .inc "^[ \t]*include[ \t]+\\([^ \t]+\\)"
+    build: include .rc "^[ \t]*rcinclude[ \t]+\\([^ \t]+\\)"
+    build: include .rc "^[ \t]*#[ \t]*include[ \t]*\"[ \t]*\\(\\:p\\)[ \t]*\""
+    build: include .rc "^[ \t]*#[ \t]*include[ \t]*<[ \t]*\\(\\:p\\)[ \t]*>" system
+    build: include .rc "^\\:i\\:bBITMAP\\:b\\(\\:p\\)"
+    build: include .rc "^\\:i\\:bCURSOR\\:b\\(\\:p\\)"
+    build: include .rc "^\\:i\\:bFONT\\:b\\(\\:p\\)"
+    build: include .rc "^\\:i\\:bICON\\:b\\(\\:p\\)"
+    build: message "^SYS[0-9][0-9][0-9][0-9]:\\:b"
+    build: message "^NET[0-9][0-9][0-9][0-9]:\\:b"
+    build: message "^\\(\\{\\:p\\!<[^>]*>\\}\\) \\([0-9]+\\) \\([0-9]+\\)[ ]*:" file line col
+    build: message "^\\(\\:p\\):\\([0-9]+\\):" file line
+    build: message "^[^(]+(\\(\\:p\\)) : error L[0-9]+[ ]*: '_*\\([^']+\\)' : unresolved external" file token
+    build: message "^[^(]+(\\(\\:p\\)) : [^L]+L[124]" file
+    build: message "^LINK [^L]+L[124]"
+    build: message "^ILINK : [^L]+L[124]"
+    build: message "^\\(\\:p\\)(\\(\\:z\\))[ ]*: [^U]+U[124]" file line
+    build: message "^NMAKE : [^U]+U[124]"
+    build: message "^\\:p : [^U]+U[124]\\:d\\:d\\:d"
+    build: message "^\\(\\:p\\)([ \t]*\\(\\:z\\),[ \t]*\\(\\:z\\)) : " file line col
+    build: message "^[]*BC :"
+    build: message "^\\(\\:p\\)(\\(\\:z\\)) : [^C]+C[124]" file line
+    build: message "^[^C]+C[124][0-9]+: "
+    build: message "^[^D]+D[124][0-9]+ : "
+    build: message "^\\(\\:p\\)(\\(\\:z\\)) : [^F]+F[1234]" file line
+    build: message "^[^F]+F[1234][0-9]+: "
+    build: message "^\\(\\:p\\)(\\([0-9]+\\))[ \t]*:[ \t]*[^A]+A[12456]" file line
+    build: message "^\\(\\:p\\)(\\(\\:z\\)) : [^H]+HI[124]" file line
+    build: message "^[^H]+HI[124][0-9]+: "
+    build: message "^bscmake: [^B]+BK[124]"
+    build: message "^sbrpack: [^S]+SB[124]"
+    build: message "^BIND : [^U]+U[124]"
+    build: message "^\\(\\:p\\)(\\(\\:z\\)) RC:" file line
+    build: message "\\(\\:p\\)(\\(\\:z\\)) : error RC\\:z:" file line
+    build: message "^RC:"
+    build: message "^RC :"
+    build: message "^LIB :"
+    build: message "^MPC :"
+    build: message "^CVPACK :"
+    build: message "^pwbrmake: [^U]+U[124]"
+    build: message "^RC: error"

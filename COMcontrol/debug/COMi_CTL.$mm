@@ -1,0 +1,95 @@
+:TARGET.SUFFIXES
+:TARGET.SUFFIXES
+:DEPENDENCY..LIB .c .dll .obj 
+:TARGET.all
+:DEPENDENCY.
+.\\..\lib\\CTL_DEB.LIB
+p:\COMcontrol\\..\lib\\CTL_DEB.LIB
+:RULE..c.asm
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /DDEBUG=1 /Sp1 /Sd /Ss /Q /Tx /Fi /Si /Ti /Op- /W1 /Gm /Gd /Ge- /G4 /Gn /Tm /Ms /Gf /Gi /Ft- /Gu /Fa /C %s
+:RULE.{p:\COMcontrol}.c.asm
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /DDEBUG=1 /Sp1 /Sd /Ss /Q /Tx /Fi /Si /Ti /Op- /W1 /Gm /Gd /Ge- /G4 /Gn /Tm /Ms /Gf /Gi /Ft- /Gu /Fa /C %s
+:RULE.{p:\COMcontrol\debug}.c.asm
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /DDEBUG=1 /Sp1 /Sd /Ss /Q /Tx /Fi /Si /Ti /Op- /W1 /Gm /Gd /Ge- /G4 /Gn /Tm /Ms /Gf /Gi /Ft- /Gu /Fa /C %s
+:RULE..c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /DDEBUG=1 /Sp1 /Sd /Ss /Q /Tx /Fi /Si /Ti /Op- /W1 /Gm /Gd /Ge- /G4 /Gn /Tm /Ms /Gf /Gi /Ft- /Gu /Fa /C %s
+:RULE.{p:\COMcontrol}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /DDEBUG=1 /Sp1 /Sd /Ss /Q /Tx /Fi /Si /Ti /Op- /W1 /Gm /Gd /Ge- /G4 /Gn /Tm /Ms /Gf /Gi /Ft- /Gu /Fa /C %s
+:RULE.{p:\COMcontrol\debug}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /DDEBUG=1 /Sp1 /Sd /Ss /Q /Tx /Fi /Si /Ti /Op- /W1 /Gm /Gd /Ge- /G4 /Gn /Tm /Ms /Gf /Gi /Ft- /Gu /Fa /C %s
+:RULE..dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe /NOLOGO %|dpF\%|fF.LIB %s
+:RULE.{p:\COMcontrol}.dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe /NOLOGO %|dpF\%|fF.LIB %s
+:RULE.{p:\COMcontrol\debug}.dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe /NOLOGO %|dpF\%|fF.LIB %s
+:TARGET.p:\COMcontrol\\..\lib\CTL_DEB.dll .\\..\lib\CTL_DEB.dll
+:DEPENDENCY.
+.\prot_hlp.obj
+.\comcontrol.obj
+p:\COMcontrol\COMi_CTL.Res
+{$(LIB)}OS2LSRTL.lib
+{$(LIB)}OS2386.lib
+{$(LIB)}CPPOM30O.lib
+{$(LIB)}UTIL_DEB.lib
+{$(LIB)}IOCTLDEB.lib
+.\\..\Ctl_DEB.def
+:ACTION.Link::Linker
+:COMMAND.
+icc.exe @<<
+ /Q /B" /de /nobase /nop /optfunc      /noe /m /l /nod"
+ /Fe".\\..\lib\CTL_DEB.dll" 
+ OS2LSRTL.lib 
+ OS2386.lib 
+ CPPOM30O.lib 
+ UTIL_DEB.lib 
+ IOCTLDEB.lib 
+ .\\..\Ctl_DEB.def
+ .\prot_hlp.obj
+ .\comcontrol.obj
+<<
+:ACTION.Bind::Resource Bind
+:COMMAND.
+rc.exe p:\COMcontrol\COMi_CTL.Res p:\COMcontrol\\..\lib\CTL_DEB.dll
+:TARGET..\comcontrol.asm .\comcontrol.obj
+:DEPENDENCY.
+p:\COMcontrol\comcontrol.c
+{p:\COMcontrol;$(INCLUDE);}COMMON.H
+{p:\COMcontrol;$(INCLUDE);}COMDD.H
+{p:\COMcontrol;$(INCLUDE);}utility.h
+{p:\COMcontrol;$(INCLUDE);}ioctl.h
+{p:\COMcontrol;$(INCLUDE);}resource.H
+{p:\COMcontrol;$(INCLUDE);}help.h
+{p:\COMcontrol;$(INCLUDE);}ComControl.h
+:TARGET..\prot_hlp.asm .\prot_hlp.obj
+:DEPENDENCY.
+p:\COMcontrol\prot_hlp.c
+{p:\COMcontrol;$(INCLUDE);}COMMON.H
+{p:\COMcontrol;$(INCLUDE);}COMDD.H
+{p:\COMcontrol;$(INCLUDE);}utility.h
+{p:\COMcontrol;$(INCLUDE);}ioctl.h
+{p:\COMcontrol;$(INCLUDE);}resource.H
+:TARGET..\\..\lib\\CTL_DEB.LIB
+:DEPENDENCY.
+.\\..\lib\CTL_DEB.dll
+:TARGET.p:\COMcontrol\\..\lib\\CTL_DEB.LIB
+:DEPENDENCY.
+p:\COMcontrol\\..\lib\CTL_DEB.dll

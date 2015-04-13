@@ -1,0 +1,17 @@
+#define IDM_CONNECT     4000
+
+#define IDM_INIT        4001
+#define IDM_LOADCLIENT  4002
+#define IDM_LOADSERVER  4003
+
+#define IDM_PROCESS     4004
+#define IDM_EXIT        4005
+
+#define IDM_SELECT      4011
+
+#define PS_DLG          5000
+#define PS_NAME_LIST    5001
+
+#define DID_NULL -1
+
+

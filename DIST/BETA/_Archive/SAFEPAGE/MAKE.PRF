@@ -1,0 +1,57 @@
+This is a profile make file for Quick Page
+[COMi]
+Driver=PAGER.SYS;
+Mod=R;
+OEM_type=0
+Max Device Count=1
+Files=1
+File_1=COMi.INF;
+Major=3
+Minor=42
+Date=950730
+Version=COMi version 3.42 P;
+ProgramSize=65203
+[Pager]
+Major=1
+Minor=00
+Date=950702
+Version=QuickPage version 1.00;
+Icon File=qpage.ico;
+Files=4
+File_1=Qpage2.EXE;
+File_2=safepage.dll;
+File_3=qpage.HLP;
+File_4=qpage.ICO;
+ProgramSize=295651
+[Install]
+DD Config Help=CONFIG.HLP;
+DD Config Library=COMi_CFG.DLL;
+DD Config Function=InstallDevice;
+App Config Help=qpage.HLP;
+App Config Library=QPG_CFG.DLL;
+App Config Function=ConfigPager;
+Transfer Library=PDB_INST.DLL;
+Transfer Function=InstallPager;
+Version=OS/tools' Install version 2.00;
+Check Caption One=COMi Device Driver;
+Check Caption Three=Quick Page;
+Check Caption Five=Quick Page Configuration;
+Title=Quick Page Installation;
+DD Name=COMi;
+App Name=QuickPage;
+Banner One=for;
+Banner Two=Quick Page;
+License File=license.txt;
+License Caption=License Information:;
+Files=8
+File_1=INSTALL.EXE;
+File_2=INSTALL.HLP;
+File_3=INSTALL.ICO;
+File_4=PDB_INST.DLL;
+File_5=OS2LS_IO.DLL;
+File_6=OS2LS_UT.DLL;
+File_7=COMi_CFG.DLL;
+File_8=C215MT.DLL;
+ProgramSize=98407
+
+

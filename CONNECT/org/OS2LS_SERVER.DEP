@@ -1,0 +1,10 @@
+
+.\server.obj: \
+    p:\connect\server.c \
+    {p:\connect;$(INCLUDE);}aerial.h \
+    {p:\connect;$(INCLUDE);}comm.h \
+    OS2LS_SERVER.mak
+
+.\OS2LS_TCPIP_SERVER.LIB: \
+    .\OS2LS_TCPIP_SERVER.DLL \
+    OS2LS_SERVER.mak

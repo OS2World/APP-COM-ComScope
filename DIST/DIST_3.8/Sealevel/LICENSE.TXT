@@ -1,0 +1,11 @@
+By installing and using these programs (the Software), you agree to the following (Agreement):
+
+OS/tools and Sealevel Systems grants you the right to use these programs on any single computer.  OS/COM and Install are the property of OS/tools Incorporated and are licensed for use by you on one computer per license.  You must have a license for each of these programs you install and/or run on any computer.
+
+You may not use, modify, or transfer the Software, or any copy, in whole or in part, except as expressly provided for in this Agreement.  You may not decompile, disassemble, or reverse engineer the Software.  Any attempt to transfer any of the rights, duties, or obligations hereunder except as expressly provided for in this Agreement is void, You may not rent, lease, loan, resell for profit, sublicense, distribute, or electronically transmit the Software.  You agree to comply with U.S export regulations, when applicable.
+
+OS/tools warrants for a period of 90 days from the date of original purchase, that the diskettes upon which the Software is furnished will be, under normal use, free from defects in workmanship and materials.  By installing and using this Software you agree that the only remedy available to you will be, at Sealevel Systems' option, a refund of the license fee or replacement of the defective diskette without charge.  Neither OS/tools, nor Sealevel Systems, warrants that the Software will meet your requirements, that operation of the Software will be uninterrupted or error-free, or that all errors will be corrected.
+
+Well, at least the lawyers are happy, now.  We hope you will be too.
+
+

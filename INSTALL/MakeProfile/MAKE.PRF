@@ -1,0 +1,46 @@
+This is a profile make file for OS/tools installation agent
+[Install]
+Package Name=COMsuite;
+Objects=3
+FileSets=1
+DD Name=COMDD.SYS;
+Version=OS/tools' COMsuite version 3.00x;
+Title=COMsuite Installation;
+Banner One=installing;
+Banner Two=COMscope, COMspool, and the COMi Device Driver;
+[FileSet_1]
+DestinationPath=F:\\COMM;
+Files=20
+File_1=COMscope.EXE;
+File_2=COMscope.HLP;
+File_3=COMscope.ICO;
+File_4=HEXFONTS.FON;
+File_5=OS2LS_PR.DLL;
+File_6=COMi_CTL.DLL;
+File_7=CONFIG.HLP;
+File_8=OS2LS_IO.DLL;
+File_9=OS2LS_UT.DLL;
+File_10=COMi_CFG.DLL;
+File_11=OS2LSRTL.DLL;
+File_12=COMi.INF;
+File_13=COMDD.SYS;
+File_14=SPLIT.EXE;
+File_15=SPLIT.C;
+File_16=IOCTL.C;
+File_17=IOCTL.H;
+File_18=CONTROL.EXE;
+File_19=INIDUMP.EXE;
+File_20=COMDD.INI;
+[Object_1]
+Type=WPFolder;
+ID=<OS/tools_1833xxx>;
+Name=OS/tools\r\x0dUtilities xxx;
+[Object_2]
+Type=WPProgram;
+Name=COMscope;
+Setup=NOAUTOCLOSE=NO\;PROGTYPE=PM\;EXENAME=F:\\COMM\\COMSCOPE.EXE\;STARTUPDIR=F:\\COMM;NODROP=YES\;;
+[Object_3]
+Type=WPProgram;
+Name=COMi User's Guide;
+Setup=DEFAULTVIEW=RUNNING\;NOPRINT=YES\;PROGTYPE=PM\;EXENAME=VIEW.EXE\;PARAMETERS=F:\\COMM\\COMi.inf\;;
+

@@ -1,0 +1,1361 @@
+Microsoft (R) Macro Assembler Version 6.00     		    08/24/02 23:27:45
+HdwTest.asm						     Page 1 - 1
+
+
+				;************************************************************************
+				;
+				; $Revision:   1.6  $
+				;
+				; $Log:   P:/archive/comi/hdw_test.asv  $
+				;
+				;     Rev 1.6   28 Mar 1996 00:20:02   EMMETT
+				;  Added resource manager.  Began work on VDD support.
+				;
+				;     Rev 1.5   18 Feb 1996 14:17:56   EMMETT
+				;  Added many features.  Notably:
+				;  Tracing application DosDevIOCtl function calls and packets.
+				;  Support for 16650 and 16750 UARTs.
+				;  Streamlined interrupt routine.
+				;
+				;     Rev 1.4   25 Apr 1995 22:16:34   EMMETT
+				;  Added Support for DigiBoard PC/16.  Changed interrupt Routine for better adapter independence.
+				;  Changed interrupt routine to allow user to select interrupting device selection algorithim.  Fixed
+				;  ABIOS interaction for better "non.INI" initialization in MCA machines.  Fixed various initialization
+				;  message strings.  COMscope and receive buffer are now allocated from system memory, allowing
+				;  a 32k (word) COMscope buffer and a 64k (byte) receive buffer.
+				;
+				;     Rev 1.3   03 Dec 1994 14:49:32   EMMETT
+				;
+				;
+				;     Rev 1.2   28 Jun 1994 09:09:28   EMMETT
+				;  Added "clear all interrupts" to handle interrupt ID register problems when one or more ports
+				;  on an adapter were in an interrupt state at system reset time.
+				;
+				;     Rev 1.1   11 Jun 1994 10:37:54   EMMETT
+				;  Changed all references to "Mirror" to "COMscope".
+				;
+				;     Rev 1.0   07 Jun 1994 00:19:08   EMMETT
+				;  Added support for DigiBoard.
+				;  Added initialization support for OEM specific loads.
+				;  Fixed hardware tests to set baud rate before testing interrupts.
+				;  Fixed hardware tests off switch to work only for retail version.
+				;
+				;************************************************************************
+
+				;use_MCA_table EQU 1
+
+				  IFNDEF x16_BIT
+				.386P
+				  ELSE
+				  ENDIF
+				.NOLISTMACRO                   ;suppress macro expansion in listing
+
+
+				.XLIST
+				.LIST
+
+ 0000				RES_DATA SEGMENT
+
+				    EXTRN bSharedInterrupts     :WORD
+				    EXTRN stDeviceParms         :s_stDeviceParms
+				    EXTRN wIntIDregister        :WORD
+				    EXTRN wDeviceIntOffsetTable :WORD
+				    EXTRN bNoOUT2change         :WORD
+				    EXTRN device_hlp            :DWORD
+				    EXTRN wInterruptsUsed       :WORD
+				    EXTRN IDCdata               :WORD
+				;    EXTRN byOEMtype             :BYTE
+				    EXTRN wOEMjumpEntry         :BYTE
+				    EXTRN byIntStatusMask       :BYTE
+				    EXTRN wPCIvendor            :WORD
+				    EXTRN wPCIdevice            :WORD
+				  IFNDEF NO_4x_CLOCK_SUPPORT
+				    EXTRN dwTimerCounter        :DWORD
+				  ENDIF
+				    EXTRN wInitTimerCount       :WORD
+				    EXTRN byAdapterType         :BYTE
+
+				  IFDEF OEM
+				    EXTRN bOEMpresent           :WORD
+				  ENDIF
+
+				    EXTRN stStackUsage          :s_stStackUsage
+
+ 0000				RES_DATA ENDS
+
+ 0000				_DATA SEGMENT
+
+				.XLIST
+				.LIST
+
+ 0000				_DATA ENDS
+
+ 0000				RES_CODE SEGMENT
+				    ASSUME CS:RCGROUP, ES:nothing, SS:nothing, DS:RDGROUP, GS:DGROUP
+
+				;-------------------------------------------------------------------------------
+				; Initialization procedures are placed after BEGIN_INIT_CODE so they can go
+				; away once initialization has completed.
+				;-------------------------------------------------------------------------------
+
+				    EXTRN PrintString           :NEAR
+				    EXTRN binac_10              :NEAR
+				    EXTRN binac                 :NEAR
+				    EXTRN GetCOMnumber          :NEAR
+				    EXTRN DelayFunction         :NEAR
+				    EXTRN SetRing0Access        :NEAR
+
+				  IFDEF COPY_PROTECT
+				  ENDIF
+
+				; SI to contain offset to stDeviceParms
+				; DI to contain offset to _stConfigParms with GS = DGROUP
+ 0000				TestValidHDW PROC NEAR USES ax dx ds
+
+				        LOCAL   wSaveBaudDivisor:WORD
+				        LOCAL   bMaybe16550:WORD
+				        LOCAL   bMaybeTI_ACE:WORD
+				        LOCAL   wFIFOcount:WORD
+				;        LOCAL   wHDWerror:WORD
+
+				;        mov     wHDWerror, 0
+ 0000  55		   *	    push   bp
+ 0001  8B EC		   *	    mov    bp, sp
+ 0003  83 C4 F8		   *	    add    sp, 0FFF8h
+ 0006  50		   *	    push   ax
+ 0007  52		   *	    push   dx
+ 0008  1E		   *	    push   ds
+ 0009  C7 46 FA 0000		        mov     bMaybeTI_ACE,FALSE
+ 000E  C7 46 FC 0000		        mov     bMaybe16550,FALSE
+
+ 0013  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 0016  83 C2 02			        add     dx,INT_ID_REG_OFFSET
+
+				; test if bit four of the interrupt ID register is a zero.  This bit is always
+				; zero in 16450, 16550, and 16750 UARTs, and is always zero after a reset
+				; the in 16650 UART.
+
+				        InByteImm
+ 001A  83 C2 02			        add     dx,MDM_CTL_REG_OFFSET - INT_ID_REG_OFFSET
+ 001D  A8 10			        test    al,10h
+ 001F  74 02			        jz      @f
+ 0021  EB 10			        jmp     test_16650_UART      ; not a 16550 or 16750, could be 16650
+ 0023				@@:
+ 0023  C7 46 FA 0001		        mov     bMaybeTI_ACE,TRUE
+
+				; test if bit five of the interrupt ID register is a zero.  This bit is always
+				; zero in 16450 and 16550 UARTs, and is always zero after a reset
+				; the in 16650 and 16750 UARTs.
+
+ 0028  A8 20			        test    al,20h
+ 002A  74 02			        jz      @f
+ 002C  EB 05			        jmp     test_16650_UART      ; not 16550, could be 16650 or 16750
+ 002E				@@:
+ 002E  C7 46 FC 0001		        mov     bMaybe16550,TRUE
+
+ 0033				test_16650_UART:
+				; Test if all support bits of the modem control register can be turned on.
+				; If this test fails it might be because it is a 16650 UART that has been left
+				; in the HDW RTS handshaking mode
+
+				;        mov     al,0f0h
+				;        OutByteDel bx
+				;        InByteDel bx
+				;        cmp     al,0f0h
+				;        je      flag_as_16650_UART
+
+				; try to enable EFR access, enable 16650 extensions, and clear handshake modes.
+
+ 0033  83 C2 FF			        add     dx,LINE_CTL_REG_OFFSET - MDM_CTL_REG_OFFSET
+				        InByteImm
+ 0037  8A E0			        mov     ah,al
+ 0039  F6 C4 80			        test    ah,80h
+ 003C  74 02			        jz      @f
+ 003E  B4 03			        mov     ah,03       ; if DLB bit was on then force LCR to be restored to a normal mode
+ 0040				@@:
+ 0040  B0 BF			        mov     al,0bfh
+				        OutByteDel bx
+ 0049  83 C2 FF			        add     dx,EFR_REG_OFFSET - LINE_CTL_REG_OFFSET
+ 004C  B0 10			        mov     al,EFR_ENABLE_16650
+				        OutByteDel bx
+ 0055  83 C2 01			        add     dx,LINE_CTL_REG_OFFSET - EFR_REG_OFFSET
+ 0058  8A C4			        mov     al,ah
+				        OutByteDel bx
+
+				; retest modem control register bits
+
+ 0061  83 C2 01			        add     dx,MDM_CTL_REG_OFFSET - LINE_CTL_REG_OFFSET
+ 0064  B0 B0			        mov     al,0b0h
+				        OutByteDel bx
+				        InByteDel bx
+ 0074  3C B0			        cmp     al,0b0h
+ 0076  74 11			        je      flag_as_16650_UART
+ 0078  83 7E FA 01		        cmp     bMaybeTI_ACE,TRUE
+ 007C  74 48			        je     test_TI_ACE_UART
+ 007E  83 7E FC 01		        cmp     bMaybe16550,TRUE
+ 0082  0F 84 00AE		        je     test_16550_UART
+				; mov wHDWerror,1
+ 0086				not_UART_1::
+ 0086  E9 0635			        jmp     not_UART
+
+ 0089				flag_as_16650_UART:
+ 0089  32 C0			        xor     al,al       ;clear modem control register
+				        OutByteDel bx
+				; Turn off 1665x extensions
+ 0092  83 C2 FF			        add     dx,LINE_CTL_REG_OFFSET - MDM_CTL_REG_OFFSET
+				        InByteDel bx
+ 009C  8A E0			        mov     ah,al
+ 009E  B0 BF			        mov     al,0bfh
+				        OutByteDel bx
+ 00A7  83 C2 FF			        add     dx,EFR_REG_OFFSET - LINE_CTL_REG_OFFSET
+ 00AA  B0 00			        mov     al,0
+				        OutByteDel bx
+ 00B3  83 C2 01			        add     dx,LINE_CTL_REG_OFFSET - EFR_REG_OFFSET
+ 00B6  8A C4			        mov     al,ah
+				        OutByteDel bx
+
+				        OR_DeviceFlag2 DEV_FLAG2_16650_UART
+ 00C3  E9 0094			        jmp     init_UART
+
+ 00C6				test_TI_ACE_UART:
+				; Test if only LOOP bit of modem control address register is toggled
+
+ 00C6  B0 F0			        mov     al,0f0h
+				        OutByteDel bx
+				        InByteDel bx
+ 00D6  8A E0			        mov     ah,al
+ 00D8  80 E4 F0			        and     ah,0f0h         ; test only upper nibble, HS bits could be on
+ 00DB  80 FC 30			        cmp     ah,30h          ; LOOP and AFE should be only bits on
+ 00DE  74 09			        je      test_TI_ACE
+ 00E0  83 7E FC 01		        cmp     bMaybe16550,TRUE
+ 00E4  74 4E			        je      test_16550_UART
+				; mov wHDWerror,2
+ 00E6				not_UART_2::
+ 00E6  E9 05D5			        jmp     not_UART
+
+ 00E9				test_TI_ACE:
+ 00E9  32 C0			        xor     al,al
+				        OutByteDel bx
+
+
+ 00F2  83 C2 FF			        add     dx,LINE_CTL_REG_OFFSET - MDM_CTL_REG_OFFSET
+ 00F5  B0 80			        mov     al,LINE_CTL_DLB_ACCESS
+				        OutByteDel bx
+ 00FE  83 C2 FF			        add     dx,FIFO_CTL_REG_OFFSET - LINE_CTL_REG_OFFSET
+ 0101  B0 FF			        mov     al,0ffh
+				        OutByteDel bx
+				        InByteDel bx
+ 0111  A8 20			        test    al,FIFO_CTL_16750_64_BYTE_FIFO
+ 0113  74 06			        jz      flag_as_TI16550C
+
+				        OR_DeviceFlag2 DEV_FLAG2_16750_UART
+ 0119  EB 04			        jmp     clear_TI_ACE_registers
+
+ 011B				flag_as_TI16550C:
+				        OR_DeviceFlag2 DEV_FLAG2_TI16550C_UART
+
+ 011F				clear_TI_ACE_registers:
+ 011F  B0 00			        mov     al,0
+				        OutByteDel bx
+ 0128  83 C2 01			        add     dx,LINE_CTL_REG_OFFSET - FIFO_CTL_REG_OFFSET
+				        OutByteDel bx
+ 0132  EB 26			        jmp     init_UART
+
+
+
+ 0134				test_16550_UART:
+				; Test if only LOOP bit of modem control address register is toggled
+
+ 0134  0C F0			        or      al,0f0h
+				        OutByteDel bx
+				        InByteDel bx
+ 0144  8A E0			        mov     ah,al
+ 0146  80 E4 F0			        and     ah,0f0h
+ 0149  80 FC 10			        cmp     ah,10h
+ 014C  74 03			        je     @f
+				; mov wHDWerror,3
+ 014E				not_UART_3::
+ 014E  E9 056D			        jmp     not_UART
+ 0151				@@:
+				;        jne     not_UART
+ 0151  24 0F			        and     al,0fh
+				        OutByteDel bx
+
+ 015A				init_UART::
+ 015A  83 3E 0000 E 01		        cmp     bSharedInterrupts,TRUE
+ 015F  74 07			        je      @f
+ 0161  83 3E 0000 E 00		        cmp     wIntIDregister,0
+ 0166  74 03			        je      clear_int_this_device
+ 0168				@@:
+				; Clear all interrtups also turns on OUT2 for all UARTs in the series
+				; For now eight UARTs are assumed as this is being added to support
+				; Sealevel System's eight port adapter.
+
+ 0168  E8 0600			        call    ClearAllInterrupts
+
+ 016B				clear_int_this_device:
+ 016B  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 016E  83 C2 04			        add     dx,MDM_CTL_REG_OFFSET
+ 0171  32 C0			        xor     al,al
+
+				; set OUT1 as requested
+
+ 0173  65: F7 45 02 0002	        test    GS:[di].s_stConfigParms.cwDeviceFlags2,CFG_FLAG2_ACTIVATE_OUT1
+ 0179  74 02			        jz      @f
+ 017B  B0 04			        mov     al,MDM_CTL_OUT1_ACTIVATE
+ 017D				@@:
+ 017D  83 3E 0000 E 01		        cmp     bNoOUT2change,TRUE  ; this is the initialization of this state (Sealevel only)
+ 0182  75 02			        jne      @f
+ 0184  0C 08			        or      al,MDM_CTL_OUT2_ACTIVATE
+ 0186				@@:
+				        OutByteDel bx      ;deactivate all modem signals, except OUT1 and OUT2 if requested
+ 018D  32 C0			        xor     al,al
+ 018F  83 C2 FD			        add     dx,INT_EN_REG_OFFSET - MDM_CTL_REG_OFFSET
+				        OutByteDel bx                 ; disable all interrupts
+ 0199  83 C2 04			        add     dx,LINE_ST_REG_OFFSET - INT_EN_REG_OFFSET
+				        InByteDel bx                  ; clear line and error interrupts
+ 01A3  83 C2 01			        add     dx,MDM_ST_REG_OFFSET - LINE_ST_REG_OFFSET
+				        InByteImm                  ; clear modem interrupts
+ 01A7  83 EA 06			        sub     dx,MDM_ST_REG_OFFSET
+				        InByteImm                  ; read input buffer
+
+ 01AB				empty_RX_buffer_loop:
+ 01AB  83 C2 05			        add     dx,LINE_ST_REG_OFFSET
+				        InByteImm
+ 01AF  83 EA 05			        sub     dx,LINE_ST_REG_OFFSET
+ 01B2  A8 01			        test    al,LINE_ST_RCV_DATA_READY
+ 01B4  74 03			        jz      enable_FIFOs
+				        InByteImm
+ 01B7  EB F2			        jmp     empty_RX_buffer_loop
+
+
+ 01B9				enable_FIFOs:
+ 01B9  83 C2 02			        add     dx,FIFO_CTL_REG_OFFSET
+ 01BC  B0 07			        mov     al,07h
+				        OutByteDel bx
+				        InByteDel bx
+ 01CC  8A E0			        mov     ah,al     ; save for 16 bit addressing test
+ 01CE  24 C0			        and     al,0c0h
+ 01D0  3C C0			        cmp     al,0c0h
+ 01D2  75 07			        jne     no_FIFO
+ 01D4  81 4C 04 2000		        or      [si].s_stDeviceParms.wDeviceFlag2,DEV_FLAG2_FIFO_AVAILABLE
+ 01D9  EB 09			        jmp     @f
+
+ 01DB				no_FIFO:
+ 01DB  80 64 26 E7		        and     [si].s_stDeviceParms.byFlag3,NOT F3_HDW_BUFFER_MASK
+ 01DF  81 64 04 DFFF		        and     [si].s_stDeviceParms.wDeviceFlag2,NOT DEV_FLAG2_FIFO_AVAILABLE
+				;        xor     al,al
+				;        OutByteDel bx
+ 01E4				@@:
+				; test for 16 bit addressing
+ 01E4  F7 C2 FC00		        test    dx,0fc00h   ; if bits are on then device is 16 bit addressable
+ 01E8  75 13			        jnz     is_16_bit_addressable
+ 01EA  81 CA 8000		        or      dx,08000h
+				        InByteDel bx
+ 01F5  81 E2 7FFF		        and     dx,07fffh
+ 01F9  3A C4			        cmp     al,ah
+ 01FB  75 07			        jne     @f
+
+ 01FD				is_16_bit_addressable:
+ 01FD  65: C7 06 0000 E		        mov     GS:_bUsesSixteenAddrLines,TRUE
+       0001
+ 0204				@@:
+				  IFDEF NO_4x_CLOCK_SUPPORT
+				  ENDIF
+ 0204				set_test_BAUD::  
+				; set the baud rate for these next tests  
+				; if LOAD_FLAG1_FORCE_4X_TEST is true then
+				;   set to 1200 baud
+				;     The baud rate must be at least 1200 baud (or 10 milliseconds/character).
+				;     The reason for the low maximum is in case the port is an idiot built-in
+				;     modem (old hardware).
+				; else
+				;   set to 57600 baud
+				;
+				; save baud rate (just in case something very low level, debugger maybe,
+				; has already set up the port).
+
+ 0204  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 0207  83 C2 03			        add     dx,LINE_CTL_REG_OFFSET
+ 020A  B0 80			        mov     al,80h
+				        OutByteDel bx
+ 0213  83 C2 FD			        add     dx,DLB_LOW_REG_OFFSET - LINE_CTL_REG_OFFSET
+				        InByteDel bx
+ 021D  88 46 FE			        mov     BYTE PTR wSaveBaudDivisor,al
+ 0220  B0 02			        mov     al,2   ; 57600 baud
+ 0222  65: F7 06 0000 E		        test    GS:_wLoadFlags,LOAD_FLAG1_FORCE_4X_TEST
+       0010
+ 0229  74 02			        jz      @f
+ 022B  B0 60			        mov     al,96   ; 1200 baud
+ 022D				@@:        
+				        OutByteDel bx
+ 0234  83 C2 01			        add     dx,DLB_HI_REG_OFFSET - DLB_LOW_REG_OFFSET
+				        InByteDel bx
+ 023E  88 46 FF			        mov     BYTE PTR wSaveBaudDivisor + 1,al
+ 0241  32 C0			        xor     al,al
+				        OutByteDel bx
+ 024A  83 C2 02			        add     dx,LINE_CTL_REG_OFFSET - DLB_HI_REG_OFFSET
+				; set  8, none, 1 line characteristics for tests
+ 024D  B0 03			        mov     al,03h ;setup eight bit data for tests
+				        OutByteDel bx
+
+				; Request interrupt for connection test
+ 0256				req_interrupt_test::
+ 0256  65: C7 06 0000 E		        mov     GS:_bValidIntIDreg,FALSE
+       0000
+ 025D  65: C7 06 0000 E		        mov     GS:_bValidInterrupt,FALSE
+       0000
+ 0264  65: 89 36 0000 E		        mov     GS:_wInitTestPort,si
+
+ 0269  B6 00			        mov     dh,DH_SIRQ_NOT_SHARED
+ 026B  83 3E 0000 E 01		        cmp     bSharedInterrupts,TRUE
+ 0270  75 02			        jne     @f
+ 0272  B6 01			        mov     dh,DH_SIRQ_SHARED
+ 0274				@@:
+ 0274  B8 080E R		        mov     ax,OFFSET InitInterrupt
+ 0277  33 DB			        xor     bx,bx
+ 0279  8A 5C 36			        mov     bl,[si].s_stDeviceParms.byInterruptLevel
+ 027C  80 FB 01			        cmp     bl,MIN_INT_LEVEL
+ 027F  72 0D			        jb      output_invalid_int_msg
+ 0281  80 FB 0F			        cmp     bl,MAX_INT_LEVEL
+ 0284  77 08			        ja      output_invalid_int_msg
+ 0286  B2 1B			        mov     dl,DevHlp_SetIRQ
+ 0288  FF 1E 0000 E		        call    device_hlp
+ 028C  73 37			        jnc     test_interrupt_used
+
+ 028E				output_invalid_int_msg:
+ 028E  33 C9			        xor     cx,cx
+ 0290  8A CB			        mov     cl,bl
+ 0292  E8 0000 E		        call    GetCOMnumber
+				        INVOKE sprintf,ADDR _szMessage,0,ADDR _szInterruptError_uu,cx,bx
+ 0295  53		   *	    push   bx
+ 0296  51		   *	    push   cx
+ 0297  0F A8		   *	    push   gs
+ 0299  68 0000 E	   *	    push   OFFSET DGROUP: _szInterruptError_uu
+ 029C  6A 00		   *	    push   +00000h
+ 029E  0F A8		   *	    push   gs
+ 02A0  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 02A3  9A ---- 0000 E	   *	    call   sprintf
+ 02A8  83 C4 0E		   *	    add    sp, 0000Eh
+				        INVOKE PrintMessage,ADDR _szMessage,ax
+ 02AB  50		   *	    push   ax
+ 02AC  0F A8		   *	    push   gs
+ 02AE  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 02B1  9A ---- 0000 E	   *	    call   PrintMessage
+ 02B6  83 C4 06		   *	    add    sp, 00006h
+ 02B9  65: C7 06 0000 E		        mov     GS:_bBadLoad,TRUE
+       0001
+ 02C0  F9			        stc
+ 02C1  9C			        pushf
+ 02C2  E9 049E			        jmp     HDW_test_exit
+
+				; determine if we need to call RegisterStackUsage
+ 02C5				test_interrupt_used::
+ 02C5  33 C0			        xor     ax,ax
+ 02C7  8A 44 36			        mov     al,[si].s_stDeviceParms.byInterruptLevel
+ 02CA  8B C8			        mov     cx,ax
+ 02CC  BB 0001			        mov     bx,1
+ 02CF  D3 E3			        shl     bx,cl
+ 02D1  65: 83 3E 0000 E		        cmp     GS:_bIsTheFirst,TRUE
+       01
+ 02D7  75 0C			        jne     @f
+ 02D9  85 1E 0000 E		        test    wInterruptsUsed,bx
+ 02DD  75 69			        jnz     test_interrupts
+ 02DF  09 1E 0000 E		        or      wInterruptsUsed,bx
+ 02E3  EB 15			        jmp     register_stack_usage
+ 02E5				@@:
+ 02E5  E8 0000 E		        call    SetRing0Access
+ 02E8  72 10			        jc      register_stack_usage
+ 02EA  83 EC 06			        sub     sp,6            ;API expects to pop 12 words, just pretending to push three words
+ 02ED  68 0000 E		        push    OFFSET IDCdata  ; offset to IDC data area
+ 02F0  50			        push    ax              ; interrupt level to test
+ 02F1  6A 07			        push    DO_IDC_ACCESS_IRQ   ; ring zero IDC function call
+ 02F3  65: FF 1E 0000 E		        call    GS:_Ring0Vector
+ 02F8  72 4E			        jc      test_interrupts
+
+ 02FA				register_stack_usage:
+ 02FA  33 C0			        xor     ax,ax
+ 02FC  8A 44 36			        mov     al,[si].s_stDeviceParms.byInterruptLevel
+ 02FF  BB 0000 E		        lea     bx,stStackUsage
+ 0302  89 47 04			        mov     [bx].s_stStackUsage.wIRQlevel,ax
+ 0305  BA 003A			        mov     dx,DevHlp_RegisterStackUsage
+ 0308  FF 1E 0000 E		        call    device_hlp
+ 030C  72 02			        jc      output_no_stack_msg
+ 030E  EB 38			        jmp     test_interrupts
+
+ 0310				output_no_stack_msg:
+ 0310  33 C9			        xor     cx,cx
+ 0312  8A 4C 36			        mov     cl,[si].s_stDeviceParms.byInterruptLevel
+ 0315  E8 0000 E		        call    GetCOMnumber
+				        INVOKE sprintf,ADDR _szMessage,0,ADDR _szNoStackAvailable_uu,bx,cx
+ 0318  51		   *	    push   cx
+ 0319  53		   *	    push   bx
+ 031A  0F A8		   *	    push   gs
+ 031C  68 0000 E	   *	    push   OFFSET DGROUP: _szNoStackAvailable_uu
+ 031F  6A 00		   *	    push   +00000h
+ 0321  0F A8		   *	    push   gs
+ 0323  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 0326  9A ---- 0000 E	   *	    call   sprintf
+ 032B  83 C4 0E		   *	    add    sp, 0000Eh
+				        INVOKE PrintMessage,ADDR _szMessage,ax
+ 032E  50		   *	    push   ax
+ 032F  0F A8		   *	    push   gs
+ 0331  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 0334  9A ---- 0000 E	   *	    call   PrintMessage
+ 0339  83 C4 06		   *	    add    sp, 00006h
+ 033C  65: C7 06 0000 E		        mov     GS:_bBadLoad,TRUE
+       0001
+ 0343  F9			        stc
+ 0344  9C			        pushf
+ 0345  E9 03CF			        jmp     restore_UART
+
+ 0348				test_interrupts::
+				; if interrupt ID register is defined then initialize it in case it
+				; is really a scratch register (user error)
+ 0348  83 3E 0000 E 00		        cmp     wIntIDregister,ZERO
+ 034D  74 0F			        je      @f
+ 034F  8B 16 0000 E		        mov     dx,wIntIDregister
+ 0353  65: A0 0000 E		        mov     al,GS:_byIntIDregisterPreset
+				        OutByteDel bx
+ 035E				@@:
+				; Make OUT2 active - enables hardware connection for UART interrupts
+ 035E  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 0361  83 C2 04			        add     dx,MDM_CTL_REG_OFFSET
+ 0364  83 3E 0000 E 01		        cmp     bNoOUT2change,TRUE
+ 0369  74 10			        je      @f
+				        InByteDel bx
+ 0372  0C 08			        or      al,MDM_CTL_OUT2_ACTIVATE
+				        OutByteDel bx
+ 037B				@@:
+				; enable TX interrupts for interrupt connect test - this should cause an
+				; interrupt immediately after TX interrupts are enabled.
+ 037B  83 C2 FE			        add     dx,INT_ID_REG_OFFSET - MDM_CTL_REG_OFFSET
+				        InByteDel bx
+ 0385  83 C2 FF			        add     dx,INT_EN_REG_OFFSET - INT_ID_REG_OFFSET
+ 0388  B0 02			        mov     al,INT_EN_TX_HOLD_EMPTY
+				        OutByteDel bx
+				        
+				        Delay   2
+				; test if hardware is connected to specified interrupt level
+
+ 039C				init_interrupt_test_point::
+ 039C  32 C0			        xor     al,al
+				        OutByteDel bx                                 ; disable TxRdy interrupt
+ 03A5  83 C2 03			        add     dx,MDM_CTL_REG_OFFSET - INT_EN_REG_OFFSET
+ 03A8  83 3E 0000 E 01		        cmp     bNoOUT2change,TRUE
+ 03AD  74 10			        je      @f
+				        InByteDel bx
+ 03B6  24 F7			        and     al,NOT MDM_CTL_OUT2_ACTIVATE
+				        OutByteDel bx                                 ; deactivate OUT2
+ 03BF				@@:
+ 03BF  65: 83 3E 0000 E		        cmp     GS:_bValidInterrupt,TRUE
+       01
+ 03C5  0F 85 029F		        jne     bad_interrupt
+
+				  IFDEF OEM
+				; if this is an ISA machine and this load is OEM specific then test for
+				; interrupt ID register
+ 03C9  65: 83 3E 0000 E		        cmp     GS:_bABIOSpresent,TRUE
+       01
+ 03CF  74 37			        je      test_UART
+
+ 03D1  83 3E 0000 E 00		        cmp     wIntIDregister,ZERO
+ 03D6  75 20			        jne     test_valid_int_ID
+
+ 03D8  65: 83 3E 0000 E		        cmp     GS:_bIsTheFirst,TRUE
+       01
+ 03DE  74 28			        je      test_UART
+ 03E0  83 3E 0000 E 01		        cmp     bOEMpresent,TRUE
+ 03E5  74 21			        je      test_UART
+
+				; IF this is OEM specific (not Sealevel) then either there is an interrupt
+				; ID register or there has been a previous load of this device driver for a
+				; qualified adapter board, otherwise print error and disallow device support.
+
+ 03E7  E8 04A5			        call    BadISAmessage
+
+ 03EA				end_load_attempt:
+ 03EA  B8 FFFF			        mov     ax,0ffffh
+ 03ED  89 84 00A4		        mov     WORD PTR [si].s_stDeviceParms.stDeviceHeader.pNextHeader,ax
+ 03F1  89 84 00A6		        mov     WORD PTR [si + 2].s_stDeviceParms.stDeviceHeader.pNextHeader,ax
+ 03F5  E9 02EF			        jmp     bad_device
+
+ 03F8				test_valid_int_ID:
+				  ELSE
+				  ENDIF
+ 03F8  65: 83 3E 0000 E		        cmp     GS:_bValidIntIDreg,TRUE
+       01
+ 03FE  0F 85 0294		        jne     bad_int_ID_reg
+
+				  IFDEF OEM
+ 0402  C7 06 0000 E 0001	        mov     bOEMpresent,TRUE
+				  ENDIF
+
+ 0408				test_UART::
+ 0408  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 040B  83 C2 04			        add     dx,MDM_CTL_REG_OFFSET
+				        InByteDel bx
+ 0415  83 3E 0000 E 01		        cmp     bNoOUT2change,TRUE
+ 041A  74 02			        je      @f
+ 041C  24 F7			        and     al,NOT MDM_CTL_OUT2_ACTIVATE
+ 041E				@@:
+ 041E  0C 10			        or      al,MDM_CTL_LOOPBK_ENABLE
+				        OutByteDel bx                   ; deactivate OUT2 and enable Loopback
+				        Delay   2                       ; just in case :-)
+
+				; clear receive register (and FIFOs, if any) and test that loop back works
+
+ 0432				clear_RCV_reg:
+				        IOdelay bx
+ 0438  83 EA 04			        sub     dx,MDM_CTL_REG_OFFSET
+
+ 043B				clear_RCV_reg_loop:
+ 043B  83 C2 05			        add     dx,LINE_ST_REG_OFFSET
+				        InByteImm
+ 043F  83 EA 05			        sub     dx,LINE_ST_REG_OFFSET
+ 0442  A8 01			        test    al,LINE_ST_RCV_DATA_READY
+ 0444  74 03			        jz      test_loopback
+				        InByteImm
+ 0447  EB F2			        jmp     clear_RCV_reg_loop
+
+ 0449				test_loopback:
+ 0449  B0 AA			        mov     al,0aah
+				        OutByteDel bx
+				        Delay   2
+ 045D  32 C0			        xor     al,al
+				        InByteDel bx
+ 0466  3C AA			        cmp     al,0aah
+ 0468  74 03			        je     @f
+				; mov wHDWerror,4
+ 046A				not_UART_4::
+ 046A  E9 0251			        jmp     not_UART
+ 046D				@@:
+				;        jne     not_UART
+ 046D  B0 55			        mov     al,55h
+				        OutByteDel bx
+				        Delay   2
+ 0481  32 C0			        xor     al,al
+				        InByteDel bx
+ 048A  3C 55			        cmp     al,55h
+ 048C  74 03			        je     @f
+				; mov wHDWerror,5
+ 048E				not_UART_5::
+ 048E  E9 022D			        jmp     not_UART
+ 0491				@@:
+				;        jne     not_UART
+
+				; if not PCI device then clear baud multiplier
+ 0491  83 3E 0000 E 00		        cmp     wPCIvendor,0
+ 0496  74 0F			        je      test_baud_clock
+
+				; if PCI adapter and baud multiplier had already been set then skip test
+ 0498  65: 80 3E 0000 E		        cmp     GS:_xBaudMultiplier,0
+       00
+ 049E  74 07			        je      test_baud_clock
+ 04A0  65: A0 0000 E		        mov     al,GS:_xBaudMultiplier
+ 04A4  E9 0109			        jmp     set_baud_multiplier
+
+				; if there are FIFOs available then try to determine baud clock
+				; (still in loop back mode)
+				; Could test clock when there are no FIFOs, but it is unlikely that
+				; a faster clock will be available when there are no FIFOs anyway.
+				; So why bother?
+
+ 04A7				test_baud_clock::
+				; If there are no FIFOs then an X clock is NOT supported
+ 04A7  F7 44 04 2000		        test    [si].s_stDeviceParms.wDeviceFlag2,DEV_FLAG2_FIFO_AVAILABLE
+ 04AC  0F 84 0169		        jz      disable_FIFOs
+
+				; If there are FIFOs and the user wants to force an X clock test then allow it
+ 04B0  65: F7 06 0000 E		        test    GS:_wLoadFlags,LOAD_FLAG1_FORCE_4X_TEST
+       0010
+ 04B7  75 10			        jnz     test_X_clock
+
+				; always test clock for PCI devices
+ 04B9  83 3E 0000 E 00		        cmp     wPCIvendor,0
+ 04BE  75 09			        jne     test_X_clock
+
+				; Otherwise don't test for X baud clock if UART is 16550.
+				; There is a problem with some internal modems that will make us think
+				; there is a X clock when there is none.
+				        test_DeviceFlag2 (DEV_FLAG2_16650_UART OR DEV_FLAG2_16750_UART OR DEV_FLAG2_16654_UART)
+ 04C5  0F 84 0150		        jz      disable_FIFOs
+
+ 04C9				test_X_clock:
+				;  setting 75 BPS to allow detecting up to 16x baud clocks
+ 04C9  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 04CC  83 C2 03			        add     dx,LINE_CTL_REG_OFFSET
+ 04CF  B0 80			        mov     al,80h
+				        OutByteDel bx                                                                             
+ 04D8  83 C2 FD			        add     dx,DLB_LOW_REG_OFFSET - LINE_CTL_REG_OFFSET
+ 04DB  32 C0			        xor     al,al
+				        OutByteDel bx
+ 04E4  83 C2 01			        add     dx,DLB_HI_REG_OFFSET - DLB_LOW_REG_OFFSET
+ 04E7  B0 06			        mov     al,06h   ; 75 baud in order to test up to 16x baud clocks
+				        OutByteDel bx
+ 04F0  83 C2 02			        add     dx,LINE_CTL_REG_OFFSET - DLB_HI_REG_OFFSET
+ 04F3  B0 03			        mov     al,03h ;setup eight bit data for tests
+				        OutByteDel bx
+				        
+				; Only the 16650 has a bit to select the baud rate divisor.
+				; Just in case that bit is enabled from before a warm boot we will
+				; explicitly turn it off.
+
+				        test_DeviceFlag2 DEV_FLAG2_16650_UART
+ 0501  74 4B			        jz      test_timer
+ 0503  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 0506  83 C2 03			        add     dx,LINE_CTL_REG_OFFSET
+				        InByteImm
+ 050A  8A E0			        mov     ah,al           ;save LCR
+ 050C  B0 BF			        mov     al,0bfh         ;enable EFR access
+				        OutByteDel bx
+ 0515  83 C2 FF			        add     dx,EFR_REG_OFFSET - LINE_CTL_REG_OFFSET
+ 0518  B0 10			        mov     al,EFR_ENABLE_16650
+				        OutByteDel bx              ; enable 16650 extensions
+ 0521  83 C2 02			        add     dx,MDM_CTL_REG_OFFSET - EFR_REG_OFFSET
+				        InByteDel bx
+ 052B  24 7F			        and     al,NOT MDM_CTL_DIV_4_CLOCK
+ 052D  0C 10			        or      al,MDM_CTL_LOOPBK_ENABLE     ; just in case :-)
+				        OutByteDel bx
+ 0536  83 C2 FE			        add     dx,EFR_REG_OFFSET - MDM_CTL_REG_OFFSET
+ 0539  32 C0			        xor     al,al
+				        OutByteDel bx              ; disable 16650 extensions
+ 0542  83 C2 01			        add     dx,LINE_CTL_REG_OFFSET - EFR_REG_OFFSET
+ 0545  8A C4			        mov     al,ah
+				        OutByteDel bx              ; restore LCR, disabling EFR access
+
+ 054E				test_timer:
+				  IFNDEF NO_4x_CLOCK_SUPPORT
+				; The Connect Tech BlueHeat PCI adpater uses a 12x baud clock, so don't
+				; bother to test the baud clock.
+				;        cmp     wPCIvendor,PCI_VENDOR_MOXA
+				;        je      test_FIFO_size
+				;        cmp     wPCIvendor,PCI_VENDOR_CONNECTECH
+				;        jne     test_4x
+				;        test    wPCIdevice,PCI_DEVICE_BLUEHEAT_MSK
+				;        jz      test_4x
+				;        jmp     test_FIFO_size
+				;test_4x:
+ 054E  65: 83 3E 0000 E		        cmp     GS:_bTimerAvailable,TRUE
+       01
+ 0554  75 62			        jne     test_FIFO_size
+ 0556  B9 0010			        mov     cx,16
+				;        IOdelay bx
+ 0559  66| C7 06 0000 E		        mov     dwTimerCounter,0        ; restart timer counter
+       00000000
+
+ 0562  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+
+ 0565				test_fill_loop:                 ; fill FIFO (16 bytes)
+				        OutByteDel bx
+ 056C  E2 F7			        loop test_fill_loop
+
+				        IOdelay bx
+ 0574  83 C2 05			        add     dx,LINE_ST_REG_OFFSET
+
+ 0577				test_wait_loop:                 ; wait for holding register to be empty
+				        InByteImm
+ 0578  A8 20			        test    al,LINE_ST_TX_HOLD_EMPTY
+ 057A  74 FB			        jz      test_wait_loop
+
+				IFDEF _4X_baudClockOnly
+				ELSE
+				; sixteen characters (10 bits each) at 75 baud (clock divisor = 600h (1536))
+				;16 * 1/7.5 = 2128 ms with 1x (1.8432MHz) clock - EAX will be > 60        - (2128 / 32) = 66.5
+				;16 * 1/7.5 =  532 ms with 4x (7.3728MHz) clock - EAX will be < 60 & > 10 -  (532 / 32) = 16.6
+				;16 * 1/7.5 =  266 ms with 8x (14.7456MHz) clock - EAX will be < 15 & > 7 -  (266 / 32) = 8.3
+				;16 * 1/7.5 =  177 ms with 12x (22.1184MHz) clock - EAX will be < 7 & > 4 -  (177 / 32) = 5.5
+				;16 * 1/7.5 =  133 ms with 16x (29.4912MHz) clock - EAX will be < 5 & > 3 -  (133 / 32) = 4.2
+				; if EAX > 60, must be 1x clock
+
+ 057C				get_baud_multiplier::
+ 057C  66| A1 0000 E		        mov     eax,dwTimerCounter  ; save timer counter
+ 0580  66| 83 F8 3C		        cmp     eax,60
+ 0584  73 32			        jae     test_FIFO_size
+ 0586  66| 83 F8 28		        cmp     eax,40
+ 058A  72 04			        jb      test_4x
+ 058C  B0 01			        mov     al, 1
+ 058E  EB 20			        jmp     set_baud_multiplier
+ 0590				test_4x:
+ 0590  66| 83 F8 0F		        cmp     eax,15
+ 0594  72 04			        jb      test_8x
+ 0596  B0 04			        mov     al, 4
+ 0598  EB 16			        jmp     set_baud_multiplier
+ 059A				test_8x:
+ 059A  66| 83 F8 07		        cmp     eax,7
+ 059E  72 04			        jb      test_12x
+ 05A0  B0 08			        mov     al, 8
+ 05A2  EB 0C			        jmp     set_baud_multiplier
+ 05A4				test_12x:
+ 05A4  66| 83 F8 05		        cmp     eax,5
+ 05A8  72 04			        jb      set_16x
+ 05AA  B0 0C			        mov     al, 12
+ 05AC  EB 02			        jmp     set_baud_multiplier
+ 05AE				set_16x:
+ 05AE  B0 10			        mov     al, 16
+
+ 05B0				set_baud_multiplier::
+ 05B0  65: A2 0000 E		        mov    GS:_xBaudMultiplier,al
+ 05B4  88 84 0086		        mov    [si].s_stDeviceParms.xBaudMultiplier,al
+				ENDIF
+				  ENDIF ;NOT NO_4x_CLOCK_SUPPORT
+
+				; determine FIFO depth - 16650 only
+ 05B8				test_FIFO_size::
+				        test_DeviceFlag2 DEV_FLAG2_16650_UART
+ 05BD  74 5A			        jz      disable_FIFOs
+
+ 05BF  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+				;        sub     dx,LINE_ST_REG_OFFSET
+ 05C2  B9 0100			        mov     cx,256
+				        IOdelay bx
+
+ 05CB				empty_FIFO_loop:
+				;        InByteDel bx
+				        InByteImm
+ 05CC  E2 FD			        loop    empty_FIFO_loop
+
+ 05CE  B9 0080			        mov     cx,128
+ 05D1  B8 0001			        mov     ax,1
+				        IOdelay bx
+
+ 05DA				size_fill_loop:
+				;        OutByteDel bx
+				        OutByteImm
+ 05DB  40			        inc     ax
+ 05DC  E2 FC			        loop    size_fill_loop
+
+ 05DE  83 C2 05			        add     dx,LINE_ST_REG_OFFSET
+				        IOdelay bx
+
+ 05E7				size_wait_loop:                 ; wait for holding register to be empty
+				;        InByteDel bx
+				        InByteImm
+ 05E8  A8 20			        test    al,LINE_ST_TX_HOLD_EMPTY
+ 05EA  74 FB			        jz      size_wait_loop
+
+ 05EC  B9 0100			        mov     cx,256
+ 05EF  83 EA 05			        sub     dx,LINE_ST_REG_OFFSET
+ 05F2  33 C0			        xor     ax,ax
+ 05F4  C7 46 F8 0000		        mov     wFIFOcount,0
+				        IOdelay bx
+
+				; depending on the read buffer repeating the last character read once the FIFO is empty
+ 05FF				size_test_loop:
+				;        InByteDel bx
+				        InByteImm
+ 0600  3A C4			        cmp     al,ah
+ 0602  74 07			        je      size_found
+ 0604  FF 46 F8			        inc     wFIFOcount
+ 0607  8A E0			        mov     ah,al
+ 0609  E2 F4			        loop    size_test_loop
+
+ 060B				size_found::
+				;        cmp     al,40
+ 060B  83 7E F8 28		        cmp     wFIFOcount,40
+ 060F  7C 08			        jl      disable_FIFOs
+				        AND_DeviceFlag2 NOT DEV_FLAG2_16650_UART
+				        OR_DeviceFlag2 DEV_FLAG2_16654_UART
+
+ 0619				disable_FIFOs::
+ 0619  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 061C  83 C2 02			        add     dx,FIFO_CTL_REG_OFFSET
+ 061F  B0 07			        mov     al,FIFO_CTL_RESET_FIFOS
+				        OutByteDel bx                 ; reset FIFOs only (SMC fix)
+				;        xor     al,al
+				;        OutByteImm                    ; disable FIFOs
+
+ 0628				clear_RX_FIFO:
+
+ 0628  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 062B  83 3E 0000 E 01		        cmp     bNoOUT2change,TRUE
+ 0630  75 16			        jne     clear_RX_FIFO_loop
+ 0632  83 C2 04			        add     dx,MDM_CTL_REG_OFFSET
+				        InByteDel bx
+ 063C  B0 08			        mov     al,MDM_CTL_OUT2_ACTIVATE
+				        OutByteDel bx
+ 0645  83 EA 04			        sub     dx,MDM_CTL_REG_OFFSET
+
+ 0648				clear_RX_FIFO_loop:
+ 0648  83 C2 05			        add     dx,LINE_ST_REG_OFFSET
+				        InByteDel bx
+ 0652  83 EA 05			        sub     dx,LINE_ST_REG_OFFSET
+ 0655  A8 01			        test    al,LINE_ST_RCV_DATA_READY
+ 0657  74 03			        jz      valid_exit
+				        InByteImm
+ 065A  EB EC			        jmp     clear_RX_FIFO_loop
+
+ 065C				valid_exit:
+ 065C  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 065F  83 C2 02			        add     dx,INT_ID_REG_OFFSET
+				        InByteImm                       ; clear interrupts
+				        InByteImm                       ; again, just in case
+
+ 0664  F8			        clc
+ 0665  E9 0080			        jmp     test_UART_exit
+
+ 0668				bad_interrupt:
+ 0668  33 C9			        xor     cx,cx
+ 066A  8A 4C 36			        mov     cl,[si].s_stDeviceParms.byInterruptLevel
+ 066D  E8 0000 E		        call    GetCOMnumber
+				        INVOKE sprintf,ADDR _szMessage,0,ADDR _szHDWinterruptError_uu,
+				                                          bx,
+				                                          cx
+ 0670  51		   *	    push   cx
+ 0671  53		   *	    push   bx
+ 0672  0F A8		   *	    push   gs
+ 0674  68 0000 E	   *	    push   OFFSET DGROUP: _szHDWinterruptError_uu
+ 0677  6A 00		   *	    push   +00000h
+ 0679  0F A8		   *	    push   gs
+ 067B  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 067E  9A ---- 0000 E	   *	    call   sprintf
+ 0683  83 C4 0E		   *	    add    sp, 0000Eh
+				        INVOKE PrintMessage,ADDR _szMessage,ax
+ 0686  50		   *	    push   ax
+ 0687  0F A8		   *	    push   gs
+ 0689  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 068C  9A ---- 0000 E	   *	    call   PrintMessage
+ 0691  83 C4 06		   *	    add    sp, 00006h
+ 0694  EB 51			        jmp     bad_device
+
+ 0696				bad_int_ID_reg:
+ 0696  E8 0000 E		        call    GetCOMnumber
+				        INVOKE sprintf,ADDR _szMessage,0,ADDR _szInterruptIDerror_u,bx
+ 0699  53		   *	    push   bx
+ 069A  0F A8		   *	    push   gs
+ 069C  68 0000 E	   *	    push   OFFSET DGROUP: _szInterruptIDerror_u
+ 069F  6A 00		   *	    push   +00000h
+ 06A1  0F A8		   *	    push   gs
+ 06A3  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 06A6  9A ---- 0000 E	   *	    call   sprintf
+ 06AB  83 C4 0C		   *	    add    sp, 0000Ch
+				        INVOKE PrintMessage,ADDR _szMessage,ax
+ 06AE  50		   *	    push   ax
+ 06AF  0F A8		   *	    push   gs
+ 06B1  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 06B4  9A ---- 0000 E	   *	    call   PrintMessage
+ 06B9  83 C4 06		   *	    add    sp, 00006h
+ 06BC  EB 29			        jmp     bad_device
+
+ 06BE				not_UART:
+ 06BE  E8 0000 E		        call    GetCOMnumber
+				        INVOKE sprintf,ADDR _szMessage,0,ADDR _szHDWerror_xu,
+				                                          [si].s_stDeviceParms.wIObaseAddress,
+				                                          bx
+ 06C1  53		   *	    push   bx
+ 06C2  FF 74 32		   *	    push   word  ptr [+si]+00032h
+ 06C5  0F A8		   *	    push   gs
+ 06C7  68 0000 E	   *	    push   OFFSET DGROUP: _szHDWerror_xu
+ 06CA  6A 00		   *	    push   +00000h
+ 06CC  0F A8		   *	    push   gs
+ 06CE  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 06D1  9A ---- 0000 E	   *	    call   sprintf
+ 06D6  83 C4 0E		   *	    add    sp, 0000Eh
+				        INVOKE PrintMessage,ADDR _szMessage,ax
+ 06D9  50		   *	    push   ax
+ 06DA  0F A8		   *	    push   gs
+ 06DC  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 06DF  9A ---- 0000 E	   *	    call   PrintMessage
+ 06E4  83 C4 06		   *	    add    sp, 00006h
+
+ 06E7				bad_device:
+ 06E7  F9			        stc
+
+ 06E8				test_UART_exit:
+ 06E8  9C			        pushf
+
+				; clear interrupt control register - disable all interrupts
+
+ 06E9  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 06EC  83 C2 01			        add     dx,INT_EN_REG_OFFSET
+ 06EF  32 C0			        xor     al,al
+				        OutByteDel bx
+
+				; clear OUT2 and LOOP bits
+
+ 06F8  83 C2 03			        add     dx,MDM_CTL_REG_OFFSET - INT_EN_REG_OFFSET
+ 06FB  32 C0			        xor     al,al
+ 06FD  65: F7 45 02 0002	        test    GS:[di].s_stConfigParms.cwDeviceFlags2,CFG_FLAG2_ACTIVATE_OUT1
+ 0703  74 02			        jz      @f
+ 0705  B0 04			        mov     al,MDM_CTL_OUT1_ACTIVATE
+ 0707				@@:
+ 0707  83 3E 0000 E 01		        cmp     bNoOUT2change,TRUE
+ 070C  75 02			        jne     @f
+ 070E  0C 08			        or      al,MDM_CTL_OUT2_ACTIVATE
+ 0710				@@:
+				        OutByteDel bx
+
+				;restore baud rate and set default line characteristics
+
+ 0717				restore_UART:
+
+ 0717  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 071A  83 C2 03			        add     dx,LINE_CTL_REG_OFFSET
+				        InByteDel bx
+ 0724  0C 80			        or      al,80h
+				        OutByteDel bx
+ 072D  83 EA 03			        sub     dx,LINE_CTL_REG_OFFSET
+ 0730  8B 46 FE			        mov     ax,wSaveBaudDivisor
+				        OutByteDel bx
+ 073A  86 C4			        xchg    al,ah
+ 073C  42			        inc     dx
+				        OutByteDel bx
+ 0744  4A			        dec     dx
+ 0745  83 C2 03			        add     dx,LINE_CTL_REG_OFFSET
+				        InByteDel bx
+ 074F  B0 03			        mov     al,DEFAULT_LINE_CHARACTERISTICS
+				        OutByteDel bx
+
+ 0758				release_interrupt:
+ 0758  33 DB			        xor     bx,bx
+ 075A  8A 5C 36			        mov     bl,[si].s_stDeviceParms.byInterruptLevel
+ 075D  B2 1C			        mov     dl,DevHlp_UnSetIRQ
+ 075F  FF 1E 0000 E		        call    device_hlp
+
+ 0763				HDW_test_exit::
+ 0763  9D			        popf
+				        ret
+ 0764  1F		   *	    pop    ds
+ 0765  5A		   *	    pop    dx
+ 0766  58		   *	    pop    ax
+ 0767  8B E5		   *	    mov    sp, bp
+ 0769  5D		   *	    pop    bp
+ 076A  C3		   *	    ret    00000h
+
+ 076B				TestValidHDW ENDP       ; CARRY set if no UART found
+
+				;-------------------------------------------------------------------------
+				;
+				; ClearAllInterrupts
+				;
+				; This routine is necessary because if there is one port that is connected
+				; to an interrupt ID register that has any interrupts enabled, and pending,
+				; it will cause all ports initialized before it to fail the interrupt
+				; connection test.  This is because that port will cause the interrupt ID
+				; register to indicate an interrupt pending to the 8259 interrupt controller
+				; for that interrupt level, and therefore, until the ID register is cleared
+				; the 8359 will not cause the initialization interrupt routine to be called.
+				;
+				;-------------------------------------------------------------------------
+
+				; assume GS = DGROUP
+ 076B				ClearAllInterrupts PROC NEAR USES DI
+
+ 076B  57		   *	    push   di
+ 076C  BF 0000 E		        lea     di,_stConfigParms
+ 076F  65: 8B 0E 0000 E		        mov     cx,GS:_wLoadCount
+ 0774  0B C9			        or      cx,cx
+ 0776  0F 84 0092		        jz      exit
+
+
+ 077A				clear_all_OEM_loop:
+ 077A  83 3E 0000 E 01		        cmp     bSharedInterrupts,TRUE
+ 077F  74 1E			        je      clear_interrupts
+
+ 0781  8B 16 0000 E		        mov     dx,wIntIDregister
+				        InByteDel bx
+ 078C  65: F7 06 0000 E		        test    GS:_wLoadFlags,LOAD_FLAG1_DIGIBOARD08_INT_ID
+       0002
+ 0793  75 06			        jnz     DigiBoard_ID
+ 0795  0A C0			        or      al,al
+ 0797  74 3E			        jz      done
+ 0799  EB 04			        jmp     clear_interrupts
+
+ 079B				DigiBoard_ID:
+ 079B  A8 80			        test    al,80h
+ 079D  75 38			        jnz     done
+
+ 079F				clear_interrupts:
+ 079F  65: 8B 55 06		        mov     dx,GS:[di].s_stConfigParms.cwIObaseAddress
+ 07A3  83 C2 04			        add     dx,MDM_CTL_REG_OFFSET
+ 07A6  32 C0			        xor     al,al
+				        OutByteDel bx           ;clear modem comtrol register
+ 07AF  83 C2 FD			        add     dx,INT_EN_REG_OFFSET - MDM_CTL_REG_OFFSET
+				        OutByteDel bx              ;clear interrupt enable register
+ 07B9  83 C2 05			        add     dx,MDM_ST_REG_OFFSET - INT_EN_REG_OFFSET
+				        InByteDel bx               ;read modem status register
+ 07C3  83 C2 FF			        add     dx,LINE_ST_REG_OFFSET - MDM_ST_REG_OFFSET
+				        InByteImm               ;read line status register
+ 07C7  83 EA 05			        sub     dx,LINE_ST_REG_OFFSET
+				        InByteImm               ;read receive register
+				        InByteImm
+ 07CC  83 C2 02			        add     dx,INT_ID_REG_OFFSET
+				        InByteImm               ;read interrupt ID register
+				        InByteImm
+
+ 07D1				continue_loop:
+ 07D1  83 C7 2A			        add     di,TYPE s_stConfigParms
+ 07D4  49			        dec     cx
+ 07D5  75 A3			        jnz     clear_all_OEM_loop
+
+ 07D7				done:
+				; do sealevel SNAFU
+ 07D7  65: F7 06 0000 E		        test    GS:_wLoadFlags,LOAD_FLAG1_ENABLE_ALL_OUT2
+       0400
+ 07DE  74 2C			        jz      exit
+
+ 07E0  8B 16 0000 E		        mov     dx,wIntIDregister
+ 07E4  83 EA 03			        sub     dx,(SCRATCH_REG_OFFSET - MDM_CTL_REG_OFFSET)
+ 07E7  B9 0008			        mov     cx,8  ; This will change to a variable if a four port adapter
+				                      ; ever exists with this same problem.  For now only Sealevel's
+				                      ; eight port adapter is supported.
+ 07EA				activate_all_OUT2_loop:
+				        InByteDel bx
+ 07F1  0C 08			        or      al,MDM_CTL_OUT2_ACTIVATE
+				        OutByteDel bx
+ 07FA  83 C2 08			        add     dx,8
+ 07FD  E2 EB			        loop    activate_all_OUT2_loop
+ 07FF  C7 06 0000 E 0001	        mov     bNoOUT2change,TRUE
+ 0805  65: 81 26 0000 E		        and     GS:_wLoadFlags,NOT LOAD_FLAG1_ENABLE_ALL_OUT2
+       FBFF
+ 080C				exit:
+				        ret
+ 080C  5F		   *	    pop    di
+ 080D  C3		   *	    ret    00000h
+
+ 080E				ClearAllInterrupts ENDP
+
+ 080E				InitInterrupt PROC FAR
+				;  int 3
+				    SetDS     RDGROUP
+				    SetGS     DGROUP
+ 0817  8B C8			        mov     cx,ax
+ 0819  65: 8B 36 0000 E		        mov     si,GS:_wInitTestPort
+ 081E  8B 16 0000 E		        mov     dx,wIntIDregister
+ 0822  0B D2			        or      dx,dx
+ 0824  74 09			        jz      @f
+				        InByteDel bx
+ 082D  8A E0			        mov     ah,al
+ 082F				@@:
+ 082F  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 0832  83 C2 02			        add     dx,INT_ID_REG_OFFSET
+				        InByteDel bx
+ 083C  A8 01			        test    al,INT_ID_INT_PENDING
+ 083E  75 3B			        jnz     not_my_interrupt
+
+ 0840  83 3E 0000 E 00		        cmp     wIntIDregister,ZERO
+ 0845  74 20			        je      is_my_interrupt
+ 0847  65: F7 06 0000 E		        test    GS:_wLoadFlags,(LOAD_FLAG1_DIGIBOARD08_INT_ID OR LOAD_FLAG1_DIGIBOARD16_INT_ID)
+       0006
+ 084E  74 05			        jz      @f
+ 0850  E8 0110			        call    test_DigiBoard_ID
+ 0853  EB 03			        jmp     test_result
+ 0855				@@:
+ 0855  E8 004A			        call    test_ID_is_bits
+
+ 0858				test_result:
+ 0858  73 0D			        jnc     is_my_interrupt
+				  IFDEF OEM
+ 085A  C7 06 0000 E 0001	        mov     bOEMpresent,TRUE
+				  ENDIF
+ 0860  65: C7 06 0000 E		        mov     GS:_bValidIntIDreg,TRUE
+       0001
+
+ 0867				is_my_interrupt:
+ 0867  65: C7 06 0000 E		        mov     GS:_bValidInterrupt,TRUE
+       0001
+ 086E  8A 44 36			        mov     al,[si].s_stDeviceParms.byInterruptLevel
+ 0871  B2 31			        mov     dl,DevHlp_EOI
+ 0873  FF 1E 0000 E		        call    device_hlp
+ 0877  F8			        clc
+ 0878  FB			        sti
+ 0879  EB 13			        jmp     exit
+
+ 087B				not_my_interrupt:
+ 087B  83 3E 0000 E 01		        cmp     bSharedInterrupts,TRUE
+ 0880  74 0A			        je      @f
+ 0882  8A 44 36			        mov     al,[si].s_stDeviceParms.byInterruptLevel
+ 0885  FA			        cli
+ 0886  B2 31			        mov     dl,DevHlp_EOI
+ 0888  FF 1E 0000 E		        call    device_hlp
+ 088C				@@:
+ 088C  F9			        stc
+ 088D  FB			        sti
+ 088E				exit:
+ 088E  CB			        ret
+
+ 088F				InitInterrupt ENDP
+
+				IFDEF OEM
+
+ 088F				BadISAmessage PROC NEAR
+
+ 088F  B8 0000 E		        mov     ax,OFFSET ISA_bad_msg
+ 0892  E8 0000 E		        call    PrintString
+ 0895  B8 0000 E		        mov     ax,OFFSET Contact_msg
+ 0898  E8 0000 E		        call    PrintString
+ 089B  B8 0000 E		        mov     ax,OFFSET OS_tools_BLURB
+ 089E  E8 0000 E		        call    PrintString
+ 08A1  C3			        ret
+
+ 08A2				BadISAmessage ENDP
+				  ENDIF
+
+				IFDEF this_junk
+				ENDIF
+
+ 08A2				test_ID_is_bits PROC NEAR  uses ax
+
+				;  int 3
+ 08A2  50		   *	    push   ax
+ 08A3  80 3E 0000 E 06		        cmp     byAdapterType,HDWTYPE_SIX
+ 08A8  75 02			        jne     @f
+ 08AA  F6 D4			        not     ah
+ 08AC				@@:
+ 08AC  65: 0A 26 0000 E		        or      ah,GS:_byInitIntORmask
+ 08B1  65: 22 26 0000 E		        and     ah,GS:_byInitIntANDmask
+ 08B6  0A E4			        or      ah,ah
+ 08B8  75 03			        jnz     get_offset
+
+ 08BA				status_invalid:
+ 08BA  F8			        clc
+				        ret
+ 08BB  58		   *	    pop    ax
+ 08BC  C3		   *	    ret    00000h
+
+				; This algorithym assumes that only higher bits will be "undefined" because
+				; the there are less than eight ports on adapter.  It also assumes that the
+				; number of ports will vary by twos (i.e., 2, 4, 6, or 8 ports)
+
+ 08BD				get_offset:
+ 08BD  F6 C4 F0			        test    ah,0f0h      ; are any bits on in the upper nibble?
+ 08C0  74 19			        jz      lo_nibble
+ 08C2  F6 C4 0F			        test    ah,00fh      ; are any bits on in the lower nibble
+ 08C5  74 4E			        jz      hi_nibble
+
+				; bits in both nibbles are on
+ 08C7  8A C4			        mov     al,ah        ; save status
+ 08C9  24 F0			        and     al,0f0h      ; mask off lower nibble
+ 08CB  3C F0			        cmp     al,0f0h      ; are all bits in the upper nibble on?
+ 08CD  75 05			        jne     @f
+
+				; if so then mask off upper nibble and test lower nibble
+
+ 08CF  80 E4 0F			        and     ah,NOT 0f0h
+ 08D2  EB 07			        jmp     lo_nibble
+ 08D4				@@:
+ 08D4  3C C0			        cmp     al,0c0h      ; are all bits in upper two bits of the upper nibble?
+ 08D6  75 E2			        jne     status_invalid
+
+				; if so then mask those bits and test lower nibble
+
+ 08D8  80 E4 3F			        and     ah,NOT 0c0h
+
+ 08DB				lo_nibble:
+ 08DB  F6 C4 0C			        test    ah,00ch      ; are any of upper two bits on
+ 08DE  74 10			        jz      lo_nibble_lo_bits
+ 08E0  F6 C4 03			        test    ah,003h      ; are any of lower two bits on
+ 08E3  74 1D			        jz      lo_nibble_hi_bits
+
+				; bits are on in both upper and lower pairs
+
+ 08E5  8A C4			        mov     al,ah
+ 08E7  24 0C			        and     al,0ch
+ 08E9  3C 0C			        cmp     al,0ch      ; are both upper bits of pair on?
+ 08EB  75 CD			        jne     status_invalid
+
+ 08ED  80 E4 F3			        and     ah,NOT 0ch
+
+ 08F0				lo_nibble_lo_bits:
+ 08F0  0A E4			        or      ah,ah
+ 08F2  7A C6			        jpe     status_invalid
+ 08F4  F6 C4 02			        test    ah,02h
+ 08F7  75 04			        jnz     bit_1
+ 08F9  33 DB			        xor     bx,bx
+ 08FB  EB 53			        jmp     set_SI
+
+ 08FD				bit_1:
+ 08FD  BB 0001			        mov     bx,1
+ 0900  EB 4E			        jmp     set_SI
+
+ 0902				lo_nibble_hi_bits:
+ 0902  0A E4			        or      ah,ah
+ 0904  7A B4			        jpe     status_invalid
+ 0906  F6 C4 08			        test    ah,08h
+ 0909  75 05			        jnz     bit_3
+ 090B  BB 0002			        mov     bx,2
+ 090E  EB 40			        jmp     set_SI
+
+ 0910				bit_3:
+ 0910  BB 0003			        mov     bx,3
+ 0913  EB 3B			        jmp     set_SI
+
+ 0915				hi_nibble:
+ 0915  F6 C4 C0			        test    ah,0c0h      ; are any of upper two bits on
+ 0918  74 10			        jz      hi_nibble_lo_bits
+ 091A  F6 C4 30			        test    ah,030h      ; are any of lower two bits on
+ 091D  74 1E			        jz      hi_nibble_hi_bits
+
+				; bits are on in both upper and lower pairs
+
+ 091F  8A C4			        mov     al,ah
+ 0921  24 C0			        and     al,0c0h
+ 0923  3C C0			        cmp     al,0c0h      ; are both upper bits of pair on?
+ 0925  75 93			        jne     status_invalid
+
+ 0927  80 E4 3F			        and     ah,NOT 0c0h
+
+ 092A				hi_nibble_lo_bits:
+ 092A  0A E4			        or      ah,ah
+ 092C  7A 8C			        jpe     status_invalid
+ 092E  F6 C4 20			        test    ah,020h
+ 0931  75 05			        jnz     bit_5
+ 0933  BB 0004			        mov     bx,4
+ 0936  EB 18			        jmp     set_SI
+
+ 0938				bit_5:
+ 0938  BB 0005			        mov     bx,5
+ 093B  EB 13			        jmp     set_SI
+
+ 093D				hi_nibble_hi_bits:
+ 093D  0A E4			        or      ah,ah
+ 093F  0F 8A FF77		        jpe     status_invalid
+ 0943  F6 C4 80			        test    ah,080h
+ 0946  75 05			        jnz     bit_7
+ 0948  BB 0006			        mov     bx,6
+ 094B  EB 03			        jmp     set_SI
+
+ 094D				bit_7:
+ 094D  BB 0007			        mov     bx,7
+
+ 0950				set_SI:
+ 0950  8B CB			        mov     cx,bx
+ 0952  D1 E3			        shl     bx,1
+ 0954  89 B7 0000 E		        mov     wDeviceIntOffsetTable[bx],si
+ 0958  B3 01			        mov     bl,1
+ 095A  D2 E3			        shl     bl,cl
+ 095C  08 1E 0000 E		        or      byIntStatusMask,bl
+ 0960				return:
+ 0960  F9			        stc
+				        ret
+ 0961  58		   *	    pop    ax
+ 0962  C3		   *	    ret    00000h
+
+ 0963				test_ID_is_bits ENDP
+
+ 0963				test_DigiBoard_ID PROC NEAR
+
+				;  int 3
+ 0963  F6 C4 E0			        test    ah,0e0h
+ 0966  75 0D			        jnz     invalid_int_ID
+
+ 0968				valid_int_ID:
+ 0968  33 DB			        xor     bx,bx
+ 096A  8A DC			        mov     bl,ah
+ 096C  D1 E3			        shl     bx,1
+ 096E  89 B7 0000 E		        mov     wDeviceIntOffsetTable[bx],si
+
+ 0972  F9			        stc
+ 0973  EB 01			        jmp     exit
+
+ 0975				invalid_int_ID:
+ 0975  F8			        clc
+
+ 0976				exit:
+ 0976  C3			        ret
+
+ 0977				test_DigiBoard_ID ENDP
+
+ 0977				RES_CODE ENDS
+
+				     END

@@ -1,0 +1,46 @@
+This is a profile make file for the DFLEX version of COMi
+[COMi]
+Version=COMi version 3.81;
+Driver=DFLEX.SYS;
+OEM_type=7
+Files=1
+File_1=COMi.INF;
+ProgramSize=96798
+[Install]
+Apps Path=C:\DFLEX;
+Libs Path=C:\DFLEX;
+DD Config Help=CONFIG.HLP;
+DD Config Library=COMi_CFG;
+DD Config Function=InstallDevice;
+DD Name=COMi;
+Transfer Library=PDA_INST;
+Transfer Function=InstallCOMi;
+Version=OS/tools' Install, version 2.20;
+Check Caption One=COMi Device Driver;
+Check Caption Two=COMscope;
+Check Caption Three=Print Spooler Utilities;
+Check Caption Four=Multi-session Utilities;
+Check Caption Five=COMi Configuration and Installation;
+Title=COMi Device Driver Installation;
+Banner One=COMi Serial Device Driver;
+Banner Two=for Connect Tech DFLEX Serial Adapters;
+License File=license.txt;
+License Caption=License Information:;
+Files=8
+File_1=INSTALL.EXE;
+File_2=INSTALL.HLP;
+File_3=INSTALL.ICO;
+File_4=CONFIG.HLP;
+File_5=PDA_INST.DLL;
+File_6=OS2LS_UT.DLL;
+File_7=COMi_CFG.DLL;
+File_8=OS2LSRTL.DLL;
+ProgramSize=524602
+[Utilities]
+Files=3
+File_1=IOCTL.C;
+File_2=IOCTL.H;
+File_3=INIDUMP.EXE;
+ProgramSize=49663
+
+

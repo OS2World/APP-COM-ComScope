@@ -1,0 +1,148 @@
+
+ CLIENT
+
+ Start         Length     Name                   Class
+ 0001:00000000 000000928H CODE32                 CODE 32-bit
+	at offset 00000000 007D3H bytes from P:\connect\client\client.obj (p:\connect\client\client.c)
+	at offset 000007d4 00040H bytes from C:\IBMCPP\LIB\CPPOM30O.lib (d:\swordcsd\crt\dllinit.c)
+	at offset 00000814 00111H bytes from C:\IBMCPP\LIB\CPPOM30O.lib (d:\swordcsd\crt\ctordtor.c)
+
+ 0002:00000000 000000000H CONST32_RO             CONST 32-bit
+
+ 0002:00000000 00000000CH DATA32                 DATA 32-bit
+	at offset 00000000 00004H bytes from P:\connect\client\client.obj (p:\connect\client\client.c)
+	at offset 00000004 00004H bytes from C:\IBMCPP\LIB\CPPOM30O.lib (d:\swordcsd\crt\dllstub.asm)
+	at offset 00000008 00004H bytes from C:\IBMCPP\LIB\CPPOM30O.lib (d:\swordcsd\crt\ctordtor.c)
+
+ 0002:0000000C 000000000H CTOR_DTOR1             DATA 32-bit
+
+ 0002:0000000C 000000000H CTOR_DTOR2             DATA 32-bit
+
+ 0002:0000000C 000000000H CTOR_DTOR3             DATA 32-bit
+
+ 0002:0000000C 000000000H EDC1                   EDC_CLASS 32-bit
+
+ 0002:0000000C 000000000H EDC2                   EDC_CLASS 32-bit
+
+ 0002:0000000C 000000000H EDC3                   EDC_CLASS 32-bit
+
+ 0002:0000000C 000000048H BSS32                  BSS 32-bit
+	at offset 00000000 00048H bytes from P:\connect\client\client.obj (p:\connect\client\client.c)
+
+ 0002:00000054 000000018H c_common               BSS 32-bit
+
+
+ Origin   Group
+ 0000:0   FLAT
+ 0002:0   DGROUP
+
+ Address       Export                  Alias
+
+ 0001:00000000 EnableDebug             EnableDebug
+ 0001:00000010 InitCOM                 InitCOM
+ 0001:000006A8 SendRequest             SendRequest
+ 0001:00000788 StopCOM                 StopCOM
+
+  Address         Publics by Name
+
+ 0002:00000060       bDebug
+ 0000:00000000  Imp  DosAllocMem          (DOSCALLS.299)
+ 0000:00000000  Imp  DosCreateThread      (DOSCALLS.311)
+ 0000:00000000  Imp  DosFreeMem           (DOSCALLS.304)
+ 0000:00000000  Imp  DosKillThread        (DOSCALLS.111)
+ 0000:00000000  Imp  DosPostEventSem      (DOSCALLS.328)
+ 0000:00000000  Imp  DosResetEventSem     (DOSCALLS.327)
+ 0000:00000000  Imp  DosSetPriority       (DOSCALLS.236)
+ 0000:00000000  Imp  DosSleep             (DOSCALLS.229)
+ 0001:00000000       EnableDebug
+ 0000:00000000  Imp  free                 (OS2LS_UT.53)
+ 0002:00000068       h_errno
+ 0002:0000005C       iLastCOMerror
+ 0001:00000010       InitCOM
+ 0000:00000000  Imp  malloc               (OS2LS_UT.83)
+ 0000:00000000  Imp  memcpy               (OS2LS_UT.100)
+ 0000:00000000  Imp  memset               (OS2LS_UT.94)
+ 0001:00000368       ResponseThread
+ 0001:000006A8       SendRequest
+ 0001:00000788       StopCOM
+ 0002:00000054       ulMaxMessageBufferSize
+ 0002:00000002       usClientPort
+ 0002:00000000       usServerPort
+ 0000:00000000  Imp  WinPostMsg           (PMWIN.919)
+ 0000:00000000  Imp  _CRT_init            (OS2LS_UT.234)
+ 0000:00000000  Imp  _CRT_term            (OS2LS_UT.230)
+ 0002:00000004       _dllentry
+ 0001:000007D4       _DLL_InitTerm
+ 0002:0000000C       _edata
+ 0002:0000006C       _end
+ 0000:00000000  Imp  _exception_dllinit   (OS2LS_UT.213)
+ 0000:00000000  Imp  _matherr             (OS2LS_UT.173)
+ 0002:00000058       _matherr_ptr
+ 0000:00000000  Imp  _PGLOBAL_PTR         (OS2LS_UT.12)
+ 0002:00000008       __ctdtused
+ 0002:00000064       __ctordtorCurrent
+ 0002:0000000C       __ctordtorEnd
+ 0001:0000084C       __ctordtorInit
+ 0002:0000000C       __ctordtorStart
+ 0001:00000814       __ctordtorTerm
+
+  Address         Publics by Value
+
+ 0000:00000000  Imp  _CRT_init            (OS2LS_UT.234)
+ 0000:00000000  Imp  memcpy               (OS2LS_UT.100)
+ 0000:00000000  Imp  memset               (OS2LS_UT.94)
+ 0000:00000000  Imp  _CRT_term            (OS2LS_UT.230)
+ 0000:00000000  Imp  malloc               (OS2LS_UT.83)
+ 0000:00000000  Imp  WinPostMsg           (PMWIN.919)
+ 0000:00000000  Imp  free                 (OS2LS_UT.53)
+ 0000:00000000  Imp  _exception_dllinit   (OS2LS_UT.213)
+ 0000:00000000  Imp  DosSetPriority       (DOSCALLS.236)
+ 0000:00000000  Imp  DosCreateThread      (DOSCALLS.311)
+ 0000:00000000  Imp  DosKillThread        (DOSCALLS.111)
+ 0000:00000000  Imp  DosSleep             (DOSCALLS.229)
+ 0000:00000000  Imp  DosAllocMem          (DOSCALLS.299)
+ 0000:00000000  Imp  _matherr             (OS2LS_UT.173)
+ 0000:00000000  Imp  _PGLOBAL_PTR         (OS2LS_UT.12)
+ 0000:00000000  Imp  DosFreeMem           (DOSCALLS.304)
+ 0000:00000000  Imp  DosPostEventSem      (DOSCALLS.328)
+ 0000:00000000  Imp  DosResetEventSem     (DOSCALLS.327)
+ 0001:00000000       EnableDebug
+ 0001:00000010       InitCOM
+ 0001:00000368       ResponseThread
+ 0001:000006A8       SendRequest
+ 0001:00000788       StopCOM
+ 0001:000007D4       _DLL_InitTerm
+ 0001:00000814       __ctordtorTerm
+ 0001:0000084C       __ctordtorInit
+ 0002:00000000       usServerPort
+ 0002:00000002       usClientPort
+ 0002:00000004       _dllentry
+ 0002:00000008       __ctdtused
+ 0002:0000000C       __ctordtorEnd
+ 0002:0000000C       __ctordtorStart
+ 0002:0000000C       _edata
+ 0002:00000054       ulMaxMessageBufferSize
+ 0002:00000058       _matherr_ptr
+ 0002:0000005C       iLastCOMerror
+ 0002:00000060       bDebug
+ 0002:00000064       __ctordtorCurrent
+ 0002:00000068       h_errno
+ 0002:0000006C       _end
+
+Program entry point at 0001:000007D4
+
+P:\connect\client\client.obj(p:\connect\client\client.c) : error LNK2029: "gethostbyname" : unresolved external
+P:\connect\client\client.obj(p:\connect\client\client.c) : error LNK2029: "recv" : unresolved external
+P:\connect\client\client.obj(p:\connect\client\client.c) : error LNK2029: "bind" : unresolved external
+P:\connect\client\client.obj(p:\connect\client\client.c) : error LNK2029: "send" : unresolved external
+P:\connect\client\client.obj(p:\connect\client\client.c) : error LNK2029: "bswap" : unresolved external
+P:\connect\client\client.obj(p:\connect\client\client.c) : error LNK2029: "accept" : unresolved external
+P:\connect\client\client.obj(p:\connect\client\client.c) : error LNK2029: "socket" : unresolved external
+P:\connect\client\client.obj(p:\connect\client\client.c) : error LNK2029: "listen" : unresolved external
+P:\connect\client\client.obj(p:\connect\client\client.c) : error LNK2029: "soclose" : unresolved external
+P:\connect\client\client.obj(p:\connect\client\client.c) : error LNK2029: "connect" : unresolved external
+P:\connect\client\client.obj(p:\connect\client\client.c) : error LNK2029: "inet_addr" : unresolved external
+P:\connect\client\client.obj(p:\connect\client\client.c) : error LNK2029: "shutdown" : unresolved external
+P:\connect\client\client.obj(p:\connect\client\client.c) : error LNK2029: "sock_errno" : unresolved external
+P:\connect\client\client.obj(p:\connect\client\client.c) : error LNK2029: "setsockopt" : unresolved external
+

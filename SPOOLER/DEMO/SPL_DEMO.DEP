@@ -1,0 +1,14 @@
+
+.\spooler.obj: \
+    P:\spooler\spooler.c \
+    {P:\spooler;$(INCLUDE);}spooler.h \
+    {P:\spooler;$(INCLUDE);}port.h \
+    {P:\spooler;$(INCLUDE);}help.h \
+    {P:\spooler;$(INCLUDE);}ioctl.h \
+    {P:\spooler;$(INCLUDE);}menu.h \
+    {P:\spooler;$(INCLUDE);}usermsg.h \
+    {P:\spooler;$(INCLUDE);}SPOOL.H \
+    SPL_DEMO.mak
+
+f:\work\lib\SPL_DEMO.LIB: \
+    f:\work\lib\SPL_DEMO.PDR 

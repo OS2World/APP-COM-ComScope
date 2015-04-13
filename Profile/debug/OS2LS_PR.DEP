@@ -1,0 +1,10 @@
+
+.\profile.obj: \
+    p:\profile\profile.c \
+    {p:\profile;$(INCLUDE);}COMMON.H \
+    {p:\profile;$(INCLUDE);}profile.h \
+    {p:\profile;$(INCLUDE);}UTILITY.H
+
+f:\work\lib\PROFDEB.LIB: \
+    f:\work\lib\PROFDEB.dll
+

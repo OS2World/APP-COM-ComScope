@@ -1,0 +1,107 @@
+
+.\dev_notebk.obj: \
+    p:\config\dev_notebk.c \
+    {p:\config;$(INCLUDE);}COMMON.H \
+    {p:\config;$(INCLUDE);}COMDD.H \
+    {p:\config;$(INCLUDE);}ioctl.h \
+    {p:\config;$(INCLUDE);}utility.h \
+    {p:\config;$(INCLUDE);}help.h \
+    {p:\config;$(INCLUDE);}COMi_CFG.h \
+    {p:\config;$(INCLUDE);}resource.h \
+    {p:\config;$(INCLUDE);}config.h \
+    {p:\config;$(INCLUDE);}linklist.h \
+    {p:\config;$(INCLUDE);}ComControl.h
+
+.\ddbufdlg.obj: \
+    p:\config\ddbufdlg.c \
+    {p:\config;$(INCLUDE);}COMMON.H \
+    {p:\config;$(INCLUDE);}COMDD.H \
+    {p:\config;$(INCLUDE);}ioctl.h \
+    {p:\config;$(INCLUDE);}utility.h \
+    {p:\config;$(INCLUDE);}help.h \
+    {p:\config;$(INCLUDE);}COMi_CFG.h \
+    {p:\config;$(INCLUDE);}resource.h \
+    {p:\config;$(INCLUDE);}config.h \
+    {p:\config;$(INCLUDE);}linklist.h
+
+.\comddini.obj: \
+    p:\config\comddini.c \
+    {p:\config;$(INCLUDE);}COMMON.H \
+    {p:\config;$(INCLUDE);}COMDD.H \
+    {p:\config;$(INCLUDE);}ioctl.h \
+    {p:\config;$(INCLUDE);}utility.h \
+    {p:\config;$(INCLUDE);}help.h \
+    {p:\config;$(INCLUDE);}COMi_CFG.h \
+    {p:\config;$(INCLUDE);}resource.h \
+    {p:\config;$(INCLUDE);}config.h \
+    {p:\config;$(INCLUDE);}linklist.h \
+    {p:\config;$(INCLUDE);}spool.h
+
+.\cfg_prot_hlp.obj: \
+    p:\config\cfg_prot_hlp.c \
+    {p:\config;$(INCLUDE);}COMMON.H \
+    {p:\config;$(INCLUDE);}COMDD.H \
+    {p:\config;$(INCLUDE);}ioctl.h \
+    {p:\config;$(INCLUDE);}utility.h \
+    {p:\config;$(INCLUDE);}resource.h
+
+.\cfg_prot_dlg.obj: \
+    p:\config\cfg_prot_dlg.c \
+    {p:\config;$(INCLUDE);}COMMON.H \
+    {p:\config;$(INCLUDE);}COMDD.H \
+    {p:\config;$(INCLUDE);}ioctl.h \
+    {p:\config;$(INCLUDE);}utility.h \
+    {p:\config;$(INCLUDE);}COMi_CFG.h \
+    {p:\config;$(INCLUDE);}resource.h \
+    {p:\config;$(INCLUDE);}config.h \
+    {p:\config;$(INCLUDE);}linklist.h
+
+.\cfg_hlp.obj: \
+    p:\config\cfg_hlp.c \
+    {p:\config;$(INCLUDE);}COMMON.H \
+    {p:\config;$(INCLUDE);}COMDD.H \
+    {p:\config;$(INCLUDE);}ioctl.h \
+    {p:\config;$(INCLUDE);}utility.h \
+    {p:\config;$(INCLUDE);}help.h \
+    {p:\config;$(INCLUDE);}COMi_CFG.h \
+    {p:\config;$(INCLUDE);}config.h \
+    {p:\config;$(INCLUDE);}linklist.h
+
+.\cfg_dlg.obj: \
+    p:\config\cfg_dlg.c \
+    {p:\config;$(INCLUDE);}COMMON.H \
+    {p:\config;$(INCLUDE);}COMDD.H \
+    {p:\config;$(INCLUDE);}ioctl.h \
+    {p:\config;$(INCLUDE);}utility.h \
+    {p:\config;$(INCLUDE);}help.h \
+    {p:\config;$(INCLUDE);}COMi_CFG.h \
+    {p:\config;$(INCLUDE);}resource.h \
+    {p:\config;$(INCLUDE);}config.h \
+    {p:\config;$(INCLUDE);}linklist.h
+
+.\cfg_dev_dlg.obj: \
+    p:\config\cfg_dev_dlg.c \
+    {p:\config;$(INCLUDE);}COMMON.H \
+    {p:\config;$(INCLUDE);}COMDD.H \
+    {p:\config;$(INCLUDE);}ioctl.h \
+    {p:\config;$(INCLUDE);}utility.h \
+    {p:\config;$(INCLUDE);}help.h \
+    {p:\config;$(INCLUDE);}COMi_CFG.h \
+    {p:\config;$(INCLUDE);}resource.h \
+    {p:\config;$(INCLUDE);}config.h \
+    {p:\config;$(INCLUDE);}linklist.h
+
+.\fifo_dlg.obj: \
+    p:\config\fifo_dlg.c \
+    {p:\config;$(INCLUDE);}COMMON.H \
+    {p:\config;$(INCLUDE);}COMDD.H \
+    {p:\config;$(INCLUDE);}ioctl.h \
+    {p:\config;$(INCLUDE);}utility.h \
+    {p:\config;$(INCLUDE);}help.h \
+    {p:\config;$(INCLUDE);}COMi_CFG.h \
+    {p:\config;$(INCLUDE);}resource.h \
+    {p:\config;$(INCLUDE);}config.h \
+    {p:\config;$(INCLUDE);}linklist.h
+
+f:\work\lib\COMi_CFG.LIB: \
+    f:\work\lib\COMi_CFG.dll

@@ -1,0 +1,82 @@
+:TARGET.SUFFIXES
+:TARGET.SUFFIXES
+:DEPENDENCY..c .obj 
+:TARGET.all
+:DEPENDENCY.
+f:\work\Install.exe
+:RULE..c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Sp1 /Sd /Ss /Q /Fi /Si /O /W1 /Gm /Gd /G4 /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+:RULE.{p:\Install}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Sp1 /Sd /Ss /Q /Fi /Si /O /W1 /Gm /Gd /G4 /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+:RULE.{p:\Install\GA}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Sp1 /Sd /Ss /Q /Fi /Si /O /W1 /Gm /Gd /G4 /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+:TARGET.f:\work\Install.exe
+:DEPENDENCY.
+.\inst_dlg.obj
+.\winstall.obj
+.\help.obj
+.\instutil.obj
+p:\Install\INSTALL.Res
+{$(LIB)}OS2LSRTL.lib
+{$(LIB)}OS2386.lib
+{$(LIB)}CPPOM30O.lib
+{$(LIB)}OS2LS_UT.lib
+.\\..\Install.def
+:ACTION.Link::Linker
+:COMMAND.
+icc.exe @<<
+ /Q /B" /exepack:2 /pmtype:pm /packd /optfunc      /noe /m /nod"
+ /Fe"f:\work\Install.exe" 
+ OS2LSRTL.lib 
+ OS2386.lib 
+ CPPOM30O.lib 
+ OS2LS_UT.lib 
+ .\\..\Install.def
+ .\inst_dlg.obj
+ .\winstall.obj
+ .\help.obj
+ .\instutil.obj
+<<
+:ACTION.Bind::Resource Bind
+:COMMAND.
+rc.exe p:\Install\INSTALL.Res f:\work\Install.exe
+:TARGET..\inst_dlg.obj
+:DEPENDENCY.
+p:\Install\inst_dlg.c
+{p:\Install;$(INCLUDE);}COMMON.H
+{p:\Install;$(INCLUDE);}UTILITY.H
+{p:\Install;$(INCLUDE);}CONFIG.H
+{p:\Install;$(INCLUDE);}help.h
+{p:\Install;$(INCLUDE);}install.h
+{p:\Install;$(INCLUDE);}resource.h
+:TARGET..\instutil.obj
+:DEPENDENCY.
+p:\Install\instutil.c
+{p:\Install;$(INCLUDE);}COMMON.H
+{p:\Install;$(INCLUDE);}UTILITY.H
+{p:\Install;$(INCLUDE);}CONFIG.H
+{p:\Install;$(INCLUDE);}install.h
+{p:\Install;$(INCLUDE);}comdd.h
+:TARGET..\help.obj
+:DEPENDENCY.
+p:\Install\help.c
+{p:\Install;$(INCLUDE);}COMMON.H
+{p:\Install;$(INCLUDE);}UTILITY.H
+{p:\Install;$(INCLUDE);}install.h
+{p:\Install;$(INCLUDE);}resource.h
+:TARGET..\winstall.obj
+:DEPENDENCY.
+p:\Install\winstall.c
+{p:\Install;$(INCLUDE);}COMMON.H
+{p:\Install;$(INCLUDE);}UTILITY.H
+{p:\Install;$(INCLUDE);}CONFIG.H
+{p:\Install;$(INCLUDE);}help.h
+{p:\Install;$(INCLUDE);}install.h
+{p:\Install;$(INCLUDE);}instpage.h
+{p:\Install;$(INCLUDE);}resource.h

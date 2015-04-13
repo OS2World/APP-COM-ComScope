@@ -1,0 +1,1870 @@
+Microsoft (R) Macro Assembler Version 6.00     		    08/24/02 23:27:26
+UTIL.asm						     Page 1 - 1
+
+
+				;************************************************************************
+				;
+				; $Revision:   1.12  $
+				;
+				; $Log:   P:/archive/comi/util.asv  $
+				;
+				; Fixed GetReceiveQueueHSspan to handle 64K receive buffer
+				;
+				;     Rev 1.12   28 Mar 1996 00:20:26   EMMETT
+				;  Added resource manager.  Began work on VDD support.
+				;
+				;     Rev 1.11   21 Feb 1996 12:08:44   EMMETT
+				;  Fixed COMscope buffer access for DosDevIOCtl function calls
+				;  so that single byte transfers of packet data would not make write
+				;  pointer odd.
+				;
+				;     Rev 1.10   19 Feb 1996 10:43:20   EMMETT
+				;  Added many features, Notably:
+				;  Tracing of DosDevIOCtl calls and packets
+				;  Added 16650 and 16750 support
+				;  Streamlined Interrupt routine.
+				;
+				;     Rev 1.9   25 Apr 1995 22:17:12   EMMETT
+				;  Added Support for DigiBoard PC/16.  Changed interrupt Routine for better adapter independence.
+				;  Changed interrupt routine to allow user to select interrupting device selection algorithim.  Fixed
+				;  ABIOS interaction for better "non.INI" initialization in MCA machines.  Fixed various initialization
+				;  message strings.  COMscope and receive buffer are now allocated from system memory, allowing
+				;  a 32k (word) COMscope buffer and a 64k (byte) receive buffer.
+				;
+				;     Rev 1.8   03 Dec 1994 15:12:18   EMMETT
+				;  Changed segment names.
+				;
+				;     Rev 1.7   29 Jun 1994 07:40:36   EMMETT
+				;  Fixed transmit immediate byte to better handle null.
+				;
+				;     Rev 1.6   28 Jun 1994 09:12:42   EMMETT
+				;  Fixed early transmit time-out problem.
+				;
+
+
+				;     Rev 1.5   11 Jun 1994 10:37:50   EMMETT
+				;  Changed all references to "mirror" to "COMscope".
+				;
+				;     Rev 1.4   11 Jun 1994 09:28:56   EMMETT
+				;  Fixed handshake stuttering by clearing then setting interrupts (CLI/STI) within WriteReceiveQueue
+				;  when processing handshaking changes.
+				;
+				;     Rev 1.3   07 Jun 1994 00:19:48   EMMETT
+				;  Added support for DigiBoard.
+				;  Added initialization support for OEM specific loads.
+				;  Fixed bug in StartWriteStream and ProcessModemSignals that caused handshaking problems.
+				;  Fixed hardware tests to set baud rate before testing interrupts.
+				;  Fixed hardware tests off switch to work only for retail version.
+				;
+				;     Rev 1.2   27 Apr 1994 22:57:24   EMMETT
+				;  FIxed ABIOS stuff to work better than before.
+				;
+				;     Rev 1.1   18 Apr 1994 23:18:40   EMMETT
+				;  Changed ABIOS processing and added ability to disallow a port to initialize.
+				;
+				;     Rev 1.0   16 Apr 1994 08:35:50   EMMETT
+				;  Initial version control archive.
+				;
+				;************************************************************************
+
+				  IFNDEF x16_BIT
+				.386P
+				  ELSE
+				  ENDIF
+				.NOLISTMACRO                   ;suppress macro expansion in listing
+
+				.XLIST
+				.LIST
+
+ 0000				RES_DATA SEGMENT
+
+				    EXTRN wClockRate            :WORD
+				    EXTRN wClockRate2           :WORD
+
+				    EXTRN byLastModemOut        :BYTE
+				    EXTRN wIntIDregister        :WORD
+				    EXTRN bSharedInterrupts     :WORD
+				    EXTRN wPCIvendor            :WORD
+				    EXTRN wPCIdevice            :WORD
+				    EXTRN device_hlp            :DWORD
+				    EXTRN wIntRegistered        :WORD
+				    EXTRN wSystemDebug          :WORD
+				    EXTRN abyPath               :WORD
+				    EXTRN abyInterruptCount     :BYTE
+
+ 0000				RES_DATA ENDS
+
+ 0000				RES_CODE SEGMENT
+				    ASSUME CS:RCGROUP, ES:nothing, SS:nothing, DS:RDGROUP
+
+				    EXTRN COM_interrupt_1       :NEAR
+				    EXTRN COM_interrupt_2       :NEAR
+				    EXTRN COM_interrupt_3       :NEAR
+				    EXTRN COM_interrupt_4       :NEAR
+				    EXTRN COM_interrupt_5       :NEAR
+				    EXTRN COM_interrupt_6       :NEAR
+				    EXTRN COM_interrupt_7       :NEAR
+				    EXTRN COM_interrupt_8       :NEAR
+				    EXTRN COM_interrupt_9       :NEAR
+				    EXTRN COM_interrupt_10      :NEAR
+				    EXTRN COM_interrupt_11      :NEAR
+				    EXTRN COM_interrupt_12      :NEAR
+				    EXTRN COM_interrupt_13      :NEAR
+				    EXTRN COM_interrupt_14      :NEAR
+				    EXTRN COM_interrupt_15      :NEAR
+
+				;-----------------------------------------------------------------------
+				; Queue utilities
+				;-----------------------------------------------------------------------
+				; Get recieve queue HandShake span (count of characters from the read pointer
+				; to the write pointer
+				;-----------------------------------------------------------------------
+
+ 0000				GetReceiveQueueHSspan  PROC NEAR ; returns number of bytes to end of queue
+
+ 0000  F7 44 52 0001		        test    [si].s_stDeviceParms.wDeviceStatus1,DEV_ST1_RCV_QUEUE_FULL
+ 0005  74 05			        jz      @f
+ 0007  66| 33 C9		        xor     ecx,ecx
+ 000A  EB 1F			        jmp     exit
+ 000C				@@:
+ 000C  66| 8B 8C 0080		        mov     ecx,[si].s_stDeviceParms.dwReceiveQueueWritePointer
+ 0011  66| 2B 8C 0084		        sub     ecx,[si].s_stDeviceParms.dwReceiveQueueReadPointer
+ 0016  72 10			        jc      invert
+ 0018  66| 52			        push    edx
+ 001A  66| 8B 54 10		        mov     edx,[si].s_stDeviceParms.dwReadBufferLength
+ 001E  66| 2B D1		        sub     edx,ecx
+ 0021  66| 87 D1		        xchg    edx,ecx
+ 0024  66| 5A			        pop     edx
+ 0026  EB 03			        jmp     exit
+ 0028				invert:
+ 0028  66| F7 D1		        not     ecx
+ 002B				exit:
+ 002B  C3			        ret
+
+ 002C				GetReceiveQueueHSspan ENDP      ; results in ECX
+
+				;-----------------------------------------------------------------------
+				; Get the number (count) of characters in the transmit queue
+				;-----------------------------------------------------------------------
+ 002C				GetXmitQueueLen PROC NEAR
+
+ 002C  66| 0F B7 4C 5E		        movzx   ecx,[si].s_stDeviceParms.wXmitQueueCount
+ 0031  C3			        ret
+
+ 0032				GetXmitQueueLen  ENDP      ;ecx contains number of bytes in queue
+
+				;-----------------------------------------------------------------------
+				; Get the number (count) of characters in the recieve queue
+				;-----------------------------------------------------------------------
+ 0032				GetReceiveQueueLen PROC NEAR
+
+ 0032  F7 44 52 0001		        test    [si].s_stDeviceParms.wDeviceStatus1,DEV_ST1_RCV_QUEUE_FULL
+ 0037  74 06			        jz      @f
+ 0039  66| 8B 4C 10		        mov     ecx,[si].s_stDeviceParms.dwReadBufferLength
+ 003D  EB 1D			        jmp     exit
+ 003F				@@:
+ 003F  66| 8B 8C 0080		        mov     ecx,[si].s_stDeviceParms.dwReceiveQueueWritePointer
+ 0044  66| 2B 8C 0084		        sub     ecx,[si].s_stDeviceParms.dwReceiveQueueReadPointer
+ 0049  73 11			        jnc     exit
+ 004B  66| 52			        push    edx
+ 004D  66| F7 D1		        not     ecx
+ 0050  66| 8B 54 10		        mov     edx,[si].s_stDeviceParms.dwReadBufferLength
+ 0054  66| 2B D1		        sub     edx,ecx
+ 0057  66| 87 D1		        xchg    edx,ecx
+ 005A  66| 5A			        pop     edx
+ 005C				exit:
+ 005C  C3			        ret
+
+ 005D				GetReceiveQueueLen  ENDP   ;ecx contains number of bytes in queue
+
+				;-----------------------------------------------------------------------
+				; write received characters to the receive buffer
+				; also manage various handshake modes and states.
+				;-----------------------------------------------------------------------
+ 005D				WrtReceiveQueue PROC NEAR ;USES BX DI ;AL contains byte to store
+
+ 005D  F7 44 52 0001		        test    [si].s_stDeviceParms.wDeviceStatus1,DEV_ST1_RCV_QUEUE_FULL
+ 0062  74 56			        jz      wrt_place_byte
+ 0064  81 4C 4E 0080		        or      [si].s_stDeviceParms.wCOMevent,COM_EVENT_COM_ERROR
+ 0069  83 4C 50 01		        or      [si].s_stDeviceParms.wCOMerror,COMERR_RCV_QUEUE_OVERRUN
+				        COMscopeStream ebx, CSFUNC_TRACE_ERRORS, CS_READ_BUFF_OVERFLOW
+
+ 0097  F6 44 2D 04		        test    [si].s_stDeviceParms.byFlag2,F2_ENABLE_ERROR_REPL
+ 009B  74 1B			        jz      wrt_no_error_replace
+ 009D  66| 8B 9C 0080		        mov     ebx,[si].s_stDeviceParms.dwReceiveQueueWritePointer
+ 00A2  66| 3B 9C 0088		        cmp     ebx,[si].s_stDeviceParms.oReadBuffer
+ 00A7  74 04			        jz      wrt_do_wrap
+ 00A9  66| 4B			        dec     ebx
+ 00AB  EB 04			        jmp     wrt_error_replace
+
+ 00AD				wrt_do_wrap:
+ 00AD  66| 8B 5C 14		        mov     ebx,[si].s_stDeviceParms.dwReadBufferExtent
+
+ 00B1				wrt_error_replace:
+ 00B1  8A 44 2F			        mov     al,[si].s_stDeviceParms.byErrorChar
+				  IFNDEF x16_BIT
+				;        test_DeviceFlag2 DEV_FLAG2_USE_DD_DATA_SEGMENT
+				;        jnz     @f
+ 00B4  67& 65: 88 03		        mov     GS:[ebx],al
+				;        jmp     wrt_no_error_replace
+				;@@:
+				  ELSE
+				  ENDIF
+				;        mov     [ebx],al
+
+ 00B8				wrt_no_error_replace:
+ 00B8  F9			        stc
+ 00B9  C3			        ret
+
+ 00BA				wrt_place_byte::
+ 00BA  66| FF 84 00A8		        inc     [si].s_stDeviceParms.dwReceiveCount
+				  IFNDEF NO_COMscope
+ 00BF  F7 44 4C 1000		        test    [si].s_stDeviceParms.fCOMscopeFunction,CSFUNC_TRACE_RX_BUFF_LEVEL
+ 00C4  74 18			        jz      @f
+ 00C6  66| 8B 9C 00B8		        mov     ebx,[si].s_stDeviceParms.dwReadBufferLevel
+ 00CB  66| 43			        inc     ebx
+ 00CD  66| 89 9C 00B8		        mov     [si].s_stDeviceParms.dwReadBufferLevel,ebx
+ 00D2  66| 3B 9C 00B2		        cmp     ebx,[si].s_stDeviceParms.dwReadBufferHigh
+ 00D7  76 05			        jna     @f
+ 00D9  66| 89 9C 00B2		        mov     [si].s_stDeviceParms.dwReadBufferHigh,ebx
+ 00DE				@@:
+				        COMscopeStream ebx, CSFUNC_TRACE_INPUT_STREAM, CS_READ
+				  ENDIF
+
+ 0108  66| 8B 9C 0080		        mov     ebx,[si].s_stDeviceParms.dwReceiveQueueWritePointer
+				  IFNDEF x16_BIT
+				;        test_DeviceFlag2 DEV_FLAG2_USE_DD_DATA_SEGMENT
+				;        jnz     @f
+ 010D  67& 65: 88 03		        mov     GS:[ebx],al
+				;        jmp     wrt_test_place_wrap
+				;@@:
+				  ELSE
+				  ENDIF
+				;        mov     [ebx],al
+
+ 0111				wrt_test_place_wrap::
+ 0111  66| 3B 5C 14		        cmp     ebx,[si].s_stDeviceParms.dwReadBufferExtent
+ 0115  72 07			        jb      @f
+ 0117  66| 8B 9C 0088		        mov     ebx,[si].s_stDeviceParms.oReadBuffer
+ 011C  66| 4B			        dec     ebx
+ 011E				@@:
+ 011E  66| 43			        inc     ebx
+ 0120  66| 39 9C 0084		        cmp     [si].s_stDeviceParms.dwReceiveQueueReadPointer,ebx
+ 0125  75 04			        jne     wrt_receive_queue_not_full
+ 0127  83 4C 52 01		        or      [si].s_stDeviceParms.wDeviceStatus1,DEV_ST1_RCV_QUEUE_FULL    ;indicate receive overflow
+
+ 012B				wrt_receive_queue_not_full::
+ 012B  66| 89 9C 0080		        mov     [si].s_stDeviceParms.dwReceiveQueueWritePointer,ebx
+ 0130  83 64 52 BF		        and     [si].s_stDeviceParms.wDeviceStatus1,NOT DEV_ST1_RCV_QUEUE_EMPTY
+ 0134  FA			        cli
+ 0135  8B 7C 02			        mov     di,[si].s_stDeviceParms.wDeviceFlag1
+ 0138  F7 C7 E000		        test    di,DEV_FLAG1_INPUT_HS_MASK
+ 013C  0F 84 00AF		        jz      wrt_no_input_HS
+ 0140  F7 C7 0400		        test    di,DEV_FLAG1_INPUT_HS_IN_PROGRESS
+ 0144  0F 85 00A7		        jnz     wrt_no_input_HS
+
+ 0148				InputHandshakeDB::
+				;  test for write -> read pointer convergence
+
+				;  if the distance from the write index to the read index is less than
+				;  the Xoff threshold value, then send an Xoff character.
+
+ 0148  66| 2B 9C 0084		        sub     ebx,[si].s_stDeviceParms.dwReceiveQueueReadPointer
+ 014D  73 0E			        jnc     wrt_no_wrap
+ 014F  66| F7 D3		        not     ebx
+ 0152  3B 5C 36			        cmp     bx,[si].s_stDeviceParms.wXoffThreshold
+ 0155  0F 87 0096		        ja      wrt_no_input_HS
+ 0159  66| 52			        push    edx
+ 015B  EB 10			        jmp     wrt_send_Xoff
+
+ 015D				wrt_no_wrap:
+ 015D  66| 52			        push    edx
+ 015F  66| 8B 54 14		        mov     edx,[si].s_stDeviceParms.dwReadBufferExtent
+ 0163  66| 2B D3		        sub     edx,ebx
+ 0166  3B 54 36			        cmp     dx,[si].s_stDeviceParms.wXoffThreshold
+ 0169  0F 87 0080		        ja      HS_exit
+
+ 016D				wrt_send_Xoff::
+				        OR_DeviceFlag1 DEV_FLAG1_INPUT_HS_IN_PROGRESS
+ 0172  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 0175  F7 C7 8000		        test    di,DEV_FLAG1_INPUT_XON_XOFF_HS
+ 0179  74 24			        jz      wrt_test_hdw_HS
+ 017B  F7 C7 0010		        test    di,DEV_FLAG1_EVENT_XOFF_SENT
+ 017F  75 1E			        jnz     wrt_test_hdw_HS
+ 0181  F6 44 2D 20		        test    [si].s_stDeviceParms.byFlag2,F2_ENABLE_FULL_DUPLEX
+ 0185  75 05			        jnz     @f
+ 0187  80 8C 00A5 10		        or      [si].s_stDeviceParms.byHSstatus,TX_WAITING_BECAUSE_XOFF_TX
+ 018C				@@:
+				        OR_DeviceFlag1 DEV_FLAG1_EVENT_XOFF_SENT
+ 0190  8A 44 32			        mov     al,[si].s_stDeviceParms.byXoffChar
+ 0193  88 44 33			        mov     [si].s_stDeviceParms.byImmediateByte,al
+				        OR_DeviceFlag1 DEV_FLAG1_IMM_BYTE_WAITING
+ 019A  57			        push    di
+ 019B  E8 051F			        call    StartWriteStream
+ 019E  5F			        pop     di
+
+ 019F				wrt_test_hdw_HS::
+ 019F  F7 C7 6000		        test    di,DEV_FLAG1_HDW_INPUT_HS_MASK
+ 01A3  74 48			        jz      HS_exit
+ 01A5  83 C2 04			        add     dx,MDM_CTL_REG_OFFSET
+				        InByteImm
+ 01A9  F7 C7 4000		        test    di,DEV_FLAG1_RTS_INPUT_HS
+ 01AD  74 02			        jz      wrt_test_DTR
+ 01AF  24 FD			        and     al,NOT MDM_CTL_RTS_ACTIVATE
+
+ 01B1				wrt_test_DTR::
+ 01B1  F7 C7 2000		        test    di,DEV_FLAG1_DTR_INPUT_HS
+ 01B5  74 02			        jz      wrt_modem_ctl_out
+ 01B7  24 FE			        and     al,NOT MDM_CTL_DTR_ACTIVATE
+
+ 01B9				wrt_modem_ctl_out::
+				        COMscopeStream ebx, CSFUNC_TRACE_MODEM_OUT_SIGNALS, CS_MODEM_OUT
+				        OutByteDel bx
+ 01EA  83 EA 04			        sub     dx,MDM_CTL_REG_OFFSET
+
+ 01ED				HS_exit:
+ 01ED  66| 5A			        pop     edx
+
+ 01EF				wrt_no_input_HS:
+ 01EF  FB			        sti
+ 01F0  F8			        clc
+ 01F1  C3			        ret
+
+ 01F2				WrtReceiveQueue ENDP      ;carry set if attempt to write full buffer
+
+				;-----------------------------------------------------------------------
+				; read received characters from the receive buffer
+				; also manage various handshake modes and states.
+				;-----------------------------------------------------------------------
+ 01F2				ReadReceiveQueue PROC NEAR USES dx bx di
+
+ 01F2  52		   *	    push   dx
+ 01F3  53		   *	    push   bx
+ 01F4  57		   *	    push   di
+ 01F5  F7 44 52 0040		        test    [si].s_stDeviceParms.wDeviceStatus1,DEV_ST1_RCV_QUEUE_EMPTY
+ 01FA  74 04			        jz      @f
+ 01FC  F9			        stc
+ 01FD  E9 00DF			        jmp     exit
+ 0200				@@:
+				  IFNDEF NO_COMscope
+ 0200  F7 44 4C 1000		        test    [si].s_stDeviceParms.fCOMscopeFunction,CSFUNC_TRACE_RX_BUFF_LEVEL
+ 0205  74 0C			        jz      @f
+ 0207  66| FF 8C 00B8		        dec     [si].s_stDeviceParms.dwReadBufferLevel
+ 020C  71 05			        jno     @f
+ 020E  66| FF 84 00B8		        inc     [si].s_stDeviceParms.dwReadBufferLevel
+
+ 0213				@@:
+				  ENDIF
+ 0213  66| 8B 9C 0084		        mov     ebx,[si].s_stDeviceParms.dwReceiveQueueReadPointer
+				  IFNDEF x16_BIT
+				;        test_DeviceFlag2 DEV_FLAG2_USE_DD_DATA_SEGMENT
+				;        jnz     @f
+ 0218  67& 65: 8A 03		        mov     al,GS:[ebx]
+				;        jmp     rd_test_wrap
+				;@@:
+				  ELSE
+				  ENDIF
+				;        mov     al,[bx]
+
+ 021C				rd_test_wrap:
+ 021C  66| 3B 5C 14		        cmp     ebx,[si].s_stDeviceParms.dwReadBufferExtent
+ 0220  72 07			        jb      @f
+ 0222  66| 8B 9C 0088		        mov     ebx,[si].s_stDeviceParms.oReadBuffer
+ 0227  66| 4B			        dec     ebx
+ 0229				@@:
+ 0229  66| 43			        inc     ebx
+ 022B  66| 39 9C 0080		        cmp     [si].s_stDeviceParms.dwReceiveQueueWritePointer,ebx
+ 0230  75 04			        jne     @f
+ 0232  83 4C 52 40		        or      [si].s_stDeviceParms.wDeviceStatus1,DEV_ST1_RCV_QUEUE_EMPTY
+ 0236				@@:
+ 0236  66| 89 9C 0084		        mov     [si].s_stDeviceParms.dwReceiveQueueReadPointer,ebx
+ 023B  83 64 52 FE		        and     [si].s_stDeviceParms.wDeviceStatus1,NOT DEV_ST1_RCV_QUEUE_FULL
+ 023F  8B 7C 02			        mov     di,[si].s_stDeviceParms.wDeviceFlag1
+ 0242  F7 C7 E000		        test    di,DEV_FLAG1_INPUT_HS_MASK
+ 0246  0F 84 0094		        jz      rd_no_input_HS
+ 024A  F7 C7 0400		        test    di,DEV_FLAG1_INPUT_HS_IN_PROGRESS
+ 024E  0F 84 008C		        jz      rd_no_input_HS
+
+				;  test for read <- write pointer divergence
+
+				;  if the distance from the read index to the write index decreases to, or
+				;  is less than, the Xon threshold value, then send an Xon character.
+
+ 0252  66| 2B 9C 0080		        sub     ebx,[si].s_stDeviceParms.dwReceiveQueueWritePointer
+ 0257  73 04			        jnc     rd_no_wrap
+ 0259  66| 03 5C 10		        add     ebx,[si].s_stDeviceParms.dwReadBufferLength
+ 025D				rd_no_wrap:
+ 025D  3B 5C 34			        cmp     bx,[si].s_stDeviceParms.wXonThreshold
+ 0260  72 7C			        jb      rd_no_input_HS
+
+ 0262				rd_send_Xon::
+				        AND_DeviceFlag1 (NOT DEV_FLAG1_INPUT_HS_IN_PROGRESS)
+ 0267  50			        push    ax
+ 0268  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 026B  F7 C7 8000		        test    di,DEV_FLAG1_INPUT_XON_XOFF_HS
+ 026F  74 1E			        jz      rd_test_hdw_HS
+ 0271  F7 C7 0010		        test    di,DEV_FLAG1_EVENT_XOFF_SENT
+ 0275  74 18			        jz      rd_test_hdw_HS
+				        AND_DeviceFlag1 (NOT DEV_FLAG1_EVENT_XOFF_SENT)
+ 027B  80 A4 00A5 EF		        and     [si].s_stDeviceParms.byHSstatus,NOT TX_WAITING_BECAUSE_XOFF_TX
+ 0280  8A 44 31			        mov     al,[si].s_stDeviceParms.byXonChar
+ 0283  88 44 33			        mov     [si].s_stDeviceParms.byImmediateByte,al
+				        OR_DeviceFlag1 DEV_FLAG1_IMM_BYTE_WAITING
+ 028A  57			        push    di
+ 028B  E8 042F			        call    StartWriteStream
+ 028E  5F			        pop     di
+
+ 028F				rd_test_hdw_HS::
+ 028F  F7 C7 6000		        test    di,DEV_FLAG1_HDW_INPUT_HS_MASK
+ 0293  74 48			        jz      rd_no_hdw_input_HS
+ 0295  83 C2 04			        add     dx,MDM_CTL_REG_OFFSET
+				        InByteImm
+ 0299  F7 C7 4000		        test    di,DEV_FLAG1_RTS_INPUT_HS
+ 029D  74 02			        jz      rd_test_DTR
+ 029F  0C 02			        or      al,MDM_CTL_RTS_ACTIVATE
+
+ 02A1				rd_test_DTR::
+ 02A1  F7 C7 2000		        test    di,DEV_FLAG1_DTR_INPUT_HS
+ 02A5  74 02			        jz      rd_no_DTR_HS
+ 02A7  0C 01			        or      al,MDM_CTL_DTR_ACTIVATE
+
+ 02A9				rd_no_DTR_HS::
+				        COMscopeStream ebx, CSFUNC_TRACE_MODEM_OUT_SIGNALS, CS_MODEM_OUT
+				        OutByteDel bx
+ 02DA  83 EA 04			        sub     dx,MDM_CTL_REG_OFFSET
+
+ 02DD				rd_no_hdw_input_HS:
+ 02DD  58			        pop     ax
+
+ 02DE				rd_no_input_HS:
+ 02DE  F8			        clc
+
+ 02DF				exit:
+				        ret
+ 02DF  5F		   *	    pop    di
+ 02E0  5B		   *	    pop    bx
+ 02E1  5A		   *	    pop    dx
+ 02E2  C3		   *	    ret    00000h
+
+ 02E3				ReadReceiveQueue ENDP   ;al contains byte read
+				                        ; carry set if queue was empty on entry
+
+				;------------------------------------------------------------------------
+				;  Other utilities
+				;------------------------------------------------------------------------
+				; apply user selected baud rate to device
+				;------------------------------------------------------------------------
+ 02E3				ProcessBaud PROC  ;EAX contains requested baudrate
+
+				        LOCAL   byLineControl:BYTE
+
+				; recalculate timeout counts to force minimum of one character timeout
+
+ 02E3  55		   *	    push   bp
+ 02E4  8B EC		   *	    mov    bp, sp
+ 02E6  83 C4 FE		   *	    add    sp, 0FFFEh
+ 02E9  8B 44 20			        mov     ax,[si].s_stDeviceParms.wWrtTimeout
+ 02EC  E8 08C2			        call    CalcWriteTimeout
+ 02EF  89 44 66			        mov     [si].s_stDeviceParms.wWriteTimerStart,ax
+ 02F2  8B 44 22			        mov     ax,[si].s_stDeviceParms.wRdTimeout
+ 02F5  E8 0867			        call    CalcTimeout
+ 02F8  89 84 009A		        mov     [si].s_stDeviceParms.wReadTimerStart,ax
+
+				; set UART to requested baud rate
+
+ 02FC  FA			        cli
+ 02FD  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 0300  83 C2 03			        add     dx,LINE_CTL_REG_OFFSET       ;line control register
+				        InByteImm
+ 0304  88 46 FF			        mov     byLineControl,al
+ 0307  B0 80			        mov     al,LINE_CTL_DLB_ACCESS       ;enable DLAB for baud rate setup
+				        OutByteDel bx
+ 0310  83 EA 03			        sub     dx,LINE_CTL_REG_OFFSET - DLB_LOW_REG_OFFSET
+ 0313  8B 44 24			        mov     ax,[si].s_stDeviceParms.wBaudRateDivisor
+ 0316  25 7FFF			        and     ax,07fffh
+				        OutByteDel bx
+ 0320  86 C4			        xchg    al,ah
+ 0322  42			        inc     dx
+				        OutByteDel bx
+ 032A  83 C2 02			        add     dx,LINE_CTL_REG_OFFSET - DLB_HI_REG_OFFSET;line control register
+ 032D  8A 46 FF			        mov     al,byLineControl
+				        OutByteDel bx
+
+				   IFNDEF NO_4x_CLOCK_SUPPORT
+				  IFDEF do_startech_baud
+				  ENDIF
+				   ENDIF
+ 0337  FB			        sti
+ 0338  F8			        clc
+				        ret
+ 0339  8B E5		   *	    mov    sp, bp
+ 033B  5D		   *	    pop    bp
+ 033C  C3		   *	    ret    00000h
+
+ 033D				ProcessBaud ENDP
+
+				;------------------------------------------------------------------------------
+				; read path to where device driver was loaded from
+				;------------------------------------------------------------------------------
+ 033D				ReadPath PROC NEAR uses ax bx cx dx si
+
+				        LOCAL  wMaxCount:WORD,
+				               wCount:WORD
+
+ 033D  55		   *	    push   bp
+ 033E  8B EC		   *	    mov    bp, sp
+ 0340  83 C4 FC		   *	    add    sp, 0FFFCh
+ 0343  50		   *	    push   ax
+ 0344  53		   *	    push   bx
+ 0345  51		   *	    push   cx
+ 0346  52		   *	    push   dx
+ 0347  56		   *	    push   si
+ 0348  06			        push    es
+ 0349  57			        push    di
+ 034A  26: 8B 4D 12		        mov     cx,ES:[di].s_stPacket.RWpacket.IOcount
+ 034E  0B C9			        or      cx,cx
+ 0350  74 56			        jz      read_exit
+
+ 0352  89 4E FE			        mov     wMaxCount,cx
+ 0355  26: 8B 45 10		        mov     ax,ES:[di].s_stPacket.RWpacket.IOdataOffset + 2
+ 0359  26: 8B 5D 0E		        mov     bx,ES:[di].s_stPacket.RWpacket.IOdataOffset
+
+ 035D  B6 01			        mov     dh,1                            ;es and di
+ 035F  B2 15			        mov     dl,DevHlp_PhysToVirt
+ 0361  FF 1E 0000 E		        call    device_hlp
+ 0365  73 04			        jnc     @f
+ 0367  33 C9			        xor     cx,cx
+ 0369  EB 3D			        jmp     read_exit
+
+ 036B				@@:
+ 036B  C7 46 FC 0000		        mov     wCount,0
+ 0370  81 F9 0102		        cmp     cx,(CCHMAXPATH - 2) ; for term zero and EOF
+ 0374  76 03			        jna     @f
+ 0376  B9 0102			        mov     cx,(CCHMAXPATH - 2)
+ 0379				@@:
+ 0379  33 D2			        xor     dx,dx
+ 037B  BE 0000 E		        lea     si,abyPath
+
+ 037E				find_path_end_loop:
+ 037E  80 3C 00			        cmp     BYTE PTR [si],0
+ 0381  74 04			        je      @f
+ 0383  46			        inc     si
+ 0384  42			        inc     dx
+ 0385  E2 F7			        loop    find_path_end_loop
+ 0387				@@:
+ 0387  0B D2			        or      dx,dx
+ 0389  74 17			        jz      read_return
+
+ 038B  C6 04 1A			        mov     BYTE PTR [si],01ah
+ 038E  46			        inc     si
+ 038F  C6 04 00			        mov     BYTE PTR [si],0
+ 0392  83 C2 02			        add     dx,2              ; EOF and include terminating zero
+ 0395  8B CA			        mov     cx,dx
+ 0397  89 56 FC			        mov     wCount,dx
+ 039A  29 56 FE			        sub     wMaxCount,dx
+
+ 039D  BE 0000 E		        lea     si,abyPath
+
+ 03A0  F3/ A4			    rep movsb
+
+ 03A2				read_return:
+ 03A2  B2 32			        mov     dl,DevHlp_UnPhysToVirt
+ 03A4  FF 1E 0000 E		        call    device_hlp
+
+ 03A8				read_exit:
+ 03A8  5F			        pop     di
+ 03A9  07			        pop     es
+ 03AA  8B 4E FC			        mov     cx,wCount
+ 03AD  26: 89 4D 12		        mov     ES:[di].s_stPacket.RWpacket.IOcount,cx
+				        ret
+ 03B1  5E		   *	    pop    si
+ 03B2  5A		   *	    pop    dx
+ 03B3  59		   *	    pop    cx
+ 03B4  5B		   *	    pop    bx
+ 03B5  58		   *	    pop    ax
+ 03B6  8B E5		   *	    mov    sp, bp
+ 03B8  5D		   *	    pop    bp
+ 03B9  C3		   *	    ret    00000h
+
+ 03BA				ReadPath ENDP
+
+				;------------------------------------------------------------------------------
+				;
+				;------------------------------------------------------------------------------
+ 03BA				ProcessModemSignals PROC NEAR USES AX DX  ;al contain contents of modem control register
+
+				;        LOCAL bRestartTransmit:WORD
+
+				        COMscopeStream ebx, CSFUNC_TRACE_MODEM_IN_SIGNALS, CS_MODEM_IN
+ 03E6  33 DB			        xor     bx,bx
+ 03E8  8A E0			        mov     ah,al
+ 03EA  C0 E0 03			        shl     al,3
+ 03ED  24 18			        and     al,18h
+ 03EF  8A D8			        mov     bl,al
+ 03F1  F6 C4 04			        test    ah,MDM_ST_DELTA_TRI
+ 03F4  74 04			        jz      PMS_test_DCD
+ 03F6  81 CB 0100		        or      bx,COM_EVENT_DELTA_TRI
+
+ 03FA				PMS_test_DCD::
+ 03FA  F6 C4 08			        test    ah,MDM_ST_DELTA_DCD
+ 03FD  74 03			        jz      PMS_store_event
+ 03FF  83 CB 20			        or      bx,COM_EVENT_DELTA_DCD
+
+ 0402				PMS_store_event::
+ 0402  09 5C 4E			        or      [si].s_stDeviceParms.wCOMevent,bx
+
+				;        mov     bRestartTransmit,FALSE
+
+ 0405				PMS_test_DSR_input_HS::
+
+				; IF DSR input HS is enabled AND DSR changed state to on THEN clear HS flag
+
+ 0405  F6 C4 02			        test    ah,MDM_ST_DELTA_DSR
+ 0408  0F 84 00F9		        jz      PMS_test_CTS_output_HS
+ 040C  F6 44 2C 40		        test    [si].s_stDeviceParms.byFlag1,F1_ENABLE_DSR_INPUT_HS
+ 0410  0F 84 00F1		        jz      PMS_test_CTS_output_HS
+ 0414  F6 C4 20			        test    ah,MDM_ST_DSR
+ 0417  0F 85 00E5		        jnz     PMS_set_DSR_input_HS_flag
+
+				; IF FIFO available THEN clear receive FIFO
+
+ 041B  F7 44 04 2000		        test    [si].s_stDeviceParms.wDeviceFlag2,DEV_FLAG2_FIFO_AVAILABLE
+ 0420  0F 84 00D5		        jz      PMS_reset_DSR_input_HS_flag
+
+ 0424  50			        push    ax
+ 0425  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 0428  83 C2 03			        add     dx,LINE_ST_REG_OFFSET - INT_ID_REG_OFFSET
+
+ 042B				PMS_read_loop::
+				        InByteImm
+ 042C  A8 01			        test    al,LINE_ST_RCV_DATA_READY
+ 042E  0F 84 00C6		        jz      PMS_reset_DSR_input_HS_flag_pop
+ 0432  A8 1E			        test    al,LINE_ST_COM_ERROR_MASK OR LINE_ST_BREAK_DETECT
+ 0434  0F 85 00B4		        jnz     PMS_clear_FIFO
+
+ 0438				PMS_get_byte::
+ 0438  8A E0			        mov     ah,al
+ 043A  83 EA 05			        sub     dx,LINE_ST_REG_OFFSET
+				        InByteImm
+ 043E  22 44 3F			        and     al,[si].s_stDeviceParms.byDataLengthMask
+ 0441  F6 84 00A5 80		        test    [si].s_stDeviceParms.byHSstatus,RX_WAITING_MASK
+ 0446  75 0C			        jnz     PWS_test_XHS
+
+				; IF input byte is ZERO AND NULL stripping is enabled THEN
+				; go get next character
+
+ 0448  0A C0			        or      al,al
+ 044A  75 08			        jnz     PWS_test_XHS
+ 044C  F6 44 2D 08		        test    [si].s_stDeviceParms.byFlag2,F2_ENABLE_NULL_STRIP
+ 0450  0F 85 0092		        jnz     PMS_test_next
+
+				; IF XMIT Xon/Xoff HS is enabled
+
+ 0454				PWS_test_XHS::
+ 0454  F6 44 2D 01		        test    [si].s_stDeviceParms.byFlag2,F2_ENABLE_XMIT_XON_XOFF_FLOW
+ 0458  74 77			        jz      PMS_queue_byte
+
+				; IF Xoff character received THEN flag Tx to wait for Xon
+
+ 045A  3A 44 32			        cmp     al,[si].s_stDeviceParms.byXoffChar
+ 045D  75 31			        jne     PMS_not_Xoff
+
+				        COMscopeStream ebx, CSFUNC_TRACE_IMM_STREAM, CS_READ_IMM
+
+ 0489  80 8C 00A5 08		        or      [si].s_stDeviceParms.byHSstatus,TX_WAITING_BECAUSE_XOFF_RX
+ 048E  EB 56			        jmp     PMS_test_next
+
+				; IF Xoff had been received AND Xon was just received THEN
+				; clear waiting for Xon flag and try to restart write stream
+
+ 0490				PMS_not_Xoff::
+ 0490  F6 84 00A5 08		        test    [si].s_stDeviceParms.byHSstatus,TX_WAITING_BECAUSE_XOFF_RX
+ 0495  74 3A			        jz      PMS_queue_byte
+ 0497  3A 44 31			        cmp     al,[si].s_stDeviceParms.byXonChar
+ 049A  75 35			        jne     PMS_queue_byte
+
+				        COMscopeStream ebx, CSFUNC_TRACE_IMM_STREAM, CS_READ_IMM
+
+ 04C6  80 A4 00A5 F7		        and     [si].s_stDeviceParms.byHSstatus,NOT TX_WAITING_BECAUSE_XOFF_RX
+ 04CB  83 4C 54 01		        or      [si].s_stDeviceParms.wDeviceStatus2,DEV_ST2_RESTARTSTREAM
+				;        mov     bRestartTransmit,TRUE
+ 04CF  EB 15			        jmp     PMS_test_next
+
+ 04D1				PMS_queue_byte::
+ 04D1  E8 FB89			        call    WrtReceiveQueue
+ 04D4  83 4C 4E 01		        or      [si].s_stDeviceParms.wCOMevent,COM_EVENT_RCV_BYTE
+				        OR_DeviceFlag1 DEV_FLAG1_EVENT_RCV_BYTE
+
+				; IF we are blocked on read THEN decrement counter
+				; incrementing byte read count is necessary in case the user specified Read
+				; Timeout period is less than four character times, therefore preventing
+				; a Read Timeout interrupt for occurring before the user specified Timeout
+				; period causes the semaphore to be cleared.
+
+ 04DD  83 7C 7E 00		        cmp     [si].s_stDeviceParms.wReadByteCount,0
+ 04E1  74 03			        je      PMS_test_next
+ 04E3  FF 4C 7E			        dec     [si].s_stDeviceParms.wReadByteCount
+
+ 04E6				PMS_test_next::
+ 04E6  83 C2 05			        add     dx,LINE_ST_REG_OFFSET
+ 04E9  E9 FF3F			        jmp     PMS_read_loop
+
+ 04EC				PMS_clear_FIFO::
+ 04EC  83 EA 05			        sub     dx,LINE_ST_REG_OFFSET
+				        InByteImm
+ 04F0  83 C2 05			        add     dx,LINE_ST_REG_OFFSET
+				        InByteImm
+ 04F4  A8 01			        test    al,LINE_ST_RCV_DATA_READY
+ 04F6  75 F4			        jnz     PMS_clear_FIFO
+
+ 04F8				PMS_reset_DSR_input_HS_flag_pop::
+ 04F8  58			        pop     ax
+
+ 04F9				PMS_reset_DSR_input_HS_flag::
+ 04F9  80 A4 00A5 7F		        and     [si].s_stDeviceParms.byHSstatus,NOT RX_WAITING_FOR_DSR_ON
+ 04FE  EB 05			        jmp     PMS_test_CTS_output_HS
+
+ 0500				PMS_set_DSR_input_HS_flag::
+ 0500  80 8C 00A5 80		        or      [si].s_stDeviceParms.byHSstatus,RX_WAITING_FOR_DSR_ON
+
+ 0505				PMS_test_CTS_output_HS::
+ 0505  F6 C4 01			        test    ah,MDM_ST_DELTA_CTS
+ 0508  74 30			        jz      PMS_test_DSR_output_HS
+ 050A  F6 44 2C 08		        test    [si].s_stDeviceParms.byFlag1,F1_ENABLE_CTS_OUTPUT_HS
+ 050E  74 2A			        jz      PMS_test_DSR_output_HS
+ 0510  F6 C4 10			        test    ah,MDM_ST_CTS
+ 0513  74 20			        jz      PMS_set_CTS_output_HS_flag
+				  IFNDEF NO_ADV_UARTS
+				        test_DeviceFlag2 DEV_FLAG2_MONITOR_CTS
+ 051A  74 0E			        jz      @f
+
+				;        push    ax
+ 051C  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 051F  83 C2 03			        add     dx,LINE_ST_REG_OFFSET - INT_ID_REG_OFFSET
+				        InByteImm
+ 0523  83 EA FD			        sub     dx,INT_ID_REG_OFFSET - LINE_ST_REG_OFFSET
+ 0526  A8 20			        test    al,LINE_ST_TX_HOLD_EMPTY
+				;        pop     ax
+ 0528  74 10			        jz      PMS_test_DSR_output_HS
+ 052A				@@:
+				  ENDIF
+ 052A  83 4C 54 01		        or      [si].s_stDeviceParms.wDeviceStatus2,DEV_ST2_RESTARTSTREAM
+				;        mov     bRestartTransmit,TRUE
+ 052E  80 A4 00A5 FE		        and     [si].s_stDeviceParms.byHSstatus,NOT TX_WAITING_FOR_CTS_ON
+ 0533  EB 05			        jmp     PMS_test_DSR_output_HS
+
+ 0535				PMS_set_CTS_output_HS_flag::
+ 0535  80 8C 00A5 01		        or      [si].s_stDeviceParms.byHSstatus,TX_WAITING_FOR_CTS_ON
+
+ 053A				PMS_test_DSR_output_HS::
+ 053A  F6 C4 02			        test    ah,MDM_ST_DELTA_DSR
+ 053D  74 1B			        jz      PMS_test_DCD_output_HS
+ 053F  F6 44 2C 10		        test    [si].s_stDeviceParms.byFlag1,F1_ENABLE_DSR_OUTPUT_HS
+ 0543  74 15			        jz      PMS_test_DCD_output_HS
+ 0545  F6 C4 20			        test    ah,MDM_ST_DSR
+ 0548  74 0B			        jz      @f
+ 054A  83 4C 54 01		        or      [si].s_stDeviceParms.wDeviceStatus2,DEV_ST2_RESTARTSTREAM
+				;        mov     bRestartTransmit,TRUE
+ 054E  80 A4 00A5 FD		        and     [si].s_stDeviceParms.byHSstatus,NOT TX_WAITING_FOR_DSR_ON
+ 0553  EB 05			        jmp     PMS_test_DCD_output_HS
+ 0555				@@:
+ 0555  80 8C 00A5 02		        or      [si].s_stDeviceParms.byHSstatus,TX_WAITING_FOR_DSR_ON
+
+ 055A				PMS_test_DCD_output_HS::
+ 055A  F6 C4 08			        test    ah,MDM_ST_DELTA_DCD
+ 055D  74 1B			        jz      PMS_process_end
+ 055F  F6 44 2C 20		        test    [si].s_stDeviceParms.byFlag1,F1_ENABLE_DCD_OUTPUT_HS
+ 0563  74 15			        jz      PMS_process_end
+ 0565  F6 C4 80			        test    ah,MDM_ST_DCD
+ 0568  74 0B			        jz      @f
+ 056A  83 4C 54 01		        or      [si].s_stDeviceParms.wDeviceStatus2,DEV_ST2_RESTARTSTREAM
+				;        mov     bRestartTransmit,TRUE
+ 056E  80 A4 00A5 FB		        and     [si].s_stDeviceParms.byHSstatus,NOT TX_WAITING_FOR_DCD_ON
+ 0573  EB 05			        jmp     PMS_process_end
+ 0575				@@:
+ 0575  80 8C 00A5 04		        or      [si].s_stDeviceParms.byHSstatus,TX_WAITING_FOR_DCD_ON
+
+ 057A				PMS_process_end::
+				;        stc
+				;        cmp     bRestartTransmit,TRUE
+				;        jnz     @f
+				;        clc
+				;@@:
+				        ret
+ 057A  5A		   *	    pop    dx
+ 057B  58		   *	    pop    ax
+ 057C  C3		   *	    ret    00000h
+
+ 057D				ProcessModemSignals ENDP   ;carry cleared if it is necessary to restart Tx streamm (obsolete)
+
+				  IFNDEF x16_BIT
+				;------------------------------------------------------------------------------
+				;
+				;------------------------------------------------------------------------------
+ 057D				CalcBaudRate PROC NEAR USES EAX EDX EBX EDI; EAX to contain requested baudrate
+
+				        LOCAL dwClock:DWORD
+				        LOCAL dwRemainder:DWORD
+
+				IFDEF do_startech_baud
+				ENDIF        
+ 057D  55		   *	    push   bp
+ 057E  8B EC		   *	    mov    bp, sp
+ 0580  83 C4 F8		   *	    add    sp, 0FFF8h
+ 0583  66| 50		   *	    push   eax
+ 0585  66| 52		   *	    push   edx
+ 0587  66| 53		   *	    push   ebx
+ 0589  66| 57		   *	    push   edi
+ 058B  66| 33 C9		        xor     ecx,ecx
+ 058E  66| 83 F8 04		        cmp     eax,MIN_BAUD_RATE
+ 0592  0F 82 011A		        jb      bad_baud
+
+				  IFNDEF NO_4x_CLOCK_SUPPORT
+				IFDEF this_junk
+				ELSE
+ 0596  80 BC 009E 01		        cmp     [si].s_stDeviceParms.xBaudMultiplier,1
+				IFNDEF do_startech_baud
+ 059B  0F 86 00C9		        jbe     normal_baud
+				ELSE        
+				ENDIF        
+ 059F  66| 50			        push    eax
+ 05A1  8A 84 009E		        mov     al,[si].s_stDeviceParms.xBaudMultiplier
+ 05A5  3C 04			        cmp     al,4
+ 05A7  75 1C			        jne     @f
+ 05A9  66| C7 46 FC		        mov     dwClock,UART_4X_CLOCK
+       00070800
+ 05B1  66| C7 46 F8		        mov     dwRemainder,MAX_4X_REMAINDER
+       0000002E
+ 05B9  66| BB 00070800		        mov     ebx,MAX_4X_BAUD_RATE
+ 05BF  66| 83 C3 2E		        add     ebx,MAX_4X_REMAINDER
+ 05C3  EB 6B			        jmp     calc_X_baud
+ 05C5				@@:
+ 05C5  3C 08			        cmp     al,8
+ 05C7  75 1C			        jne     @f
+ 05C9  66| C7 46 FC		        mov     dwClock,UART_8X_CLOCK
+       000E1000
+ 05D1  66| C7 46 F8		        mov     dwRemainder,MAX_8X_REMAINDER
+       0000005C
+ 05D9  66| BB 000E1063		        mov     ebx,MAX_8X_BAUD_RATE
+ 05DF  66| 83 C3 5C		        add     ebx,MAX_8X_REMAINDER
+ 05E3  EB 4B			        jmp     calc_X_baud
+ 05E5				@@:
+ 05E5  3C 0C			        cmp     al,12
+ 05E7  75 1F			        jne     @f
+ 05E9  66| C7 46 FC		        mov     dwClock,UART_12X_CLOCK
+       00151800
+ 05F1  66| C7 46 F8		        mov     dwRemainder,MAX_12X_REMAINDER
+       0000008A
+ 05F9  66| BB 00151800		        mov     ebx,MAX_12X_BAUD_RATE
+ 05FF  66| 81 C3 0000008A	        add     ebx,MAX_12X_REMAINDER
+ 0606  EB 28			        jmp     calc_X_baud
+ 0608				@@:
+ 0608  3C 10			        cmp     al,16
+ 060A  75 1F			        jne     bad_X_baud
+ 060C  66| C7 46 FC		        mov     dwClock,UART_16X_CLOCK
+       0026AC00
+ 0614  66| C7 46 F8		        mov     dwRemainder,MAX_16X_REMAINDER
+       000000B8
+ 061C  66| BB 001C2000		        mov     ebx,MAX_16X_BAUD_RATE
+ 0622  66| 81 C3 000000B8	        add     ebx,MAX_16X_REMAINDER
+ 0629  EB 05			        jmp     calc_X_baud
+
+ 062B				bad_X_baud:
+ 062B  66| 58			        pop     eax
+				IFNDEF do_startech_baud
+ 062D  E9 0080			        jmp bad_baud
+				ELSE        
+				ENDIF
+
+ 0630				calc_X_baud:
+ 0630  66| 58			        pop     eax
+ 0632  66| 3B C3		        cmp     eax,ebx
+ 0635  77 79			        ja      bad_baud
+
+ 0637  66| 33 D2		        xor     edx,edx
+ 063A  66| 8B D8		        mov     ebx,eax
+ 063D  66| 8B 46 FC		        mov     eax,dwClock
+ 0641  66| F7 F3		        div     ebx
+ 0644  66| 8B C8		        mov     ecx,eax
+ 0647  66| 3B 56 F8		        cmp     edx,dwRemainder
+ 064B  76 60			        jbe     got_baud
+
+ 064D  66| 40			        inc     eax
+ 064F  66| 8B C8		        mov     ecx,eax
+ 0652  66| 81 FB 000007D0	        cmp     ebx,2000                 ;special case
+ 0659  74 52			        je      got_baud
+
+ 065B  66| F7 E3		        mul     ebx                     ;test high side
+ 065E  66| 2B 46 FC		        sub     eax,dwClock
+ 0662  66| 3B 46 F8		        cmp     eax,dwRemainder
+ 0666  76 45			        jbe     got_baud
+				ENDIF
+
+				IFDEF do_startech_baud
+				ELSE        
+ 0668				normal_baud:
+				ENDIF
+				  ENDIF
+ 0668  66| 3D 0001C20C		        cmp     eax,(MAX_LONG_BAUD_RATE + MAX_REMAINDER)
+ 066E  77 40			        ja      bad_baud
+ 0670  66| 33 D2		        xor     edx,edx
+ 0673  66| 8B D8		        mov     ebx,eax
+ 0676  66| B8 0001C200		        mov     eax,UART_CLOCK
+ 067C  66| F7 F3		        div     ebx
+ 067F  66| 0B C8		        or      ecx,eax
+ 0682  66| 83 FA 0C		        cmp     edx,MAX_REMAINDER
+ 0686  76 25			        jbe     got_baud
+
+ 0688  66| 83 FB 6E		        cmp     ebx,110                 ;special case
+ 068C  74 1F			        je      got_baud
+ 068E  33 C9			        xor     cx,cx
+
+				; round up
+
+ 0690  66| 40			        inc     eax
+ 0692  66| 0B C8		        or      ecx,eax
+ 0695  66| 81 FB 000007D0	        cmp     ebx,2000                 ;special case
+ 069C  74 0F			        je      got_baud
+
+ 069E  66| F7 E3		        mul     ebx                     ;test high side
+ 06A1  66| 2D 0001C200		        sub     eax,UART_CLOCK
+ 06A7  66| 83 F8 0C		        cmp     eax,MAX_REMAINDER
+ 06AB  77 03			        ja      bad_baud
+
+ 06AD				got_baud:
+ 06AD  F8			        clc
+ 06AE  EB 01			        jmp     set_baud_exit
+
+ 06B0				bad_baud:
+ 06B0  F9			        stc
+
+ 06B1				set_baud_exit:
+				  IFNDEF NO_4x_CLOCK_SUPPORT
+				IFDEF do_startech_baud
+				ENDIF
+				  ENDIF
+				        ret
+ 06B1  66| 5F		   *	    pop    edi
+ 06B3  66| 5B		   *	    pop    ebx
+ 06B5  66| 5A		   *	    pop    edx
+ 06B7  66| 58		   *	    pop    eax
+ 06B9  8B E5		   *	    mov    sp, bp
+ 06BB  5D		   *	    pop    bp
+ 06BC  C3		   *	    ret    00000h
+
+ 06BD				CalcBaudRate ENDP               ;CX to contain divisor - high bit on means
+				                                ;use divide by four bit in 16650 UART
+				                                ;carry set if bad baud rate
+				  ELSE
+				  ENDIF ; x16_BIT
+
+				;------------------------------------------------------------------------------
+				; Test and restart the write stream when safe and if a stream exists
+				;------------------------------------------------------------------------------
+ 06BD				StartWriteStream PROC NEAR USES ax cx dx
+
+
+				; Test if hardware can receive characters to transmit.
+
+ 06BD  50		   *	    push   ax
+ 06BE  51		   *	    push   cx
+ 06BF  52		   *	    push   dx
+ 06C0  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 06C3  83 C2 05			        add     dx,LINE_ST_REG_OFFSET
+ 06C6  FA			        cli
+				        InByteImm
+ 06C8  83 EA 05			        sub     dx,LINE_ST_REG_OFFSET
+ 06CB  A8 20			        test    al,LINE_ST_TX_HOLD_EMPTY
+ 06CD  75 25			        jnz     SWS_setup_fill
+
+				; Test if queue is empty.  If not, then test if immediate byte is ready
+				; to be transmitted, if either is true then make sure TX interrupts
+				; are enabled and exit.
+
+ 06CF  83 7C 5E 00		        cmp     [si].s_stDeviceParms.wXmitQueueCount,0
+ 06D3  75 09			        jne     SWS_enable_TX_interrupt
+				        test_DeviceFlag1 DEV_FLAG1_IMM_BYTE_WAITING
+ 06DA  0F 84 01B8		        jz      exit
+
+ 06DE				SWS_enable_TX_interrupt::
+ 06DE  83 C2 FC			        add     dx,INT_EN_REG_OFFSET - LINE_ST_REG_OFFSET
+				        InByteImm
+ 06E2  A8 02			        test    al,INT_EN_TX_HOLD_EMPTY
+ 06E4  0F 85 01AE		        jnz     exit
+ 06E8  0C 02			        or      al,INT_EN_TX_HOLD_EMPTY
+				        OutByteDel bx
+ 06F1  E9 01A2			        jmp     exit
+
+ 06F4				SWS_setup_fill::
+				; If hardware can receive characters then begin fill.
+
+ 06F4  F6 84 00A5 27		        test    [si].s_stDeviceParms.byHSstatus,TX_WAITING_HDW_MASK
+ 06F9  0F 85 0199		        jnz     exit
+ 06FD  83 64 54 FE		        and     [si].s_stDeviceParms.wDeviceStatus2,(NOT DEV_ST2_RESTARTSTREAM)
+ 0701  8B 4C 78			        mov     cx,[si].s_stDeviceParms.wTxFIFOdepth
+				        test_DeviceFlag1 DEV_FLAG1_IMM_BYTE_WAITING
+ 0709  0F 84 009B		        jz      SWS_test_queue
+ 070D  8A 44 33			        mov     al,[si].s_stDeviceParms.byImmediateByte
+
+				        RTStoggleOn ebx
+				        COMscopeStream ebx, CSFUNC_TRACE_OUTPUT_STREAM, CS_WRITE_IMM
+				        OutByteDel bx
+				        AND_DeviceFlag1 (NOT DEV_FLAG1_IMM_BYTE_WAITING)
+ 079D  E2 09			        loop    SWS_test_queue
+
+ 079F  83 7C 5E 00		        cmp     [si].s_stDeviceParms.wXmitQueueCount,0
+ 07A3  74 1D			        je      SWS_test_semaphore
+ 07A5  E9 00DD			        jmp     SWS_enable_write_interrupts
+
+				; if the output queue is empty or has been flushed then clear
+				; write semaphore, if necessary
+
+ 07A8				SWS_test_queue:
+ 07A8  83 7C 5E 00		        cmp     [si].s_stDeviceParms.wXmitQueueCount,0
+ 07AC  74 14			        je      SWS_test_semaphore
+ 07AE  F7 44 52 1000		        test    [si].s_stDeviceParms.wDeviceStatus1,DEV_ST1_OUTPUT_FLUSHED
+ 07B3  75 0D			        jnz     SWS_test_semaphore
+
+				; if in infinite write timeout mode then just restart write stream
+
+ 07B5  FA			        cli
+ 07B6  F6 44 2E 01		        test    [si].s_stDeviceParms.byFlag3,F3_INFINITE_WRT_TIMEOUT
+ 07BA  75 1D			        jnz     SWS_wait_TX_loop
+
+				; if timer count is zero then clear write semaphore, if necessary
+				; else restart write stream
+
+ 07BC  83 7C 64 00		        cmp     [si].s_stDeviceParms.wWrtTimerCount,0
+ 07C0  75 17			        jne     SWS_wait_TX_loop
+
+				; if write not waiting for semaphore then exit
+
+ 07C2				SWS_test_semaphore::
+				        test_DeviceFlag1 DEV_FLAG1_WRT_BLOCKED
+ 07C7  0F 84 00CB		        jz      exit
+
+ 07CB				SWS_clear_write_sem::
+ 07CB  8C D8			        mov     ax,ds
+ 07CD  8D 5C 6C			        lea     bx,[si].s_stDeviceParms.dwWrtSemaphore
+ 07D0  B2 07			        mov     dl,DevHlp_SemClear
+ 07D2  FF 1E 0000 E		        call    device_hlp
+ 07D6  E9 00BD			        jmp     exit
+
+ 07D9				SWS_wait_TX_loop:
+ 07D9  F6 84 00A5 3F		        test    [si].s_stDeviceParms.byHSstatus,TX_WAITING_MASK
+ 07DE  0F 85 00B4		        jnz     exit
+
+ 07E2  8B 7C 60			        mov     di,[si].s_stDeviceParms.wXmitQueueReadPointer
+				        RTStoggleOn ebx
+
+ 083D				fill_loop:
+ 083D  66| FF 84 00AC		        inc     [si].s_stDeviceParms.dwTransmitCount
+ 0842  8A 05			        mov     al,[di]
+
+				        COMscopeStream ebx, CSFUNC_TRACE_OUTPUT_STREAM, CS_WRITE
+				        OutByteDel bx
+ 0875  47			        inc     di
+ 0876  FF 4C 5E			        dec     [si].s_stDeviceParms.wXmitQueueCount
+ 0879  E0 C2			        loopnz  fill_loop
+
+				;        cmp     [si].s_stDeviceParms.wXmitQueueCount,0
+				;        je      SWS_test_semaphore
+ 087B  89 7C 60			        mov     [si].s_stDeviceParms.wXmitQueueReadPointer,di
+
+ 087E  8B 44 66			        mov     ax,[si].s_stDeviceParms.wWriteTimerStart
+ 0881  89 44 64			        mov     [si].s_stDeviceParms.wWrtTimerCount,ax       ;update timer
+ 0884  FB			        sti
+
+ 0885				SWS_enable_write_interrupts::
+ 0885  42			        inc     dx
+				        InByteDel cx
+ 088D  0C 02			        or      al,INT_EN_TX_HOLD_EMPTY
+				        OutByteDel cx
+
+ 0896				exit:
+ 0896  FB			        sti
+				        ret
+ 0897  5A		   *	    pop    dx
+ 0898  59		   *	    pop    cx
+ 0899  58		   *	    pop    ax
+ 089A  C3		   *	    ret    00000h
+
+ 089B				StartWriteStream ENDP
+
+				;------------------------------------------------------------------------------
+				;
+				;------------------------------------------------------------------------------
+ 089B				FlushInputBuffers PROC NEAR
+
+ 089B  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+
+ 089E				clear_RX_buffer_loop:
+ 089E  83 C2 05			        add     dx,LINE_ST_REG_OFFSET
+				        InByteImm
+ 08A2  83 EA 05			        sub     dx,LINE_ST_REG_OFFSET
+ 08A5  A8 01			        test    al,LINE_ST_RCV_DATA_READY
+ 08A7  74 03			        jz      @f
+				        InByteImm
+ 08AA  EB F2			        jmp     clear_RX_buffer_loop
+ 08AC				@@:
+ 08AC  66| 8B 84 0088		        mov     eax,[si].s_stDeviceParms.oReadBuffer
+ 08B1  66| 89 84 0080		        mov     [si].s_stDeviceParms.dwReceiveQueueWritePointer,eax
+ 08B6  66| 89 84 0084		        mov     [si].s_stDeviceParms.dwReceiveQueueReadPointer,eax
+ 08BB  C7 44 7E 0000		        mov     [si].s_stDeviceParms.wReadByteCount,0
+ 08C0  83 4C 52 40		        or      [si].s_stDeviceParms.wDeviceStatus1,DEV_ST1_RCV_QUEUE_EMPTY
+ 08C4  81 4C 52 0080		        or      [si].s_stDeviceParms.wDeviceStatus1,DEV_ST1_LAST_CHAR_RCVD
+ 08C9  83 64 52 FE		        and     [si].s_stDeviceParms.wDeviceStatus1,NOT DEV_ST1_RCV_QUEUE_FULL
+ 08CD  F7 44 52 0008		        test    [si].s_stDeviceParms.wDeviceStatus1,DEV_ST1_RX_IN_PROGRESS
+ 08D2  74 1B			        jz      flush_exit
+ 08D4  81 4C 52 2000		        or      [si].s_stDeviceParms.wDeviceStatus1,DEV_ST1_INPUT_FLUSHED
+ 08D9  81 4C 52 0200		        or      [si].s_stDeviceParms.wDeviceStatus1,DEV_ST1_RCV_TIMED_OUT
+ 08DE  C7 84 0098 0000		        mov     [si].s_stDeviceParms.wRdTimerCount,0
+ 08E4  8C D8			        mov     ax,ds
+ 08E6  8D 5C 68			        lea     bx,[si].s_stDeviceParms.dwRdSemaphore
+ 08E9  B2 07			        mov     dl,DevHlp_SemClear
+ 08EB  FF 1E 0000 E		        call    device_hlp
+
+ 08EF				flush_exit:
+ 08EF  C3			        ret
+
+ 08F0				FlushInputBuffers ENDP
+
+				;------------------------------------------------------------------------------
+				;
+				;------------------------------------------------------------------------------
+ 08F0				ClearInputHandshake PROC NEAR   ; si is offset to device parameters
+
+				; IF any input handshaking is enabled AND input handshaking is in progress
+				; THEN clear handshake condition
+				; (all input handshaking in done in parallel - if one is in progress, then
+				; all that are enabled ARE in progress)
+
+ 08F0  8B 7C 02			        mov     di,[si].s_stDeviceParms.wDeviceFlag1
+ 08F3  F7 C7 E000		        test    di,DEV_FLAG1_INPUT_HS_MASK
+ 08F7  0F 84 011C		        jz      clear_HS_exit
+ 08FB  F7 C7 0400		        test    di,DEV_FLAG1_INPUT_HS_IN_PROGRESS
+ 08FF  0F 84 0114		        jz      clear_HS_exit
+
+ 0903  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+				        AND_DeviceFlag1 (NOT DEV_FLAG1_INPUT_HS_IN_PROGRESS)
+
+				; IF waiting to send Xon THEN clear flags and send Xon
+
+ 090B  F7 C7 8000		        test    di,DEV_FLAG1_INPUT_XON_XOFF_HS
+ 090F  0F 84 00AB		        jz      test_hdw_HS
+ 0913  80 A4 00A5 EF		        and     [si].s_stDeviceParms.byHSstatus,NOT TX_WAITING_BECAUSE_XOFF_TX
+				        AND_DeviceFlag1 (NOT DEV_FLAG1_EVENT_XOFF_SENT)
+ 091C  83 C2 05			        add     dx,LINE_ST_REG_OFFSET
+ 091F  FA			        cli
+				        InByteImm
+ 0921  83 EA 05			        sub     dx,LINE_ST_REG_OFFSET
+ 0924  A8 20			        test    al,LINE_ST_TX_HOLD_EMPTY
+ 0926  0F 84 0088		        jz      load_immediate_byte
+ 092A  8A 44 31			        mov     al,[si].s_stDeviceParms.byXonChar
+
+				        RTStoggleOn ebx
+				        COMscopeStream ebx, CSFUNC_TRACE_OUTPUT_STREAM, CS_WRITE_IMM
+				        OutByteImm
+ 09B0  EB 0C			        jmp     test_hdw_HS
+
+ 09B2				load_immediate_byte:
+ 09B2  88 44 33			        mov     [si].s_stDeviceParms.byImmediateByte,al
+				        OR_DeviceFlag1 DEV_FLAG1_IMM_BYTE_WAITING
+ 09B9  57			        push    di
+ 09BA  E8 FD00			        call    StartWriteStream
+ 09BD  5F			        pop     di
+
+				; IF RTS input handshaking is enabled then turn RTS on
+
+ 09BE				test_hdw_HS:
+ 09BE  FB			        sti
+ 09BF  F7 C7 6000		        test    di,DEV_FLAG1_HDW_INPUT_HS_MASK
+ 09C3  74 52			        jz      clear_HS_exit
+ 09C5  83 C2 04			        add     dx,MDM_CTL_REG_OFFSET
+				        InByteImm
+ 09C9  F7 C7 4000		        test    di,DEV_FLAG1_RTS_INPUT_HS
+ 09CD  74 07			        jz      test_DTR
+				        AND_DeviceFlag1 (NOT DEV_FLAG1_RTS_INPUT_HS)
+ 09D4  0C 02        or      al,MDM_CTL_RTS_ACTIVATE
+
+				; IF DTR onput handshaking is enabled then turn DTR on
+
+ 09D6				test_DTR:
+ 09D6  F7 C7 2000		        test    di,DEV_FLAG1_DTR_INPUT_HS
+ 09DA  74 07			        jz      modem_ctl_out
+				        AND_DeviceFlag1 (NOT DEV_FLAG1_DTR_INPUT_HS)
+ 09E1  0C 01			        or      al,MDM_CTL_DTR_ACTIVATE
+
+ 09E3				modem_ctl_out:
+				        COMscopeStream ebx, CSFUNC_TRACE_MODEM_OUT_SIGNALS, CS_MODEM_OUT
+				        OutByteDel bx
+ 0A14  83 EA 04			        sub     dx,MDM_CTL_REG_OFFSET
+
+ 0A17				clear_HS_exit:
+ 0A17  C3			        ret
+
+ 0A18				ClearInputHandshake ENDP
+
+				;------------------------------------------------------------------------------
+				;
+				;------------------------------------------------------------------------------
+ 0A18				ReadFIFO PROC NEAR  USES ax bx dx  ;si to contain DeviceParam offset
+
+ 0A18  50		   *	    push   ax
+ 0A19  53		   *	    push   bx
+ 0A1A  52		   *	    push   dx
+ 0A1B  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+				        test_DeviceFlag1 DEV_FLAG1_MDM_INT_ENABLED
+ 0A23  75 17			        jnz     test_rcv
+ 0A25  83 C2 06			        add     dx,MDM_ST_REG_OFFSET
+				        InByteImm
+ 0A29  88 84 009F		        mov     [si].s_stDeviceParms.byMSRimage,al
+ 0A2D  80 A4 009F F0		        and     [si].s_stDeviceParms.byMSRimage,0f0h
+
+ 0A32  A8 0F			        test    al,MDM_ST_DELTA_MASK
+ 0A34  74 03			        jz      @f
+ 0A36  E8 F981			        call    ProcessModemSignals
+ 0A39				@@:
+ 0A39  83 EA 06			        sub     dx,MDM_ST_REG_OFFSET
+
+ 0A3C				test_rcv:
+ 0A3C  33 C9			        xor     cx,cx
+ 0A3E  83 C2 05			        add     dx,LINE_ST_REG_OFFSET
+ 0A41  FA			        cli
+				        InByteImm
+ 0A43  A8 01			        test    al,LINE_ST_RCV_DATA_READY
+ 0A45  0F 84 00BE		        jz      read_FIFO_exit
+
+ 0A49				RF_read_loop::
+ 0A49  83 EA 05			        sub     dx,LINE_ST_REG_OFFSET
+				        InByteImm
+ 0A4D  FB			        sti
+
+ 0A4E  F6 84 00A5 80		        test    [si].s_stDeviceParms.byHSstatus,RX_WAITING_MASK
+ 0A53  0F 85 0099		        jnz     RF_test_next
+
+ 0A57  22 44 3F			        and     al,[si].s_stDeviceParms.byDataLengthMask
+
+				; IF input byte is ZERO AND NULL stripping is enabled THEN
+				; go get next character
+
+ 0A5A  0A C0			        or      al,al
+ 0A5C  75 09			        jnz     RF_test_XHS
+ 0A5E  F6 44 2D 08		        test    [si].s_stDeviceParms.byFlag2,F2_ENABLE_NULL_STRIP
+ 0A62  74 03			        jz      RF_test_XHS
+ 0A64  E9 0089			        jmp     RF_test_next
+
+				; IF XMIT Xon/Xoff HS is enabled
+
+ 0A67				RF_test_XHS::
+ 0A67  F6 44 2D 01		        test    [si].s_stDeviceParms.byFlag2,F2_ENABLE_XMIT_XON_XOFF_FLOW
+ 0A6B  74 76			        jz      RF_queue_byte
+
+				; IF Xoff character received THEN flag Tx to wait for Xon
+
+ 0A6D  3A 44 32			        cmp     al,[si].s_stDeviceParms.byXoffChar
+ 0A70  75 31			        jne     RF_not_Xoff
+
+				        COMscopeStream ebx, CSFUNC_TRACE_IMM_STREAM, CS_READ_IMM
+
+ 0A9C  80 8C 00A5 08		        or      [si].s_stDeviceParms.byHSstatus,TX_WAITING_BECAUSE_XOFF_RX
+ 0AA1  EB 4D			        jmp     RF_test_next
+
+				; IF Xoff had been received AND Xon was just received THEN
+				; clear waiting for Xon flag and try to restart write stream
+
+ 0AA3				RF_not_Xoff:
+ 0AA3  F6 84 00A5 08		        test    [si].s_stDeviceParms.byHSstatus,TX_WAITING_BECAUSE_XOFF_RX
+ 0AA8  74 39			        jz      RF_queue_byte
+ 0AAA  3A 44 31			        cmp     al,[si].s_stDeviceParms.byXonChar
+ 0AAD  75 34			        jne     RF_queue_byte
+
+				        COMscopeStream ebx, CSFUNC_TRACE_IMM_STREAM, CS_READ_IMM
+
+ 0AD9  80 A4 00A5 F7		        and     [si].s_stDeviceParms.byHSstatus,NOT TX_WAITING_BECAUSE_XOFF_RX
+ 0ADE  E8 FBDC			        call    StartWriteStream
+ 0AE1  EB 0D			        jmp     RF_test_next
+
+ 0AE3				RF_queue_byte::
+ 0AE3  E8 F577			        call    WrtReceiveQueue
+ 0AE6  41			        inc     cx
+
+				; IF we are blocked on read THEN decrement counter
+				; incrementing byte read count is necessary in case the user specified Read
+				; Timeout period is less than four character times, therefore preventing
+				; a Read Timeout interrupt for occurring before the user specified Timeout
+				; period causes the semaphore to be cleared.
+
+ 0AE7  83 7C 7E 00		        cmp     [si].s_stDeviceParms.wReadByteCount,0
+ 0AEB  74 03			        je      RF_test_next
+ 0AED  FF 4C 7E			        dec     [si].s_stDeviceParms.wReadByteCount
+
+ 0AF0				RF_test_next::
+ 0AF0  83 C2 05			        add     dx,LINE_ST_REG_OFFSET
+				        InByteImm
+ 0AF4  A8 01			        test    al,LINE_ST_RCV_DATA_READY
+ 0AF6  0F 85 FF4F		        jnz     RF_read_loop
+
+ 0AFA  0B C9			        or      cx,cx
+ 0AFC  74 09			        jz      read_FIFO_exit
+ 0AFE  83 4C 4E 01		        or      [si].s_stDeviceParms.wCOMevent,COM_EVENT_RCV_BYTE
+				        OR_DeviceFlag1 DEV_FLAG1_EVENT_RCV_BYTE
+
+ 0B07				read_FIFO_exit:
+ 0B07  F7 44 54 0001		        test    [si].s_stDeviceParms.wDeviceStatus2,DEV_ST2_RESTARTSTREAM
+ 0B0C  74 03			        jz      @f
+ 0B0E  E8 FBAC			        call    StartWriteStream
+ 0B11				@@:
+				        ret
+ 0B11  5A		   *	    pop    dx
+ 0B12  5B		   *	    pop    bx
+ 0B13  58		   *	    pop    ax
+ 0B14  C3		   *	    ret    00000h
+
+ 0B15				ReadFIFO ENDP          ; cx = number of characters received
+
+				;------------------------------------------------------------------------------
+				;
+				;------------------------------------------------------------------------------
+ 0B15				UpdateModemHandshakeBits PROC NEAR USES DX
+
+				; Delta CTS interrupts are NEVER generated for advanced UARTs when CTS hardware handshaking is enabled
+				        test_DeviceFlag2 DEV_FLAG2_MONITOR_CTS
+ 0B1B  74 1C			        jz      @f
+ 0B1D  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 0B20  83 C2 06			        add     dx,MDM_ST_REG_OFFSET
+				        InByteDel bx
+ 0B2A  8A E0			        mov     ah,al
+ 0B2C  80 E4 F0			        and     ah,0f0h
+ 0B2F  3A A4 009F		        cmp     ah,[si].s_stDeviceParms.byMSRimage
+ 0B33  74 28			        je      exit
+ 0B35  0C 01			        or      al,MDM_ST_DELTA_CTS
+ 0B37  EB 21			        jmp     process_change
+ 0B39				@@:
+				;        test    [si].s_stDeviceParms.wConfigFlags1,CFG_FLAG1_NO_MODEM_INT
+				;        jz      exit
+				        test_DeviceFlag1 DEV_FLAG1_MDM_INT_ENABLED
+ 0B3E  75 1D			        jnz     exit
+
+ 0B40  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 0B43  83 C2 06			        add     dx,MDM_ST_REG_OFFSET
+				        InByteDel bx
+ 0B4D  88 84 009F		        mov     [si].s_stDeviceParms.byMSRimage,al
+ 0B51  80 A4 009F F0		        and     [si].s_stDeviceParms.byMSRimage,0f0h
+
+ 0B56  A8 0F			        test    al,MDM_ST_DELTA_MASK
+ 0B58  74 03			        jz      exit
+
+ 0B5A				process_change:
+ 0B5A  E8 F85D			        call    ProcessModemSignals
+ 0B5D				exit:
+				        ret
+ 0B5D  5A		   *	    pop    dx
+ 0B5E  C3		   *	    ret    00000h
+
+ 0B5F				UpdateModemHandshakeBits ENDP
+
+				;------------------------------------------------------------------------------
+				;
+				;------------------------------------------------------------------------------
+ 0B5F				CalcTimeout PROC NEAR USES cx dx di ;AX to contain logical timeout value
+				                              ;(.01 sec each) assuming a 32 millisecond clock
+
+				; Make sure that there is a timeout of at least one character time.
+
+ 0B5F  51		   *	    push   cx
+ 0B60  52		   *	    push   dx
+ 0B61  57		   *	    push   di
+ 0B62  8B F8			        mov     di,ax
+ 0B64  F7 44 08 0080		        test    [si].s_stDeviceParms.wConfigFlags1,CFG_FLAG1_EXPLICIT_BAUD_DIVISOR
+ 0B69  75 19			        jnz     min_test_end
+
+				; should possibly change this to process extended baud rates
+ 0B6B  8B 44 24			        mov     ax,[si].s_stDeviceParms.wBaudRateDivisor
+ 0B6E  25 7FFF			        and     ax,07fffh
+ 0B71  B9 0056			        mov     cx,86    ;one character time is about 86% of the divisor / 100
+ 0B74  33 D2			        xor     dx,dx
+ 0B76  F7 F1			        div     cx
+ 0B78  83 FA 2B			        cmp     dx,43
+ 0B7B  72 01			        jb      @f
+ 0B7D  40			        inc     ax
+ 0B7E				@@:
+ 0B7E  3B C7			        cmp     ax,di
+ 0B80  76 02			        jna     min_test_end
+ 0B82  8B F8			        mov     di,ax
+
+ 0B84				min_test_end:
+ 0B84  8B C7			        mov     ax,di
+
+ 0B86  B9 000A			        mov     cx,10
+ 0B89  F7 E1			        mul     cx
+ 0B8B  72 0F			        jc      @f
+ 0B8D  0B D2			        or      dx,dx
+ 0B8F  75 0B			        jnz     @f
+ 0B91  3B 06 0000 E		        cmp     ax,wClockRate2
+ 0B95  77 05			        ja      @f
+ 0B97  B8 0002			        mov     ax,2
+ 0B9A  EB 11			        jmp     calc_end
+ 0B9C				@@:
+ 0B9C  8B 0E 0000 E		        mov     cx,wClockRate
+ 0BA0  0B C9			        or      cx,cx
+ 0BA2  74 09			        jz      calc_end
+ 0BA4  F7 F1			        div     cx
+ 0BA6  D1 E9			        shr     cx,1
+ 0BA8  3B D1			        cmp     dx,cx
+ 0BAA  72 01			        jb      calc_end
+ 0BAC  40			        inc     ax                      ;round up
+
+ 0BAD				calc_end:
+
+				        ret
+ 0BAD  5F		   *	    pop    di
+ 0BAE  5A		   *	    pop    dx
+ 0BAF  59		   *	    pop    cx
+ 0BB0  C3		   *	    ret    00000h
+
+ 0BB1				CalcTimeout ENDP        ; AX to contain timeout start value
+
+				;------------------------------------------------------------------------------
+				;
+				;------------------------------------------------------------------------------
+ 0BB1				CalcWriteTimeout PROC NEAR
+
+				; IF infinite write timeout is selected THEN force counter start to be
+				; one second
+
+ 0BB1  F6 44 2E 01		        test    [si].s_stDeviceParms.byFlag3,F3_INFINITE_WRT_TIMEOUT
+ 0BB5  74 1C			        jz      calc_timeout
+ 0BB7  33 D2			        xor     dx,dx
+ 0BB9  A1 0000 E		        mov     ax,wClockRate
+ 0BBC  0B C0			        or      ax,ax
+ 0BBE  75 04			        jnz     @f
+ 0BC0  B8 001E			        mov     ax,30  ;set arbitrary value for unlikely case - zero clock spec.
+ 0BC3  C3			        ret
+ 0BC4				@@:
+ 0BC4  B8 03E8			        mov     ax,1000
+ 0BC7  F7 36 0000 E		        div     wClockRate
+ 0BCB  3B 16 0000 E		        cmp     dx,wClockRate2
+ 0BCF  72 01			        jb      @f
+ 0BD1  40			        inc     ax
+ 0BD2				@@:
+ 0BD2  C3			        ret
+
+ 0BD3				calc_timeout:
+ 0BD3  E8 FF89			        call    CalcTimeout
+ 0BD6  C3			        ret
+
+ 0BD7				CalcWriteTimeout ENDP  ; AX to contain timeout start value
+
+				;------------------------------------------------------------------------------
+				;
+				;------------------------------------------------------------------------------
+ 0BD7				RequestInterrupt PROC USES ax bx cx dx ;si contains offset to device parms
+
+ 0BD7  50		   *	    push   ax
+ 0BD8  53		   *	    push   bx
+ 0BD9  51		   *	    push   cx
+ 0BDA  52		   *	    push   dx
+ 0BDB  32 FF			        xor     bh,bh
+ 0BDD  8A 5C 3E			        mov     bl,[si].s_stDeviceParms.byInterruptLevel
+ 0BE0  80 BF 0000 E 00		        cmp     abyInterruptCount[bx],0
+ 0BE5  74 20			        je      request_interrupt
+ 0BE7  83 3E 0000 E 01		        cmp     bSharedInterrupts,TRUE
+ 0BEC  0F 84 0084		        je      success
+ 0BF0  83 3E 0000 E 00		        cmp     wIntIDregister,ZERO
+ 0BF5  75 7D			        jnz     success
+ 0BF7  F7 44 08 4000		        test    [si].s_stDeviceParms.wConfigFlags1,CFG_FLAG1_MULTI_INT
+ 0BFC  74 73			        jz      fail_request
+ 0BFE  F7 44 08 8000		        test    [si].s_stDeviceParms.wConfigFlags1,CFG_FLAG1_EXCLUSIVE_ACCESS
+ 0C03  74 6F			        jz      success
+ 0C05  EB 6A			        jmp     fail_request
+
+ 0C07				request_interrupt:
+ 0C07  D1 E3			        shl     bx,1
+ 0C09  2E: FF A7 0C7E R		        jmp     WORD PTR CS:IntRequestTable[bx]
+
+ 0C0E				set_int1:
+ 0C0E  B8 0000 E		        lea     ax,COM_interrupt_1
+ 0C11  EB 49			        jmp     set_interrupt
+
+ 0C13				set_int2:
+ 0C13  B8 0000 E		        lea     ax,COM_interrupt_2
+ 0C16  EB 44			        jmp     set_interrupt
+
+ 0C18				set_int3:
+ 0C18  B8 0000 E		        lea     ax,COM_interrupt_3
+ 0C1B  EB 3F			        jmp     set_interrupt
+
+ 0C1D				set_int4:
+ 0C1D  B8 0000 E		        lea     ax,COM_interrupt_4
+ 0C20  EB 3A			        jmp     set_interrupt
+
+ 0C22				set_int5:
+ 0C22  B8 0000 E		        lea     ax,COM_interrupt_5
+ 0C25  EB 35			        jmp     set_interrupt
+
+ 0C27				set_int6:
+ 0C27  B8 0000 E		        lea     ax,COM_interrupt_6
+ 0C2A  EB 30			        jmp     set_interrupt
+
+ 0C2C				set_int7:
+ 0C2C  B8 0000 E		        lea     ax,COM_interrupt_7
+ 0C2F  EB 2B			        jmp     set_interrupt
+
+ 0C31				set_int8:
+ 0C31  B8 0000 E		        lea     ax,COM_interrupt_8
+ 0C34  EB 26			        jmp     set_interrupt
+
+ 0C36				set_int9:
+ 0C36  B8 0000 E		        lea     ax,COM_interrupt_9
+ 0C39  EB 21			        jmp     set_interrupt
+
+ 0C3B				set_int10:
+ 0C3B  B8 0000 E		        lea     ax,COM_interrupt_10
+ 0C3E  EB 1C			        jmp     set_interrupt
+
+ 0C40				set_int11:
+ 0C40  B8 0000 E		        lea     ax,COM_interrupt_11
+ 0C43  EB 17			        jmp     set_interrupt
+
+ 0C45				set_int12:
+ 0C45  B8 0000 E		        lea     ax,COM_interrupt_12
+ 0C48  EB 12			        jmp     set_interrupt
+
+ 0C4A				set_int13:
+ 0C4A  B8 0000 E		        lea     ax,COM_interrupt_13
+ 0C4D  EB 0D			        jmp     set_interrupt
+
+ 0C4F				set_int14:
+ 0C4F  B8 0000 E		        lea     ax,COM_interrupt_14
+ 0C52  EB 08			        jmp     set_interrupt
+
+ 0C54				set_int15:
+ 0C54  B8 0000 E		        lea     ax,COM_interrupt_15
+ 0C57  EB 03			        jmp     set_interrupt
+
+ 0C59				bad_int:
+ 0C59  F9			        stc
+ 0C5A  EB 1D			        jmp     request_end
+
+ 0C5C				set_interrupt:
+ 0C5C  D1 EB			        shr     bx,1
+ 0C5E  B6 00			        mov     dh,DH_SIRQ_NOT_SHARED
+ 0C60  83 3E 0000 E 01		        cmp     bSharedInterrupts,TRUE
+ 0C65  75 02			        jne     @f
+ 0C67  B6 01			        mov     dh,DH_SIRQ_SHARED
+ 0C69				@@:
+ 0C69  B2 1B			        mov     dl,DevHlp_SetIRQ
+ 0C6B  FF 1E 0000 E		        call    device_hlp
+ 0C6F  73 03			        jnc     success
+
+ 0C71				fail_request:
+ 0C71  F9			        stc
+ 0C72  EB 05			        jmp     request_end
+
+ 0C74				success:
+ 0C74  FE 87 0000 E		        inc     abyInterruptCount[bx]
+ 0C78  F8			        clc
+
+ 0C79				request_end:
+				        ret
+ 0C79  5A		   *	    pop    dx
+ 0C7A  59		   *	    pop    cx
+ 0C7B  5B		   *	    pop    bx
+ 0C7C  58		   *	    pop    ax
+ 0C7D  C3		   *	    ret    00000h
+
+				;------------------------------------------------------------------------------
+				;
+				;------------------------------------------------------------------------------
+ 0C7E				IntRequestTable LABEL WORD
+ 0C7E  0C59 R			        WORD bad_int
+ 0C80  0C0E R			        WORD set_int1
+ 0C82  0C13 R			        WORD set_int2
+ 0C84  0C18 R			        WORD set_int3
+ 0C86  0C1D R			        WORD set_int4
+ 0C88  0C22 R			        WORD set_int5
+ 0C8A  0C27 R			        WORD set_int6
+ 0C8C  0C2C R			        WORD set_int7
+ 0C8E  0C31 R			        WORD set_int8
+ 0C90  0C36 R			        WORD set_int9
+ 0C92  0C3B R			        WORD set_int10
+ 0C94  0C40 R			        WORD set_int11
+ 0C96  0C45 R			        WORD set_int12
+ 0C98  0C4A R			        WORD set_int13
+ 0C9A  0C4F R			        WORD set_int14
+ 0C9C  0C54 R			        WORD set_int15
+ 0C9E  0C59 R			        WORD bad_int
+
+ 0CA0				RequestInterrupt ENDP           ;carry set if no interrupt available
+
+				;------------------------------------------------------------------------------
+				;
+				;------------------------------------------------------------------------------
+ 0CA0				ReleaseInterrupt PROC USES bx dx ;bl to contain interrupt level to register
+
+ 0CA0  53		   *	    push   bx
+ 0CA1  52		   *	    push   dx
+ 0CA2  32 FF			        xor     bh,bh
+ 0CA4  FE 8F 0000 E		        dec     abyInterruptCount[bx]
+ 0CA8  75 06			        jnz     exit
+ 0CAA  B2 1C			        mov     dl,DevHlp_UnSetIRQ
+ 0CAC  FF 1E 0000 E		        call    device_hlp
+ 0CB0				exit:
+				        ret
+ 0CB0  5A		   *	    pop    dx
+ 0CB1  5B		   *	    pop    bx
+ 0CB2  C3		   *	    ret    00000h
+
+ 0CB3				ReleaseInterrupt ENDP
+
+				 IFNDEF NO_COMscope
+				;------------------------------------------------------------------------------
+				;
+				;------------------------------------------------------------------------------
+ 0CB3				COMscopeReadWrite PROC NEAR C USES EAX EBX, wCOMscopeTrace:WORD, wCount:WORD
+
+ 0CB3  55		   *	    push   bp
+ 0CB4  8B EC		   *	    mov    bp, sp
+ 0CB6  66| 50		   *	    push   eax
+ 0CB8  66| 53		   *	    push   ebx
+ 0CBA  8B 46 04			        mov     ax,wCOMscopeTrace  ; includes both COMscope function and queue level
+ 0CBD  FA			        cli
+ 0CBE  66| 8B 9C 008C		        mov     ebx,[si].s_stDeviceParms.dwCOMscopeQWrtPtr
+				;        test_DeviceFlag2 DEV_FLAG2_USE_DD_DATA_SEGMENT
+				;        jnz     @f
+ 0CC3  67& 64: 89 03		        mov     FS:[ebx],ax
+				;        jmp     test_wrap_1
+				;@@:
+				;        mov     [ebx],ax
+
+ 0CC7				test_wrap_1:
+ 0CC7  66| 3B 5C 1C		        cmp     ebx,[si].s_stDeviceParms.dwCOMscopeBuffExtent
+ 0CCB  72 09			        jb      inc_index_1
+ 0CCD  66| 8B 9C 0094		        mov     ebx,[si].s_stDeviceParms.oCOMscopeBuff
+ 0CD2  66| 83 EB 02		        sub     ebx,2
+
+ 0CD6				inc_index_1:
+ 0CD6  66| 83 C3 02		        add     ebx,2
+
+ 0CDA  F7 44 4C 4000		        test    [si].s_stDeviceParms.fCOMscopeFunction,CSFUNC_TRACE_INCLUDE_PACKET
+ 0CDF  74 37			        jz      store_pointer
+ 0CE1  B8 0001			        mov     ax,1                            ; WORD count
+ 0CE4  0D FF00			        or      ax,CS_PACKET_DATA
+				;        test_DeviceFlag2 DEV_FLAG2_USE_DD_DATA_SEGMENT
+				;        jnz     @f
+ 0CE7  67& 64: 89 03		        mov     FS:[ebx],ax
+				;        jmp     test_wrap_2
+				;@@:
+				;        mov     [ebx],ax
+
+ 0CEB				test_wrap_2:
+ 0CEB  66| 3B 5C 1C		        cmp     ebx,[si].s_stDeviceParms.dwCOMscopeBuffExtent
+ 0CEF  72 09			        jb      inc_index_2
+ 0CF1  66| 8B 9C 0094		        mov     ebx,[si].s_stDeviceParms.oCOMscopeBuff
+ 0CF6  66| 83 EB 02		        sub     ebx,2
+
+ 0CFA				inc_index_2:
+ 0CFA  66| 83 C3 02		        add     ebx,2
+
+ 0CFE  8B 46 06			        mov     ax,wCount
+				;        test_DeviceFlag2 DEV_FLAG2_USE_DD_DATA_SEGMENT
+				;        jnz     @f
+ 0D01  67& 64: 89 03		        mov     FS:[ebx],ax
+				;        jmp     test_wrap_3
+				;@@:
+				;        mov     [ebx],ax
+
+ 0D05				test_wrap_3:
+ 0D05  66| 3B 5C 1C		        cmp     ebx,[si].s_stDeviceParms.dwCOMscopeBuffExtent
+ 0D09  72 09			        jb      inc_index_3
+ 0D0B  66| 8B 9C 0094		        mov     ebx,[si].s_stDeviceParms.oCOMscopeBuff
+ 0D10  66| 83 EB 02		        sub     ebx,2
+
+ 0D14				inc_index_3:
+ 0D14  66| 83 C3 02		        add     ebx,2
+
+ 0D18				store_pointer:
+ 0D18  66| 89 9C 008C		        mov     [si].s_stDeviceParms.dwCOMscopeQWrtPtr,ebx
+ 0D1D  FB			        sti
+
+ 0D1E				no_trace:
+				        ret
+ 0D1E  66| 5B		   *	    pop    ebx
+ 0D20  66| 58		   *	    pop    eax
+ 0D22  5D		   *	    pop    bp
+ 0D23  C3		   *	    ret    00000h
+
+ 0D24				COMscopeReadWrite ENDP
+
+				;------------------------------------------------------------------------------
+				;
+				; ES:DI is destination buffer definition
+				; Bounds checking was done by calling routine and they must be returned
+				; unchanged.
+				;------------------------------------------------------------------------------
+
+ 0D24				COMscopeDevIOCtl PROC NEAR C USES EBX CX DI, wFunction:WORD, wStoreCount:WORD
+
+				        LOCAL bOddCount:WORD
+				        LOCAL dwBuffExtent:DWORD
+
+ 0D24  55		   *	    push   bp
+ 0D25  8B EC		   *	    mov    bp, sp
+ 0D27  83 C4 FA		   *	    add    sp, 0FFFAh
+ 0D2A  66| 53		   *	    push   ebx
+ 0D2C  51		   *	    push   cx
+ 0D2D  57		   *	    push   di
+ 0D2E  F7 44 4C 0040		        test    [si].s_stDeviceParms.fCOMscopeFunction,CSFUNC_TRACE_DEVIOCTL
+ 0D33  0F 84 00A3		        jz      no_trace
+ 0D37  66| 8B 44 1C		        mov     eax,[si].s_stDeviceParms.dwCOMscopeBuffExtent
+ 0D3B  66| 89 46 FA		        mov     dwBuffExtent,eax
+ 0D3F  8B 46 04			        mov     ax,wFunction
+ 0D42  B4 85			        mov     ah,CS_DEVIOCTL
+ 0D44  FA			        cli
+ 0D45  66| 8B 9C 008C		        mov     ebx,[si].s_stDeviceParms.dwCOMscopeQWrtPtr
+				;        test_DeviceFlag2 DEV_FLAG2_USE_DD_DATA_SEGMENT
+				;        jnz     @f
+ 0D4A  67& 64: 89 03		        mov     FS:[ebx],ax
+				;        jmp     test_wrap_1
+				;@@:
+				;        mov     [ebx],ax
+
+ 0D4E				test_wrap_1:
+ 0D4E  66| 3B 5E FA		        cmp     ebx,dwBuffExtent
+ 0D52  72 09			        jb      inc_index_1
+ 0D54  66| 8B 9C 0094		        mov     ebx,[si].s_stDeviceParms.oCOMscopeBuff
+ 0D59  66| 83 EB 02		        sub     ebx,2
+
+ 0D5D				inc_index_1:
+ 0D5D  66| 83 C3 02		        add     ebx,2
+
+ 0D61  F7 44 4C 4000		        test    [si].s_stDeviceParms.fCOMscopeFunction,CSFUNC_TRACE_INCLUDE_PACKET
+ 0D66  74 6C			        jz      store_pointer
+ 0D68  83 7E 06 00		        cmp     wStoreCount,ZERO
+ 0D6C  74 66			        je      store_pointer
+ 0D6E  C7 46 FE 0000		        mov     bOddCount,FALSE
+ 0D73  8B 4E 06			        mov     cx,wStoreCount
+ 0D76  8B C1			        mov     ax,cx
+ 0D78  D1 E8			        shr     ax,1
+ 0D7A  73 06			        jnc     add_key
+ 0D7C  C7 46 FE 0001		        mov     bOddCount,TRUE
+ 0D81  40			        inc     ax
+ 0D82				add_key:
+ 0D82  0D FF00			        or      ax,CS_PACKET_DATA
+				;        test_DeviceFlag2 DEV_FLAG2_USE_DD_DATA_SEGMENT
+				;        jnz     @f
+ 0D85  67& 64: 89 03		        mov     FS:[ebx],ax
+				;        jmp     test_wrap_2
+				;@@:
+				;        mov     [ebx],ax
+
+ 0D89				test_wrap_2:
+ 0D89  66| 3B 5E FA		        cmp     ebx,dwBuffExtent
+ 0D8D  72 09			        jb      inc_index_2
+ 0D8F  66| 8B 9C 0094		        mov     ebx,[si].s_stDeviceParms.oCOMscopeBuff
+ 0D94  66| 83 EB 02		        sub     ebx,2
+
+ 0D98				inc_index_2:
+ 0D98  66| 83 C3 02		        add     ebx,2
+ 0D9C  66| FF 46 FA		        inc     dwBuffExtent  ; because we are going to move the rest one byte at a time
+
+ 0DA0				fill_loop:
+ 0DA0  26: 8A 05		        mov     al,ES:[di]
+				;        test_DeviceFlag2 DEV_FLAG2_USE_DD_DATA_SEGMENT
+				;        jnz     @f
+ 0DA3  67& 64: 88 03		        mov     FS:[ebx],al
+				;        jmp     test_wrap_3
+				;@@:
+				;        mov     [ebx],al
+
+ 0DA7				test_wrap_3:
+ 0DA7  66| 3B 5E FA		        cmp     ebx,dwBuffExtent
+ 0DAB  72 07			        jb      inc_index_3
+ 0DAD  66| 8B 9C 0094		        mov     ebx,[si].s_stDeviceParms.oCOMscopeBuff
+ 0DB2  66| 4B			        dec     ebx
+
+ 0DB4				inc_index_3:
+ 0DB4  66| 43			        inc     ebx
+ 0DB6  47			        inc     di
+ 0DB7  E2 E7			        loop    fill_loop
+
+ 0DB9  83 7E FE 01		        cmp     bOddCount,TRUE
+ 0DBD  75 15			        jne     store_pointer
+ 0DBF  32 C0			        xor     al,al
+				;        test_DeviceFlag2 DEV_FLAG2_USE_DD_DATA_SEGMENT
+				;        jnz     @f
+ 0DC1  67& 64: 88 03		        mov     FS:[ebx],al
+				;        jmp     test_wrap_4
+				;@@:
+				;        mov     [ebx],al
+
+ 0DC5				test_wrap_4:
+ 0DC5  66| 3B 5E FA		        cmp     ebx,dwBuffExtent
+ 0DC9  72 07			        jb      inc_index_4
+ 0DCB  66| 8B 9C 0094		        mov     ebx,[si].s_stDeviceParms.oCOMscopeBuff
+ 0DD0  66| 4B			        dec     ebx
+
+ 0DD2				inc_index_4:
+ 0DD2  66| 43			        inc     ebx
+
+ 0DD4				store_pointer:
+ 0DD4  66| 89 9C 008C		        mov     [si].s_stDeviceParms.dwCOMscopeQWrtPtr,ebx
+ 0DD9  FB			        sti
+
+ 0DDA				no_trace:
+				        ret
+ 0DDA  5F		   *	    pop    di
+ 0DDB  59		   *	    pop    cx
+ 0DDC  66| 5B		   *	    pop    ebx
+ 0DDE  8B E5		   *	    mov    sp, bp
+ 0DE0  5D		   *	    pop    bp
+ 0DE1  C3		   *	    ret    00000h
+
+ 0DE2				COMscopeDevIOCtl ENDP
+				  ENDIF ; NO_COMscope
+
+				;------------------------------------------------------------------------------
+				;
+				;------------------------------------------------------------------------------
+ 0DE2				DevHelp_GetDOSVar PROC FAR C USES BX DX DS ES DI, wIndex:WORD, pSegment:DWORD
+
+
+ 0DE2  55		   *	    push   bp
+ 0DE3  8B EC		   *	    mov    bp, sp
+ 0DE5  53		   *	    push   bx
+ 0DE6  52		   *	    push   dx
+ 0DE7  1E		   *	    push   ds
+ 0DE8  06		   *	    push   es
+ 0DE9  57		   *	    push   di
+ 0DEA  B8 ---- R		        mov     ax,RDGROUP
+ 0DED  8E D8			        mov     ds,ax
+ 0DEF  8B 46 06			        mov     ax,wIndex
+ 0DF2  B2 24			        mov     dl,DevHlp_GetDOSVar
+ 0DF4  FF 1E 0000 E		        call    device_hlp
+ 0DF8  73 08			        jnc     store_pointer
+ 0DFA  66| B8 00000001		        mov     eax,1
+ 0E00  EB 0D			        jmp     exit
+
+ 0E02				store_pointer:
+ 0E02  C4 7E 08			        les     di,pSegment
+ 0E05  26: 89 1D		        mov     WORD PTR ES:[di],bx
+ 0E08  26: 89 45 02		        mov     WORD PTR ES:[di + 2],ax
+				;        mov     WORD PTR pData,bx
+				;        mov     WORD PTR (pData + 2),ax
+ 0E0C  66| 33 C0		        xor     eax,eax
+ 0E0F				exit:
+				        ret
+ 0E0F  5F		   *	    pop    di
+ 0E10  07		   *	    pop    es
+ 0E11  1F		   *	    pop    ds
+ 0E12  5A		   *	    pop    dx
+ 0E13  5B		   *	    pop    bx
+ 0E14  5D		   *	    pop    bp
+ 0E15  CB		   *	    ret    00000h
+
+ 0E16				DevHelp_GetDOSVar ENDP
+
+ 0E16				RES_CODE ENDS
+
+				    END

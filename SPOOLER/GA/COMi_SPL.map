@@ -1,0 +1,135 @@
+
+ COMI_SPL
+
+ Start         Length     Name                   Class
+ 0001:00000000 000000CC0H CODE32                 CODE 32-bit
+	at offset 00000000 00CBFH bytes from P:\spooler\ga\spooler.obj (p:\Spooler\spooler.c)
+
+ 0002:00000000 000000000H CONST32_RO             CONST 32-bit
+
+ 0002:00000000 000000738H DATA32                 DATA 32-bit
+	at offset 00000000 00734H bytes from P:\spooler\ga\spooler.obj (p:\Spooler\spooler.c)
+	at offset 00000734 00004H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\dllstub.asm)
+
+ 0002:00000738 000000000H CTOR_DTOR1             DATA 32-bit
+
+ 0002:00000738 000000000H CTOR_DTOR2             DATA 32-bit
+
+ 0002:00000738 000000000H CTOR_DTOR3             DATA 32-bit
+
+ 0002:00000738 000000000H EDC1                   EDC_CLASS 32-bit
+
+ 0002:00000738 000000000H EDC2                   EDC_CLASS 32-bit
+
+ 0002:00000738 000000000H EDC3                   EDC_CLASS 32-bit
+
+ 0002:00000738 000000008H BSS32                  BSS 32-bit
+	at offset 00000000 00008H bytes from P:\spooler\ga\spooler.obj (p:\Spooler\spooler.c)
+
+ 0002:00000740 000000874H c_common               BSS 32-bit
+
+
+ Origin   Group
+ 0000:0   FLAT
+ 0002:0   DGROUP
+
+ Address       Export                  Alias
+
+ 0001:000008B0 SPLPDENUMPORT           SPLPDENUMPORT
+ 0001:00000000 SPLPDGETPORTICON        SPLPDGETPORTICON
+ 0001:000005D2 SPLPDINITPORT           SPLPDINITPORT
+ 0001:00000434 SPLPDINSTALLPORT        SPLPDINSTALLPORT
+ 0001:000003D8 SPLPDQUERYPORT          SPLPDQUERYPORT
+ 0001:000000F5 SPLPDREMOVEPORT         SPLPDREMOVEPORT
+ 0001:000001E0 SPLPDSETPORT            SPLPDSETPORT
+ 0001:00000014 SPLPDTERMPORT           SPLPDTERMPORT
+
+  Address         Publics by Name
+
+ 0002:00000744       aszDeviceList
+ 0002:00000738       bSpoolerEnabled
+ 0001:00000720       CopyPortInfo
+ 0000:00000000  Imp  DosClose             (DOSCALLS.257)
+ 0000:00000000  Imp  DosFreeModule        (DOSCALLS.322)
+ 0000:00000000  Imp  DosLoadModule        (DOSCALLS.318)
+ 0000:00000000  Imp  DosOpen              (DOSCALLS.273)
+ 0000:00000000  Imp  DosQueryProcAddr     (DOSCALLS.321)
+ 0000:00000000  Imp  FlushComBuffer       (OS2LS_IO.14)
+ 0000:00000000  Imp  GetBaudRates         (OS2LS_IO.9)
+ 0002:00000740       hThisModule
+ 0000:00000000  Imp  PrfQueryProfileData  (PMSHAPI.117)
+ 0000:00000000  Imp  PrfQueryProfileString (PMSHAPI.115)
+ 0000:00000000  Imp  PrfWriteProfileData  (PMSHAPI.118)
+ 0000:00000000  Imp  PrfWriteProfileString (PMSHAPI.116)
+ 0000:00000000  Imp  SendDCB              (OS2LS_IO.19)
+ 0000:00000000  Imp  SetBaudRate          (OS2LS_IO.6)
+ 0000:00000000  Imp  SetLineCharacteristics (OS2LS_IO.5)
+ 0001:000008B0       SPLPDENUMPORT
+ 0001:00000000       SPLPDGETPORTICON
+ 0001:000005D2       SPLPDINITPORT
+ 0001:00000434       SPLPDINSTALLPORT
+ 0001:000003D8       SPLPDQUERYPORT
+ 0001:000000F5       SPLPDREMOVEPORT
+ 0001:000001E0       SPLPDSETPORT
+ 0001:00000014       SPLPDTERMPORT
+ 0001:00000CA0       Spl_MessageBox
+ 0002:00000E38       stCOMiCFG
+ 0002:00000B2C       szConfigLibPath
+ 0002:00000C30       szDriverIniPath
+ 0002:00000D34       szDriverVersion
+ 0002:00000E88       szMessage
+ 0002:0000073C       ulSignature
+ 0000:00000000  Imp  WinGetLastError      (PMWIN.753)
+ 0000:00000000  Imp  WinMessageBox        (PMWIN.789)
+ 0000:00000000  Imp  _CRT_init            (OS2LSRTL.467)
+ 0002:00000734       _dllentry
+ 0001:00000A80       _DLL_InitTerm
+ 0002:00000738       _edata
+ 0002:00000FB4       _end
+ 0000:00000000  Imp  _sprintfieee         (OS2LSRTL.32)
+
+  Address         Publics by Value
+
+ 0000:00000000  Imp  DosLoadModule        (DOSCALLS.318)
+ 0000:00000000  Imp  WinMessageBox        (PMWIN.789)
+ 0000:00000000  Imp  DosFreeModule        (DOSCALLS.322)
+ 0000:00000000  Imp  DosClose             (DOSCALLS.257)
+ 0000:00000000  Imp  DosOpen              (DOSCALLS.273)
+ 0000:00000000  Imp  WinGetLastError      (PMWIN.753)
+ 0000:00000000  Imp  SendDCB              (OS2LS_IO.19)
+ 0000:00000000  Imp  FlushComBuffer       (OS2LS_IO.14)
+ 0000:00000000  Imp  DosQueryProcAddr     (DOSCALLS.321)
+ 0000:00000000  Imp  SetLineCharacteristics (OS2LS_IO.5)
+ 0000:00000000  Imp  PrfWriteProfileString (PMSHAPI.116)
+ 0000:00000000  Imp  PrfWriteProfileData  (PMSHAPI.118)
+ 0000:00000000  Imp  SetBaudRate          (OS2LS_IO.6)
+ 0000:00000000  Imp  _CRT_init            (OS2LSRTL.467)
+ 0000:00000000  Imp  PrfQueryProfileData  (PMSHAPI.117)
+ 0000:00000000  Imp  PrfQueryProfileString (PMSHAPI.115)
+ 0000:00000000  Imp  GetBaudRates         (OS2LS_IO.9)
+ 0000:00000000  Imp  _sprintfieee         (OS2LSRTL.32)
+ 0001:00000000       SPLPDGETPORTICON
+ 0001:00000014       SPLPDTERMPORT
+ 0001:000000F5       SPLPDREMOVEPORT
+ 0001:000001E0       SPLPDSETPORT
+ 0001:000003D8       SPLPDQUERYPORT
+ 0001:00000434       SPLPDINSTALLPORT
+ 0001:000005D2       SPLPDINITPORT
+ 0001:00000720       CopyPortInfo
+ 0001:000008B0       SPLPDENUMPORT
+ 0001:00000A80       _DLL_InitTerm
+ 0001:00000CA0       Spl_MessageBox
+ 0002:00000734       _dllentry
+ 0002:00000738       _edata
+ 0002:00000738       bSpoolerEnabled
+ 0002:0000073C       ulSignature
+ 0002:00000740       hThisModule
+ 0002:00000744       aszDeviceList
+ 0002:00000B2C       szConfigLibPath
+ 0002:00000C30       szDriverIniPath
+ 0002:00000D34       szDriverVersion
+ 0002:00000E38       stCOMiCFG
+ 0002:00000E88       szMessage
+ 0002:00000FB4       _end
+
+Program entry point at 0001:00000A80

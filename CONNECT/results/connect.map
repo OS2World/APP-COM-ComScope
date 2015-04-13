@@ -1,0 +1,364 @@
+
+ CONNECT
+
+ Start         Length     Name                   Class
+ 0001:00000000 000002D65H CODE32                 CODE 32-bit
+	at offset 00000000 00A10H bytes from P:\connect\results\request.obj (p:\connect\request.c)
+	at offset 00000a10 00420H bytes from P:\connect\results\response.obj (p:\connect\response.c)
+	at offset 00000e30 014D8H bytes from P:\connect\results\connect.obj (p:\connect\connect.c)
+	at offset 00002308 00788H bytes from P:\connect\results\conn_dlg.obj (p:\connect\conn_dlg.c)
+	at offset 00002a90 000BEH bytes from C:\IBMCPP\LIB\CPPOM30O.lib (d:\swordcsd\crt\dde4strt.c)
+	at offset 00002b50 00007H bytes from C:\IBMCPP\LIB\CPPOM30O.lib (d:\swordcsd\crt\cppinit.asm)
+	at offset 00002b58 001F8H bytes from C:\IBMCPP\LIB\CPPOM30O.lib (d:\swordcsd\crt\setuparg.asm)
+	at offset 00002d50 0000DH bytes from C:\IBMCPP\LIB\CPPOM30O.lib (d:\swordcsd\crt\sctdt.c)
+	at offset 00002d60 00005H bytes from C:\IBMCPP\LIB\CPPOM30O.lib (d:\swordcsd\crt\wctdt.c)
+
+ 0002:00000000 000000000H CONST32_RO             CONST 32-bit
+
+ 0002:00000000 00000DEC8H DATA32                 DATA 32-bit
+	at offset 00000000 002CCH bytes from P:\connect\results\request.obj (p:\connect\request.c)
+	at offset 000002cc 001CCH bytes from P:\connect\results\response.obj (p:\connect\response.c)
+	at offset 00000498 0058CH bytes from P:\connect\results\connect.obj (p:\connect\connect.c)
+	at offset 00000a24 00098H bytes from P:\connect\results\conn_dlg.obj (p:\connect\conn_dlg.c)
+	at offset 00000abc 0D3F8H bytes from P:\connect\results\data.obj (p:\connect\data.c)
+	at offset 0000deb4 00004H bytes from C:\IBMCPP\LIB\CPPOM30O.lib (d:\swordcsd\crt\exeentry.asm)
+	at offset 0000deb8 00010H bytes from C:\IBMCPP\LIB\CPPOM30O.lib (d:\swordcsd\crt\setuparg.asm)
+
+ 0002:0000DEC8 000000000H CTOR_DTOR1             DATA 32-bit
+
+ 0002:0000DEC8 000000000H CTOR_DTOR2             DATA 32-bit
+
+ 0002:0000DEC8 000000000H CTOR_DTOR3             DATA 32-bit
+
+ 0002:0000DEC8 000000000H EDC1                   EDC_CLASS 32-bit
+
+ 0002:0000DEC8 000000018H EDC2                   EDC_CLASS 32-bit
+	at offset 00000000 0000CH bytes from C:\IBMCPP\LIB\CPPOM30O.lib (d:\swordcsd\crt\cppinit.asm)
+	at offset 0000000c 0000CH bytes from C:\IBMCPP\LIB\CPPOM30O.lib (d:\swordcsd\crt\setuparg.asm)
+
+ 0002:0000DEE0 000000000H EDC3                   EDC_CLASS 32-bit
+
+ 0002:0000DEE0 00000002CH BSS32                  BSS 32-bit
+	at offset 00000000 0000CH bytes from P:\connect\results\connect.obj (p:\connect\connect.c)
+	at offset 0000000c 00018H bytes from P:\connect\results\conn_dlg.obj (p:\connect\conn_dlg.c)
+	at offset 00000024 00008H bytes from C:\IBMCPP\LIB\CPPOM30O.lib (d:\swordcsd\crt\dde4strt.c)
+
+ 0002:0000DF0C 000000192H c_common               BSS 32-bit
+
+ 0002:0000E0A0 000008000H STACK32                STACK 32-bit
+	at offset 00000000 08000H bytes from C:\IBMCPP\LIB\CPPOM30O.lib (d:\swordcsd\crt\exeentry.asm)
+
+
+ Origin   Group
+ 0000:0   FLAT
+ 0002:0   DGROUP
+
+  Address         Publics by Name
+
+ 0002:0000CB28       astGroupList
+ 0002:00000B26       astSubList
+ 0000:00000000  Imp  atoi                 (OS2LS_UT.62)
+ 0002:0000DEE4       bLoadClient
+ 0002:0000DEE0       bLoadServer
+ 0002:0000DF10       bNotifyLoop
+ 0000:00000000  Imp  CheckButton          (OS2LS_UT.7)
+ 0000:00000000  Imp  Checked              (OS2LS_UT.141)
+ 0001:0000216C       ClearScreen
+ 0001:00001AE0       COMthreadMonitor
+ 0001:00001F60       DisplayMessageError
+ 0001:00001ECC       DisplayProcessError
+ 0000:00000000  Imp  DosCloseEventSem     (DOSCALLS.326)
+ 0000:00000000  Imp  DosCreateEventSem    (DOSCALLS.324)
+ 0000:00000000  Imp  DosCreateThread      (DOSCALLS.311)
+ 0000:00000000  Imp  DosExitList          (DOSCALLS.296)
+ 0000:00000000  Imp  DosFreeMem           (DOSCALLS.304)
+ 0000:00000000  Imp  DosFreeModule        (DOSCALLS.322)
+ 0000:00000000  Imp  DosKillThread        (DOSCALLS.111)
+ 0000:00000000  Imp  DosLoadModule        (DOSCALLS.318)
+ 0000:00000000  Imp  DosPostEventSem      (DOSCALLS.328)
+ 0000:00000000  Imp  DosQueryProcAddr     (DOSCALLS.321)
+ 0000:00000000  Imp  DosResetEventSem     (DOSCALLS.327)
+ 0000:00000000  Imp  DosSetExceptionHandler (DOSCALLS.354)
+ 0000:00000000  Imp  DosSleep             (DOSCALLS.229)
+ 0000:00000000  Imp  DosUnsetExceptionHandler (DOSCALLS.355)
+ 0000:00000000  Imp  DosWaitEventSem      (DOSCALLS.329)
+ 0002:0000DFB8       eidError
+ 0001:000020D8       ErrorNotify
+ 0000:00000000  Imp  exit                 (OS2LS_UT.60)
+ 0002:0000DEE8       fLoaded
+ 0001:000010E8       fnwpClient
+ 0001:00002308       fnwpConfigCommDlg
+ 0001:00002464       fnwpLogonDlg
+ 0001:00002614       fnwpNotifyDlg
+ 0001:0000295C       fnwpSubscriberDlg
+ 0000:00000000  Imp  free                 (OS2LS_UT.53)
+ 0000:00000000  Imp  GpiCharStringAt      (PMGPI.359)
+ 0000:00000000  Imp  GpiSetBackColor      (PMGPI.504)
+ 0000:00000000  Imp  GpiSetBackMix        (PMGPI.505)
+ 0000:00000000  Imp  GpiSetColor          (PMGPI.517)
+ 0000:00000000  Imp  GpiSetMix            (PMGPI.537)
+ 0002:0000DF1C       habAnchorBlock
+ 0002:0000DF80       hdcPs
+ 0002:0000DFB0       hevKillThreadSem
+ 0002:0000DFB4       hevNotifyLoopSem
+ 0002:0000DF7C       hMod
+ 0002:0000E090       hwndClient
+ 0002:0000DFC0       hwndFrame
+ 0001:00001B68       InitializeCOM
+ 0001:00001D00       InitializeServer
+ 0002:0000DFBC       lcxBrdr
+ 0002:0000DFAC       lcxVSc
+ 0002:0000DF84       lXScr
+ 0001:00000E30       main
+ 0000:00000000  Imp  malloc               (OS2LS_UT.83)
+ 0000:00000000  Imp  memcpy               (OS2LS_UT.100)
+ 0000:00000000  Imp  MenuItemEnable       (OS2LS_UT.34)
+ 0000:00000000  Imp  MessageBox           (OS2LS_UT.240)
+ 0001:000025A8       NotifyLoopThread
+ 0001:000021F0       Paint
+ 0002:0000DF20       pfnSendMessage
+ 0002:0000E098       pfnStopCOM
+ 0001:00002028       PrintString
+ 0001:00000000       ProcessRequest
+ 0001:00000A10       ProcessResponse
+ 0001:00001E94       SendMessage
+ 0002:00000B0E       stAddr
+ 0002:0000DFA8       stCell
+ 0002:00000ABC       stLogon
+ 0000:00000000  Imp  strcpy               (OS2LS_UT.128)
+ 0000:00000000  Imp  stricmp              (OS2LS_UT.177)
+ 0000:00000000  Imp  strlen               (OS2LS_UT.111)
+ 0002:0000DF88       stTestAddressee
+ 0002:0000DF28       szErrorMessage
+ 0002:00000910       szEXEtitle
+ 0002:0000DFC4       szMessage
+ 0002:00000920       szModName
+ 0002:00000A92       szSub
+ 0002:0000E08C       tidMonitor
+ 0002:00000908       ulMaxMessageBufferSize
+ 0002:0000090C       ulMessageNumber
+ 0002:0000DF24       ulWindowHeight
+ 0002:0000DF18       ulWindowWidth
+ 0002:0000DEB0       usGroupListCount
+ 0002:0000CB26       usSubscriberListCount
+ 0002:0000E094       usWndDepth
+ 0002:0000E09C       usWndWidth
+ 0002:0000DF0C       wBackground
+ 0002:0000DF0E       wForeground
+ 0000:00000000  Imp  WinBeginPaint        (PMWIN.703)
+ 0000:00000000  Imp  WinCalcFrameRect     (PMWIN.704)
+ 0000:00000000  Imp  WinCreateMsgQueue    (PMWIN.716)
+ 0000:00000000  Imp  WinCreateStdWindow   (PMWIN.908)
+ 0000:00000000  Imp  WinDefDlgProc        (PMWIN.910)
+ 0000:00000000  Imp  WinDefWindowProc     (PMWIN.911)
+ 0000:00000000  Imp  WinDestroyMsgQueue   (PMWIN.726)
+ 0000:00000000  Imp  WinDestroyWindow     (PMWIN.728)
+ 0000:00000000  Imp  WinDismissDlg        (PMWIN.729)
+ 0000:00000000  Imp  WinDispatchMsg       (PMWIN.912)
+ 0000:00000000  Imp  WinDlgBox            (PMWIN.923)
+ 0000:00000000  Imp  WinEndPaint          (PMWIN.738)
+ 0000:00000000  Imp  WinFillRect          (PMWIN.743)
+ 0000:00000000  Imp  WinGetLastError      (PMWIN.753)
+ 0000:00000000  Imp  WinGetMsg            (PMWIN.915)
+ 0000:00000000  Imp  WinGetPS             (PMWIN.757)
+ 0000:00000000  Imp  WinInitialize        (PMWIN.763)
+ 0000:00000000  Imp  WinInvalidateRect    (PMWIN.765)
+ 0000:00000000  Imp  WinOpenWindowDC      (PMWIN.794)
+ 0000:00000000  Imp  WinPostMsg           (PMWIN.919)
+ 0000:00000000  Imp  WinQueryDlgItemText  (PMWIN.815)
+ 0000:00000000  Imp  WinQueryDlgItemTextLength (PMWIN.816)
+ 0000:00000000  Imp  WinQuerySysValue     (PMWIN.829)
+ 0000:00000000  Imp  WinQueryWindow       (PMWIN.834)
+ 0000:00000000  Imp  WinQueryWindowRect   (PMWIN.840)
+ 0000:00000000  Imp  WinRegisterClass     (PMWIN.926)
+ 0000:00000000  Imp  WinReleasePS         (PMWIN.848)
+ 0000:00000000  Imp  WinSendDlgItemMsg    (PMWIN.903)
+ 0000:00000000  Imp  WinSetDlgItemText    (PMWIN.859)
+ 0000:00000000  Imp  WinSetFocus          (PMWIN.860)
+ 0000:00000000  Imp  WinSetWindowPos      (PMWIN.875)
+ 0000:00000000  Imp  WinSetWindowText     (PMWIN.877)
+ 0000:00000000  Imp  WinShowWindow        (PMWIN.883)
+ 0000:00000000  Imp  WinTerminate         (PMWIN.888)
+ 0001:00002260       WndSize
+ 0002:0000DF04       _argc
+ 0002:0000DF08       _argv
+ 0000:00000000  Imp  _callback_opt_sys    (OS2LS_UT.139)
+ 0001:00002B50       _cppinit
+ 0000:00000000  Imp  _CRT_init            (OS2LS_UT.234)
+ 0000:00000000  Imp  _CRT_term            (OS2LS_UT.230)
+ 0002:0000DEE0       _edata
+ 0002:0000E0A0       _end
+ 0000:00000000  Imp  _environ             (OS2LS_UT.201)
+ 0000:00000000  Imp  _exception_procinit  (OS2LS_UT.2)
+ 0002:0000DEB4       _exeentry
+ 0001:00002A90       _exestart
+ 0000:00000000  Imp  _EXE_Exception       (OS2LS_UT.65)
+ 0000:00000000  Imp  _fpninit             (OS2LS_UT.190)
+ 0000:00000000  Imp  _fpreset             (OS2LS_UT.186)
+ 0000:00000000  Imp  _matherr             (OS2LS_UT.173)
+ 0002:0000DF14       _matherr_ptr
+ 0000:00000000  Imp  _PrintErrMsg         (OS2LS_UT.20)
+ 0001:00002B58       _setuparg
+ 0000:00000000  Imp  _sprintfieee         (OS2LS_UT.14)
+ 0000:00000000  Imp  _terminate           (OS2LS_UT.241)
+ 0001:00002B20       __RunExitList
+ 0001:00002D50       __sctordtorInit
+ 0001:00002D58       __sctordtorTerm
+ 0001:00002D60       __wctordtorInit
+ 0001:00002D64       __wctordtorTerm
+
+  Address         Publics by Value
+
+ 0000:00000000  Imp  WinGetMsg            (PMWIN.915)
+ 0000:00000000  Imp  atoi                 (OS2LS_UT.62)
+ 0000:00000000  Imp  _EXE_Exception       (OS2LS_UT.65)
+ 0000:00000000  Imp  WinDlgBox            (PMWIN.923)
+ 0000:00000000  Imp  GpiSetMix            (PMGPI.537)
+ 0000:00000000  Imp  WinSetWindowPos      (PMWIN.875)
+ 0000:00000000  Imp  DosSleep             (DOSCALLS.229)
+ 0000:00000000  Imp  _fpreset             (OS2LS_UT.186)
+ 0000:00000000  Imp  MenuItemEnable       (OS2LS_UT.34)
+ 0000:00000000  Imp  WinRegisterClass     (PMWIN.926)
+ 0000:00000000  Imp  DosFreeMem           (DOSCALLS.304)
+ 0000:00000000  Imp  DosUnsetExceptionHandler (DOSCALLS.355)
+ 0000:00000000  Imp  WinDispatchMsg       (PMWIN.912)
+ 0000:00000000  Imp  exit                 (OS2LS_UT.60)
+ 0000:00000000  Imp  _CRT_init            (OS2LS_UT.234)
+ 0000:00000000  Imp  _CRT_term            (OS2LS_UT.230)
+ 0000:00000000  Imp  free                 (OS2LS_UT.53)
+ 0000:00000000  Imp  WinQueryWindow       (PMWIN.834)
+ 0000:00000000  Imp  WinDefWindowProc     (PMWIN.911)
+ 0000:00000000  Imp  DosCloseEventSem     (DOSCALLS.326)
+ 0000:00000000  Imp  GpiCharStringAt      (PMGPI.359)
+ 0000:00000000  Imp  memcpy               (OS2LS_UT.100)
+ 0000:00000000  Imp  _fpninit             (OS2LS_UT.190)
+ 0000:00000000  Imp  WinInvalidateRect    (PMWIN.765)
+ 0000:00000000  Imp  strcpy               (OS2LS_UT.128)
+ 0000:00000000  Imp  strlen               (OS2LS_UT.111)
+ 0000:00000000  Imp  DosResetEventSem     (DOSCALLS.327)
+ 0000:00000000  Imp  DosWaitEventSem      (DOSCALLS.329)
+ 0000:00000000  Imp  WinGetLastError      (PMWIN.753)
+ 0000:00000000  Imp  WinGetPS             (PMWIN.757)
+ 0000:00000000  Imp  DosCreateThread      (DOSCALLS.311)
+ 0000:00000000  Imp  GpiSetBackColor      (PMGPI.504)
+ 0000:00000000  Imp  _environ             (OS2LS_UT.201)
+ 0000:00000000  Imp  WinOpenWindowDC      (PMWIN.794)
+ 0000:00000000  Imp  DosPostEventSem      (DOSCALLS.328)
+ 0000:00000000  Imp  malloc               (OS2LS_UT.83)
+ 0000:00000000  Imp  WinCalcFrameRect     (PMWIN.704)
+ 0000:00000000  Imp  DosQueryProcAddr     (DOSCALLS.321)
+ 0000:00000000  Imp  WinDestroyMsgQueue   (PMWIN.726)
+ 0000:00000000  Imp  WinQueryDlgItemTextLength (PMWIN.816)
+ 0000:00000000  Imp  WinSendDlgItemMsg    (PMWIN.903)
+ 0000:00000000  Imp  WinFillRect          (PMWIN.743)
+ 0000:00000000  Imp  WinEndPaint          (PMWIN.738)
+ 0000:00000000  Imp  WinSetFocus          (PMWIN.860)
+ 0000:00000000  Imp  WinReleasePS         (PMWIN.848)
+ 0000:00000000  Imp  WinTerminate         (PMWIN.888)
+ 0000:00000000  Imp  WinQuerySysValue     (PMWIN.829)
+ 0000:00000000  Imp  WinDestroyWindow     (PMWIN.728)
+ 0000:00000000  Imp  WinSetDlgItemText    (PMWIN.859)
+ 0000:00000000  Imp  _sprintfieee         (OS2LS_UT.14)
+ 0000:00000000  Imp  CheckButton          (OS2LS_UT.7)
+ 0000:00000000  Imp  WinCreateStdWindow   (PMWIN.908)
+ 0000:00000000  Imp  GpiSetColor          (PMGPI.517)
+ 0000:00000000  Imp  WinQueryDlgItemText  (PMWIN.815)
+ 0000:00000000  Imp  DosSetExceptionHandler (DOSCALLS.354)
+ 0000:00000000  Imp  stricmp              (OS2LS_UT.177)
+ 0000:00000000  Imp  Checked              (OS2LS_UT.141)
+ 0000:00000000  Imp  _matherr             (OS2LS_UT.173)
+ 0000:00000000  Imp  WinPostMsg           (PMWIN.919)
+ 0000:00000000  Imp  DosCreateEventSem    (DOSCALLS.324)
+ 0000:00000000  Imp  _callback_opt_sys    (OS2LS_UT.139)
+ 0000:00000000  Imp  DosKillThread        (DOSCALLS.111)
+ 0000:00000000  Imp  _exception_procinit  (OS2LS_UT.2)
+ 0000:00000000  Imp  DosFreeModule        (DOSCALLS.322)
+ 0000:00000000  Imp  WinDismissDlg        (PMWIN.729)
+ 0000:00000000  Imp  WinQueryWindowRect   (PMWIN.840)
+ 0000:00000000  Imp  WinInitialize        (PMWIN.763)
+ 0000:00000000  Imp  MessageBox           (OS2LS_UT.240)
+ 0000:00000000  Imp  WinShowWindow        (PMWIN.883)
+ 0000:00000000  Imp  WinCreateMsgQueue    (PMWIN.716)
+ 0000:00000000  Imp  _terminate           (OS2LS_UT.241)
+ 0000:00000000  Imp  DosExitList          (DOSCALLS.296)
+ 0000:00000000  Imp  WinSetWindowText     (PMWIN.877)
+ 0000:00000000  Imp  DosLoadModule        (DOSCALLS.318)
+ 0000:00000000  Imp  GpiSetBackMix        (PMGPI.505)
+ 0000:00000000  Imp  WinBeginPaint        (PMWIN.703)
+ 0000:00000000  Imp  _PrintErrMsg         (OS2LS_UT.20)
+ 0000:00000000  Imp  WinDefDlgProc        (PMWIN.910)
+ 0001:00000000       ProcessRequest
+ 0001:00000A10       ProcessResponse
+ 0001:00000E30       main
+ 0001:000010E8       fnwpClient
+ 0001:00001AE0       COMthreadMonitor
+ 0001:00001B68       InitializeCOM
+ 0001:00001D00       InitializeServer
+ 0001:00001E94       SendMessage
+ 0001:00001ECC       DisplayProcessError
+ 0001:00001F60       DisplayMessageError
+ 0001:00002028       PrintString
+ 0001:000020D8       ErrorNotify
+ 0001:0000216C       ClearScreen
+ 0001:000021F0       Paint
+ 0001:00002260       WndSize
+ 0001:00002308       fnwpConfigCommDlg
+ 0001:00002464       fnwpLogonDlg
+ 0001:000025A8       NotifyLoopThread
+ 0001:00002614       fnwpNotifyDlg
+ 0001:0000295C       fnwpSubscriberDlg
+ 0001:00002A90       _exestart
+ 0001:00002B20       __RunExitList
+ 0001:00002B50       _cppinit
+ 0001:00002B58       _setuparg
+ 0001:00002D50       __sctordtorInit
+ 0001:00002D58       __sctordtorTerm
+ 0001:00002D60       __wctordtorInit
+ 0001:00002D64       __wctordtorTerm
+ 0002:00000908       ulMaxMessageBufferSize
+ 0002:0000090C       ulMessageNumber
+ 0002:00000910       szEXEtitle
+ 0002:00000920       szModName
+ 0002:00000A92       szSub
+ 0002:00000ABC       stLogon
+ 0002:00000B0E       stAddr
+ 0002:00000B26       astSubList
+ 0002:0000CB26       usSubscriberListCount
+ 0002:0000CB28       astGroupList
+ 0002:0000DEB0       usGroupListCount
+ 0002:0000DEB4       _exeentry
+ 0002:0000DEE0       bLoadServer
+ 0002:0000DEE0       _edata
+ 0002:0000DEE4       bLoadClient
+ 0002:0000DEE8       fLoaded
+ 0002:0000DF04       _argc
+ 0002:0000DF08       _argv
+ 0002:0000DF0C       wBackground
+ 0002:0000DF0E       wForeground
+ 0002:0000DF10       bNotifyLoop
+ 0002:0000DF14       _matherr_ptr
+ 0002:0000DF18       ulWindowWidth
+ 0002:0000DF1C       habAnchorBlock
+ 0002:0000DF20       pfnSendMessage
+ 0002:0000DF24       ulWindowHeight
+ 0002:0000DF28       szErrorMessage
+ 0002:0000DF7C       hMod
+ 0002:0000DF80       hdcPs
+ 0002:0000DF84       lXScr
+ 0002:0000DF88       stTestAddressee
+ 0002:0000DFA8       stCell
+ 0002:0000DFAC       lcxVSc
+ 0002:0000DFB0       hevKillThreadSem
+ 0002:0000DFB4       hevNotifyLoopSem
+ 0002:0000DFB8       eidError
+ 0002:0000DFBC       lcxBrdr
+ 0002:0000DFC0       hwndFrame
+ 0002:0000DFC4       szMessage
+ 0002:0000E08C       tidMonitor
+ 0002:0000E090       hwndClient
+ 0002:0000E094       usWndDepth
+ 0002:0000E098       pfnStopCOM
+ 0002:0000E09C       usWndWidth
+ 0002:0000E0A0       _end
+
+Program entry point at 0001:00002A90

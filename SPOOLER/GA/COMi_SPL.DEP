@@ -1,0 +1,17 @@
+
+.\spooler.obj: \
+    p:\Spooler\spooler.c \
+    {p:\Spooler;$(INCLUDE);}spooler.h \
+    {p:\Spooler;$(INCLUDE);}port.h \
+    {p:\Spooler;$(INCLUDE);}help.h \
+    {p:\Spooler;$(INCLUDE);}COMMON.H \
+    {p:\Spooler;$(INCLUDE);}COMDD.H \
+    {p:\Spooler;$(INCLUDE);}IOCTL.H \
+    {p:\Spooler;$(INCLUDE);}UTILITY.H \
+    {p:\Spooler;$(INCLUDE);}menu.h \
+    {p:\Spooler;$(INCLUDE);}usermsg.h \
+    {p:\Spooler;$(INCLUDE);}SPOOL.H \
+    {p:\Spooler;$(INCLUDE);}CONFIG.H
+
+f:\work\lib\COMi_SPL.LIB: \
+    f:\work\lib\COMi_SPL.PDR

@@ -1,0 +1,324 @@
+
+ SPOOLTEST
+
+ Start         Length     Name                   Class
+ 0001:00000000 000001AADH CODE32                 CODE 32-bit
+	at offset 00000000 017D6H bytes from P:\spooler\extra\serialt.obj (P:\spooler\extra\serialt.c)
+	at offset 000017d8 000BEH bytes from E:\IBMCPP\LIB\cppom30i.lib (d:\swordcsd6\crt\dde4strt.c)
+	at offset 00001898 00007H bytes from E:\IBMCPP\LIB\cppom30i.lib (d:\swordcsd6\crt\cppinit.asm)
+	at offset 000018a0 001F8H bytes from E:\IBMCPP\LIB\cppom30i.lib (d:\swordcsd6\crt\setuparg.asm)
+	at offset 00001a98 0000DH bytes from E:\IBMCPP\LIB\cppom30i.lib (d:\swordcsd6\crt\sctdt.c)
+	at offset 00001aa8 00005H bytes from E:\IBMCPP\LIB\cppom30i.lib (d:\swordcsd6\crt\wctdt.c)
+
+ 0002:00000000 000000000H CONST32_RO             CONST 32-bit
+
+ 0002:00000000 0000006A8H DATA32                 DATA 32-bit
+	at offset 00000000 00694H bytes from P:\spooler\extra\serialt.obj (P:\spooler\extra\serialt.c)
+	at offset 00000694 00004H bytes from E:\IBMCPP\LIB\cppom30i.lib (d:\swordcsd6\crt\exeentry.asm)
+	at offset 00000698 00010H bytes from E:\IBMCPP\LIB\cppom30i.lib (d:\swordcsd6\crt\setuparg.asm)
+
+ 0002:000006A8 000000000H CTOR_DTOR1             DATA 32-bit
+
+ 0002:000006A8 000000000H CTOR_DTOR2             DATA 32-bit
+
+ 0002:000006A8 000000000H CTOR_DTOR3             DATA 32-bit
+
+ 0002:000006A8 000000000H EDC1                   EDC_CLASS 32-bit
+
+ 0002:000006A8 000000018H EDC2                   EDC_CLASS 32-bit
+	at offset 00000000 0000CH bytes from E:\IBMCPP\LIB\cppom30i.lib (d:\swordcsd6\crt\cppinit.asm)
+	at offset 0000000c 0000CH bytes from E:\IBMCPP\LIB\cppom30i.lib (d:\swordcsd6\crt\setuparg.asm)
+
+ 0002:000006C0 000000000H EDC3                   EDC_CLASS 32-bit
+
+ 0002:000006C0 00000000CH BSS32                  BSS 32-bit
+	at offset 00000000 00004H bytes from P:\spooler\extra\serialt.obj (P:\spooler\extra\serialt.c)
+	at offset 00000004 00008H bytes from E:\IBMCPP\LIB\cppom30i.lib (d:\swordcsd6\crt\dde4strt.c)
+
+ 0002:000006CC 00000169AH c_common               BSS 32-bit
+
+ 0002:00001D70 000008000H STACK32                STACK 32-bit
+	at offset 00000000 08000H bytes from E:\IBMCPP\LIB\cppom30i.lib (d:\swordcsd6\crt\exeentry.asm)
+
+
+ Origin   Group
+ 0000:0   FLAT
+ 0002:0   DGROUP
+
+  Address         Publics by Name
+
+ 0002:0000085C       achBuffer
+ 0000:00000000  Imp  CenterDlgBox         (UTIL_DEB.4)
+ 0001:00000F98       ClearScreen
+ 0001:000015AC       CopyProfile
+ 0000:00000000  Imp  DosClose             (DOSCALLS.257)
+ 0000:00000000  Imp  DosCopy              (DOSCALLS.258)
+ 0000:00000000  Imp  DosDelete            (DOSCALLS.259)
+ 0000:00000000  Imp  DosExitList          (DOSCALLS.296)
+ 0000:00000000  Imp  DosFreeModule        (DOSCALLS.322)
+ 0000:00000000  Imp  DosLoadModule        (DOSCALLS.318)
+ 0000:00000000  Imp  DosOpen              (DOSCALLS.273)
+ 0000:00000000  Imp  DosQueryProcAddr     (DOSCALLS.321)
+ 0000:00000000  Imp  DosSetExceptionHandler (DOSCALLS.354)
+ 0000:00000000  Imp  DosUnsetExceptionHandler (DOSCALLS.355)
+ 0002:00000854       eidError
+ 0001:00000860       EnumeratePorts
+ 0001:00000EFC       ErrorNotify
+ 0000:00000000  Imp  exit                 (CPPOM30.exit)
+ 0001:00000254       fnwpClient
+ 0001:00001148       fnwpSelectPortDlg
+ 0000:00000000  Imp  free                 (CPPOM30.free)
+ 0000:00000000  Imp  GpiCharStringAt      (PMGPI.359)
+ 0000:00000000  Imp  GpiSetBackColor      (PMGPI.504)
+ 0000:00000000  Imp  GpiSetBackMix        (PMGPI.505)
+ 0000:00000000  Imp  GpiSetColor          (PMGPI.517)
+ 0002:000006E0       habAnchorBlock
+ 0002:000006C0       hCom
+ 0002:00000740       hdcPs
+ 0002:0000073C       hMod
+ 0002:00001C48       hwndClient
+ 0002:00001B7C       hwndFrame
+ 0001:00000BA8       InitializePort
+ 0001:00000A90       InstallPort
+ 0002:00000858       lcxBrdr
+ 0002:00000850       lcxVSc
+ 0002:00000744       lXScr
+ 0001:00000000       main
+ 0000:00000000  Imp  malloc               (CPPOM30.malloc)
+ 0000:00000000  Imp  MenuItemEnable       (UTIL_DEB.9)
+ 0001:00001020       Paint
+ 0000:00000000  Imp  PrfCloseProfile      (PMSHAPI.103)
+ 0000:00000000  Imp  PrfOpenProfile       (PMSHAPI.102)
+ 0000:00000000  Imp  PrfQueryProfile      (PMSHAPI.107)
+ 0000:00000000  Imp  PrfQueryProfileData  (PMSHAPI.117)
+ 0000:00000000  Imp  PrfQueryProfileSize  (PMSHAPI.101)
+ 0000:00000000  Imp  PrfQueryProfileString (PMSHAPI.115)
+ 0000:00000000  Imp  PrfReset             (PMSHAPI.108)
+ 0000:00000000  Imp  PrfWriteProfileData  (PMSHAPI.118)
+ 0001:00000E48       PrintString
+ 0001:00000734       QueryPort
+ 0001:000013DC       RecoverProfile
+ 0001:00000978       RemovePort
+ 0001:000005E8       SetupPort
+ 0002:00000748       stCell
+ 0002:0000185C       stPorts
+ 0000:00000000  Imp  strcmp               (CPPOM30.strcmp)
+ 0000:00000000  Imp  strcpy               (CPPOM30.strcpy)
+ 0000:00000000  Imp  strlen               (CPPOM30.strlen)
+ 0002:0000074C       szDriverIniPath
+ 0002:000006E8       szErrorMessage
+ 0002:0000057F       szEXEtitle
+ 0002:00001B80       szMessage
+ 0002:0000058F       szModuleName
+ 0002:00001C50       szPortDesc
+ 0002:00001D50       szPortName
+ 0001:00000CF8       TerminatePort
+ 0002:000006D0       ulItemCount
+ 0002:000006D4       ulPortCount
+ 0002:000006E4       ulWindowHeight
+ 0002:000006DC       ulWindowWidth
+ 0002:00001C4C       usWndDepth
+ 0002:00001D64       usWndWidth
+ 0002:000006CC       wBackground
+ 0002:000006CE       wForeground
+ 0000:00000000  Imp  WinBeginPaint        (PMWIN.703)
+ 0000:00000000  Imp  WinCalcFrameRect     (PMWIN.704)
+ 0000:00000000  Imp  WinCreateMsgQueue    (PMWIN.716)
+ 0000:00000000  Imp  WinCreateStdWindow   (PMWIN.908)
+ 0000:00000000  Imp  WinDefDlgProc        (PMWIN.910)
+ 0000:00000000  Imp  WinDefWindowProc     (PMWIN.911)
+ 0000:00000000  Imp  WinDestroyMsgQueue   (PMWIN.726)
+ 0000:00000000  Imp  WinDestroyWindow     (PMWIN.728)
+ 0000:00000000  Imp  WinDismissDlg        (PMWIN.729)
+ 0000:00000000  Imp  WinDispatchMsg       (PMWIN.912)
+ 0000:00000000  Imp  WinDlgBox            (PMWIN.923)
+ 0000:00000000  Imp  WinEndPaint          (PMWIN.738)
+ 0000:00000000  Imp  WinFillRect          (PMWIN.743)
+ 0000:00000000  Imp  WinGetLastError      (PMWIN.753)
+ 0000:00000000  Imp  WinGetMsg            (PMWIN.915)
+ 0000:00000000  Imp  WinGetPS             (PMWIN.757)
+ 0000:00000000  Imp  WinInitialize        (PMWIN.763)
+ 0000:00000000  Imp  WinInvalidateRect    (PMWIN.765)
+ 0000:00000000  Imp  WinOpenWindowDC      (PMWIN.794)
+ 0000:00000000  Imp  WinPostMsg           (PMWIN.919)
+ 0000:00000000  Imp  WinQuerySysValue     (PMWIN.829)
+ 0000:00000000  Imp  WinQueryWindow       (PMWIN.834)
+ 0000:00000000  Imp  WinQueryWindowRect   (PMWIN.840)
+ 0000:00000000  Imp  WinRegisterClass     (PMWIN.926)
+ 0000:00000000  Imp  WinReleasePS         (PMWIN.848)
+ 0000:00000000  Imp  WinSendDlgItemMsg    (PMWIN.903)
+ 0000:00000000  Imp  WinSetFocus          (PMWIN.860)
+ 0000:00000000  Imp  WinSetWindowPos      (PMWIN.875)
+ 0000:00000000  Imp  WinSetWindowText     (PMWIN.877)
+ 0000:00000000  Imp  WinShowWindow        (PMWIN.883)
+ 0000:00000000  Imp  WinTerminate         (PMWIN.888)
+ 0001:00001094       WndSize
+ 0002:000006C4       _argc
+ 0002:000006C8       _argv
+ 0000:00000000  Imp  _callback_opt_sys    (CPPOM30._callback_opt_sys)
+ 0001:00001898       _cppinit
+ 0000:00000000  Imp  _CRT_init            (CPPOM30._CRT_init)
+ 0000:00000000  Imp  _CRT_term            (CPPOM30._CRT_term)
+ 0000:00000000  Imp  _debug_free          (CPPOM30._debug_free)
+ 0000:00000000  Imp  _debug_malloc        (CPPOM30._debug_malloc)
+ 0002:000006C0       _edata
+ 0002:00001D70       _end
+ 0000:00000000  Imp  _environ             (CPPOM30._environ)
+ 0000:00000000  Imp  _exception_procinit  (CPPOM30._exception_procinit)
+ 0002:00000694       _exeentry
+ 0001:000017D8       _exestart
+ 0000:00000000  Imp  _EXE_Exception       (CPPOM30._EXE_Exception)
+ 0000:00000000  Imp  _fpninit             (CPPOM30._fpninit)
+ 0000:00000000  Imp  _fpreset             (CPPOM30._fpreset)
+ 0000:00000000  Imp  _fullDump            (CPPOM30._fullDump)
+ 0000:00000000  Imp  _matherr             (CPPOM30._matherr)
+ 0002:000006D8       _matherr_ptr
+ 0000:00000000  Imp  _PrintErrMsg         (CPPOM30._PrintErrMsg)
+ 0001:000018A0       _setuparg
+ 0000:00000000  Imp  _sprintfieee         (CPPOM30._sprintfieee)
+ 0000:00000000  Imp  _terminate           (CPPOM30._terminate)
+ 0001:00001868       __RunExitList
+ 0001:00001A98       __sctordtorInit
+ 0001:00001AA0       __sctordtorTerm
+ 0001:00001AA8       __wctordtorInit
+ 0001:00001AAC       __wctordtorTerm
+
+  Address         Publics by Value
+
+ 0000:00000000  Imp  WinGetLastError      (PMWIN.753)
+ 0000:00000000  Imp  strcpy               (CPPOM30.strcpy)
+ 0000:00000000  Imp  WinRegisterClass     (PMWIN.926)
+ 0000:00000000  Imp  WinInvalidateRect    (PMWIN.765)
+ 0000:00000000  Imp  DosQueryProcAddr     (DOSCALLS.321)
+ 0000:00000000  Imp  WinSetWindowPos      (PMWIN.875)
+ 0000:00000000  Imp  WinSetWindowText     (PMWIN.877)
+ 0000:00000000  Imp  WinDefWindowProc     (PMWIN.911)
+ 0000:00000000  Imp  WinSendDlgItemMsg    (PMWIN.903)
+ 0000:00000000  Imp  WinCreateMsgQueue    (PMWIN.716)
+ 0000:00000000  Imp  WinQuerySysValue     (PMWIN.829)
+ 0000:00000000  Imp  WinDestroyWindow     (PMWIN.728)
+ 0000:00000000  Imp  strlen               (CPPOM30.strlen)
+ 0000:00000000  Imp  exit                 (CPPOM30.exit)
+ 0000:00000000  Imp  _EXE_Exception       (CPPOM30._EXE_Exception)
+ 0000:00000000  Imp  GpiSetBackColor      (PMGPI.504)
+ 0000:00000000  Imp  WinPostMsg           (PMWIN.919)
+ 0000:00000000  Imp  malloc               (CPPOM30.malloc)
+ 0000:00000000  Imp  WinOpenWindowDC      (PMWIN.794)
+ 0000:00000000  Imp  WinCalcFrameRect     (PMWIN.704)
+ 0000:00000000  Imp  GpiCharStringAt      (PMGPI.359)
+ 0000:00000000  Imp  PrfCloseProfile      (PMSHAPI.103)
+ 0000:00000000  Imp  PrfQueryProfile      (PMSHAPI.107)
+ 0000:00000000  Imp  WinQueryWindow       (PMWIN.834)
+ 0000:00000000  Imp  strcmp               (CPPOM30.strcmp)
+ 0000:00000000  Imp  DosClose             (DOSCALLS.257)
+ 0000:00000000  Imp  WinDlgBox            (PMWIN.923)
+ 0000:00000000  Imp  DosDelete            (DOSCALLS.259)
+ 0000:00000000  Imp  WinGetMsg            (PMWIN.915)
+ 0000:00000000  Imp  _CRT_term            (CPPOM30._CRT_term)
+ 0000:00000000  Imp  _terminate           (CPPOM30._terminate)
+ 0000:00000000  Imp  _CRT_init            (CPPOM30._CRT_init)
+ 0000:00000000  Imp  _fullDump            (CPPOM30._fullDump)
+ 0000:00000000  Imp  PrfQueryProfileData  (PMSHAPI.117)
+ 0000:00000000  Imp  PrfWriteProfileData  (PMSHAPI.118)
+ 0000:00000000  Imp  PrfQueryProfileSize  (PMSHAPI.101)
+ 0000:00000000  Imp  WinGetPS             (PMWIN.757)
+ 0000:00000000  Imp  WinCreateStdWindow   (PMWIN.908)
+ 0000:00000000  Imp  DosOpen              (DOSCALLS.273)
+ 0000:00000000  Imp  PrfReset             (PMSHAPI.108)
+ 0000:00000000  Imp  _matherr             (CPPOM30._matherr)
+ 0000:00000000  Imp  WinQueryWindowRect   (PMWIN.840)
+ 0000:00000000  Imp  _fpreset             (CPPOM30._fpreset)
+ 0000:00000000  Imp  _environ             (CPPOM30._environ)
+ 0000:00000000  Imp  _fpninit             (CPPOM30._fpninit)
+ 0000:00000000  Imp  WinDestroyMsgQueue   (PMWIN.726)
+ 0000:00000000  Imp  DosCopy              (DOSCALLS.258)
+ 0000:00000000  Imp  _callback_opt_sys    (CPPOM30._callback_opt_sys)
+ 0000:00000000  Imp  DosLoadModule        (DOSCALLS.318)
+ 0000:00000000  Imp  DosExitList          (DOSCALLS.296)
+ 0000:00000000  Imp  WinBeginPaint        (PMWIN.703)
+ 0000:00000000  Imp  GpiSetBackMix        (PMGPI.505)
+ 0000:00000000  Imp  PrfQueryProfileString (PMSHAPI.115)
+ 0000:00000000  Imp  WinDefDlgProc        (PMWIN.910)
+ 0000:00000000  Imp  DosFreeModule        (DOSCALLS.322)
+ 0000:00000000  Imp  _exception_procinit  (CPPOM30._exception_procinit)
+ 0000:00000000  Imp  WinShowWindow        (PMWIN.883)
+ 0000:00000000  Imp  WinDismissDlg        (PMWIN.729)
+ 0000:00000000  Imp  WinInitialize        (PMWIN.763)
+ 0000:00000000  Imp  _debug_malloc        (CPPOM30._debug_malloc)
+ 0000:00000000  Imp  _PrintErrMsg         (CPPOM30._PrintErrMsg)
+ 0000:00000000  Imp  DosSetExceptionHandler (DOSCALLS.354)
+ 0000:00000000  Imp  GpiSetColor          (PMGPI.517)
+ 0000:00000000  Imp  _debug_free          (CPPOM30._debug_free)
+ 0000:00000000  Imp  CenterDlgBox         (UTIL_DEB.4)
+ 0000:00000000  Imp  WinFillRect          (PMWIN.743)
+ 0000:00000000  Imp  WinSetFocus          (PMWIN.860)
+ 0000:00000000  Imp  WinEndPaint          (PMWIN.738)
+ 0000:00000000  Imp  _sprintfieee         (CPPOM30._sprintfieee)
+ 0000:00000000  Imp  WinReleasePS         (PMWIN.848)
+ 0000:00000000  Imp  free                 (CPPOM30.free)
+ 0000:00000000  Imp  WinTerminate         (PMWIN.888)
+ 0000:00000000  Imp  DosUnsetExceptionHandler (DOSCALLS.355)
+ 0000:00000000  Imp  WinDispatchMsg       (PMWIN.912)
+ 0000:00000000  Imp  PrfOpenProfile       (PMSHAPI.102)
+ 0000:00000000  Imp  MenuItemEnable       (UTIL_DEB.9)
+ 0001:00000000       main
+ 0001:00000254       fnwpClient
+ 0001:000005E8       SetupPort
+ 0001:00000734       QueryPort
+ 0001:00000860       EnumeratePorts
+ 0001:00000978       RemovePort
+ 0001:00000A90       InstallPort
+ 0001:00000BA8       InitializePort
+ 0001:00000CF8       TerminatePort
+ 0001:00000E48       PrintString
+ 0001:00000EFC       ErrorNotify
+ 0001:00000F98       ClearScreen
+ 0001:00001020       Paint
+ 0001:00001094       WndSize
+ 0001:00001148       fnwpSelectPortDlg
+ 0001:000013DC       RecoverProfile
+ 0001:000015AC       CopyProfile
+ 0001:000017D8       _exestart
+ 0001:00001868       __RunExitList
+ 0001:00001898       _cppinit
+ 0001:000018A0       _setuparg
+ 0001:00001A98       __sctordtorInit
+ 0001:00001AA0       __sctordtorTerm
+ 0001:00001AA8       __wctordtorInit
+ 0001:00001AAC       __wctordtorTerm
+ 0002:0000057F       szEXEtitle
+ 0002:0000058F       szModuleName
+ 0002:00000694       _exeentry
+ 0002:000006C0       _edata
+ 0002:000006C0       hCom
+ 0002:000006C4       _argc
+ 0002:000006C8       _argv
+ 0002:000006CC       wBackground
+ 0002:000006CE       wForeground
+ 0002:000006D0       ulItemCount
+ 0002:000006D4       ulPortCount
+ 0002:000006D8       _matherr_ptr
+ 0002:000006DC       ulWindowWidth
+ 0002:000006E0       habAnchorBlock
+ 0002:000006E4       ulWindowHeight
+ 0002:000006E8       szErrorMessage
+ 0002:0000073C       hMod
+ 0002:00000740       hdcPs
+ 0002:00000744       lXScr
+ 0002:00000748       stCell
+ 0002:0000074C       szDriverIniPath
+ 0002:00000850       lcxVSc
+ 0002:00000854       eidError
+ 0002:00000858       lcxBrdr
+ 0002:0000085C       achBuffer
+ 0002:0000185C       stPorts
+ 0002:00001B7C       hwndFrame
+ 0002:00001B80       szMessage
+ 0002:00001C48       hwndClient
+ 0002:00001C4C       usWndDepth
+ 0002:00001C50       szPortDesc
+ 0002:00001D50       szPortName
+ 0002:00001D64       usWndWidth
+ 0002:00001D70       _end
+
+Program entry point at 0001:000017D8

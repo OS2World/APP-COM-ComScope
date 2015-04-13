@@ -1,0 +1,9 @@
+NAME    SPOOLTEST WINDOWAPI
+
+DESCRIPTION 'OS/2 Presentation Manager SERIAL PORT .PDR test suite'
+
+STUB    'OS2STUB.EXE'
+
+PROTMODE
+
+

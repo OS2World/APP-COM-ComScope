@@ -1,0 +1,130 @@
+
+ INIDUMP
+
+ Start         Length     Name                   Class
+ 0001:00000000 00000105DH CODE32                 CODE 32-bit
+	at offset 00000000 00D87H bytes from P:\IniDump\ga\inidump.obj (p:\inidump\inidump.c)
+	at offset 00000d88 000BEH bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\dde4strt.c)
+	at offset 00000e48 00007H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\cppinit.asm)
+	at offset 00000e50 001F8H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\setuparg.asm)
+	at offset 00001048 0000DH bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\sctdt.c)
+	at offset 00001058 00005H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\wctdt.c)
+
+ 0002:00000000 000000000H CONST32_RO             CONST 32-bit
+
+ 0002:00000000 00000072CH DATA32                 DATA 32-bit
+	at offset 00000000 00718H bytes from P:\IniDump\ga\inidump.obj (p:\inidump\inidump.c)
+	at offset 00000718 00004H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\exeentry.asm)
+	at offset 0000071c 00010H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\setuparg.asm)
+
+ 0002:0000072C 000000000H CTOR_DTOR1             DATA 32-bit
+
+ 0002:0000072C 000000000H CTOR_DTOR2             DATA 32-bit
+
+ 0002:0000072C 000000000H CTOR_DTOR3             DATA 32-bit
+
+ 0002:0000072C 000000000H EDC1                   EDC_CLASS 32-bit
+
+ 0002:0000072C 000000018H EDC2                   EDC_CLASS 32-bit
+	at offset 00000000 0000CH bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\cppinit.asm)
+	at offset 0000000c 0000CH bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\setuparg.asm)
+
+ 0002:00000744 000000000H EDC3                   EDC_CLASS 32-bit
+
+ 0002:00000744 000000014H BSS32                  BSS 32-bit
+	at offset 00000000 0000CH bytes from P:\IniDump\ga\inidump.obj (p:\inidump\inidump.c)
+	at offset 0000000c 00008H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\dde4strt.c)
+
+ 0002:00000758 0000000CCH c_common               BSS 32-bit
+
+ 0002:00000830 000008000H STACK32                STACK 32-bit
+	at offset 00000000 08000H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\exeentry.asm)
+
+
+ Origin   Group
+ 0000:0   FLAT
+ 0002:0   DGROUP
+
+  Address         Publics by Name
+
+ 0000:00000000  Imp  DosAllocMem          (DOSCALLS.299)
+ 0000:00000000  Imp  DosClose             (DOSCALLS.257)
+ 0000:00000000  Imp  DosDevIOCtl          (DOSCALLS.284)
+ 0000:00000000  Imp  DosExitList          (DOSCALLS.296)
+ 0000:00000000  Imp  DosFreeMem           (DOSCALLS.304)
+ 0000:00000000  Imp  DosOpen              (DOSCALLS.273)
+ 0000:00000000  Imp  DosRead              (DOSCALLS.281)
+ 0000:00000000  Imp  DosSetExceptionHandler (DOSCALLS.354)
+ 0000:00000000  Imp  DosSetFilePtr        (DOSCALLS.256)
+ 0000:00000000  Imp  DosUnsetExceptionHandler (DOSCALLS.355)
+ 0000:00000000  Imp  exit                 (OS2LSRTL.106)
+ 0000:00000000  Imp  free                 (OS2LSRTL.88)
+ 0001:000009C0       main
+ 0000:00000000  Imp  malloc               (OS2LSRTL.167)
+ 0002:0000075C       szLine
+ 0002:00000750       _argc
+ 0002:00000754       _argv
+ 0000:00000000  Imp  _callback_opt_sys    (OS2LSRTL.273)
+ 0001:00000E48       _cppinit
+ 0000:00000000  Imp  _CRT_init            (OS2LSRTL.467)
+ 0000:00000000  Imp  _CRT_term            (OS2LSRTL.457)
+ 0000:00000000  Imp  _ctype               (OS2LSRTL.220)
+ 0000:00000000  Imp  _environ             (OS2LSRTL.396)
+ 0000:00000000  Imp  _exception_procinit  (OS2LSRTL.2)
+ 0001:00000D88       _exestart
+ 0000:00000000  Imp  _EXE_Exception       (OS2LSRTL.114)
+ 0000:00000000  Imp  _fpninit             (OS2LSRTL.380)
+ 0000:00000000  Imp  _fpreset             (OS2LSRTL.374)
+ 0000:00000000  Imp  _matherr             (OS2LSRTL.346)
+ 0000:00000000  Imp  _PrintErrMsg         (OS2LSRTL.41)
+ 0000:00000000  Imp  _printfieee          (OS2LSRTL.11)
+ 0001:00000E50       _setuparg
+ 0000:00000000  Imp  _sprintfieee         (OS2LSRTL.32)
+ 0000:00000000  Imp  _terminate           (OS2LSRTL.482)
+ 0001:00001048       __sctordtorInit
+ 0001:00001050       __sctordtorTerm
+ 0001:00001058       __wctordtorInit
+ 0001:0000105C       __wctordtorTerm
+
+  Address         Publics by Value
+
+ 0000:00000000  Imp  exit                 (OS2LSRTL.106)
+ 0000:00000000  Imp  _EXE_Exception       (OS2LSRTL.114)
+ 0000:00000000  Imp  malloc               (OS2LSRTL.167)
+ 0000:00000000  Imp  _ctype               (OS2LSRTL.220)
+ 0000:00000000  Imp  _terminate           (OS2LSRTL.482)
+ 0000:00000000  Imp  DosRead              (DOSCALLS.281)
+ 0000:00000000  Imp  DosOpen              (DOSCALLS.273)
+ 0000:00000000  Imp  _matherr             (OS2LSRTL.346)
+ 0000:00000000  Imp  _callback_opt_sys    (OS2LSRTL.273)
+ 0000:00000000  Imp  _fpreset             (OS2LSRTL.374)
+ 0000:00000000  Imp  _fpninit             (OS2LSRTL.380)
+ 0000:00000000  Imp  _environ             (OS2LSRTL.396)
+ 0000:00000000  Imp  DosClose             (DOSCALLS.257)
+ 0000:00000000  Imp  _CRT_term            (OS2LSRTL.457)
+ 0000:00000000  Imp  _CRT_init            (OS2LSRTL.467)
+ 0000:00000000  Imp  DosFreeMem           (DOSCALLS.304)
+ 0000:00000000  Imp  _PrintErrMsg         (OS2LSRTL.41)
+ 0000:00000000  Imp  DosSetFilePtr        (DOSCALLS.256)
+ 0000:00000000  Imp  free                 (OS2LSRTL.88)
+ 0000:00000000  Imp  DosUnsetExceptionHandler (DOSCALLS.355)
+ 0000:00000000  Imp  _exception_procinit  (OS2LSRTL.2)
+ 0000:00000000  Imp  DosExitList          (DOSCALLS.296)
+ 0000:00000000  Imp  _printfieee          (OS2LSRTL.11)
+ 0000:00000000  Imp  _sprintfieee         (OS2LSRTL.32)
+ 0000:00000000  Imp  DosDevIOCtl          (DOSCALLS.284)
+ 0000:00000000  Imp  DosAllocMem          (DOSCALLS.299)
+ 0000:00000000  Imp  DosSetExceptionHandler (DOSCALLS.354)
+ 0001:000009C0       main
+ 0001:00000D88       _exestart
+ 0001:00000E48       _cppinit
+ 0001:00000E50       _setuparg
+ 0001:00001048       __sctordtorInit
+ 0001:00001050       __sctordtorTerm
+ 0001:00001058       __wctordtorInit
+ 0001:0000105C       __wctordtorTerm
+ 0002:00000750       _argc
+ 0002:00000754       _argv
+ 0002:0000075C       szLine
+
+Program entry point at 0001:00000D88

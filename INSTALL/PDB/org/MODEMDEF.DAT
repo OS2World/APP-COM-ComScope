@@ -1,0 +1,319 @@
+{AST 2X9600{,{AT&F&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{AT&T 4000{,{ATQ0V1X4F1&C1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{AT&T 4024{,{ATQ0V1X4F1&C1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{AT&T Comsphere 3820{,{ATE1Q0V1M1X6Y0&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{AT&T DataPort 14.4{,{ATQ0V1X4F1&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{AT&T Paradyne Dataport 14.4{,{AT&F&C1{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{AT&T Paradyne PCMCIA{,{AT&F\N3{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{ATI 2400etc (non V.42){,{AT&F1&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{ATI 2400etc/e, 2400etc/i (with V.42){,{AT&F2&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{ATI 9600etc/e V.32/V.42{,{AT&F2&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Aceex 1414 v.32bis{,{AT&F\N3\Q3{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Alliance V.32{,{AT&FE0&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Anchor 2400e{,{ATE1Q0M1X4V1S7=60&C1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Anchor 2400i Internal Half-card{,{ATE1Q0M1X4V1S7=60&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Anchor 964E{,{ATQ0V1X4&C1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Apex 9600 Data/Fax{,{AT&FE0&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Apex Data 14.4 v.32bis{,{AT&F\N3{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Apex PCMCIA{,{AT&FE0&K3{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Apex V.32, V.32bis Data/Fax{,{AT&F\N7\Q3\V2&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Archtek Smartlink 144{,{AT&F{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Arima{,{AT&FE0X4\N7\Q{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Avatech 2400E{,{AT&FQ0V1X4F1&C1&D2S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Avatex 1200{,{ATQ0V1X4F1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{BSM Quik Com MNP{,{ATQ0V1X4F1&C1&D2S7=60S0=0{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Bestdata 1442 FX{,{AT&F&C1&D2{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Boca 14.4{,{AT&F&C1&D2\N3{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Boca 14.4 V.32bis External{,{AT&F&C1&D2&R0&S1&T5S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Boca Fax Modem{,{ATZS0=0Q0V1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Boca M2400{,{ATZS0=0Q0V1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Boca MV28KE (28.8 V. Fast modem){,{AT&F&C1&D2\N3{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Boca MV28KI (28.8 V. Fast modem){,{AT&F&C1&D2\N3{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Boca Multimedia 14.4{,{AT&F&C1&D2{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Boca Research 14.4{,{AT&F&C1&D2&{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{CMS{,{AT\N1 S0=0 Q0 V1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{CTS 2424ADH PLUS{,{ATV1Q0X4&C1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Calcom 1442{,{AT&F2\N3{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Cardinal 14.4 DSP{,{AT&F{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Cardinal 2400 MNP{,{AT&F2C1&D2&T5\C1\J0\N3\Q3\V1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Cardinal 9600{,{AT&F&C1&D2{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Cardinal Fax 14.4{,{AT&F&C1&D2&Q5{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Carrier 24/96{,{AT&FE1QV1&D2X4&C1\V0\X1\Q3{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Cermetek 2400 R/2400 SPC{,{AT&FC1&D2&T5\C1\J0\N3\Q3\V1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Codex 2264{,{AT&F&C1&D2*FL3*XC1*PT0&R0{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Compaq Contura{,{AT&FE1QV1&D2X4&C1&Q5&K3{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Compaq Enhanced Int. V.42bis{,{AT&F&C1&D2X4W1S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Compaq Enhanced Internal Modem{,{AT&F&C1&D2X4W1S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Complete Communications Gold 14.4{,{AT&F&C1&D2{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Complete PC 14400 Turbo{,{AT&F2E1Q0V1M1X4Y0&C1&D2&R0&S1&T5S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Complete PC Turbo 14.4{,{AT&F&C1&D2&K3\N3{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{CompuCom Speedmodem{,{AT&F&C1&D1S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Compudyne 1442 FX{,{AT&F&C1&D2{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Compudyne 2400{,{AF\N0{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Datarace Redicard PCMCIA{,{AT&F&Q5\N3{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Digicom 9624LE/9624PC V.32bis{,{AT&F2F3*E9{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Digicom Connection + 14.4{,{AT&F{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Digicom Connection + 9600 v.32{,{AT&F{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Digicom DSI9624 and DSI9624 Plus{,{AT&F*F3*E1&C1S0=0S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Digicom Eagle 14.4{,{AT&F{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Digicom Eagle 9600{,{AT&F&C1*E5{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Digicom Eagle Plus{,{AT&F&C1*S1*E0{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Digicom Scout Plus{,{AT&F{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Digitan DS144FVM{,{ATS0=0Q0V1\Z1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Digitan HI-IQ DS-24{,{ATS0=0Q0V1\Z1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{E-Tech Bullet 14400{,{AT&F&C1&D2{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{E-Tech Bullet E9696M V.32MNP{,{AT&F1&C1&D2&T5$C1$E1$F4$S0$X5DM{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{E-Tech Bullet PC2400MH MNP{,{AT&F1C1&D2&T5$C1$E2$F4$X1DM{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Eagle V.32 Data/Fax{,{AT&FE0Q0V1X4&B0&C1&D2&M0&R2*F3{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Eiger Labs 14.4{,{AT&F{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Emac 24/96{,{AT&FE1Q0V1&D2X4&C1\N3\Q3{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Everex 12e External (EV-936){,{ATE1F1H0M1Q0V1X4&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Everex 24e External (EV-945){,{ATE1F1H0M1Q0V1X4&C1&D2\N3\Q0{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Everex Carrier 96/24{,{AT&F\Q3\N3\J0\V1\C1S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Everex EV941{,{AT&FE1V1Q0X4&C1&D2&I1S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Everex EverFax 24/96E{,{AT&FE1QV1&D2X4&C1\V1\N3{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Everex Evercom 24+ MNP{,{AT\C0\J0\K5N3\Q0\V1V1E1Q0X4{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Everex Evercom 24e{,{AT&FE1Q0V1X4&C1&D2S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Everex Evercom 24e+ (MNP 5){,{AT&FQ0V1X4&C1&D2\Q3\C1\N3\J0\V1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Everex Evercom II-24 PS/2{,{ATV1X4&C1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Fastcomm FDX 2424 (MNP Class-5){,{AT&F{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Fastcomm FDX 2496{,{AT&FE1Q0M1X4V1S7=60&B1&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Fastcomm FDX 9696 (V.32 & MNP-5){,{AT&FE1Q0M1X4V1S7=60&B1&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Focus 14.4{,{AT&F{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Forval IM14400{,{AT&F&C1&D2\J0\N3\Q3\V1S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Fountain 14.4{,{AT&F&C1&D2{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{GVC 14.4{,{AT&F\N3{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{GVC 9600 V.42{,{AT&F{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{GVC Super Modem 2400 MNP-5{,{AT&F{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{GVC Super Modem 9600 V.32{,{AT&FE1V1Q0X4&C1&D2S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Galaxy Gemini{,{AT&F&D2\N3\Q3{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Galaxy Pioneer V.22/42{,{ATV1X4&C1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Galaxy UFO v.32/v.42 bis{,{AT&F&D2\N3\Q3{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Gateway Telepath{,{AT&F&C1&D2E1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Gateway Telepath II{,{AT&F&H1&B1&R2&K3{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Global Village Powerport{,{AT&F\J0\N7{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Global Village Teleport Gold{,{AT&F&D2\J0\Q1X4W1\N3{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Hayes Accura 14.4 + FAX 144{,{AT&F&C1&D2S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Hayes Accura 288 V.FC{,{AT&F&C1&D2{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Hayes Accura 9600{,{AT&F&C1&D2{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Hayes Accura 9600B{,{AT&F&C1&D2{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Hayes Compatible Modem 1200{,{ATE1Q0M1X4V1{,{ATZ{,{~~~+++~~~{,{ATH0{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Hayes Compatible Modem 2400{,{ATE1Q0M1X4V1{,{ATZ{,{~~~+++~~~{,{ATH0{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Hayes Personal Modem 2400{,{ATEC1&D2E1Q0{,{ATZ{,{~~~+++~~~{,{ATH0{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Hayes Smartmodem 1200 External{,{ATE1Q0M1X4V1S7=60{,{ATZ{,{~~~+++~~~{,{ATH0{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Hayes Smartmodem 1200B Full Card Internal{,{ATE1Q0M1X4V1S7=60{,{ATZ{,{~~~+++~~~{,{ATH0{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Hayes Smartmodem 1200B Half Card Internal{,{ATE1Q0M1X4V1S7=60{,{ATZ{,{~~~+++~~~{,{ATH0{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Hayes Smartmodem 2400/2400B{,{AT&FS0=0E1Q0M1X4V1S11=60&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Hayes Smartmodem Optima 14.4 - 14.4B{,{AT&F&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Hayes Smartmodem Optima 28800 V.FC{,{AT&FC1&D2N0{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Hayes Smartmodem Optima 9600FX{,{AT&CE0Q0V1W2X4&Q9{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Hayes Smartmodem Optima PCMCIA 14.4{,{AT&F&C1&D2N0{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Hayes Smartmodem Optima Pocket 14.4{,{AT&F&C1&D2N0{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Hayes Smartmodem Optima Series{,{AT&F&C1&D2N0{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Hayes Smartmodem Standard 1{,{ATE1V1&C1&D2{,{ATZ{,{+++{,{ATH0{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Hayes Smartmodem Standard 2{,{AT&F&C1&D2&K3&Q5E1V1Q0X4{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Hayes Smartmodem Ultima 14400{,{AT&FE0&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Hayes V-Series 2400 (without V.42){,{ATE1Q0M1X4V1S11=60&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Hayes V-Series 2400/2400B V.42{,{AT&F&C1&D2&K3S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Hayes V-Series 9600{,{ATE1Q0M1X4V1S11=60&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Hayes V-Series 9600/9600B V.42{,{ATE1Q0M1X4V1S11=60&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Hayes V-series Ultra Smartmodem 14400{,{AT&F&C1&D2S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Hayes V-series Ultra Smartmodem 9600{,{AT&FS7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{IBM 7851 Easy Options 14.4{,{AT&F&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{IBM 7855 1200{,{AT&F{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{IBM 7855 9600{,{AT&FS0=0E0&M0&AP7&C1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{IBM MWave Waverunner Digital Modem{,{AT&FZ2S0=2&S1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{IBM MWave Windsurfer Adapter{,{AT&FE0Q0S0=0V1X1&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{IBM PC Convertible Internal Modem{,{ATE1V1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{IBM PCMCIA{,{AT&FE3{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{IBM PS/1 Default{,{AT&FE1V1Q0X4&C1&D2S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{InfoMate 212X/PC{,{AT&FE1Q0V1X1S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Infotel 14.4{,{AT&F&C1&D2{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Intel 14.4{,{AT&F{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Intel 14.4 e{,{AT&F{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Intel 14.4 i{,{AT&F{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Intel 14.4EX{,{AT&F{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Intel 2400B{,{AT&FE1V1Q0X4&C1&D2S11=55{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Intel 2400B MNP{,{AT&F\Q3\N3\J0\V1\C1S11=55{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Intel 2400EX MNP{,{AT&FCT5\J0\N3\Q3\V1\X1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Intel 400e/400i{,{ATZF2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Intel 9600EX V.32 with V.42bis{,{AT&FM0V1X4&C1&D2\N0\Q3{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Intel SatisFAXtion{,{AT&F&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Leading Edge Model L 1200{,{ATS0=0Q-V1X1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{LightCom 14.4F{,{AT&FS0=0Q0V1&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Lightspeed 2400LE{,{ATV1X4&C1\N3\J0\Q3\V1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Line Link 14.4 e{,{AT&F0&C1&D2\N3{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Macronix Maxlite 96/14.4{,{AT&F&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Magnum 14400 v.32 bis{,{AT&F&D2{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Maxwell Modem 2400PC{,{AT&FE1Q0V1X1S7=30S0=0{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Megahertz 14.4 Data/Fax PCMCIA{,{AT&FE1&D2QV1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Megahertz C5144 and C596FM{,{AT&F&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Megahertz EasyTalk 2400{,{AT&FE1Q0V1X4&C1&D2S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Megahertz T3144 and T396FM{,{AT&FE0{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Megahertz XJ1144FM PCMCIA Data/Fax{,{AT&FE1F0Q0V1X4Y0&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Megahertz XJ196FM PCMCIA Data/Fax{,{AT&FE1F0Q0V1X4Y0&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Megahertz Z3144 and Z396FM{,{AT&FE0{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{MicroDirect 14.4/Fax{,{AT&F2{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Microcom AX/1200,AX/1200c,AX/2400,AX/2400c{,{ATE1Q0M1X1V1&D2&C1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Microcom AX/9612c-AX/9624c{,{AT&F\J0\Q3\N3S0=0{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Microcom AX/9624c, QX/12K{,{ATE1Q0M1X1V1\V1\E0\T0\H0&D2&C1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Microcom DeskPorte{,{AT&F{,{AT{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Microcom DeskPorte 28.8{,{AT&F&C1&D2{,{AT{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Microcom DeskPorte FAST{,{AT&FE1Q0V1M1W2X4Y0&C1&D2&S1&T5S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Microcom MicroPorte 4232bis Portable{,{AT&FE1M1Q0V1X4Y0&C1&D2S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Microcom QX/2400t{,{AT&F&C1&D2\Q3\N3\V1S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Microcom QX/4232bis{,{AT&FE1Q0V1M1W2X4Y0&C1&D2S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Microcom QX/4232hs{,{AT&FE1Q0X4\V1\N3\J0&D2&C1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Microcom QX/V.32c{,{AT&FE1Q0X4\V2\N5\J0\Q3&D2&C1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Microcom TravelPorte 28.8 Fast{,{AT&F{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Migent Pocket Modem 1200{,{ATS0=0 Q0 V1 X1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Miracom Courier HST{,{ATQ0V1S7=58X6&B1&H1&R2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Monterey 14.4 v.32bis{,{AT&F&K3\N3\Q3{,{AT{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Motorola CELLect 14.4{,{AT&F&C1&D2\N3\Q3\J1{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Motorola Codex 3220 Plus{,{AT&F*FL3*&D2&C1X4{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Motorola Codex 3260{,{AT&F*FL3&D2&C1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Motorola Codex 3261{,{AT&F*FL3&D2&C1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Motorola Codex 3265{,{AT&F&C1&D2*FL3{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Motorola FasTalk V.32x{,{AT&FE1QV1&D2X4&C1\Q3\X1\C1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Motorola UDS 2440{,{AT&FS7=60&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Motorola UDS V.3224/V.3225 (V.32){,{AT&FS7=60&C1&D2\Q3{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Motorola V.3229L{,{AT&F&C1&D2\Q3{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{MultiTech 1432{,{AT&FX4&C1&D1S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{MultiTech 1432Mu{,{AT&FX4&C1&D1S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{MultiTech MultiModem 224E7 V.42bis{,{AT&FQ0&E1&E4&E7&E13X4{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{MultiTech MultiModem 224EC & 224PC W/MNP{,{AT&F&E1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{MultiTech MultiModem 224PC5{,{AT&F{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{MultiTech MultiModem 696E{,{ATB1E1M1Q0V1X4&Q0&E1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{MultiTech MultiModem 932EC{,{AT&F{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{MultiTech MultiModem MT224EH5 (MNP5){,{ATE1M1Q0V1X4&Q0{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{MultiTech MultiModem MT224EH7 (MNP7){,{ATB1E1M1Q0V1X4&Q0{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{MultiTech MultiModem V.32{,{AT&F&C1&D2B1E1M1Q0V1X4{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{MultiTech MultiModem V.32 with V.42bis{,{AT&F&C1&D2B1E1M1Q0V1X4{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{NEC 19632E Intelligent Modem{,{AT&FE1Q0V1X4Y0&C1&D2S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{NEC N2431/2431C{,{AT&F&C1&D2&E1S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{NEC N9631 V.32 MNP{,{AT&FE1Q0&T5\Q3\V1\X1*FT1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Novation Professional 2400{,{AT&FE1Q0V1X3YC0YF1YT0S7=45{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Okidata Okitel 2400 Plus/2400B Plus{,{AT&F&C1&D2\V1\N3\Q3\J0\C1S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Okidata Okitel 2400/2400B{,{AT&FE1Q0V1X4&C1&D2S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Okidata Okitel 9600{,{ATQ0V1\V1\N3X4&B0&K0{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Pace{,{ATS0=0Q0V1S50=2551=2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Packard Bell{,{ATS0=0Q0V1&D3{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Poweruser Fax Modem 14.4{,{AT&F0&C1&D2\N3{,{AT{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Practical PM1200SA{,{ATE1QV1X4{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Practical Peripherals{,{AT&F1{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Practical Peripherals 288MTII V.FC{,{AT&F1Q0V1X4Y0&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Practical Peripherals PC 288 HC{,{AT&F1S110=2{,{AT{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Practical Peripherals PC 288 LCD{,{AT&F1S110=2{,{AT{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Practical Peripherals PC 288 MT{,{AT&F1S110=2{,{AT{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Practical Peripherals PC 288 SA{,{AT&F1S110=2{,{AT{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Practical Peripherals PM 288 HCII{,{AT&F1S110=2{,{AT{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Practical Peripherals PM 288 PKT{,{AT&F1S110=2{,{AT{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Practical Peripherals PM14400FX MT{,{AT&F1E1L2M1Q0V1X4Y0&C1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Practical Peripherals PM14400FXSA{,{AT&F1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Practical Peripherals PM2400{,{ATB1E1L2M1Q0V1X4Y1&C1&D2S0=0S2=43{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Practical Peripherals PM2400EFX w/V.42bis{,{ATB1E1L2M1Q0V1X4Y1&C1&D2S0=0S2=43{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Practical Peripherals PM2400EFXSA w/V.42bis{,{ATB1E1L2M1Q0V1X4Y0&C1&D2S0=0S2=43{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Practical Peripherals PM2400SA{,{ATB1E1L2M1Q0V1X4Y0&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Practical Peripherals PM9600FX & PM9600FXMT{,{AT&FE1L2M1Q0V1X4Y0&C1&D3{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Practical Peripherals PM9600SA{,{AT&F&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Prometheus 2400 MCT-24I HalfCard{,{AT&FE1Q0V1X4&C1&D2S7=60S0=0{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Prometheus 2400G, MNP{,{AT&FS0=0Q0V1X4&C1\N0\Q0\S0{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Prometheus 9600 MNP{,{AT&F*F3{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Prometheus Fax Modem{,{AT&FQ0V1\J0\N0\V1\Q1\X1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Prometheus Home Office{,{AT&F{,{AT{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Prometheus LineLink 144e{,{AT&F2&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Prometheus Pro Modem Ultima{,{AT&F{,{AT{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Prometheus Ultima 9600{,{AT&F{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Quickcom V.32{,{ATS0=0 Q0 V1 *E0*F1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Quicktel Xeba 14.4{,{AT&F&C1&D2{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{RC&T PCMCIA{,{AT&F{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Racal ALM 3226{,{AT&F&C1&D2{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Racal-Datacom ALM3223{,{AT&F\Q1S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Racal-Milgo RMD 3221{,{AT&FX9&C1&D2*F2S7=60S0=0{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Racal-Vadic 2400/PS{,{AT&F*F2&C1&D2*E1S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Racal-Vadic 2400LC{,{AT&F&C1&D2X4*E1*L1*Q1*F2*P1S7=60S11=55{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Racal-Vadic 2400PA Model 2{,{AT&F&C1&D2X4*E1*L1*Q1*F2*P1S7=60S11=55{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Racal-Vadic 2400VP{,{AT&F&C1*C1&D2*E1*F2Y1S7=60*Q1S11=55{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Racal-Vadic 9600VP{,{AT&F&C1*C1&D2*F2Y1*Q1S7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Racal-Vadic 9632PA{,{AT&FS7=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Racal-Vadic LC2400PC{,{AT&FS7=60S11=55{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Reveal 14.4{,{AT&F{,{AT{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Rolm 244 PC Telephone{,{AT&FE1M0Q0V1X1S0=2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Spartan FM-144{,{AT&F&C1&D2\Q3\N3{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Stowaway 14.4{,{AT&F0E0L3S11=50&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Supra Fax Modem V.32 (9600 and 14400){,{AT&F2&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Supra Fax V.32bis Internal Modem{,{AT&F{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Supra Modem 2400{,{AT&F2&C1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Supra Modem V.32bis{,{AT&F&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Supra V.32 Modem{,{AT&F&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Sysdyne MDM 24H{,{AT&FE1Q0V1X4&C1&D2S7=60S11=55S0=0{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Telebit Internal PC Card w/MNP{,{AT&FS11=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Telebit QBlazer 9600{,{AT&FE0X2&D2S58=2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Telebit T1000{,{AT~&FS0=0 Q0 V1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Telebit T1500{,{AT&FS11=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Telebit T1600{,{AT&F&C1&D2S0=0{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Telebit T2000{,{ATE1Q0M1V1W1X14Y0{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Telebit T2500{,{AT&F&C1&D2S58=2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Telebit Trailblazer{,{AT&FS11=60S51=5S52=1S53=1S58=2S66=1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Telebit Trailblazer Plus{,{AT&FS11=60S51=5S52=1S53=1S58=2S66=1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Telebit Worldblazer{,{AT&FE0&C1&D2S11=50S68=2S52=4S58=2S96=1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Twincom 14.4 Fax Modem{,{AT&F&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Twincom 96/24i{,{AT&F{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Tyin 4000 Pro Fax{,{AT&F&C1&D2{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{US Robotics Courier 2400, 2400/PS & 2400e/PS{,{ATE1Q0M1X6V1S7=60S11=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{US Robotics Courier HST (144x ROM){,{AT&F&H1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{US Robotics Courier HST (96x ROM){,{AT&F&B1&H2&I2&K0{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{US Robotics Courier HST Dual Standard{,{AT&F&H1&K2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{US Robotics Courier PCMCIA{,{AT&F&B1&H1&R2&K0{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{US Robotics Courier Terbofax w/ASL{,{AT&F&K2{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{US Robotics Courier V.32bis & V.32bis FAX{,{AT&FS7=60&C1&D2&H1&K2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{US Robotics Courier V.34 Data/Fax w/V.FC{,{AT&F&H1&K2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{US Robotics Direct 1200PC Internal{,{ATE1Q0M1X1V1S7=60{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{US Robotics MicroLink 2400{,{ATE1Q0M1X6V1S7=60S11=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{US Robotics Password 1200 Internal{,{ATE1Q0M1X1V1S7=60{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{US Robotics Sportster 14.4 PCMCIA FAX{,{AT&F&C1&D2&H1X4{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{US Robotics Sportster 14.4, 14.4 V.42, 14.4PC & 14{,{AT&F&B1&H1&R2&K3{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{US Robotics Sportster 2400, 2400PC & 2400 V.42bis{,{ATE1Q0M1X6V1S7=60S11=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{US Robotics Sportster 28,800 FAX & FAX/PC{,{AT&F1{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{US Robotics Sportster 9600/Fax{,{AT&FX4&H1{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{US Robotics Sportster V.34 FAX & FAX/PC{,{AT&F&H1&B1&R2&K3{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{US Robotics Sportster V.34 PCMCIA FAX{,{AT&F&H1&B1&R2&K3{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{US Robotics VARmodem 2400{,{ATE1Q0M1X6V1S7=60S11=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{US Robotics Worldport 14400{,{AT&F&D2&H1&R2X4{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{UST 9600{,{ATS0=0Q0V1B0&A3&B1&K3&N0{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Universal (Hayes Compatible Modem){,{AT&F&C1&D2&K3&Q5E1V1Q0X4{,{ATZ{,{~~~+++~~~{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Ven-Tel 212Plus{,{ATSFE1Q0V1X1S7=60S11=55S0=0{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Ven-Tel 2400 Plus II{,{ATSF&C1&D2S7=60S11=55S0=0{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Ven-Tel 9600 Plus / Plus II{,{ATSF&C1&D2S7=60S11=55S0=0{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Ven-Tel Halfcard{,{ATSFE1Q0V1X4S7=60S0=0{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Ven-Tel Halfcard 24{,{ATSFE1Q0V1X4S7=60S0=0{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Ven-Tel Pathfinder{,{ATSFS11=55{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{ViVa 14.4/FAX{,{AT&F&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{ViVa 2442ef{,{AT&F&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{ViVa 24m/2496 if{,{AT&FE1QV1&D2X4&C1\N3{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{ViVa 9600{,{AT&F{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{ViVa 9642e/9642i{,{AT&F&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Wang 14.4{,{AT&F&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{WorldPort 14.4 V.42bis & PCMCIA FAX{,{AT&F{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{WorldPort 2400 & 2405i{,{AT&F{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{WorldPort 2496, 2496i &2496i-Toshiba{,{AT&F{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Xircom{,{AT&F&D2&Q5{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Xtend Chamelion{,{AT&F\N3{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Yokohama Telecom 14.4{,{AT&F&C1&D2X4{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Zoltrix 14.4{,{AT&F&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Zoom 28.8 VFP{,{AT&F&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Zoom 28.8 VFX{,{AT&F&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Zoom HC2400R{,{AT&FS11=60&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Zoom HC2400R V.32bis/2400{,{AT&F&C1&D2S36=7S38=0S95=44S11=60{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Zoom HC2400S{,{AT&FS11=60&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Zoom MX2400R{,{AT&FS11=60&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Zoom MX2400S{,{AT&FS11=60&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Zoom VFP/VFX V.32bis 14.4{,{AT&F&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{Zoom VFZ{,{AT&FE1V1&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{ZyXEL U-1496B{,{AT&F{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{ZyXEL U-1496E{,{AT&F{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{ZyXEL U-1496E Plus{,{AT&FE1V1&C1&D2{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{ZyXEL U-1496P Portable{,{AT&F{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{ZyXEL U-1496R{,{AT&F{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+{ZyXEL U-1496RE{,{AT&F{,{ATZ{,{+++{,{ATH{,{1.0{,{BUSY{,{NO DIAL{,{NO CARRIER{,{NO ANSWER{
+

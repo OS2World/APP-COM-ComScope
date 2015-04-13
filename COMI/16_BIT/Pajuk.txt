@@ -1,0 +1,20 @@
+Michael,
+
+I have finally completed the "reincarnation" of the 16 bit OS/2 serial device
+driver.  I haven't done much testing yet.  This version should work for any
+machine that can run OS/2 1.x. (including 286s)
+
+Please note the explnation for the "i" keyword in DDRIVER.TXT.  You may need 
+to adjust this value.
+
+Please let me know if you have ANY trouble; either via e-mail 
+(emmett@os-tools.com) or by leaving a message addressed to me or the SysOp on 
+the BBS.
+
+I'll be looking forward to hearing your feed back.  If I discover any problems
+during the testing I will inform you and make any fixes availble to you as 
+soon as they are complete.
+
+Thanks for your interest, and patience.
+
+Emmett

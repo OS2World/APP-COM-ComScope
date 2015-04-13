@@ -1,0 +1,700 @@
+
+
+
+
+                               OS/tools Incorporated
+                         COM/8 Asynchronous Device Driver
+                        Information and Installation Guide
+
+     Introduction
+
+          The OS/tools Incorporated COM/8 Device Driver for OS/2 is capable of
+          handling up to eight asynchronous serial devices for each COM/8
+          "DEVICE=" line in the CONFIG.SYS file.  It can either replace or
+          supplement either the COM01.SYS asynchronous device driver supplied
+          by IBM and Microsoft for use with Industry Standard Architecture
+          (ISA) machines, the COM02.SYS device driver supplied by IBM and
+          Microsoft for use with Micro Channel Architecture (MCA) machines and
+          versions 1.x of OS/2.  The COM/8 device can also replace and/or
+          supplement the COM.SYS device driver supplied with OS/2 2.0.
+
+     Version Description
+
+          There are three different versions of the COM/8 device driver:
+
+               1.   A standard version, COMDD.SYS, that will work with any IBM
+                    compatible Asynchronous Serial port and/or adapter board.
+
+               2.   Custom versions, xCOMDD.SYS, that will only work with
+                    specific adapter boards.  Where the "x" varies with the
+                    adapter board the custom COM/8 device driver is optimized
+                    for.  These versions are usually distributed by the OEM
+                    suppliers of specific adapter boards.
+
+               3.   An evaluation version, COMDDE.SYS, will work on any IBM
+                    compatible Asynchronous Serial port or adapter board, but
+                    has some features disabled.  See Evaluation Device Driver
+                    Restrictions under Application Interface, below.
+
+     Systems Supported
+
+     The COM/8 device driver supports two of the three platforms that support
+     the OS/2 operating system.  The two platforms supported are the Industry
+     Standard Architecture (ISA), or IBM AT bus, and the Micro Channel
+     Architecture (MCA) bus.  Specific support for the Extended Industry
+     Architecture (EISA) is expected by January of 1993.
+
+
+     Micro Channel Architecture Support
+
+          The COM/8 device driver will automatically configure a Micro Channel
+          Architecture machine with asynchronous serial ports that use base
+          I/O addresses and interrupt levels the same as those specified by
+          IBM for MCA machines.  The I/O base addresses and interrupt levels
+          for Asynchronous Serial Devices supported for automatic
+          configuration by the COM/8 device driver are:
+
+
+
+             Base I/O address      Logical Port      Interrupt Level
+
+             3F8h                  One               4
+
+             2F8h                  Two               3
+             3220h                 Three             3
+             3228h                 Four              3
+             4220h                 Five              3
+             4228h                 Six               3
+             5220h                 Seven             3
+             5228h                 Eight             3
+
+          If the device driver finds a valid Asynchronous Serial device at one
+          of the above I/O base addresses that is connected to the
+          corresponding interrupt level, then that device is initialized and
+          made available to applications.  Unlike the COM02.SYS or COM.SYS
+          device drivers supplied with OS/2 (for use with MCA machines), the
+          COM/8 device driver is designed to have a one-to-one relationship
+          with available port base addresses and DOS device names.  This means
+          that a DOS device name (e.g. COM1) will be mapped directly to a
+          corresponding hardware address (e.g. logical port one).  Ports will
+          be mapped as shown below.
+
+               Logical Port       DOS Device Name
+
+               One                COM1
+               Two                COM2
+               Three              COM3
+
+               Four               COM4
+               Five               COM5
+               Six                COM6
+               Seven              COM7
+               Eight              COM8
+
+          If you install devices that fill address space for port's one,
+          three, and four, then DOS devices COM1, COM3, and COM4 will be
+          available to applications after automatic configuration at system
+          start-up (boot).
+
+          If you need consecutive DOS device name numbering, you must
+          configure your hardware for consecutive base addresses as described
+          above, or specify the pertinent information about your hardware on
+          the  COM/8 device driver command line (see explanation under device
+          driver installation).
+
+     Industry Standard Architecture Support
+
+
+          There is no automatic configuration for Industry Standard
+          Architecture (ISA) machines.  Because ISA machines use edge
+          sensitive interrupts, there are restrictions the COM/8 device driver
+          must place on port address and interrupt level selection.
+
+          In an ISA machine, devices that have the same interrupt level must
+          be on the same expansion board (all in one slot).  A maximum of
+          eight devices can be handled by the COM/8 device driver on any
+          single interrupt level on ISA machines.  The  COM/8 device driver
+          will not prevent you from using the same interrupt level across
+          slots.
+
+     Hardware Requirements
+
+          It is highly recommended that any asynchronous serial device used
+          with OS/2 have hardware buffering capabilities (i.e. using the
+          16550A UART).  This is especially important when more than two or
+          three devices are to be supported and/or baud rates above 1200 bps
+          are to be used.  The  COM/8 device driver will not prevent you from
+          using non-hardware-buffered devices.
+
+          The COM/8 device driver will perform the following tests at
+          initialization to verify that any device it is expected to support
+          is configured correctly:
+
+               1.   Test if there is a valid UART at the requested I/O base
+                    address.
+
+               2.   Test if the requested interrupt level is available.
+
+               3.   Test if the device is connected to the requested interrupt
+                    level.
+
+          Any discrepancies in the above tests are reported during
+          initialization at start-up.  Devices that fail the above tests will
+          not be installed and will not, therefore, be available to
+          applications through this device driver load.
+
+     Device Driver Installation
+
+          Standard Version
+
+               If you have the standard version of the device driver you must
+               use the installation program (INSTALL.EXE) supplied on the
+               distribution disk.
+
+               Place your distribution disk in either drive A or drive B and
+               change the default drive to that drive (e.g. [C:\]A: <ENTER>).
+               Enter INSTALL at the prompt, followed by the drive and
+               directory path where you want to install the driver (e.g.
+               [A:\]INSTALL c:\os2 <ENTER>).
+
+               You will be prompted for a configuration string during the
+               installation process.  Be sure you are familiar with your
+               hardware configuration and what you will need to place in the
+               configuration string, based on that hardware configuration.
+               See Device Driver Configuration below for details on how to
+               assemble a configuration string.  A "DEVICE=COMDD.SYS
+               'configuration string'" line will be written, automatically,
+               into your CONFIG.SYS file by the installation program.
+
+
+          Multiple License, Custom, and Evaluation Versions
+
+               If you are installing a multiply licensed, custom (OEM) version
+               (xCOMDD.SYS), or the evaluation version (COMDDE.SYS) of the
+               device driver then copy the device driver from the distribution
+               disk to a directory on your boot disk and add this line to your
+               CONFIG.SYS file:
+
+                    DEVICE=[path][driver name] [configuration switches]
+
+                    Where "path" is the absolute directory path you copied the
+                    device driver to and "driver name" is either COMDDS.SYS,
+                    COMDDE.SYS, or xCOMDD.SYS, where "x" is dependent on which
+                    OEM the device driver is customized for.
+
+               Includes Rev's E, Em, Q, Qm, N, Nm, S, and Sm.
+
+     Device Driver Configuration
+
+          If you have non-standard hardware, with different base addresses or
+          different interrupt levels than those supported for automatic
+          configuration, or more than eight devices on an MCA machine, or you
+          have an ISA machine, you will have to define the device driver
+          configuration with command line switches.
+
+          All switches begin with "/" or "-".  The first character after the
+          "/" or "-" will be a "V", a number from "1" to "8", an "I", a "P",
+          an "M", a "T", a "C", or a "D".
+
+          A "V" following a "/" enables verbose mode and tells the driver to
+          write to the screen, at start-up time, the base I/O address,
+          interrupt level, and non default buffer sizes for each logical
+          device the driver controls.  A "D" following the "V" will cause the
+          device driver to delay after writing the "verbose" information to
+          the screen.  If a number follows the "D", it will be used to
+          determine the time (in tenths of a second) to delay after all
+          devices to be supported are initialized.  The default delay value is
+          20 (2 seconds).  The "V" switch also causes device driver version
+          information to be displayed during initialization.
+
+          A number "1" through "8" following a "/" represents the specific
+          logical device number subsequent characters in the switch refer to.
+          A"1" following the "/" would refer to the first logical device.
+          There are up to eight logical devices for each COM/8 "DEVICE=" line
+          in the CONFIG.SYS file.  After the "number" the following characters
+          have meaning:
+
+               "I"  Tells the driver that the following number is the
+                    interrupt level to use for this logical device.  All
+                    interrupt levels except 0 and 1 are supported.
+
+               "P"  Tells the driver that the following number is the base I/O
+                    address of this logical device.
+
+               "M"  Precedes a buffer size specification for this logical
+                    device; an "MR" indicates a read buffer size follows, an
+                    "MW" indicates a write buffer size follows, and an "MI"
+                    indicates a COMscope buffer size follows.  Any "MI" switch
+                    also enables COMscope extentions for the device driver.
+
+
+               "D"  Precedes a COM default specification
+
+                         Position 1      2     3     4
+
+                                  D      T     R     #
+                                  D      T     W     #
+                                  D      B     #
+                                  D      F     1     #
+                                  D      F     2     #
+                                  D      F     3     #
+                                  D      L     #
+
+                                  D      I
+
+               "T"  Precedes an extension mask for this logical device.
+
+               NOTE:     No white space or delimiters are required or allowed
+                         within a logical device specific switch as described
+                         above.
+
+          An "I" following a "/" will indicate a global interrupt level
+          definition follows.  The number following the "I" tells the device
+          driver the logical device number to start applying the interrupt
+          level definition to.  A delimiter ("-", ",", or single space) and a
+          number follow.  The number is to indicate the desired interrupt
+          level to use for all of the devices from the specified starting
+          logical device to logical device number eight.  Again, all interrupt
+          levels except 0 and 1 can be selected.
+
+          A "P" following the "/" indicates a global starting consecutive port
+          base address follows.  The number following the "P" tells the driver
+          the logical device number to start applying the starting consecutive
+          base address to.  A delimiter ("-", ",", or single space) and a
+          number to indicate the I/O base address to apply to the starting
+          logical device follow.  All succeeding ports (up to and including
+          logical device eight) are then given base addresses by adding eight
+          to the base address applied to the previous port.
+
+          An "M" following the "/" indicates a global buffer size
+          specification follows.  Either an "R" (for Read), a "W" (for Write),
+          or an "I" (for COMscope) following the "M" will indicate which
+          buffer the global switch refers to.  Immediately following either
+          the "R", "W", or "I" is a number to indicate starting logical device
+          number to apply the global buffer specification to.  After a
+          delimiter ("-", ",", or single space) a number to indicate the
+          requested size of the specified buffer follows.    "MI" also enables
+          the COMscope extentions for the device driver.  If no number follows
+          the "MI" switch a default buffer size of 64 bytes will be allocated.
+
+          A "D" following the "/" indicates a global COM default specification
+          follows.  A "T" (for Tmeout), a "B" (for Baud rate),  an "F" (for
+          DCB Flag), an "L" (for Line characteristics), or an "I" (for IBM
+          defaults) is to follow the "D".  A "T" will be followed by either an
+          "R" (for  Read) or a "W" (for Write).  An "F" will be followed by a
+          number from 1 to 3 to indicate the DCB flag to set defaults for (see
+          the "Physical Device Driver Technical Reference", Category 1, I/O
+          control function 53h for a description of these flags).  An "I"
+          following the "D" will cause that logical port to use the defaults
+          suggested by IBM for Asynchronous device support for that logical
+          port.  A number after the "R" or "W" after "T", the "B", the flag
+
+
+          number, or the "L" tells the device driver the logical device number
+          to start applying the default specification to.  After a delimiter
+          ("-", ",", or single space) the second number will represent the
+          value to set the default to.
+
+                   Position 1     2     3      4     5     6
+
+                            D     T     R      #     -     #
+                            D     T     W      #     -     #
+                            D     B     #      -     #
+                            D     F     1      #     -     #
+                            D     F     2      #     -     #
+                            D     F     3      #     -     #
+                            D     L     #      -     #
+
+                            D     I     #
+
+          First number (#) is logical device to start default application.
+          Second number (#) is value to set default to.
+
+               Default Line Characteristic bit assignments:
+
+           Function             Bit 7  Bit 6  Bit 5 Bit 4  Bit   Bit 2  Bit   Bit 0
+                                                           3            1
+           Data bits                                                      X     X
+           Stop Bits                                               X
+           Parity Enable                                     X
+
+           Even Parity Select                         X
+           Stick Parity Select                  X
+
+                             Data Bits  Bit 1  Bit 0
+                                5         0      0
+                                6         0      1
+
+                                7         1      0
+                                8         1      1
+
+                         Stop Bits               Bit 2
+                         1                         0
+                         1.5 (with 5 data bits)    1
+
+                         2 (with 8 data bits)      1
+
+               Default Line Characteristic Examples:
+
+                    8 data bits, no parity , 1 stop bit -> use:    /DL1-03h or /1DL03
+
+                    7 data bits, even parity, 1 stop bit -> use: /DL1-1Ah or /1DL1Ah
+
+          For timeouts ("T") the vaule will indicate a default timeout, in .01
+          second increments, for its respective flow direction (Read or Write)
+          for that logical device.  For baud rate ("B") the value will
+          indicate the required default baud rate for that logical device.
+          For line characteristics ("L") the value will represent the default
+          line characteristics required for the logical device.  For DCB flags
+          the value will represent the default value to set the flag to.
+
+          "T" following the "/" indicates that a Device Driver extension mask
+          follows.  The number following the "T" tells the device driver the
+
+
+          logical device number to start applying the extension mask to.
+          After a delimiter ("-", ",", or single space) the second number will
+          enable certain extensions as described below:
+
+
+
+                Bit  Function
+
+
+                0    reserved (must be zero).
+                1    Disable Modem Interrupts (Modem Signals will still work)
+                2    reserved (must be zero).
+                3    reserved (must be zero).
+                4    Disable initialization hardware tests.
+                5    reserved (must be zero).
+                6    reserved (must be zero).
+                7    reserved (must be zero).
+                8    reserved (must be zero).
+                9    reserved (must be zero).
+                10   Enable access to OUT1 and LOOP modem control bits.
+                11   Use requested baud rate as explicit UART clock divisor.
+
+                12   reserved (must be zero).
+                13   reserved (must be zero).
+                14   reserved (must be zero).
+                15   Print System Location Information at initialization.
+
+
+          A "C" following the "/" indicates a DOS COMx port range map follows.
+          The number following the "C" tells the driver the DOS port number to
+          start mapping the device driver's logical ports to.  After a
+          delimiter ("-", ",", or single space) the second number indicates
+          the last DOS port number to be handled by the COM/8 device driver.
+          Up to eight devices can be supported by the COM/8 device driver for
+          each COM/8 "DEVICE=" line in the CONFIG.SYS file.  DOS COMx port
+          numbering will be consecutive, starting with the first number
+          indicated and ending with the second number indicated.
+
+          The COM/8 device driver command line interface is NOT case sensitive
+          ("i" = "I").  Any numerical value can be in either base 10 or base
+          16 (hexidecimal).  An "H" must directly follow a base 16 number
+          (e.g. 3f8h).  All switches for the device driver being loaded must
+          be on the same line as the COM/8 "DEVICE=" in the config.sys file.
+
+          Once a particular configuration parameter for a logical device has
+          been specified by some command line switch, a following conflicting
+          global parameter specification switch will be ignored.  This is
+          useful if you want to specify two or more, different base I/O
+          address sequences, or interrupt levels, globally.  Just specify the
+          global switch for the higher logical port numbers first.  The last
+          port specific parameter specification will always override any
+          global or previous port specific specification.  We are just
+          specifically specifying some particular specificity about very
+          specific items, globally speaking (writing) that is, in case you
+          hadn't noticed.  You may ignore that last sentence, if you can.  It
+          was getting late.
+
+          Configuration Example:
+
+
+               /VD100 /1p2000hi4mw800hb4800 /2F343hL03TR9B38400 /i2-10 /p2-
+               380h /C2-6 /T1-8000h /b3-2400 /DI1
+
+          This example tells the device driver to:
+
+               1.   /VD100 - Be verbose and delay ten seconds after writing
+                    initialization and version messages to the screen and
+                    initializing all ports to be supported by this device
+                    driver load.
+
+               2.   /1p2000hi4mw800hb4800 - Assign to logical device one a
+                    base I/O address of 2000h, interrupt level four, set write
+                    buffer length to 2048 bytes, and to set its baud rate to
+                    4800 bps.
+
+               3.   /2F343hL03TR10B38400 - Assign to logical device two a DCB
+                    flag3 enabling both transmit and receive Xon/Xoff flow
+                    control (handshaking) with full duplex on, Line
+                    characteristics of 8 data bits, one stop bit, and no
+                    parity, a read timeout of 100 milliseconds, and a baud
+                    rate of 38400 bps.
+
+               4.   /i2-10 - Use interrupt level ten for all logical devices
+                    from two through eight.
+
+               5.   /p2-380h - Use base address 380h for logical device two,
+                    388h for logical device three, 390h for logical device
+                    four, 398h for logical device five, 3A0h for logical
+                    device six, 3A8h for logical device seven, and 3B0h for
+                    logical device eight.
+
+               6.   /C2-6 - Map COM2 to logical port one, COM3 to logical port
+                    two, COM4 to logical port three, COM5 to logical port
+                    four, and COM6 to logical port five.  The "C" switch
+                    defines and limits the range of DOS COMx ports handled by
+                    the device driver load module.
+
+               7.   /T1-8000h, bit 15 - Print device driver memory location at
+                    initialization.
+
+               8.   /b3-2400 - Assign to logical devices 3 through 8 a default
+                    baud rate of 2400 bps.
+
+               10.  /di1 - Assing to all logical devices the defaults
+                    suggested by IBM in the "Physical Device Driver Technical
+                    Reference" for Asynchronous communications devices.  NOTE:
+                    those parameters previously will not be changed,  only
+                    those that have not been assigned will be set to the IBM
+                    defaults.
+
+          The maximum buffer space for each device driver load module is about
+          63k bytes, total.  You must divide the available space to suit your
+          needs.    The default receive buffer size is 2048 bytes and the
+          default write buffer size is 256 bytes.  The minimum buffer size is
+          128 bytes.
+
+          Using the COM/8 command line switches will override any automatic
+          configuration expectations.  A switch specified interrupt level will
+          take affect in any case, as will explicit buffer sizes.  A port
+          specific switch will always override a global switch.
+
+
+          If left alone (no command line switches to the contrary), the
+          defaults for the COM/8 device driver are:
+
+
+             Parameter                       Default Values
+
+             Read timeout                    normal, 100 milliseconds
+             Write timeout                   normal, 1 second
+             Line characteristics            8 data, no parity, 1 stop
+             RTS                             enabled  (no handshaking)
+             DTR                             enabled  (no Handshaking)
+             CTS                             ignored
+             DSR                             ignored
+
+             DCD                             ignored
+             FIFOs                           automatic (if present)
+             Xon/Xoff, transmit and receive  disabled (no handshaking)
+
+          All other parameters are as suggested by IBM.  Default baud rates
+          from 2 to 57600 bps can be specified on the COM/8 device driver
+          command line.
+
+          If you specify a base I/O address of FFFFh (65535) for a logical
+          device, the logical device number and the DOS COMx device name
+          mapped to that port will not be accessed or controlled by this
+          device driver load, and therefore, may not be accessible to
+          applications.
+
+          If you enable System Location Information (bit 15 of the "T" switch)
+          you will see a message like the following at the end of all other
+          information printed at initialization.
+
+               0309:2230 - 3680 C
+               0319:0380 - 0482 - 3662 D
+
+          The first line of the above System Location messages indicates that
+          the code segment selector is 0309h (CS), that the run-time code
+          segment limit is 2230h (CSLIM), and that the initialization-time
+          code segment limit is 3680h (CSLIM).  The second line indicates that
+          the data segment selector is 0319h (DS and/or ES), that the run-time
+          driver variable area length is 0380h, that the initialization-time
+          driver variable area length is 0482h, and that the run-time data
+          segment limit is 3662h (DSLIM and/or ESLIM).
+
+          It is recommended that you use the Verbose-Delay (e.g. /VD100)
+          switch to give you time to read and/or copy the System Location
+          information.
+
+      Application Interface
+
+          The application interface for all ports under COM/8 control is
+          exactly the same as for the COM02.SYS, or COM01.SYS device drivers
+          supplied with OS/2 1.x and the COM.SYS device driver supplied with
+          OS/2 2.0.  You must issue a DosOpen and use the handle returned by
+          that function to issue DosWrite, DosRead, and DosDevIOCtl requests.
+          See the OS/2 "Physical Device Driver Technical Reference"
+          publications under "DosDevIOCtl" for details on using I/O control
+          functions for the COM/8 device driver.  The standard and OEM custom
+          device drivers support all of the features described in OS/2
+          technical publications for Asynchronous Serial devices (Category 1).
+
+
+          All versions of the COM/8 device driver are designed to operate the
+          same as the COM02.SYS and COM01.SYS device drivers supplied with
+          OS/2 1.x and the COM.SYS devices driver supplied with OS/2 2.0, with
+          a few exceptions:
+
+               1.   DOS COMx device name is based solely on base I/O address
+                    and/or explicit command line switches.
+
+               2.   Up to eight COMx devices are supported for each COM/8
+                    "DEVICE=" line in your CONFIG.SYS file.
+
+               3.   Up to thirteen different hardware interrupt levels are
+                    supported.
+
+               4.   Baud rates up to 115.2k, and above, if hardware is
+                    capable.
+
+               5.   The default receive trigger level on ports with 16550A
+                    UARTs is 14 bytes.
+
+               6.   Ports can be accessed from a DOS window only through the
+                    DOS INT 21h file system interface.
+
+               7.   The MODE command will only work with COM1 through COM9.
+                    This is a limitation of the current MODE command
+                    asynchronous port support supplied with OS/2.  Use
+                    COMscope or command line switches to set COM ports above
+                    COM9.
+
+               8.   The device I/O control functions 43h and 63h can be used
+                    to set and query baud rates above 57.6K.  This is also
+                    possible with the COM.SYS device driver supplied with OS/2
+                    2.0.
+
+          Evaluation Device Driver Restrictions
+
+               The COMDDE.SYS device driver has been partially disabled.  When
+               the device driver is first initialized at start-up, only 1000
+               DosWrite requests will be processed before write capabilities
+               will be disabled.  Once write capabilities have been disabled
+               they can be restarted again by first closing the port (issuing
+               a first level DosClose request), then re-opening the port
+               (issuing a first level DosOpen request).  Each re-open will
+               then allow half the number of write requests as the previous
+               close/open sequence allowed, until no write requests, at all,
+               are allowed.  At this time all DosRead requests will be denied
+               also.  You will then have to re-boot your system to re-
+               initialize the device driver.
+
+     COMscope Communications Monitor
+
+          In order to use the COMscope Communications Monitor, you must
+          include at least one "MI" switch on the device driver command line.
+          Just add something like "/MI1-256" or "/1MI100h" to the COM/8
+          "DEVICE=" line in your CONFIG.SYS file to enable support for
+          COMscope.EXE.  In addition the COM/8 device driver must have a lower
+          case "m" in its Revision number, as displayed at system
+          initialization, for COMscope to work with it (e.g. Revision Sm).
+
+
+          Setting the "MI" option will allow COMscope to non-invasively
+          monitor the data stream and states of the device driver and hardware
+          for any, or all, of the devices controlled by the COM/8 device
+          driver.
+
+          When you select the Device Driver Status option, under the Monitor
+          menu heading, a movable window will be placed on screen that
+          displays the various status words available from the device driver.
+          If you click the mouse pointer on any of the values displayed,
+          another window will open.  That window will list the meanings of
+          each bit in the status word and show their states at the time the
+          mouse was clicked.
+
+          Unless you enable the Stream Monitor Function from the "Monitor"
+          menu, any key pressed while the main window is active will be sent
+          to the device driver via the Transmit Byte Immediate I/O control
+          function (0x44h).
+
+          You can have an application that accesses a COM port, and COMscope,
+          monitoring that same port simultaneously.  COMscope can be loaded
+          multiple times to monitor multiple COM ports.
+
+          If you select "Count Characters" from the "Options" menu you can
+          calculate the number of character positions from the position of the
+          click of the left mouse button to the position of the click of the
+          right mouse button.
+
+          The monitor display consists of alternate white on black and black
+          on white lines.  When a character is read from the device hardware
+          it will be displayed in the white on black line (odd lines).  When a
+          character is written to the device hardware it will be displayed in
+          the black on white line (even lines).
+
+          The data stream collected by COMscope is continually written to the
+          display buffer as characters are sent to and received from the
+          device hardware.  When the display buffer is full the data stream
+          will wrap around to the beginning of the buffer.  The display buffer
+          can hold around 15,000 characters.
+
+          The size of the buffer specified on the device driver command line
+          should be selected according to the baud rate at which you expect to
+          operate the device.  A buffer size of 256 (e.g. /1MI100h) may be too
+          small for 9600 baud; and that's all the help you get.
+
+          The bottom line of the display window will display COMscope errors
+          when "Error Display" is selected from the "Options" menu (assuming
+          there are errors to display).  Selecting "Count Characters from the
+          "Options" menu lets you count characters in the display buffer.
+          When neither the "Count Characters" or the "Error Display" items are
+          enabled, the bottom line will display the position in the display
+          buffer of the top of the window (TOW) and the current position (CUR)
+          of the next character to be written to the display buffer.  An up or
+          down arrow will show the relative position of those two lines, and a
+          block will be displayed whenever the next character to be written
+          line is within the COMscope display window.
+
+          COMscope monitors the character stream between the hardware and the
+          device driver.  We have another product that can be used to monitor
+          the data stream between two different serial ports.
+
+
+          The version of the COMscope Monitor that will work with the
+          evaluation version of the device driver is supplied as MIRROR.EXE
+          when it is necessary to supply COMscope version for both the
+          evaluation and normal versions of the device driver.  The version of
+          COMscope for the evaluation version of the COM/8 device driver can
+          be distributed freely, along with the evauation version of the
+          device driver itself.
+
+     Advertisement
+
+          We have attempted to produce products that meet the communication
+          needs of our current customer base.  If you or your company have
+          special needs, please feel free to contact us about those needs.
+          Our address is:
+
+          OS/tools Incorporated
+          124H Blossom Hill Road
+          Suite 1522
+          San Jose, CA USA 95123
+
+          You may phone or FAX us at (408)225-7188.
+
+     Credits
+
+          IBM is a trademark of International Business Machines Incorporated.
+          Microsoft is a trademark of Microsoft Corporation.  OS/2 is a
+          trademark of IBM and Microsoft.  Micro Channel Architecture is
+          trademark of IBM.  OS/tools is a trademark of OS/tools Incorporated.
+
+     License
+
+          You may copy and distribute the evaluation version (COMDDE.SYS)
+          freely.  You may not modify any version of the COM/8 device driver
+          or its utilities in any way.  We own it and you may use it on a one
+          license per CPU license basis.
+
+     Disclaimers
+
+          The usual warranties and subsequent disclaimers, of course, apply.
+          We know nothing and are responsible for nothing.  Thank you for your
+          support.

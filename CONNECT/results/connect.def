@@ -1,0 +1,10 @@
+NAME    Connect WINDOWAPI
+
+DESCRIPTION 'OS/2 Aerial Server Simulator'
+
+DATA    MULTIPLE
+
+STACKSIZE   0x8000
+
+PROTMODE
+

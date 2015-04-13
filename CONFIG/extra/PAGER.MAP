@@ -1,0 +1,444 @@
+
+ Start         Length     Name                   Class
+ 0001:00000000 0000059D8H _TEXT                  CODE
+ 0002:00000000 000001304H _DATA                  DATA
+ 0002:00001304 00000002AH _INIT_                 INITDATA
+ 0002:0000132E 000000000H _INITEND_              INITDATA
+ 0002:0000132E 000000006H _EXIT_                 EXITDATA
+ 0002:00001334 000000000H _EXITEND_              EXITDATA
+ 0002:00001334 000000000H CONST                  CONST
+ 0002:00001334 000000418H _BSS                   BSS
+ 0003:00000000 000001000H STACKBASE              
+ 0003:00001000 00000B000H _STACK                 STACK
+
+  Address         Publics by Name
+
+ 0001:00002B50       operator delete(void*)
+ 0001:00002B60       operator delete[](void*)
+ 0001:00004B8D       __tpdsc__[Bad_typeid]
+ 0001:00004BA9       __tpdsc__[Bad_cast]
+ 0001:00004BC5       __tpdsc__[Type_info]
+ 0001:00004B75       __tpdsc__[Type_info*]
+ 0001:00002B8C       invokeHnd()
+ 0001:00002B70  Idle jump()
+ 0001:00003712  Idle RaiseException(unsigned long,unsigned long,unsigned long,unsigned long*)
+ 0001:00004D22  Idle set_terminate(void(*)())
+ 0001:00004E03  Idle set_unexpected(void(*)())
+ 0001:00004D18  Idle terminate()
+ 0001:000047F3  Idle Type_info::operator =(const Type_info&)
+ 0001:000047BD  Idle Type_info::Type_info(const Type_info&)
+ 0001:000047FB  Idle Type_info::~Type_info()
+ 0001:0000481E  Idle Type_info::operator ==(const Type_info&) const
+ 0001:00004835  Idle Type_info::operator !=(const Type_info&) const
+ 0002:00001052       Type_info::
+ 0001:0000484D  Idle Type_info::before(const Type_info&) const
+ 0001:000048A0  Idle Type_info::name() const
+ 0001:00004DF9  Idle unexpected()
+ 0001:00003868       _CatchCleanup()
+ 0001:00003660  Idle _ReThrowException(unsigned int,unsigned char*)
+ 0001:00003634       _ThrowException(void*,void*,void*,void*,unsigned int,unsigned int,unsigned int,unsigned char*)
+ 0001:00002BBC  Idle __debuggerExcListChange()
+ 0001:00004A8D  Idle __DynamicCast(void*,void*,void*,void*,int)
+ 0001:00004EA2       __GetPolymorphicDTC(void*,unsigned int)
+ 0001:000048B0  Idle __GetTypeInfo(void*,void*,void*,void*)
+ 0001:00004CD8       @__InitExceptBlock
+ 0001:000047AC  Idle __ThrowExceptionName()
+ 0001:0000478A  Idle __ThrowFileName()
+ 0001:0000479B  Idle __ThrowLineNumber()
+ 0001:000005E6       _abort
+ 0001:00000723  Idle _atoi
+ 0001:00000690       _atol
+ 0002:00000068  Idle _bOpenComm
+ 0002:0000006C  Idle _bWaitForBreak
+ 0002:0000050C       _errno
+ 0001:00003D86       _ExceptionHandler
+ 0001:00000972       _exit
+ 0001:000009C0       _fflush
+ 0001:00000A64       _flushall
+ 0001:00001190       _fputc
+ 0001:00000B70       _fputs
+ 0001:00000CDF       _free
+ 0001:000002CA       _main
+ 0001:00000EBA       _malloc
+ 0001:00001298       _memchr
+ 0001:000012C0       _memcmp
+ 0001:00001308       _memcpy
+ 0001:00001330       _memmove
+ 0001:0000137C       _memset
+ 0001:000013B0  Idle _perror
+ 0001:00000088  Idle _PrimeOpen
+ 0001:00001430       _printf
+ 0001:00005601       _raise
+ 0001:000015B0       _realloc
+ 0001:0000558A  Idle _signal
+ 0001:00001A68       _sprintf
+ 0001:00001E30       _strcmp
+ 0001:00001E60       _strcpy
+ 0001:00001FD4       _strlen
+ 0002:00000074  Idle _szPort
+ 0001:000001B7  Idle _TriggerCount
+ 0002:00000070  Idle _usIncrement
+ 0001:00001A8B  Idle _vsprintf
+ 0002:00000072  Idle _wSignature
+ 0001:000005D0       __abort
+ 0001:00000038  Idle __acrtused
+ 0001:00001993       __addarg
+ 0001:00000600       __allocbuf
+ 0002:00001678  Idle __argc
+ 0002:0000167C       __argv
+ 0002:00000524       __atexitcnt
+ 0002:0000133C       __atexittbl
+ 0002:00001698       __C0argc
+ 0002:0000169C       __C0argv
+ 0002:000016A0       __C0environ
+ 0002:0000002B       __c0_heaps
+ 0002:0000002F       __c0_nheaps
+ 0001:00000998  Idle __cexit
+ 0002:00000F24       __cfinfo_get
+ 0002:00000F2C       __cfinfo_name
+ 0002:00000F28       __cfinfo_value
+ 0001:00004C10       __chkstk
+ 0001:00001D85       __cleanup
+ 0001:00002AD0       __clear87
+ 0001:00002AE8       __control87
+ 0001:00001AF6       __create_shmem
+ 0002:00000398       __ctype
+ 0001:00004753       __CurrExcContext
+ 0001:000009A8  Idle __c_exit
+ 0002:000010F0  Idle __DebuggerHookData
+ 0002:00000508       __default87
+ 0002:000016C4       __DestructorCountPtr
+ 0002:00001684  Idle __dll_table
+ 0002:00001748  Idle __doserrno
+ 0002:00001130  Idle __dosErrorToSV
+ 0001:000050C0       __ErrorExit
+ 0001:00005060       __ErrorMessage
+ 0001:00004EDE       __ExceptInit
+ 0002:000010EC  Idle __ExceptVarsSize
+ 0002:0000168C       __ExcRegPtr
+ 0001:00000985       __exit
+ 0002:00000528       __exitbuf
+ 0002:0000052C       __exitfopen
+ 0002:00000530  Idle __exitopen
+ 0001:000008AF  Idle __exit_except
+ 0001:00001450  Idle __expand
+ 0002:00000E28  Idle __expandptr
+ 0001:00002A60       __flushall
+ 0002:00001068       __fmode
+ 0002:00000998       __fmodeptr
+ 0001:00002B14       __fpreset
+ 0002:00001660  Idle __free_dummy
+ 0002:00001670       __free_list
+ 0001:00004ECE       __GetExceptDLLinfo
+ 0001:00005022  Idle __GetExceptDLLinfoInternal
+ 0001:00000BD0       __getmem
+ 0001:00005790       __getpid
+ 0001:000036CA  Idle __Global_unwind
+ 0002:00001334       __HandlerPtr
+ 0001:00000DDB       __heapadd
+ 0002:0000145C       __heaps
+ 0002:0000099C       __heap_brk
+ 0002:000009A0  Idle __heap_top
+ 0001:000008C8       __InitDefaultHander
+ 0001:00000A70       __initfmode
+ 0001:00002B30       __initmatherr
+ 0001:00005910       __initstk
+ 0001:00004CD0       __initwild
+ 0001:00000896  Idle __init_except
+ 0001:00001B7F       __init_exit_proc
+ 0001:000051AE       __init_handles
+ 0001:00001EA0       __init_streams
+ 0001:00003D00       __Local_unwind
+ 0001:00004C40       __matherr
+ 0001:00004C80       __matherrl
+ 0001:00001733  Idle __msize
+ 0002:000004A4       __nextrealptr
+ 0002:000008F4       __nfile
+ 0002:0000165C       __nheaps
+ 0002:000008F8       __openfd
+ 0002:00000050       __os2hmod
+ 0002:00001694       __oscmd
+ 0002:00001690       __osenv
+ 0002:000013BC       __pidtab
+ 0002:00000F40       __pmatherr
+ 0002:00000F44       __pmatherrl
+ 0002:000004A0       __realcvtptr
+ 0001:00003D12  Idle __Return_unwind
+ 0002:00001674       __rover
+ 0001:000057D0  Idle __rtl_write
+ 0001:00000DA3       __same_seg
+ 0001:00000762       __scanrslt
+ 0002:000004AC       __scanrsltptr
+ 0001:0000075C       __scantod
+ 0002:000004A8       __scantodptr
+ 0001:00001760  Idle __setargv
+ 0002:00000E24       __setargv__
+ 0001:0000083D  Idle __setexc
+ 0001:00005320       __SetExceptionHandler
+ 0001:00000872  Idle __SetUserHandler
+ 0001:00001C65       __startup
+ 0002:000016AC       __stkbase
+ 0002:00000510       __stkchk
+ 0001:00002AA0       __stpcpy
+ 0002:00000534       __streams
+ 0002:000009A4       __sys_errlist
+ 0002:00000A68       __sys_nerr
+ 0001:00001E16       __terminate
+ 0001:00000860  Idle __unsetexc
+ 0001:00005325       __UnsetExceptionHandler
+ 0001:00000887  Idle __unsetuserhandler
+ 0001:0000532A       __UnwindException
+ 0002:00001338  Idle __UserHandlerPtr
+ 0001:000056EA       __virt_commit
+ 0001:0000572A       __virt_decommit
+ 0001:0000576A       __virt_release
+ 0001:000056B0       __virt_reserve
+ 0001:00005809       __write
+ 0001:00002820       __xfflush
+ 0001:00004D48       ___call_terminate
+ 0001:00004E29       ___call_unexpected
+ 0002:00001088  Idle ___CPPexceptionList
+ 0002:00000F48       ___debuggerDisableTerminateCallback
+ 0002:00001098  Idle ___debuggerHookDataP
+ 0002:00001090  Idle ___debuggerHookFN
+ 0002:00001094  Idle ___debuggerWatchingP
+ 0001:00002B76       ___doGlobalUnwind
+ 0001:0000530B       ___DOSerror
+ 0001:000050B1  Idle ___ErrorMessage
+ 0002:0000108C  Idle ___exceptFlags
+ 0002:000010B4  Idle ___exceptMemAllocVars
+ 0002:000010B0  Idle ___exceptStaticBuffP
+ 0002:000016C8  Idle ___ExceptStaticXbuff
+ 0001:00000A80       ___fputn
+ 0001:000052C0       ___IOerror
+ 0001:00005820       ___isatty
+ 0002:0000003B       ___isDLL
+ 0001:00002B94  Idle ___JumpToCatch__
+ 0001:000010E0       ___longtoa
+ 0001:00005870       ___lseek
+ 0001:00000756       ___nextreal
+ 0001:00000750       ___realcvt
+ 0002:0000109C  Idle ___terminatePTR
+ 0002:000010AC  Idle ___throwExceptionName
+ 0002:000010A4  Idle ___throwFileName
+ 0002:000010A8  Idle ___throwLineNumber
+ 0002:000010A0  Idle ___unexpectdPTR
+ 0001:00001175       ___utoa
+ 0001:00002095       ___vprinter
+ 0001:00002924       ___write
+
+  Address         Publics by Value
+
+ 0001:00000038  Idle __acrtused
+ 0001:00000088  Idle _PrimeOpen
+ 0001:000001B7  Idle _TriggerCount
+ 0001:000002CA       _main
+ 0001:000005D0       __abort
+ 0001:000005E6       _abort
+ 0001:00000600       __allocbuf
+ 0001:00000690       _atol
+ 0001:00000723  Idle _atoi
+ 0001:00000750       ___realcvt
+ 0001:00000756       ___nextreal
+ 0001:0000075C       __scantod
+ 0001:00000762       __scanrslt
+ 0001:0000083D  Idle __setexc
+ 0001:00000860  Idle __unsetexc
+ 0001:00000872  Idle __SetUserHandler
+ 0001:00000887  Idle __unsetuserhandler
+ 0001:00000896  Idle __init_except
+ 0001:000008AF  Idle __exit_except
+ 0001:000008C8       __InitDefaultHander
+ 0001:00000972       _exit
+ 0001:00000985       __exit
+ 0001:00000998  Idle __cexit
+ 0001:000009A8  Idle __c_exit
+ 0001:000009C0       _fflush
+ 0001:00000A64       _flushall
+ 0001:00000A70       __initfmode
+ 0001:00000A80       ___fputn
+ 0001:00000B70       _fputs
+ 0001:00000BD0       __getmem
+ 0001:00000CDF       _free
+ 0001:00000DA3       __same_seg
+ 0001:00000DDB       __heapadd
+ 0001:00000EBA       _malloc
+ 0001:000010E0       ___longtoa
+ 0001:00001175       ___utoa
+ 0001:00001190       _fputc
+ 0001:00001298       _memchr
+ 0001:000012C0       _memcmp
+ 0001:00001308       _memcpy
+ 0001:00001330       _memmove
+ 0001:0000137C       _memset
+ 0001:000013B0  Idle _perror
+ 0001:00001430       _printf
+ 0001:00001450  Idle __expand
+ 0001:000015B0       _realloc
+ 0001:00001733  Idle __msize
+ 0001:00001760  Idle __setargv
+ 0001:00001993       __addarg
+ 0001:00001A68       _sprintf
+ 0001:00001A8B  Idle _vsprintf
+ 0001:00001AF6       __create_shmem
+ 0001:00001B7F       __init_exit_proc
+ 0001:00001C65       __startup
+ 0001:00001D85       __cleanup
+ 0001:00001E16       __terminate
+ 0001:00001E30       _strcmp
+ 0001:00001E60       _strcpy
+ 0001:00001EA0       __init_streams
+ 0001:00001FD4       _strlen
+ 0001:00002095       ___vprinter
+ 0001:00002820       __xfflush
+ 0001:00002924       ___write
+ 0001:00002A60       __flushall
+ 0001:00002AA0       __stpcpy
+ 0001:00002AD0       __clear87
+ 0001:00002AE8       __control87
+ 0001:00002B14       __fpreset
+ 0001:00002B30       __initmatherr
+ 0001:00002B50       operator delete(void*)
+ 0001:00002B60       operator delete[](void*)
+ 0001:00002B70  Idle jump()
+ 0001:00002B76       ___doGlobalUnwind
+ 0001:00002B8C       invokeHnd()
+ 0001:00002B94  Idle ___JumpToCatch__
+ 0001:00002BBC  Idle __debuggerExcListChange()
+ 0001:00003634       _ThrowException(void*,void*,void*,void*,unsigned int,unsigned int,unsigned int,unsigned char*)
+ 0001:00003660  Idle _ReThrowException(unsigned int,unsigned char*)
+ 0001:000036CA  Idle __Global_unwind
+ 0001:00003712  Idle RaiseException(unsigned long,unsigned long,unsigned long,unsigned long*)
+ 0001:00003868       _CatchCleanup()
+ 0001:00003D00       __Local_unwind
+ 0001:00003D12  Idle __Return_unwind
+ 0001:00003D86       _ExceptionHandler
+ 0001:00004753       __CurrExcContext
+ 0001:0000478A  Idle __ThrowFileName()
+ 0001:0000479B  Idle __ThrowLineNumber()
+ 0001:000047AC  Idle __ThrowExceptionName()
+ 0001:000047BD  Idle Type_info::Type_info(const Type_info&)
+ 0001:000047F3  Idle Type_info::operator =(const Type_info&)
+ 0001:000047FB  Idle Type_info::~Type_info()
+ 0001:0000481E  Idle Type_info::operator ==(const Type_info&) const
+ 0001:00004835  Idle Type_info::operator !=(const Type_info&) const
+ 0001:0000484D  Idle Type_info::before(const Type_info&) const
+ 0001:000048A0  Idle Type_info::name() const
+ 0001:000048B0  Idle __GetTypeInfo(void*,void*,void*,void*)
+ 0001:00004A8D  Idle __DynamicCast(void*,void*,void*,void*,int)
+ 0001:00004B75       __tpdsc__[Type_info*]
+ 0001:00004B8D       __tpdsc__[Bad_typeid]
+ 0001:00004BA9       __tpdsc__[Bad_cast]
+ 0001:00004BC5       __tpdsc__[Type_info]
+ 0001:00004C10       __chkstk
+ 0001:00004C40       __matherr
+ 0001:00004C80       __matherrl
+ 0001:00004CD0       __initwild
+ 0001:00004CD8       @__InitExceptBlock
+ 0001:00004D18  Idle terminate()
+ 0001:00004D22  Idle set_terminate(void(*)())
+ 0001:00004D48       ___call_terminate
+ 0001:00004DF9  Idle unexpected()
+ 0001:00004E03  Idle set_unexpected(void(*)())
+ 0001:00004E29       ___call_unexpected
+ 0001:00004EA2       __GetPolymorphicDTC(void*,unsigned int)
+ 0001:00004ECE       __GetExceptDLLinfo
+ 0001:00004EDE       __ExceptInit
+ 0001:00005022  Idle __GetExceptDLLinfoInternal
+ 0001:00005060       __ErrorMessage
+ 0001:000050B1  Idle ___ErrorMessage
+ 0001:000050C0       __ErrorExit
+ 0001:000051AE       __init_handles
+ 0001:000052C0       ___IOerror
+ 0001:0000530B       ___DOSerror
+ 0001:00005320       __SetExceptionHandler
+ 0001:00005325       __UnsetExceptionHandler
+ 0001:0000532A       __UnwindException
+ 0001:0000558A  Idle _signal
+ 0001:00005601       _raise
+ 0001:000056B0       __virt_reserve
+ 0001:000056EA       __virt_commit
+ 0001:0000572A       __virt_decommit
+ 0001:0000576A       __virt_release
+ 0001:00005790       __getpid
+ 0001:000057D0  Idle __rtl_write
+ 0001:00005809       __write
+ 0001:00005820       ___isatty
+ 0001:00005870       ___lseek
+ 0001:00005910       __initstk
+ 0002:0000002B       __c0_heaps
+ 0002:0000002F       __c0_nheaps
+ 0002:0000003B       ___isDLL
+ 0002:00000050       __os2hmod
+ 0002:00000068  Idle _bOpenComm
+ 0002:0000006C  Idle _bWaitForBreak
+ 0002:00000070  Idle _usIncrement
+ 0002:00000072  Idle _wSignature
+ 0002:00000074  Idle _szPort
+ 0002:00000398       __ctype
+ 0002:000004A0       __realcvtptr
+ 0002:000004A4       __nextrealptr
+ 0002:000004A8       __scantodptr
+ 0002:000004AC       __scanrsltptr
+ 0002:00000508       __default87
+ 0002:0000050C       _errno
+ 0002:00000510       __stkchk
+ 0002:00000524       __atexitcnt
+ 0002:00000528       __exitbuf
+ 0002:0000052C       __exitfopen
+ 0002:00000530  Idle __exitopen
+ 0002:00000534       __streams
+ 0002:000008F4       __nfile
+ 0002:000008F8       __openfd
+ 0002:00000998       __fmodeptr
+ 0002:0000099C       __heap_brk
+ 0002:000009A0  Idle __heap_top
+ 0002:000009A4       __sys_errlist
+ 0002:00000A68       __sys_nerr
+ 0002:00000E24       __setargv__
+ 0002:00000E28  Idle __expandptr
+ 0002:00000F24       __cfinfo_get
+ 0002:00000F28       __cfinfo_value
+ 0002:00000F2C       __cfinfo_name
+ 0002:00000F40       __pmatherr
+ 0002:00000F44       __pmatherrl
+ 0002:00000F48       ___debuggerDisableTerminateCallback
+ 0002:00001052       Type_info::
+ 0002:00001068       __fmode
+ 0002:00001088  Idle ___CPPexceptionList
+ 0002:0000108C  Idle ___exceptFlags
+ 0002:00001090  Idle ___debuggerHookFN
+ 0002:00001094  Idle ___debuggerWatchingP
+ 0002:00001098  Idle ___debuggerHookDataP
+ 0002:0000109C  Idle ___terminatePTR
+ 0002:000010A0  Idle ___unexpectdPTR
+ 0002:000010A4  Idle ___throwFileName
+ 0002:000010A8  Idle ___throwLineNumber
+ 0002:000010AC  Idle ___throwExceptionName
+ 0002:000010B0  Idle ___exceptStaticBuffP
+ 0002:000010B4  Idle ___exceptMemAllocVars
+ 0002:000010EC  Idle __ExceptVarsSize
+ 0002:000010F0  Idle __DebuggerHookData
+ 0002:00001130  Idle __dosErrorToSV
+ 0002:00001334       __HandlerPtr
+ 0002:00001338  Idle __UserHandlerPtr
+ 0002:0000133C       __atexittbl
+ 0002:000013BC       __pidtab
+ 0002:0000145C       __heaps
+ 0002:0000165C       __nheaps
+ 0002:00001660  Idle __free_dummy
+ 0002:00001670       __free_list
+ 0002:00001674       __rover
+ 0002:00001678  Idle __argc
+ 0002:0000167C       __argv
+ 0002:00001684  Idle __dll_table
+ 0002:0000168C       __ExcRegPtr
+ 0002:00001690       __osenv
+ 0002:00001694       __oscmd
+ 0002:00001698       __C0argc
+ 0002:0000169C       __C0argv
+ 0002:000016A0       __C0environ
+ 0002:000016AC       __stkbase
+ 0002:000016C4       __DestructorCountPtr
+ 0002:000016C8  Idle ___ExceptStaticXbuff
+ 0002:00001748  Idle __doserrno

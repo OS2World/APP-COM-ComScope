@@ -1,0 +1,1053 @@
+Microsoft (R) Macro Assembler Version 6.00     		    08/24/02 23:27:37
+ProcessFlags.asm					     Page 1 - 1
+
+
+				;************************************************************************
+				;
+				; $Revision$
+				;
+				; $Log$
+				;
+				;************************************************************************
+
+				  IFNDEF x16_BIT
+				.386P
+				  ELSE
+				  ENDIF
+				.NOLISTMACRO                   ;suppress macro expansion in listing
+
+				.XLIST                       ;Suppress listing of include files
+				.LIST
+
+				  IFNDEF NO_ADV_UARTS
+ 0000				Set16650_RTS_HS PROC NEAR USES AX BX DX DI  ; AH contain new flags
+
+ 0000  50		   *	    push   ax
+ 0001  53		   *	    push   bx
+ 0002  52		   *	    push   dx
+ 0003  57		   *	    push   di
+ 0004  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 0007  83 C2 03			        add     dx,LINE_CTL_REG_OFFSET
+				        InByteImm
+ 000B  8A F8			        mov     bh,al           ;save LCR
+ 000D  B0 BF			        mov     al,0bfh         ;enable EFR
+ 000F  FA			        cli
+				        OutByteDel di
+ 0017  83 C2 FF			        add     dx,EFR_REG_OFFSET - LINE_CTL_REG_OFFSET
+				        InByteDel di
+ 0021  24 BF			        and     al,NOT EFR_AUTO_RTS
+ 0023  F7 44 0A 0800		        test    [si].s_stDeviceParms.wConfigFlags2,CFG_FLAG2_HDW_RTS_HS
+ 0028  74 0A			        jz      @f
+ 002A  80 E4 C0			        and     ah,F2_RTS_HS_MASK
+ 002D  80 FC 80			        cmp     ah,F2_ENABLE_RTS_INPUT_HS
+ 0030  75 02			        jne     @f
+				;        or      al,(EFR_AUTO_RTS OR EFR_ENABLE_16650)
+ 0032  0C 40			        or      al,EFR_AUTO_RTS
+				;        test_DeviceFlag2 DEV_FLAG2_16654_UART
+				;        jz      @f
+				;        add     dx,MDM_CTL_REG_OFFSET - EFR_REG_OFFSET
+				;        push    ax
+				;        InByteDel di
+				;        or      al,MDM_CTL_RTS_ACTIVATE
+				;        OutByteDel di
+				;        pop     ax
+				;        add     dx,EFR_REG_OFFSET - MDM_CTL_REG_OFFSET
+ 0034				@@:
+				        OutByteDel di
+ 003B  83 C2 01			        add     dx,LINE_CTL_REG_OFFSET - EFR_REG_OFFSET
+ 003E  8A C7			        mov     al,bh
+				        OutByteImm              ;restore LCR
+ 0041  FB			        sti
+				        ret
+ 0042  5F		   *	    pop    di
+ 0043  5A		   *	    pop    dx
+ 0044  5B		   *	    pop    bx
+ 0045  58		   *	    pop    ax
+ 0046  C3		   *	    ret    00000h
+
+ 0047				Set16650_RTS_HS ENDP
+
+ 0047				Set16650_CTS_HS PROC NEAR USES AX BX DX DI  ; AH contain new flags
+
+ 0047  50		   *	    push   ax
+ 0048  53		   *	    push   bx
+ 0049  52		   *	    push   dx
+ 004A  57		   *	    push   di
+ 004B  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 004E  83 C2 03			        add     dx,LINE_CTL_REG_OFFSET
+				        InByteImm
+ 0052  8A F8			        mov     bh,al           ;save LCR
+ 0054  B0 BF			        mov     al,0bfh         ;enable EFR
+ 0056  FA			        cli
+				        OutByteDel di
+ 005E  83 C2 FF			        add     dx,EFR_REG_OFFSET - LINE_CTL_REG_OFFSET
+				        InByteDel di
+ 0068  24 7F			        and     al,NOT EFR_AUTO_CTS
+ 006A  F7 44 0A 0400		        test    [si].s_stDeviceParms.wConfigFlags2,CFG_FLAG2_HDW_CTS_HS
+ 006F  74 07			        jz      @f
+ 0071  F6 C4 08			        test    ah,F1_ENABLE_CTS_OUTPUT_HS
+ 0074  74 02			        jz      @f
+				;        or      al,(EFR_AUTO_CTS OR EFR_ENABLE_16650)
+ 0076  0C 80			        or      al,EFR_AUTO_CTS
+ 0078				@@:
+				        OutByteDel di
+ 007F  83 C2 01			        add     dx,LINE_CTL_REG_OFFSET - EFR_REG_OFFSET
+ 0082  8A C7			        mov     al,bh
+				        OutByteImm              ;restore LCR
+ 0085  FB			        sti
+				        ret
+ 0086  5F		   *	    pop    di
+ 0087  5A		   *	    pop    dx
+ 0088  5B		   *	    pop    bx
+ 0089  58		   *	    pop    ax
+ 008A  C3		   *	    ret    00000h
+
+ 008B				Set16650_CTS_HS ENDP
+
+				    IFNDEF NO_16650_Xon_HS_support
+				    ENDIF ;NOT NO_16650_Xon_HS_support
+				  ENDIF ; NOT NO_ADV_UARTS
+
+ 008B				ProcessFlag1 PROC NEAR USES DI
+
+				;        LOCAL   bRestartTransmit:WORD
+
+				;        mov     bRestartTransmit,FALSE
+
+ 008B  57		   *	    push   di
+ 008C  8A DC			        mov     bl,ah
+ 008E  8A 7C 24			        mov     bh,[si].s_stDeviceParms.byFlag1
+ 0091  80 E3 03			        and     bl,F1_DTR_HS_MASK
+ 0094  80 FB 03			        cmp     bl,F1_DTR_HS_MASK
+ 0097  0F 84 015A		        je      set_error
+
+ 009B  FA			        cli
+ 009C  80 FB 02			        cmp     bl,F1_ENABLE_DTR_INPUT_HS
+ 009F  75 45			        jne     test_DTR_enable
+
+				; IF DTR is off now AND if the receive buffer is less than the Xoff threshold
+				; THEN turn DTR on and signify no input handshake in progress
+
+ 00A1  E8 0000 E		        call    GetReceiveQueueHSspan
+ 00A4  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 00A7  83 C2 04			        add     dx,MDM_CTL_REG_OFFSET
+				        InByteImm
+ 00AB  A8 01			        test    al,MDM_CTL_DTR_ACTIVATE
+ 00AD  75 1D			        jnz     test_DSR_Xoff_threshold
+ 00AF  66| 53			        push    ebx
+ 00B1  66| 0F B7 5C 2E		        movzx   ebx,[si].s_stDeviceParms.wXoffThreshold
+ 00B6  66| 3B CB		        cmp     ecx,ebx
+ 00B9  5B			        pop     bx
+ 00BA  72 23			        jb      set_DTR_HS_flag
+ 00BC  0C 01			        or      al,MDM_CTL_DTR_ACTIVATE
+
+				;        COMscopeStream di, CSFUNC_TRACE_MODEM_OUT_SIGNALS, CS_MODEM_OUT
+				        OutByteDel di
+
+				;        test_DeviceFlag1 DEV_FLAG1_HDW_INPUT_HS_MASK
+				;        jnz     set_DTR_HS_flag
+				        AND_DeviceFlag1 (NOT DEV_FLAG1_INPUT_HS_IN_PROGRESS)
+ 00CA  EB 13			        jmp     set_DTR_HS_flag
+
+				; IF DTR is on now AND if the receive buffer is greater than the Xoff threshold
+				; THEN turn DTR off and signify input handshake in progress
+
+ 00CC				test_DSR_Xoff_threshold::                                                              ; makes it global
+ 00CC  3B 4C 2E			        cmp     cx,[si].s_stDeviceParms.wXoffThreshold
+ 00CF  73 0E			        jae     set_DTR_HS_flag
+ 00D1  24 FE			        and     al,NOT MDM_CTL_DTR_ACTIVATE
+
+				;        COMscopeStream di, CSFUNC_TRACE_MODEM_OUT_SIGNALS, CS_MODEM_OUT
+				        OutByteDel di
+				        OR_DeviceFlag1 DEV_FLAG1_INPUT_HS_IN_PROGRESS
+
+ 00DF				set_DTR_HS_flag::                                                              ; makes it global
+				        OR_DeviceFlag1 DEV_FLAG1_DTR_INPUT_HS
+ 00E4  EB 1E			        jmp     test_DSR_in
+
+ 00E6				test_DTR_enable::                                                              ; makes it global
+				        AND_DeviceFlag1 (NOT DEV_FLAG1_DTR_INPUT_HS)
+ 00EB  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 00EE  83 C2 04			        add     dx,MDM_CTL_REG_OFFSET
+				        InByteImm
+ 00F2  80 FB 00			        cmp     bl,F1_DISABLE_DTR
+ 00F5  74 04			        je      disable_DTR
+ 00F7  0C 01			        or      al,MDM_CTL_DTR_ACTIVATE
+ 00F9  EB 02			        jmp     @f
+
+ 00FB				disable_DTR::                                                              ; makes it global
+ 00FB  24 FE			        and     al,NOT MDM_CTL_DTR_ACTIVATE
+ 00FD				@@:
+				;        COMscopeStream di, CSFUNC_TRACE_MODEM_OUT_SIGNALS, CS_MODEM_OUT
+				        OutByteDel di
+
+ 0104				test_DSR_in::                                                              ; makes it global
+ 0104  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 0107  83 C2 06			        add     dx,MDM_ST_REG_OFFSET
+				;        cli
+				        InByteDel di
+ 0111  88 84 0087		        mov     [si].s_stDeviceParms.byMSRimage,al
+ 0115  80 A4 0087 F0		        and     [si].s_stDeviceParms.byMSRimage,0f0h
+
+				;        test    [si].s_stDeviceParms.wConfigFlags1,CFG_FLAG1_NO_MODEM_INT
+				;        jnz     @f
+				        test_DeviceFlag1 DEV_FLAG1_MDM_INT_ENABLED
+ 011F  75 07			        jnz     fill_fields
+				;@@:
+ 0121  A8 0F			        test    al,MDM_ST_DELTA_MASK
+ 0123  74 03			        jz      fill_fields
+ 0125  E8 0000 E		        call    ProcessModemSignals
+
+ 0128				fill_fields:
+				;        sti
+
+				; IF we are to enable DSR input handshaking AND DSR (hdw) is not on THEN
+				; set receive waiting for DSR
+
+ 0128  F6 C4 40			        test    ah,F1_ENABLE_DSR_INPUT_HS
+ 012B  74 0B			        jz      set_DSR_input_HS_flag
+ 012D  A8 20			        test    al,MDM_ST_DSR
+ 012F  75 07			        jnz     set_DSR_input_HS_flag
+ 0131  80 8C 008D 80		        or      [si].s_stDeviceParms.byHSstatus,RX_WAITING_FOR_DSR_ON
+ 0136  EB 05			        jmp     test_CTS_proc
+
+ 0138				set_DSR_input_HS_flag::                                                              ; makes it global
+ 0138  80 A4 008D 7F		        and     [si].s_stDeviceParms.byHSstatus,NOT RX_WAITING_FOR_DSR_ON
+
+ 013D				test_CTS_proc::                                                              ; makes it global
+				; if we are to enable CTS HS and CTS is inactive then set flag
+				; for transmit stream to wait for CTS to activate, otherwise continue
+
+ 013D  F6 C4 08			        test    ah,F1_ENABLE_CTS_OUTPUT_HS
+ 0140  74 1E			        jz      disable_CTS_output_HS
+ 0142  80 A4 008D FE		        and     [si].s_stDeviceParms.byHSstatus,NOT TX_WAITING_FOR_CTS_ON
+				  IFNDEF NO_ADV_UARTS
+				; IF capable of HDW handshaking AND HDW handshaking is requested THEN
+				; then enable HDW CTS handshaking
+
+				        test_DeviceFlag2 (DEV_FLAG2_16750_UART OR \
+				                          DEV_FLAG2_TI16550C_UART OR \
+				                          DEV_FLAG2_16650_UART OR \
+				                          DEV_FLAG2_16654_UART)
+ 014C  74 07			        jz      @f
+ 014E  F7 44 0A 0400		        test    [si].s_stDeviceParms.wConfigFlags2,CFG_FLAG2_HDW_CTS_HS
+ 0153  75 1B			        jnz     test_HDW_HS
+ 0155				@@:
+				  ENDIF
+				; IF CTS is inactive then mark transmit waiting for CTS ON then
+				; test if HDW CTS handshaking was enabled
+
+ 0155  A8 10			        test    al,MDM_ST_CTS
+ 0157  75 17			        jnz     test_HDW_HS
+ 0159  80 8C 008D 01		        or      [si].s_stDeviceParms.byHSstatus,TX_WAITING_FOR_CTS_ON
+ 015E  EB 10			        jmp     test_HDW_HS
+
+ 0160				disable_CTS_output_HS::                                                              ; makes it global
+				; if we are to disable CTS HS and we are waiting for CTS to activate
+				; then restart the write stream
+
+ 0160  F6 84 008D 01		        test    [si].s_stDeviceParms.byHSstatus,TX_WAITING_FOR_CTS_ON
+ 0165  74 3C			        jz      @f
+ 0167  83 4C 4A 01		        or      [si].s_stDeviceParms.wDeviceStatus2,DEV_ST2_RESTARTSTREAM
+				;        mov     bRestartTransmit,TRUE
+ 016B  80 A4 008D FE		        and     [si].s_stDeviceParms.byHSstatus,NOT TX_WAITING_FOR_CTS_ON
+
+ 0170				test_HDW_HS::                                                              ; makes it global
+				  IFNDEF NO_ADV_UARTS
+				; IF HDW CTS handshaking is or was enabled then enable or disable
+				; HDW CTS handshaking
+
+ 0170  F7 44 0A 0440		        test    [si].s_stDeviceParms.wConfigFlags2,(CFG_FLAG2_HDW_CTS_HS OR CFG_FLAG2_HDW_CTS_WAS)
+ 0175  74 37			        jz      test_DSR_out_HS
+				        test_DeviceFlag2 (DEV_FLAG2_16650_UART OR DEV_FLAG2_16654_UART)
+ 017C  74 05			        jz      test_TI_ACE_CTS_HS
+ 017E  E8 FEC6			        call    Set16650_CTS_HS
+ 0181  EB 27			        jmp     clear_CTS_was_flag
+
+ 0183				test_TI_ACE_CTS_HS::                                                              ; makes it global
+				        test_DeviceFlag2 (DEV_FLAG2_16750_UART OR DEV_FLAG2_TI16550C_UART)
+ 0188  74 24			        jz      test_DSR_out_HS
+ 018A  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 018D  83 C2 04			        add     dx,MDM_CTL_REG_OFFSET
+				        InByteImm
+ 0191  F7 44 0A 0400		        test    [si].s_stDeviceParms.wConfigFlags2,CFG_FLAG2_HDW_CTS_HS
+ 0196  74 09			        jz      no_ACE_CTS_HDW_HS
+ 0198  F6 C4 08			        test    ah,F1_ENABLE_CTS_OUTPUT_HS
+ 019B  74 04			        jz      no_ACE_CTS_HDW_HS
+ 019D  0C 20			        or      al,MDM_CTL_HDW_HS_ENABLE
+ 019F  EB 02			        jmp     @f
+
+ 01A1				no_ACE_CTS_HDW_HS::                                                              ; makes it global
+ 01A1  24 DF			        and     al, NOT MDM_CTL_HDW_HS_ENABLE
+ 01A3				@@:
+				        OutByteDel di
+
+ 01AA				clear_CTS_was_flag::                                                              ; makes it global
+ 01AA  83 64 0A BF		        and     [si].s_stDeviceParms.wConfigFlags2,NOT CFG_FLAG2_HDW_CTS_WAS
+				  ENDIF
+
+ 01AE				test_DSR_out_HS::                                                              ; makes it global
+ 01AE  F6 C4 10			        test    ah,F1_ENABLE_DSR_OUTPUT_HS
+ 01B1  74 0B			        jz      set_DSR_output_HS_flag
+ 01B3  A8 20			        test    al,MDM_ST_DSR
+ 01B5  75 07			        jnz     set_DSR_output_HS_flag
+ 01B7  80 8C 008D 02		        or      [si].s_stDeviceParms.byHSstatus,TX_WAITING_FOR_DSR_ON
+ 01BC  EB 10			        jmp     test_DCD_proc
+
+ 01BE				set_DSR_output_HS_flag::                                                              ; makes it global
+ 01BE  F6 84 008D 02		        test    [si].s_stDeviceParms.byHSstatus,TX_WAITING_FOR_DSR_ON
+ 01C3  74 04			        jz      @f
+ 01C5  83 4C 4A 01		        or      [si].s_stDeviceParms.wDeviceStatus2,DEV_ST2_RESTARTSTREAM
+				;        mov     bRestartTransmit,TRUE
+ 01C9				@@:
+ 01C9  80 A4 008D FD		        and     [si].s_stDeviceParms.byHSstatus,NOT TX_WAITING_FOR_DSR_ON
+
+ 01CE				test_DCD_proc::                                                              ; makes it global
+ 01CE  F6 C4 20			        test    ah,F1_ENABLE_DCD_OUTPUT_HS
+ 01D1  74 0B			        jz      set_DCD_output_HS_flag
+ 01D3  A8 80			        test    al,MDM_ST_DCD
+ 01D5  75 07			        jnz     set_DCD_output_HS_flag
+ 01D7  80 8C 008D 04		        or      [si].s_stDeviceParms.byHSstatus,TX_WAITING_FOR_DCD_ON
+ 01DC  EB 10			        jmp     move_Flag1
+
+ 01DE				set_DCD_output_HS_flag::                                                              ; makes it global
+ 01DE  F6 84 008D 04		        test    [si].s_stDeviceParms.byHSstatus,TX_WAITING_FOR_DCD_ON
+ 01E3  74 04			        jz      @f
+ 01E5  83 4C 4A 01		        or      [si].s_stDeviceParms.wDeviceStatus2,DEV_ST2_RESTARTSTREAM
+				;        mov     bRestartTransmit,TRUE
+ 01E9				@@:
+ 01E9  80 A4 008D FB		        and     [si].s_stDeviceParms.byHSstatus,NOT TX_WAITING_FOR_DCD_ON
+
+ 01EE				move_Flag1::                                                              ; makes it global
+ 01EE  FB			        sti
+				;        mov     bx,bRestartTransmit
+ 01EF  88 64 24			        mov     [si].s_stDeviceParms.byFlag1,ah
+ 01F2  F8			        clc
+ 01F3  EB 01			        jmp     exit
+
+ 01F5				set_error:
+ 01F5  F9			        stc
+
+ 01F6				exit:
+ 01F6  FB			        sti
+				        ret
+ 01F7  5F		   *	    pop    di
+ 01F8  C3		   *	    ret    00000h
+
+ 01F9				ProcessFlag1 ENDP       ; (obsolete) -> BX = TRUE if we need to try to restart write stream
+
+ 01F9				ProcessFlag2 PROC NEAR USES DI ; AH = current flag request
+
+				;        LOCAL   bRestartTransmit:WORD
+				        LOCAL   bXoffSent:WORD
+				  IFNDEF NO_ADV_UARTS
+				        LOCAL   bHdwCTS_HS_enabled:WORD
+
+ 01F9  55		   *	    push   bp
+ 01FA  8B EC		   *	    mov    bp, sp
+ 01FC  83 C4 FC		   *	    add    sp, 0FFFCh
+ 01FF  57		   *	    push   di
+ 0200  C7 46 FC 0000		        mov     bHdwCTS_HS_enabled,FALSE
+				  ENDIF
+				;        mov     bRestartTransmit,FALSE
+ 0205  C7 46 FE 0000		        mov     bXoffSent,FALSE
+
+ 020A  8A 7C 25			        mov     bh,[si].s_stDeviceParms.byFlag2
+ 020D  8A DC			        mov     bl,ah
+ 020F  FA			        cli
+
+				; If input handshaking is in progress and receive Xon/Xoff handshaking WAS enabled
+				; then set "bXoffSent" to true.
+				        test_DeviceFlag1 DEV_FLAG1_INPUT_HS_IN_PROGRESS
+ 0215  74 0A			        jz      @f
+ 0217  F6 C7 02			        test    bh,F2_ENABLE_RCV_XON_XOFF_FLOW
+ 021A  74 05			        jz      @f
+ 021C  C7 46 FE 0001		        mov     bXoffSent,TRUE
+ 0221				@@:
+				  IFNDEF NO_ADV_UARTS
+				    IFNDEF NO_16650_Xon_HS_support
+				    ENDIF
+				  ENDIF
+				; IF requesting full duplex AND
+				; transmit is waiting because Xoff has been transmitted THEN
+				; try to restart write stream and clear HS flag
+
+ 0221  F6 C4 20			        test    ah,F2_ENABLE_FULL_DUPLEX
+ 0224  74 12			        jz      test_handshake
+
+ 0226				test_TX_waiting::                                                              ; makes it global
+ 0226  F6 84 008D 10		        test    [si].s_stDeviceParms.byHSstatus,TX_WAITING_BECAUSE_XOFF_TX
+ 022B  74 1E			        jz      test_RTS_toggle
+ 022D  83 4C 4A 01		        or      [si].s_stDeviceParms.wDeviceStatus2,DEV_ST2_RESTARTSTREAM
+				;        mov     bRestartTransmit,TRUE
+ 0231  80 A4 008D EF		        and     [si].s_stDeviceParms.byHSstatus,NOT TX_WAITING_BECAUSE_XOFF_TX
+ 0236  EB 13			        jmp     test_RTS_toggle
+
+ 0238				test_handshake::                                                              ; makes it global
+				; IF not requesting full duplex AND
+				; transmit should be waiting because Xoff has been transmitted THEN
+				; set handshaking flag
+
+				        test_DeviceFlag1 DEV_FLAG1_INPUT_XON_XOFF_HS
+ 023D  74 0C			        jz      test_RTS_toggle
+				        test_DeviceFlag1 DEV_FLAG1_INPUT_HS_IN_PROGRESS
+ 0244  74 05			        jz      test_RTS_toggle
+ 0246  80 8C 008D 10		        or      [si].s_stDeviceParms.byHSstatus,TX_WAITING_BECAUSE_XOFF_TX
+
+ 024B				test_RTS_toggle::                                                              ; makes it global
+				  IFNDEF NO_ADV_UARTS
+				        test_DeviceFlag2 (DEV_FLAG2_16750_UART OR \
+				                          DEV_FLAG2_TI16550C_UART)
+ 0250  74 1D			        jz      @f
+ 0252  F7 44 0A 0400		        test    [si].s_stDeviceParms.wConfigFlags2,CFG_FLAG2_HDW_CTS_HS
+ 0257  74 16			        jz      @f
+ 0259  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 025C  83 C2 04			        add     dx,MDM_CTL_REG_OFFSET
+				        InByteDel di
+ 0266  A8 20			        test    al,MDM_CTL_HDW_HS_ENABLE
+ 0268  74 05			        jz      @f
+ 026A  C7 46 FC 0001		        mov     bHdwCTS_HS_enabled,TRUE
+ 026F				@@:
+				  ENDIF
+				; IF RTS toggle on transmit is to be enabled THEN
+				; set the flags and counter and clear the RTS handshake flag.
+
+ 026F  80 E3 C0			        and     bl,F2_RTS_HS_MASK
+ 0272  80 FB C0			        cmp     bl,F2_ENABLE_RTS_TOG_ON_XMIT
+ 0275  75 22			        jne     test_RTS_input_HS
+
+				  IFNDEF NO_ADV_UARTS
+				; If device is a TI ACE with hardware handshaking requested and enabled THEN
+				; do not enable RTS toggling on transmit AND
+				; cause RTS to be enabled.
+				; This forces hardware RTS handshaking which causes RTS to be
+				; enabled until FIFO fills to threshold.
+
+				        test_DeviceFlag2 (DEV_FLAG2_TI16550C_UART OR DEV_FLAG2_16750_UART)
+ 027C  74 0E			        jz      enable_RTS_toggle
+ 027E  83 7E FC 01		        cmp     bHdwCTS_HS_enabled,TRUE
+ 0282  75 08			        jne     enable_RTS_toggle
+
+				        AND_DeviceFlag1 (NOT (DEV_FLAG1_RTS_TOG_ENABLED OR DEV_FLAG1_RTS_TOG_ON))
+ 0289  E9 00DA			        jmp     reset_RTS
+
+ 028C				enable_RTS_toggle::                                                              ; makes it global
+				  ENDIF
+				        OR_DeviceFlag1 DEV_FLAG1_RTS_TOG_ENABLED
+ 0291  C7 44 70 0002		        mov     [si].s_stDeviceParms.wRTScount,2
+ 0296  E9 0087			        jmp     clear_SW_RTS_HS_device_flag
+
+ 0299				test_RTS_input_HS::                                                              ; makes it global
+				; first turn off all RTS toggling bits
+				        AND_DeviceFlag1 (NOT (DEV_FLAG1_RTS_TOG_ENABLED OR DEV_FLAG1_RTS_TOG_ON))
+
+				; IF NOT enabling RTS handshaking THEN clear the RTS handshake flag and test
+				; if HDW RTS handshaking was enabled
+
+ 029E  80 FB 80			        cmp     bl,F2_ENABLE_RTS_INPUT_HS
+ 02A1  75 7D			        jne     clear_SW_RTS_HS_device_flag
+
+				;------------------------------------------------------------------------
+				; begin processing all RTS handshaking requests
+				;------------------------------------------------------------------------
+				  IFNDEF NO_ADV_UARTS
+				; IF device is hardware handshaking capable TI UART AND
+				; hardware CTS handshaking is enabled THEN
+				; enable hardware RTS handshaking
+				        test_DeviceFlag2 (DEV_FLAG2_16750_UART OR \
+				                          DEV_FLAG2_TI16550C_UART)
+ 02A8  74 0D			        jz      @f
+ 02AA  83 7E FC 01		        cmp     bHdwCTS_HS_enabled,TRUE
+ 02AE  75 24			        jne     process_RTS_SW_HS
+ 02B0  81 4C 0A 0800		        or      [si].s_stDeviceParms.wConfigFlags2,CFG_FLAG2_HDW_RTS_HS
+ 02B5  EB 69			        jmp     clear_SW_RTS_HS_device_flag
+ 02B7				@@:
+				; If device is other hardware handshaking capable UART AND
+				; hardware RTS handshaking is requested THEN
+				; enable hardware RTS handshaking
+
+				        test_DeviceFlag2 (DEV_FLAG2_16650_UART OR \
+				                          DEV_FLAG2_16654_UART)
+ 02BC  74 16			        jz      process_RTS_SW_HS
+ 02BE  F7 44 0A 0800		        test    [si].s_stDeviceParms.wConfigFlags2,CFG_FLAG2_HDW_RTS_HS
+ 02C3  75 5B			        jnz     clear_SW_RTS_HS_device_flag
+
+				; If hardware handshaking WAS enabled then set EFR registers and clear "was" flag
+
+ 02C5  F7 44 0A 0080		        test    [si].s_stDeviceParms.wConfigFlags2,CFG_FLAG2_HDW_RTS_WAS
+ 02CA  74 08			        jz      process_RTS_SW_HS
+ 02CC  E8 FD31			        call    Set16650_RTS_HS
+ 02CF  81 64 0A FF7F		        and     [si].s_stDeviceParms.wConfigFlags2,NOT CFG_FLAG2_HDW_RTS_WAS
+
+				;--------------------------------------------------------------------------------
+				;  begin processing pure handshaking requests
+				;--------------------------------------------------------------------------------
+ 02D4				process_RTS_SW_HS::                                                              ; makes it global
+				  ENDIF
+				; IF the RTS signal is inactive now AND if the receive buffer is less than
+				; the Xoff threshold THEN turn RTS on and signify no input handshake in progress
+
+ 02D4  E8 0000 E		        call    GetReceiveQueueHSspan
+ 02D7  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 02DA  83 C2 04			        add     dx,MDM_CTL_REG_OFFSET
+				        InByteDel di
+ 02E4  A8 02			        test    al,MDM_CTL_RTS_ACTIVATE
+ 02E6  75 1E			        jnz     test_RTS_HS_threshold
+ 02E8  66| 53			        push    ebx
+ 02EA  66| 0F B7 5C 2E		        movzx   ebx,[si].s_stDeviceParms.wXoffThreshold
+ 02EF  66| 3B CB		        cmp     ecx,ebx
+ 02F2  66| 5B			        pop     ebx
+ 02F4  72 23			        jb      set_RTS_HS_flag
+ 02F6  0C 02			        or      al,MDM_CTL_RTS_ACTIVATE
+
+				;        COMscopeStream di, CSFUNC_TRACE_MODEM_OUT_SIGNALS, CS_MODEM_OUT
+				        OutByteDel di
+
+				; Just turn it off.  If this HS mode is not to be "in progress" then neither is any others
+				        AND_DeviceFlag1 NOT DEV_FLAG1_INPUT_HS_IN_PROGRESS
+ 0304  EB 13			        jmp     set_RTS_HS_flag
+
+				; IF RTS is active now AND if the receive buffer is greater than the
+				; Xoff threshold THEN turn RTS off and signify input handshaking in progress
+
+ 0306				test_RTS_HS_threshold::                                                              ; makes it global
+ 0306  3B 4C 2E			        cmp     cx,[si].s_stDeviceParms.wXoffThreshold
+ 0309  73 0E			        jae     set_RTS_HS_flag
+ 030B  24 FD			        and     al,NOT MDM_CTL_RTS_ACTIVATE
+
+				;        COMscopeStream di, CSFUNC_TRACE_MODEM_OUT_SIGNALS, CS_MODEM_OUT
+				        OutByteDel di
+				        OR_DeviceFlag1 DEV_FLAG1_INPUT_HS_IN_PROGRESS
+
+ 0319				set_RTS_HS_flag::                                                              ; makes it global
+				        OR_DeviceFlag1 DEV_FLAG1_RTS_INPUT_HS
+ 031E  EB 76			        jmp     test_transmit_Xon_Xoff
+
+				;-------------------------------------------------------------------------------
+				; Two ways to get here:
+				; 1: RTS handshaking was not requested
+				; 2: RTS handshaking was requested and hardware handshaking is indicated
+				;-------------------------------------------------------------------------------
+ 0320				clear_SW_RTS_HS_device_flag::                                                              ; makes it global
+				        AND_DeviceFlag1 (NOT DEV_FLAG1_RTS_INPUT_HS)
+
+				  IFNDEF NO_ADV_UARTS
+				;--------------------------------------------------------------------------------
+				;  begin processing hardware handshaking requests
+				;--------------------------------------------------------------------------------
+				; IF hardware handshaking was enabled or is being requested THEN
+				; set the appropitate registers
+ 0325  F7 44 0A 0880		        test    [si].s_stDeviceParms.wConfigFlags2,(CFG_FLAG2_HDW_RTS_HS OR CFG_FLAG2_HDW_RTS_WAS)
+ 032A  74 3A			        jz      reset_RTS
+
+				;       "was" flag is set via bit shift at the beginning of IOCTL processing
+ 032C  81 64 0A FF7F		        and     [si].s_stDeviceParms.wConfigFlags2,NOT CFG_FLAG2_HDW_RTS_WAS
+
+				        test_DeviceFlag2 (DEV_FLAG2_16650_UART OR DEV_FLAG2_16654_UART)
+ 0336  74 05			        jz      test_TI_ACE_RTS_HS
+
+				; this function call takes all cases for Startech UARTs into consideration
+ 0338  E8 FCC5			        call    Set16650_RTS_HS
+ 033B  EB 59			        jmp     test_transmit_Xon_Xoff
+
+ 033D				test_TI_ACE_RTS_HS::                                                              ; makes it global
+				        test_DeviceFlag2 (DEV_FLAG2_16750_UART OR DEV_FLAG2_TI16550C_UART)
+ 0342  74 22			        jz      reset_RTS
+
+				; if RTS handshaking was requested (case one), then we need only correctly set MCR bit
+ 0344  80 FB 80			        cmp     bl,F2_ENABLE_RTS_INPUT_HS
+ 0347  74 1D			        je      reset_RTS
+
+				; if RTS handshaking was not requested then we may need to set the flag to show a new "mode"
+
+				; If we are not allowed to change RTS AND
+				; CTS hardware handshaking is enabled THEN
+				; indicate RTS handshaking is enabled
+ 0349  F7 44 0A 0001		        test    [si].s_stDeviceParms.wConfigFlags2,CFG_FLAG2_ALLOW16750RTSCTL
+ 034E  75 16			        jnz     reset_RTS
+ 0350  F7 44 0A 0400		        test    [si].s_stDeviceParms.wConfigFlags2,CFG_FLAG2_HDW_CTS_HS
+ 0355  74 0F			        jz      reset_RTS
+ 0357  83 7E FC 01		        cmp     bHdwCTS_HS_enabled,TRUE
+ 035B  75 09			        jne     reset_RTS
+ 035D  80 E4 3F			        and     ah,NOT F2_RTS_HS_MASK
+ 0360  80 CC 80			        or      ah,F2_ENABLE_RTS_INPUT_HS
+ 0363  80 CB 80			        or      bl,F2_ENABLE_RTS_INPUT_HS
+
+ 0366				reset_RTS::
+				  ENDIF
+ 0366  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 0369  83 C2 04			        add     dx,MDM_CTL_REG_OFFSET
+				        InByteImm
+ 036D  0C 02			        or      al,MDM_CTL_RTS_ACTIVATE
+
+				  IFNDEF NO_ADV_UARTS
+				; If device is hardware handshaking capable TI ACE AND
+				; CTS hardware handshaking is required AND
+				; CTS bit is on in MCR register AND
+				; app is not allowed to control RTS THEN
+				; explicitly enable RTS
+				        test_DeviceFlag2 (DEV_FLAG2_16750_UART OR DEV_FLAG2_TI16550C_UART)
+ 0374  74 12			        jz      @f
+ 0376  F7 44 0A 0400		        test    [si].s_stDeviceParms.wConfigFlags2,CFG_FLAG2_HDW_CTS_HS
+ 037B  74 0B			        jz      @f
+ 037D  A8 20			        test    al,MDM_CTL_HDW_HS_ENABLE
+ 037F  74 07			        jz      @f
+ 0381  F7 44 0A 0001		        test    [si].s_stDeviceParms.wConfigFlags2,CFG_FLAG2_ALLOW16750RTSCTL
+ 0386  74 07			        jz      output_RTS_change
+
+				; Since the user is allowed to modify RTS anyway AND
+				; disable RTS was not requested THEN
+				; force to indicate RTS input handshaking was enabled and activate RTS
+				;        cmp     bl,F2_DISABLE_RTS
+				;        je      @f
+				;        mov     bl,F2_ENABLE_RTS_INPUT_HS
+				;        mov     ah,F2_ENABLE_RTS_INPUT_HS
+				;        jmp     output_RTS_change
+ 0388				@@:
+				  ENDIF
+ 0388  80 FB 00			        cmp     bl,F2_DISABLE_RTS     ;disable only if explicitly requested
+ 038B  75 02			        jne     output_RTS_change
+ 038D  24 FD			        and     al,NOT MDM_CTL_RTS_ACTIVATE
+
+ 038F				output_RTS_change:
+				;        COMscopeStream di, CSFUNC_TRACE_MODEM_OUT_SIGNALS, CS_MODEM_OUT
+				        OutByteDel di
+
+ 0396				test_transmit_Xon_Xoff::                                                              ; makes it global
+
+				; IF we are disabling transmit Xon/Xoff processing THEN
+				; test if we should restart transmission AND disable transmit Xon/Xoff handshaking
+
+ 0396  F6 C4 01			        test    ah,F2_ENABLE_XMIT_XON_XOFF_FLOW
+ 0399  75 17			        jnz     enable_xmit_processing
+				        AND_DeviceFlag1 (NOT DEV_FLAG1_OUTPUT_XON_XOFF_HS)
+
+				; IF we are waiting to receive Xon THEN try to restart transmission
+
+ 03A0  F6 84 008D 08		        test    [si].s_stDeviceParms.byHSstatus,TX_WAITING_BECAUSE_XOFF_RX
+ 03A5  74 10			        jz      test_receive_Xon_Xoff
+ 03A7  80 A4 008D F7		        and     [si].s_stDeviceParms.byHSstatus,NOT TX_WAITING_BECAUSE_XOFF_RX
+ 03AC  83 4C 4A 01		        or      [si].s_stDeviceParms.wDeviceStatus2,DEV_ST2_RESTARTSTREAM
+				;        mov     bRestartTransmit,TRUE
+ 03B0  EB 05			        jmp     test_receive_Xon_Xoff
+
+ 03B2				enable_xmit_processing::                                                              ; makes it global
+				        OR_DeviceFlag1 DEV_FLAG1_OUTPUT_XON_XOFF_HS
+				  IFNDEF NO_ADV_UARTS
+				    IFNDEF NO_16650_Xon_HS_support
+				    ENDIF
+				  ENDIF
+
+ 03B7				test_receive_Xon_Xoff::                                                              ; makes it global
+
+ 03B7  F6 C4 02			        test    ah,F2_ENABLE_RCV_XON_XOFF_FLOW
+ 03BA  75 6A			        jnz     enable_receive_Xon_Xoff
+				        AND_DeviceFlag1 (NOT DEV_FLAG1_INPUT_XON_XOFF_HS)
+
+				; IF we were waiting to send Xon THEN send Xon
+ 03C1  83 7E FE 01		        cmp     bXoffSent,TRUE
+ 03C5  75 4C			        jne     reset_waiting_to_transmit_Xon
+
+				; if hardware is ready then write to hardware
+				;  else store for later write to hardware
+
+ 03C7  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 03CA  83 C2 05			        add     dx,LINE_ST_REG_OFFSET
+				        InByteImm
+ 03CE  83 EA 05			        sub     dx,LINE_ST_REG_OFFSET
+ 03D1  A8 20			        test    al,LINE_ST_TX_HOLD_EMPTY
+ 03D3  74 34			        jz      set_immediate_byte
+
+ 03D5  8A 44 29			        mov     al,[si].s_stDeviceParms.byXonChar
+
+				        RTStoggleOn edi
+				        COMscopeStream edi, CSFUNC_TRACE_OUTPUT_STREAM, CS_WRITE_IMM
+				        OutByteImm
+ 0407  EB 0A			        jmp     reset_waiting_to_transmit_Xon
+
+ 0409				set_immediate_byte::                                                              ; makes it global
+ 0409  8A 44 29			        mov     al,[si].s_stDeviceParms.byXonChar
+ 040C  88 44 2B			        mov     [si].s_stDeviceParms.byImmediateByte,al
+				        OR_DeviceFlag1 DEV_FLAG1_IMM_BYTE_WAITING
+
+ 0413				reset_waiting_to_transmit_Xon::                                                              ; makes it global
+ 0413  80 A4 008D EF		        and     [si].s_stDeviceParms.byHSstatus,NOT TX_WAITING_BECAUSE_XOFF_TX
+				        test_DeviceFlag1 DEV_FLAG1_HDW_INPUT_HS_MASK
+ 041D  75 78			        jnz     move_Flag2
+				        AND_DeviceFlag1 (NOT DEV_FLAG1_INPUT_HS_IN_PROGRESS)
+ 0424  EB 71			        jmp     move_Flag2
+
+ 0426				enable_receive_Xon_Xoff::                                                              ; makes it global
+				        OR_DeviceFlag1 DEV_FLAG1_INPUT_XON_XOFF_HS
+				  IFNDEF NO_ADV_UARTS
+				    IFNDEF NO_16650_Xon_HS_support
+				    ENDIF
+				  ENDIF
+				; IF the receive buffer is greater than the Xoff threshold
+				; THEN send Xoff and signify input handshake in progress
+
+ 042B  E8 0000 E		        call    GetReceiveQueueHSspan
+ 042E  66| 53			        push    ebx
+ 0430  66| 0F B7 5C 2E		        movzx   ebx,[si].s_stDeviceParms.wXoffThreshold
+ 0435  66| 3B CB		        cmp     ecx,ebx
+ 0438  66| 5B			        pop     ebx
+ 043A  73 5B			        jae     move_Flag2
+ 043C  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+
+				; if hardware is ready then write to hardware
+				;  else store for later write to hardware
+
+ 043F  83 C2 05			        add     dx,LINE_ST_REG_OFFSET
+				        InByteImm
+ 0443  83 EA 05			        sub     dx,LINE_ST_REG_OFFSET
+ 0446  A8 20			        test    al,LINE_ST_TX_HOLD_EMPTY
+ 0448  74 34			        jz      store_immediate_byte
+
+ 044A  8A 44 2A			        mov     al,[si].s_stDeviceParms.byXoffChar
+
+				        RTStoggleOn edi
+				        COMscopeStream edi, CSFUNC_TRACE_OUTPUT_STREAM, CS_WRITE_IMM
+				        OutByteImm
+ 047C  EB 0A			        jmp     set_receive_Xoff_in_progress
+
+ 047E				store_immediate_byte::                                                              ; makes it global
+ 047E  8A 44 2A			        mov     al,[si].s_stDeviceParms.byXoffChar
+ 0481  88 44 2B			        mov     [si].s_stDeviceParms.byImmediateByte,al
+				        OR_DeviceFlag1 DEV_FLAG1_IMM_BYTE_WAITING
+
+ 0488				set_receive_Xoff_in_progress::                                                              ; makes it global
+				        OR_DeviceFlag1 DEV_FLAG1_INPUT_HS_IN_PROGRESS
+ 048D  F6 C4 20			        test    ah,F2_ENABLE_FULL_DUPLEX
+ 0490  75 05			        jnz     move_Flag2
+ 0492  80 8C 008D 10		        or      [si].s_stDeviceParms.byHSstatus,TX_WAITING_BECAUSE_XOFF_TX
+
+ 0497				move_Flag2::                                                              ; makes it global
+				  IFNDEF NO_ADV_UARTS
+				    IFNDEF NO_16650_Xon_HS_support
+				    ENDIF
+				  ENDIF
+				;        mov     bx,bRestartTransmit
+ 0497  88 64 25			        mov     [si].s_stDeviceParms.byFlag2,ah
+ 049A  F8			        clc
+ 049B  EB 01			        jmp     exit
+
+ 049D				set_error:
+ 049D  F9			        stc
+ 049E				exit:
+ 049E  FB			        sti
+				        ret
+ 049F  5F		   *	    pop    di
+ 04A0  8B E5		   *	    mov    sp, bp
+ 04A2  5D		   *	    pop    bp
+ 04A3  C3		   *	    ret    00000h
+
+ 04A4				ProcessFlag2 ENDP       ; (Obsolete) -> BX = TRUE if we need to restart write stream
+
+ 04A4				ProcessFlag3 PROC NEAR PASCAL, bForceFIFOinit:WORD ; AH = current flag request
+
+
+
+ 04A4  55		   *	    push   bp
+ 04A5  8B EC		   *	    mov    bp, sp
+ 04A7  F6 C4 06			        test    ah,F3_READ_TIMEOUT_MASK         ;invalid input
+ 04AA  0F 84 0210		        jz      set_error
+
+ 04AE  8A 7C 26			        mov     bh,[si].s_stDeviceParms.byFlag3   ;get current flags
+ 04B1  8A C4			        mov     al,ah
+ 04B3  24 06			        and     al,F3_READ_TIMEOUT_MASK
+ 04B5  8A DF			        mov     bl,bh
+ 04B7  80 E3 06			        and     bl,F3_READ_TIMEOUT_MASK
+
+				; We always want force a read TO when we are waiting and we are changing
+				; to or from WAIT_NONE
+				; if want WAIT_NONE and we were WAIT_NONE then setup write TO, noting to do
+
+ 04BA  3C 06			        cmp     al,F3_WAIT_NONE
+ 04BC  75 07			        jne     WAIT_NONE_not_req
+ 04BE  80 FB 06			        cmp     bl,F3_WAIT_NONE
+ 04C1  74 2A			        je      do_Write_TO         ;WAIT_NONE was previously enabled
+ 04C3  EB 05			        jmp     clear_read_TO_semaphore
+
+ 04C5				WAIT_NONE_not_req:
+				; if we are not requesting WAIT_NONE and we were WAIT_NONE setup write TO,
+				; nothing to do
+
+ 04C5  80 FB 06			        cmp     bl,F3_WAIT_NONE
+ 04C8  74 23			        je      do_Write_TO
+
+ 04CA				clear_read_TO_semaphore:
+ 04CA  83 BC 0080 00		        cmp     [si].s_stDeviceParms.wRdTimerCount,ZERO
+ 04CF  74 1C			        je      do_Write_TO
+ 04D1  50			        push    ax
+ 04D2  53			        push    bx
+ 04D3  8C D8			        mov     ax,ds
+ 04D5  8D 5C 5C			        lea     bx,[si].s_stDeviceParms.dwRdSemaphore
+ 04D8  B2 07			        mov     dl,DevHlp_SemClear
+ 04DA  FA			        cli
+ 04DB  FF 1E 0000 E		        call    device_hlp
+ 04DF  5B			        pop     bx
+ 04E0  58			        pop     ax
+ 04E1  C7 84 0080 0000		        mov     [si].s_stDeviceParms.wRdTimerCount,ZERO
+ 04E7  81 4C 48 0200		        or      [si].s_stDeviceParms.wDeviceStatus1,DEV_ST1_RCV_TIMED_OUT
+ 04EC  FB			        sti
+
+ 04ED				do_Write_TO::                                                              ; makes it global
+ 04ED  FA			        cli
+				; If device is not blocked for write TO then do nothing
+
+				        test_DeviceFlag1 DEV_FLAG1_WRT_BLOCKED
+ 04F3  74 24			        jz      do_FIFO
+
+				; If INFINITE_WRT_TIMEOUT is requested and was enabled the no nothing
+
+ 04F5  F6 C4 01			        test    ah,F3_INFINITE_WRT_TIMEOUT
+ 04F8  74 05			        jz      clear_write_TO_semaphore
+ 04FA  F6 C7 01			        test    bh,F3_INFINITE_WRT_TIMEOUT
+ 04FD  75 1A			        jnz     do_FIFO
+
+				; If blocked and tarnsitioning to/from write TO processing then clear
+				; semaphore
+ 04FF				clear_write_TO_semaphore:
+ 04FF  50			        push    ax
+ 0500  53			        push    bx
+ 0501  8C D8			        mov     ax,ds
+ 0503  8D 5C 60			        lea     bx,[si].s_stDeviceParms.dwWrtSemaphore
+ 0506  B2 07			        mov     dl,DevHlp_SemClear
+ 0508  FF 1E 0000 E		        call    device_hlp
+ 050C  5B			        pop     bx
+ 050D  58			        pop     ax
+ 050E  C7 44 58 0000		        mov     [si].s_stDeviceParms.wWrtTimerCount,ZERO
+ 0513  81 4C 48 0100		        or      [si].s_stDeviceParms.wDeviceStatus1,DEV_ST1_XMIT_TIMED_OUT
+ 0518  FB			        sti
+
+ 0519				do_FIFO::                                                              ; makes it global
+				;        sti
+				; process FIFO control
+
+ 0519  F7 44 04 2000		        test    [si].s_stDeviceParms.wDeviceFlag2,DEV_FLAG2_FIFO_AVAILABLE
+ 051E  75 1D			        jnz     setup_FIFOs
+ 0520  F6 C4 F8			        test    ah,(F3_RECEIVE_TRIG_MASK OR F3_HDW_BUFFER_MASK OR F3_USE_TX_BUFFER)
+ 0523  0F 85 0197		        jnz     set_error
+ 0527  C7 44 6C 0001		        mov     [si].s_stDeviceParms.wTxFIFOdepth,1
+
+				; If UART is not 16650 or 16654 then only set trigger levels to zero and reset
+				; FIFOs.  this will cause the UART to always remain in the "16550" mode.  This should
+				; prevent problems with the SMC Super I/O UART.  That UART causes the receive data ready bit
+				; to remain on forever if there is data in the receive holding register when the UART
+				; is changed from the 16450 mode to the 16550 mode.
+				; The Startech UARTs (16650 and 16654) cannot be set to a receive trigger level of
+				; zero.  Since the receive data ready bit problem does not occur in these
+				; UARTs we just turn off FIFOs (go to 16450 mode) for these UARTs.
+
+ 052C  32 C0			        xor     al,al
+				        test_DeviceFlag2 (DEV_FLAG2_16650_UART OR DEV_FLAG2_16650_UART)
+ 0533  75 02			        jnz     @f
+ 0535  B0 07			        mov     al,FIFO_CTL_RESET_FIFOS
+ 0537				@@:
+ 0537  80 E4 07			        and     ah,NOT (F3_RECEIVE_TRIG_MASK OR F3_HDW_BUFFER_MASK OR F3_USE_TX_BUFFER)
+ 053A  E9 00E0			        jmp     out_FIFO_control
+
+ 053D				setup_FIFOs::
+ 053D  8A DC			        mov     bl,ah                     ; duplicate flags
+ 053F  83 7E 04 01		        cmp     bForceFIFOinit,TRUE
+ 0543  75 05			        jne     @f
+ 0545  80 E3 18			        and     bl,F3_HDW_BUFFER_MASK
+ 0548  EB 21			        jmp     change_FIFOs
+ 054A				@@:
+				; don't mess with FIFOs unless required to
+ 054A  53			        push    bx
+ 054B  80 E3 F8			        and     bl,(F3_USE_TX_BUFFER OR F3_HDW_BUFFER_MASK OR F3_RECEIVE_TRIG_MASK)
+ 054E  80 E7 F8			        and     bh,(F3_USE_TX_BUFFER OR F3_HDW_BUFFER_MASK OR F3_RECEIVE_TRIG_MASK)
+ 0551  3A FB			        cmp     bh,bl
+ 0553  75 04			        jne     @f
+ 0555  5B			        pop     bx
+ 0556  E9 015F			        jmp     move_Flag3
+ 0559				@@:
+ 0559  5B			        pop     bx
+ 055A  80 E3 18			        and     bl,F3_HDW_BUFFER_MASK
+ 055D  0A DB			        or      bl,bl                ; if bits are zero then change nothing
+ 055F  75 0A			        jnz     change_FIFOs
+ 0561  8A DF			        mov     bl,bh                ; get current flag
+ 0563  80 E3 F8			        and     bl,(F3_USE_TX_BUFFER OR F3_HDW_BUFFER_MASK OR F3_RECEIVE_TRIG_MASK)
+ 0566  0A E3			        or      ah,bl                ; OR current FIFO bits into new flag
+ 0568  E9 014D			        jmp     move_Flag3
+
+ 056B				change_FIFOs::                                                              ; makes it global
+ 056B  80 FB 08			        cmp     bl,F3_HDW_BUFFER_DISABLE
+ 056E  75 0A			        jne     test_APO
+
+				; disable FIFOs
+ 0570  C7 44 6C 0001		        mov     [si].s_stDeviceParms.wTxFIFOdepth,1
+ 0575  32 C0			        xor     al,al
+ 0577  E9 00A3			        jmp     out_FIFO_control
+
+ 057A				test_APO::                                                              ; makes it global
+ 057A  80 FB 18			        cmp     bl,F3_HDW_BUFFER_APO
+ 057D  74 5D			        je      set_up_APO
+
+ 057F  8A DC			        mov     bl,ah
+
+ 0581				set_FIFO_size::
+ 0581  B0 07			        mov     al,(FIFO_CTL_FIFO_ENABLE OR FIFO_CTL_TX_RESET OR FIFO_CTL_RX_RESET)
+ 0583  BF 0001			        mov     di,1
+ 0586  F6 C3 80			        test    bl,F3_USE_TX_BUFFER
+ 0589  74 45			        jz      set_depth
+ 058B  8B 7C 6E			        mov     di,[si].s_stDeviceParms.wUserTxFIFOdepth
+
+				        test_DeviceFlag2 DEV_FLAG2_16650_UART
+ 0593  74 0A			        jz      test_16654
+ 0595  83 FF 20			        cmp     di,MAX_16650_TX_DEPTH
+ 0598  76 36			        jna     set_depth
+ 059A  BF 0020			        mov     di,MAX_16650_TX_DEPTH
+ 059D  EB 31			        jmp     set_depth
+
+ 059F				test_16654::                                                              ; makes it global
+				        test_DeviceFlag2 DEV_FLAG2_16654_UART
+ 05A4  74 0A			        jz      test_16750
+ 05A6  83 FF 40			        cmp     di,MAX_16654_TX_DEPTH
+ 05A9  76 25			        jna     set_depth
+ 05AB  BF 0040			        mov     di,MAX_16654_TX_DEPTH
+ 05AE  EB 20			        jmp     set_depth
+
+ 05B0				test_16750::                                                              ; makes it global
+				        test_DeviceFlag2 DEV_FLAG2_16750_UART
+ 05B5  74 11			        jz      set_16550
+ 05B7  F7 44 0A 8000		        test    [si].s_stDeviceParms.wConfigFlags2,CFG_FLAG2_LOW_16750_TRIG
+ 05BC  75 0A			        jnz     set_16550
+ 05BE  83 FF 40			        cmp     di,MAX_16750_TX_DEPTH
+ 05C1  76 0D			        jna     set_depth
+ 05C3  BF 0040			        mov     di,MAX_16750_TX_DEPTH
+ 05C6  EB 08			        jmp     set_depth
+
+ 05C8				set_16550::                                                              ; makes it global
+ 05C8  83 FF 10			        cmp     di,MAX_16550_TX_DEPTH
+ 05CB  76 03			        jna     set_depth
+ 05CD  BF 0010			        mov     di,MAX_16550_TX_DEPTH
+
+ 05D0				set_depth::                                                              ; makes it global
+ 05D0  89 7C 6C			        mov     [si].s_stDeviceParms.wTxFIFOdepth,di
+ 05D3  80 E3 60			        and     bl,F3_RECEIVE_TRIG_MASK
+ 05D6  D0 E3			        shl     bl,1
+ 05D8  0A C3			        or      al,bl
+ 05DA  EB 41			        jmp     out_FIFO_control
+
+ 05DC				set_up_APO::                                                              ; makes it global
+ 05DC  8A DC			        mov     bl,ah                     ; get requested FIFO spec
+				  IFNDEF NO_ADV_UARTS
+				    IFNDEF NO_16650_Xon_HS_support
+				    ENDIF
+				  ENDIF
+ 05DE  F6 44 25 01		        test    [si].s_stDeviceParms.byFlag2,F2_ENABLE_XMIT_XON_XOFF_FLOW
+ 05E2  75 05			        jnz     enable_TX_buffer
+ 05E4  80 E3 1F			        and     bl,NOT (F3_RECEIVE_TRIG_MASK OR F3_USE_TX_BUFFER)
+ 05E7  EB 98			        jmp     set_FIFO_size
+
+ 05E9				enable_TX_buffer::                                                              ; makes it global
+ 05E9  80 CB 80			        or      bl,F3_USE_TX_BUFFER
+ 05EC  F6 44 24 38		        test    [si].s_stDeviceParms.byFlag1,F1_ENABLE_CTS_OUTPUT_HS OR \
+				                                           F1_ENABLE_DSR_OUTPUT_HS OR \
+				                                           F1_ENABLE_DCD_OUTPUT_HS
+ 05F0  74 17			        jz      test_input_HS
+
+				  IFNDEF NO_ADV_UARTS
+				        test_DeviceFlag2 (DEV_FLAG2_16750_UART OR \
+				                          DEV_FLAG2_TI16550C_UART OR \
+				                          DEV_FLAG2_16650_UART OR \
+				                          DEV_FLAG2_16654_UART)
+ 05F7  74 0D			        jz      limit_TX_FIFO
+ 05F9  F7 44 0A 0400		        test    [si].s_stDeviceParms.wConfigFlags2,CFG_FLAG2_HDW_CTS_HS
+ 05FE  74 06			        jz      limit_TX_FIFO
+ 0600  F6 44 24 30		        test    [si].s_stDeviceParms.byFlag1,F1_ENABLE_DCD_OUTPUT_HS OR \
+				                                           F1_ENABLE_DSR_OUTPUT_HS
+ 0604  74 03			        jz      test_input_HS
+				  ENDIF
+
+ 0606				limit_TX_FIFO::                                                              ; makes it global
+ 0606  80 E3 7F			        and     bl,NOT F3_USE_TX_BUFFER
+
+ 0609				test_input_HS::                                                              ; makes it global
+				  IFNDEF NO_ADV_UARTS
+				    IFNDEF NO_16650_Xon_HS_support
+				    ENDIF
+				  ENDIF
+ 0609  F6 44 25 01		        test    [si].s_stDeviceParms.byFlag2,F2_ENABLE_XMIT_XON_XOFF_FLOW
+ 060D  75 08			        jnz     limit_RX_FIFO
+
+ 060F				test_DSR_input::                                                              ; makes it global
+ 060F  F6 44 24 40		        test    [si].s_stDeviceParms.byFlag1,F1_ENABLE_DSR_INPUT_HS
+ 0613  0F 84 FF6A		        jz      set_FIFO_size
+
+ 0617				limit_RX_FIFO::                                                              ; makes it global
+ 0617  80 E3 9F			        and     bl,NOT F3_RECEIVE_TRIG_MASK
+ 061A  E9 FF64			        jmp     set_FIFO_size
+
+ 061D				out_FIFO_control::                                                              ; makes it global
+				  IFNDEF x16_BIT
+				        test_DeviceFlag2 DEV_FLAG2_16750_UART
+ 0622  74 7F			        jz      set_FCR
+ 0624  F7 44 0A 8000		        test    [si].s_stDeviceParms.wConfigFlags2,CFG_FLAG2_LOW_16750_TRIG
+ 0629  74 3C			        jz      set_16750_to_64_byte_FIFOs
+ 062B  24 DF			        and     al,NOT FIFO_CTL_16750_64_BYTE_FIFO
+ 062D  8A D8			        mov     bl,al
+ 062F  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 0632  83 C2 03			        add     dx,LINE_CTL_REG_OFFSET
+				        InByteDel di
+ 063C  8A F8			        mov     bh,al
+ 063E  B0 80			        mov     al,80h
+				        OutByteDel di
+ 0647  83 C2 FF			        add     dx,FIFO_CTL_REG_OFFSET - LINE_CTL_REG_OFFSET
+ 064A  8A C3			        mov     al,bl
+				        OutByteDel di
+ 0653  83 C2 01			        add     dx,LINE_CTL_REG_OFFSET - FIFO_CTL_REG_OFFSET
+ 0656  8A C7			        mov     al,bh
+				        OutByteDel di
+ 065F  32 FF			        xor     bh,bh
+ 0661  89 9C 0084		        mov     [si].s_stDeviceParms.wFIFOcontrolImage,bx
+ 0665  EB 51			        jmp     move_Flag3
+
+ 0667				set_16750_to_64_byte_FIFOs::                                                              ; makes it global
+ 0667  0C 20			        or      al,FIFO_CTL_16750_64_BYTE_FIFO
+ 0669  8A D8			        mov     bl,al
+ 066B  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 066E  83 C2 03			        add     dx,LINE_CTL_REG_OFFSET
+				        InByteDel di
+ 0678  8A F8			        mov     bh,al
+ 067A  B0 80			        mov     al,80h
+				        OutByteDel di
+ 0683  83 C2 FF			        add     dx,FIFO_CTL_REG_OFFSET - LINE_CTL_REG_OFFSET
+ 0686  8A C3			        mov     al,bl
+				        OutByteDel di
+ 068F  83 C2 01			        add     dx,LINE_CTL_REG_OFFSET - FIFO_CTL_REG_OFFSET
+ 0692  8A C7			        mov     al,bh
+				        OutByteDel di
+ 069B  32 FF			        xor     bh,bh
+ 069D  89 9C 0084		        mov     [si].s_stDeviceParms.wFIFOcontrolImage,bx
+ 06A1  EB 15			        jmp     move_Flag3
+
+ 06A3				set_FCR::                                                              ; makes it global
+				  ENDIF
+ 06A3  8B 54 32			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 06A6  83 C2 02			        add     dx,FIFO_CTL_REG_OFFSET
+ 06A9  8B D8			        mov     bx,ax
+				        OutByteDel di
+ 06B2  32 FF			        xor     bh,bh
+ 06B4  89 9C 0084		        mov     [si].s_stDeviceParms.wFIFOcontrolImage,bx
+
+ 06B8				move_Flag3::                                                              ; makes it global
+ 06B8  88 64 26			        mov     [si].s_stDeviceParms.byFlag3,ah
+ 06BB  F8			        clc
+ 06BC  EB 01			        jmp exit
+
+ 06BE				set_error:
+ 06BE  F9			        stc
+ 06BF				exit:
+ 06BF  FB			        sti
+				        ret
+ 06C0  5D		   *	    pop    bp
+ 06C1  C2 0002		   *	    ret    00002h
+
+ 06C4				ProcessFlag3 ENDP
+
+ 06C4				RES_CODE ENDS
+
+				  END

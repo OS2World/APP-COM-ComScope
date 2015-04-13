@@ -1,0 +1,59 @@
+# PDB_inst.mak
+# Created by IBM WorkFrame/2 MakeMake at 20:52:36 on 9 May 2000
+#
+# The actions included in this make file are:
+#  Compile::C++ Compiler
+#  Link::Linker
+#  Lib::Import Lib
+
+.SUFFIXES:
+
+.SUFFIXES: .LIB .c .dll .obj 
+
+.all: \
+    f:\work\lib\PDB_INST.LIB
+
+.c.obj:
+    @echo " Compile::C++ Compiler "
+    icc.exe /Sp1 /Ss /Q /Wall /Fi /Si /O /W2 /Gm /Gd /Ge- /G4 /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+
+{p:\Install\PDB}.c.obj:
+    @echo " Compile::C++ Compiler "
+    icc.exe /Sp1 /Ss /Q /Wall /Fi /Si /O /W2 /Gm /Gd /Ge- /G4 /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+
+{p:\Install\PDB\GA}.c.obj:
+    @echo " Compile::C++ Compiler "
+    icc.exe /Sp1 /Ss /Q /Wall /Fi /Si /O /W2 /Gm /Gd /Ge- /G4 /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+
+.dll.LIB:
+    @echo " Lib::Import Lib "
+    implib.exe /NOLOGO f:\work\lib\%|fF.LIB %s
+
+{p:\Install\PDB}.dll.LIB:
+    @echo " Lib::Import Lib "
+    implib.exe /NOLOGO f:\work\lib\%|fF.LIB %s
+
+{p:\Install\PDB\GA}.dll.LIB:
+    @echo " Lib::Import Lib "
+    implib.exe /NOLOGO f:\work\lib\%|fF.LIB %s
+
+f:\work\lib\PDB_inst.dll: \
+    .\page.obj \
+    {$(LIB)}OS2LSRTL.lib \
+    {$(LIB)}OS2386.lib \
+    {$(LIB)}CPPOM30O.lib \
+    {$(LIB)}OS2LS_UT.lib \
+    .\\..\PDB_inst.def
+    @echo " Link::Linker "
+    icc.exe @<<
+     /Q /B" /nobase /nop      /noe /m /nod"
+     /Fe"f:\work\lib\PDB_inst.dll" 
+     OS2LSRTL.lib 
+     OS2386.lib 
+     CPPOM30O.lib 
+     OS2LS_UT.lib 
+     .\\..\PDB_inst.def
+     .\page.obj
+<<
+
+!include "PDB_inst.DEP"

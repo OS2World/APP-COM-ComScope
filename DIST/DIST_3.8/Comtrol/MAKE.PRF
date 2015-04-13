@@ -1,0 +1,24 @@
+This is a profile make file for the Comtrol version of COMi
+[COMi]
+Driver=CCOMDD.SYS;
+Mod=C;
+OEM_type=2
+Files=4
+File_1=CONFIG.EXE;
+File_2=CONFIG.HLP;
+File_3=CONFIG.ICO;
+File_4=COMi.INF;
+Config=CONFIG.EXE;
+ProgramSize=201274
+Banner Two=for Comtrol Hostess Serial Adapters;
+Banner One= Installing the COMi Device Driver;
+Major=3
+Minor=21
+Date=941120
+[Install]
+APP_files=3
+APP_file_1=INSTALL.EXE;
+APP_file_2=INSTALL.HLP;
+APP_file_2=INSTALL.ICO;
+ProgramSize=67706
+

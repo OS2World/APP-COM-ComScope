@@ -1,0 +1,49 @@
+OS/tools Incorporated:
+       COMi Asynchronous Serial Device Driver (DEMO)
+       Version 3.71 E
+
+What's New:
+
+        1.  Support for 16650 and 16750 UARTs has been added.
+        2.  Support for new COMscope features.
+        
+
+COMi Description:
+
+        COMi is a multi-port asynchronous serial device driver for OS/2.  It 
+        allows access to COM1 through COM99 in any OS/2 machine.  COMi supports
+        shared interrupts on Industry Standard Architecture (ISA) machines when 
+        used with specific serial adapters, and on Micro Channel Architecture
+        (MCA) machines with any serial adapter.  COMi is designed to conform
+        exactly to the Application Programming Interface as defined for 
+        Category One, Asynchronous Serial Device Drivers in the "Physical
+        Device Driver" technical reference.
+
+Features:
+        1.  Up to sixteen devices on a single hardware interrupt are supported 
+             on ISA machines.
+        2.  Allows user to specify all device driver buffer sizes.
+        3.  Serial devices from COM1 through COM99 are supported.
+        4.  Tests each device and interrupt connection at initialization. 
+        5.  Supports baud rates of 115.2k and above.
+        6.  Lets user specify the start-up states of all protocol parameters.
+        7.  Enables applications to control the OUT1 and LOOP modem control
+             signals.
+        8.  Includes extensions for COMscope access.
+
+NOTE:
+       This version of COMi limits the number of write requests.  After 1000 
+       write requests to the device driver will stop transmitting and 
+       begins returning a "bytes written" count of zero.
+
+COMi requires OS/2 2.0 or later.
+
+Ordering Infromation:
+
+       OS/tools Incorporated
+       1685 Branham Lane, Suite 0S/2
+       San Jose, CA  95118-5226
+       (408)269-9411, FAX:(408)269-9434, BBS:(408)269-9435
+       Internet: products@os-tools.com, CompuServe: 70314,3235
+
+

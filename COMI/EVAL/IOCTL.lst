@@ -1,0 +1,3576 @@
+Microsoft (R) Macro Assembler Version 6.00     		    08/24/02 23:27:25
+IOCTL.asm						     Page 1 - 1
+
+
+				;************************************************************************
+				;
+				; $Revision:   1.12  $
+				;
+				; $Log:   P:/archive/comi/ioctl.asv  $
+				;
+				;     Rev 1.12   28 Mar 1996 00:20:12   EMMETT
+				;  Added resource manager.  Began work on VDD support.
+				;
+				;     Rev 1.11   21 Feb 1996 12:08:38   EMMETT
+				;  Fixed COMscope buffer access for DosDevIOCtl function calls
+				;  so that single byte transfers of packet data would not make write
+				;  pointer odd.
+				;
+				;     Rev 1.10   18 Feb 1996 14:21:48   EMMETT
+				;  Added many features.  Notably:
+				;  Tracing of DosDevIOCtl function calls and packets.
+				;  Added 16650 and 16750 support.
+				;  Streamlined interrupt routine.
+				;
+				;     Rev 1.9   25 Apr 1995 22:16:52   EMMETT
+				;  Added Support for DigiBoard PC/16.  Changed interrupt Routine for better adapter independence.
+				;  Changed interrupt routine to allow user to select interrupting device selection algorithim.  Fixed
+				;  ABIOS interaction for better "non.INI" initialization in MCA machines.  Fixed various initialization
+				;  message strings.  COMscope and receive buffer are now allocated from system memory, allowing
+				;  a 32k (word) COMscope buffer and a 64k (byte) receive buffer.
+				;
+				;     Rev 1.8   03 Dec 1994 15:11:22   EMMETT
+				;  Changed segment names.  Fixed DTR set modem control code.
+				;  Changed extension error handling.
+				;
+				;     Rev 1.7   29 Jun 1994 08:09:12   EMMETT
+				;  Fixed "transmit byte immediate" to store user character instead of current modem state.
+				;
+				;     Rev 1.6   29 Jun 1994 07:40:32   EMMETT
+				;  Fixed transmit immediate byte to better handle null.
+				;
+				;     Rev 1.5   28 Jun 1994 09:14:16   EMMETT
+				;  Changed modem signal routines to preform better when modem interrupts have been disabled
+				;  by the user.
+				;
+				;     Rev 1.4   11 Jun 1994 10:37:46   EMMETT
+				;  Changed all references to "mirror" to "COMscope".
+				;
+				;     Rev 1.3   07 Jun 1994 00:19:16   EMMETT
+				;  Added support for DigiBoard.
+				;  Added initialization support for OEM specific loads.
+				;  Fixed bug in StartWriteStream and ProcessModemSignals that caused handshaking problems.
+				;  Fixed hardware tests to set baud rate before testing interrupts.
+				;  Fixed hardware tests off switch to work only for retail version.
+				;
+				;     Rev 1.2   27 Apr 1994 22:56:30   EMMETT
+				;  FIxed ABIOS stuff to work better than before.
+				;
+				;     Rev 1.1   18 Apr 1994 23:18:14   EMMETT
+				;  Changed ABIOS processing and added ability to disallow a port to initialize.
+				;
+				;     Rev 1.0   16 Apr 1994 08:35:20   EMMETT
+				;  Initial version control archive.
+				;
+				;************************************************************************
+
+				  IFNDEF x16_BIT
+				.386P
+				  ELSE
+				  ENDIF
+				;.NOLISTMACRO                   ;suppress macro expansion in listing
+
+				.XLIST                       ;Suppress listing of files
+				.LIST
+
+ 0000				ioctl_call_table LABEL WORD
+
+ 0000  06DE R			                 WORD SetShortBaud                ;41h
+ 0002  078F R			                 WORD SetLineCharacteristics      ;42h
+ 0004  063F R			                 WORD SetLongBaud                 ;43h
+ 0006  0889 R			                 WORD TXbyteImmediate             ;44h
+ 0008  0C2D R			                 WORD BreakOff                    ;45h
+ 000A  09B0 R			                 WORD SetModemControl             ;46h
+ 000C  0BE0 R			                 WORD ForceXOFF                   ;47h
+ 000E  0BFD R			                 WORD ForceXON                    ;48h
+ 0010  00FD R			                 WORD BadFunction                 ;       49h
+ 0012  00FD R			                 WORD BadFunction                 ;       4ah
+ 0014  0CE5 R			                 WORD BreakOn                     ;4bh
+ 0016  00FD R			                 WORD BadFunction                 ;       4ch
+ 0018  00FD R			                 WORD BadFunction                 ;       4dh
+ 001A  00FD R			                 WORD BadFunction                 ;       4eh
+ 001C  00FD R			                 WORD BadFunction                 ;       4fh
+ 001E  00FD R			                 WORD BadFunction                 ;       50h
+ 0020  00FD R			                 WORD BadFunction                 ;       51h
+ 0022  00FD R			                 WORD BadFunction                 ;       52h
+ 0024  03ED R			                 WORD set_DCB                     ;53h
+ 0026  00FD R			                 WORD BadFunction                 ;       54h
+ 0028  030F R			                 WORD SetFIFO                     ;55h
+ 002A  01C4 R			                 WORD SetThresholds               ;56h
+ 002C  00FD R			                 WORD BadFunction                 ;       57h
+ 002E  00FD R			                 WORD BadFunction                 ;       58h
+ 0030  00FD R			                 WORD BadFunction                 ;       59h
+ 0032  00FD R			                 WORD BadFunction                 ;       5ah
+ 0034  00FD R			                 WORD BadFunction                 ;       5bh
+ 0036  00FD R			                 WORD BadFunction                 ;       5ch
+ 0038  00FD R			                 WORD BadFunction                 ;       5dh
+ 003A  00FD R			                 WORD BadFunction                 ;       5eh
+ 003C  00FD R			                 WORD BadFunction                 ;       5fh
+ 003E  00FD R			                 WORD BadFunction                 ;       60h
+ 0040  0EF1 R			                 WORD GetShortBaud                ;61h
+ 0042  0F7A R			                 WORD GetLineCharacteristics      ;62h
+ 0044  0E1F R			                 WORD GetLongBaud                 ;63h
+ 0046  1058 R			                 WORD GetComStatus                ;64h
+ 0048  10C8 R			                 WORD GetXmitStatus               ;65h
+ 004A  116F R			                 WORD GetModemOutSignals          ;66h
+ 004C  11E8 R			                 WORD GetModemInSignals           ;67h
+ 004E  1275 R			                 WORD GetReceiveQueueCount        ;68h
+ 0050  130B R			                 WORD GetTransmitQueueCount       ;69h
+ 0052  00FD R			                 WORD BadFunction                 ;       6ah
+ 0054  00FD R			                 WORD BadFunction                 ;       6bh
+ 0056  00FD R			                 WORD BadFunction                 ;       6ch
+ 0058  1391 R			                 WORD GetComError                 ;6dh
+ 005A  00FD R			                 WORD BadFunction                 ;       6eh
+ 005C  00FD R			                 WORD BadFunction                 ;       6fh
+ 005E  00FD R			                 WORD BadFunction                 ;       70h
+ 0060  00FD R			                 WORD BadFunction                 ;       71h
+ 0062  13FF R			                 WORD GetComEventInfo             ;72h
+ 0064  059F R			                 WORD get_DCB                     ;73h
+ 0066  00FD R			                 WORD BadFunction                 ;     74h
+ 0068  0250 R			                 WORD GetFIFOinfo                 ;75h
+ 006A  0138 R			                 WORD GetThresholds               ;76h
+				   IFNDEF x16_BIT
+ 006C  00FD R			                 WORD BadFunction                 ;     77h
+ 006E  00FD R			                 WORD BadFunction                 ;     78h
+ 0070  00FD R			                 WORD BadFunction                 ;     79h
+ 0072  18B2 R			                 WORD GetCountsSinceLast          ;7Ah
+				  IFNDEF NO_COMscope
+ 0074  1492 R			                 WORD GetComFlags                 ;7Bh
+ 0076  0000 E			                 WORD _ExtensionFunction          ;7Ch
+ 0078  153F R			                 WORD GetCOMscopeData             ;7Dh
+ 007A  1678 R			                 WORD COMscopeControl             ;7Eh
+ 007C  17E9 R			                 WORD GetDeviceData               ;7fh
+				  ELSE
+				  ENDIF
+				   ENDIF
+
+				;-------------------------------------------------------------------------------
+				; Subroutine GENIOCLTL handles the IOCTL
+				;-------------------------------------------------------------------------------
+ 007E				GenIOctl PROC NEAR C USES ES DI, oErrorCode:WORD
+
+				  IFDEF PCMCIA
+				  ENDIF
+ 007E  55		   *	    push   bp
+ 007F  8B EC		   *	    mov    bp, sp
+ 0081  06		   *	    push   es
+ 0082  57		   *	    push   di
+ 0083  26: 80 7D 0D 01		        cmp     es:[di].s_stPacket.GIOpacket.GIOcategory,01
+ 0088  74 0B			        je      @f
+				        StoreError oErrorCode,ERROR_INVALID_CATEGORY
+ 008A  53		     1	        push    bx
+ 008B  8B 5E 04		     1	        mov     bx,oErrorCode
+ 008E  36: C6 07 75	     1	        mov     BYTE PTR SS:[bx],ERROR_INVALID_CATEGORY
+ 0092  5B		     1	        pop     bx
+ 0093  EB 64			        jmp     gio_rtn
+ 0095				@@:
+ 0095  26: 8A 5D 0E		        mov     bl,es:[di].s_stPacket.GIOpacket.GIOfunction
+ 0099  50			        push    ax
+ 009A  A1 0000 E		        mov     ax,wLastFunctionCall
+ 009D  8A E3			        mov     ah,bl
+ 009F  A3 0000 E		        mov     wLastFunctionCall,ax
+ 00A2  58			        pop     ax
+				  IFNDEF NO_COMscope
+ 00A3  A9 F000			        test    ax,TARGET_ALL_EXT
+ 00A6  74 07			        jz      @f
+ 00A8  80 FB 7F			        cmp     bl,MAX_COMscope_IOCTL
+ 00AB  76 12			        jna     test_min
+ 00AD  EB 05			        jmp     bad_command
+ 00AF				@@:
+				  ENDIF
+ 00AF  80 FB 7C			        cmp     bl,MAX_IOCTL
+ 00B2  76 0B			        jna     test_min
+
+ 00B4				bad_command:
+				        StoreError oErrorCode,ERROR_I24_BAD_COMMAND
+ 00B4  53		     1	        push    bx
+ 00B5  8B 5E 04		     1	        mov     bx,oErrorCode
+ 00B8  36: C6 07 03	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_BAD_COMMAND
+ 00BC  5B		     1	        pop     bx
+ 00BD  EB 3A			        jmp     gio_rtn
+
+ 00BF				test_min:
+ 00BF  80 FB 41			        cmp     bl,MIN_IOCTL
+ 00C2  73 0B			        jnb     @f
+				        StoreError oErrorCode,ERROR_I24_BAD_COMMAND
+ 00C4  53		     1	        push    bx
+ 00C5  8B 5E 04		     1	        mov     bx,oErrorCode
+ 00C8  36: C6 07 03	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_BAD_COMMAND
+ 00CC  5B		     1	        pop     bx
+ 00CD  EB 2A			        jmp     gio_rtn
+				  IFNDEF NO_COMscope
+ 00CF				@@:
+ 00CF  A9 3000			        test    ax,TARGET_OS_tools      ;AX still contains called target
+ 00D2  74 10			        jz      @f
+ 00D4  80 FB 7C			        cmp     bl,07ch  ;Only ExtensionFunctions can be called by OS$tools
+ 00D7  74 0B			        je      @f
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 00D9  53		     1	        push    bx
+ 00DA  8B 5E 04		     1	        mov     bx,oErrorCode
+ 00DD  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 00E1  5B		     1	        pop     bx
+ 00E2  EB 15			        jmp     gio_rtn
+				  ENDIF
+ 00E4				@@:
+ 00E4  32 FF			        xor     bh,bh
+ 00E6  53			        push    bx
+ 00E7  83 EB 41			        sub     bx,MIN_IOCTL
+ 00EA  D1 E3			        shl     bx,1
+ 00EC  50			        push    ax                      ; target Info
+ 00ED  8B 46 04			        mov     ax,WORD PTR oErrorCode
+ 00F0  50			        push    ax
+ 00F1  2E: FF 97 0000 R		        call    CS:ioctl_call_table[bx]
+ 00F6  83 C4 06			        add     sp,6
+ 00F9				gio_rtn:
+				        ret
+ 00F9  5F		   *	    pop    di
+ 00FA  07		   *	    pop    es
+ 00FB  5D		   *	    pop    bp
+ 00FC  C3		   *	    ret    00000h
+
+ 00FD				GenIOctl ENDP
+
+ 00FD				BadFunction PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+ 00FD  55		   *	    push   bp
+ 00FE  8B EC		   *	    mov    bp, sp
+ 0100  8B 46 08			        mov     ax,wFunction
+				        COMscopeStream ebx, CSFUNC_TRACE_DEVIOCTL, CS_DEVIOCTL
+ 0103  F7 44 4C 0040	     1	        test    [si].s_stDeviceParms.fCOMscopeFunction,CSFUNC_TRACE_DEVIOCTL
+ 0108  74 23		     1	        jz      ??0001
+ 010A  B4 85		     1	        mov     ah,CS_DEVIOCTL
+ 010C  66| 8B 9C 008C	     1	        mov     ebx,[si].s_stDeviceParms.dwCOMscopeQWrtPtr
+ 0111  67& 64: 89 03	     1	        mov     FS:[ebx],ax
+ 0115			     1	??0003:
+ 0115  66| 3B 5C 1C	     1	        cmp     ebx,[si].s_stDeviceParms.dwCOMscopeBuffExtent
+ 0119  72 09		     1	        jb      ??0000
+ 011B  66| 8B 9C 0094	     1	        mov     ebx,[si].s_stDeviceParms.oCOMscopeBuff
+ 0120  66| 83 EB 02	     1	        sub     ebx,2
+ 0124			     1	??0000:
+ 0124  66| 83 C3 02	     1	        add     ebx,2
+ 0128  66| 89 9C 008C	     1	        mov     [si].s_stDeviceParms.dwCOMscopeQWrtPtr,ebx
+ 012D			     1	??0001:
+				        StoreError oErrorCode,ERROR_I24_BAD_COMMAND
+ 012D  53		     1	        push    bx
+ 012E  8B 5E 04		     1	        mov     bx,oErrorCode
+ 0131  36: C6 07 03	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_BAD_COMMAND
+ 0135  5B		     1	        pop     bx
+				        ret
+ 0136  5D		   *	    pop    bp
+ 0137  C3		   *	    ret    00000h
+
+ 0138				BadFunction ENDP
+
+				;    function 76h
+ 0138				GetThresholds PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+				        LOCAL   pDataAddress:DWORD
+
+ 0138  55		   *	    push   bp
+ 0139  8B EC		   *	    mov    bp, sp
+ 013B  83 C4 FC		   *	    add    sp, 0FFFCh
+ 013E  33 DB			        xor     bx,bx
+ 0140  33 C9			        xor     cx,cx                   ; use packet count
+				        VerifyPacketData
+ 0142  0B C9		     1	        or      cx,cx
+ 0144  75 0B		     1	        jnz     ??0004
+ 0146  26: 83 7D 1B 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOdataLength,0
+ 014B  74 6A		     1	        je      error
+ 014D  26: 8B 4D 1B	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOdataLength
+ 0151			     1	??0004:
+ 0151  57		     1	        push    di
+ 0152  8D 5E FC		     1	        lea     bx,pDataAddress
+ 0155  26: 8B 45 15	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOdataOffset + 2
+ 0159  26: 8B 7D 13	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOdataOffset
+ 015D  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 0161  36: 89 3F	     1	        mov     SS:[bx],di
+ 0164  B6 01		     1	        mov     dh,DH_VA_READ_WRT_ACCESS        ;verify for read/write access
+ 0166  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ;carry set if access denied
+ 0168  FF 1E 0000 E	     1	        call    device_hlp
+ 016C  5F		     1	        pop     di
+ 016D  72 48		     1	        jc      error
+ 016F			     1	??0005:
+
+ 016F  83 F9 06			        cmp     cx,TYPE s_stThresholds
+ 0172  72 43			        jb      error
+
+ 0174  C4 7E FC			        les     di,pDataAddress
+ 0177  66| 8B 44 10		        mov     eax,[si].s_stDeviceParms.dwReadBufferLength
+ 017B  66| 33 DB		        xor     ebx,ebx
+
+ 017E  8B 5C 34			        mov     bx,[si].s_stDeviceParms.wXonThreshold
+ 0181  66| 2B C3		        sub     eax,ebx
+ 0184  8B 5C 36			        mov     bx,[si].s_stDeviceParms.wXoffThreshold
+ 0187  66| 2B C3		        sub     eax,ebx
+ 018A  26: 89 05		        mov     ES:[di].s_stThresholds.wXon,ax
+ 018D  8B 44 36			        mov     ax,[si].s_stDeviceParms.wXoffThreshold
+ 0190  26: 89 45 02		        mov     ES:[di].s_stThresholds.wXoff,ax
+ 0194  8A 44 2A			        mov     al,[si].s_stDeviceParms.byMaxWritePktCount
+ 0197  26: 88 45 04		        mov     ES:[di].s_stThresholds.byWritePackets,al
+ 019B  8A 44 2B			        mov     al,[si].s_stDeviceParms.byMaxReadPktCount
+ 019E  26: 88 45 05		        mov     ES:[di].s_stThresholds.byReadPackets,al
+				  IFNDEF NO_COMscope
+ 01A2  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 01A7  75 17			        jnz     exit
+ 01A9  6A 06			        push    TYPE s_stThresholds
+ 01AB  8B 46 08			        mov     ax,wFunction
+ 01AE  50			        push    ax
+ 01AF  E8 0000 E		        call    _COMscopeDevIOCtl
+ 01B2  83 C4 04			        add     sp,4
+				  ENDIF
+ 01B5  EB 09			        jmp     exit
+ 01B7				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 01B7  53		     1	        push    bx
+ 01B8  8B 5E 04		     1	        mov     bx,oErrorCode
+ 01BB  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 01BF  5B		     1	        pop     bx
+ 01C0				exit:
+				        ret
+ 01C0  8B E5		   *	    mov    sp, bp
+ 01C2  5D		   *	    pop    bp
+ 01C3  C3		   *	    ret    00000h
+
+ 01C4				GetThresholds ENDP
+
+				;   function 56h
+ 01C4				SetThresholds PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+				        LOCAL   pParamAddress:DWORD
+
+ 01C4  55		   *	    push   bp
+ 01C5  8B EC		   *	    mov    bp, sp
+ 01C7  83 C4 FC		   *	    add    sp, 0FFFCh
+ 01CA  33 DB			        xor     bx,bx
+ 01CC  33 C9			        xor     cx,cx                   ; use packet count
+				        VerifyPacketParams
+ 01CE  0B C9		     1	        or      cx,cx
+ 01D0  75 0B		     1	        jnz     ??0006
+ 01D2  26: 83 7D 19 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOparamLength,0
+ 01D7  74 6A		     1	        je      error
+ 01D9  26: 8B 4D 19	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOparamLength
+ 01DD			     1	??0006:
+ 01DD  57		     1	        push    di
+ 01DE  8D 5E FC		     1	        lea     bx,pParamAddress
+ 01E1  26: 8B 45 11	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOparamOffset + 2
+ 01E5  26: 8B 7D 0F	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOparamOffset
+ 01E9  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 01ED  36: 89 3F	     1	        mov     SS:[bx],di
+ 01F0  B6 00		     1	        mov     dh,DH_VA_READ_ACCESS            ; verify for read access
+ 01F2  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ; carry set if access denied
+ 01F4  FF 1E 0000 E	     1	        call    device_hlp
+ 01F8  5F		     1	        pop     di
+ 01F9  72 48		     1	        jc      error
+ 01FB			     1	??0007:
+
+ 01FB  83 F9 06			        cmp     cx,TYPE s_stThresholds
+ 01FE  75 43			        jne     error
+
+ 0200  C4 7E FC			        les     di,pParamAddress
+				  IFNDEF NO_COMscope
+ 0203  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 0208  75 0C			        jnz     @f
+ 020A  6A 06			        push    TYPE s_stThresholds
+ 020C  8B 46 08			        mov     ax,wFunction
+ 020F  50			        push    ax
+ 0210  E8 0000 E		        call    _COMscopeDevIOCtl
+ 0213  83 C4 04			        add     sp,4
+ 0216				@@:
+				  ENDIF
+ 0216  66| 8B 44 10		        mov     eax,[si].s_stDeviceParms.dwReadBufferLength
+ 021A  66| 33 DB		        xor     ebx,ebx
+
+ 021D  26: 8B 1D		        mov     bx,ES:[di].s_stThresholds.wXon
+ 0220  66| 2B C3		        sub     eax,ebx
+ 0223  8B 5C 36			        mov     bx,[si].s_stDeviceParms.wXoffThreshold
+ 0226  66| 2B C3		        sub     eax,ebx
+ 0229  89 44 34			        mov     [si].s_stDeviceParms.wXonThreshold,ax
+ 022C  26: 8B 45 02		        mov     ax,ES:[di].s_stThresholds.wXoff
+ 0230  89 44 36			        mov     [si].s_stDeviceParms.wXoffThreshold,ax
+ 0233  26: 8A 45 04		        mov     al,ES:[di].s_stThresholds.byWritePackets
+ 0237  88 44 2A			        mov     [si].s_stDeviceParms.byMaxWritePktCount,al
+ 023A  26: 8A 45 05		        mov     al,ES:[di].s_stThresholds.byReadPackets
+ 023E  88 44 2B			        mov     [si].s_stDeviceParms.byMaxReadPktCount,al
+ 0241  EB 09			        jmp     exit
+ 0243				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 0243  53		     1	        push    bx
+ 0244  8B 5E 04		     1	        mov     bx,oErrorCode
+ 0247  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 024B  5B		     1	        pop     bx
+ 024C				exit:
+				        ret
+ 024C  8B E5		   *	    mov    sp, bp
+ 024E  5D		   *	    pop    bp
+ 024F  C3		   *	    ret    00000h
+
+ 0250				SetThresholds ENDP
+
+				;  function 75h
+ 0250				GetFIFOinfo PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+				        LOCAL   pDataAddress:DWORD
+
+ 0250  55		   *	    push   bp
+ 0251  8B EC		   *	    mov    bp, sp
+ 0253  83 C4 FC		   *	    add    sp, 0FFFCh
+ 0256  33 C9			        xor     cx,cx                   ; use packet count
+				        VerifyPacketData
+ 0258  0B C9		     1	        or      cx,cx
+ 025A  75 0D		     1	        jnz     ??0008
+ 025C  26: 83 7D 1B 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOdataLength,0
+ 0261  0F 84 009D	     1	        je      error
+ 0265  26: 8B 4D 1B	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOdataLength
+ 0269			     1	??0008:
+ 0269  57		     1	        push    di
+ 026A  8D 5E FC		     1	        lea     bx,pDataAddress
+ 026D  26: 8B 45 15	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOdataOffset + 2
+ 0271  26: 8B 7D 13	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOdataOffset
+ 0275  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 0279  36: 89 3F	     1	        mov     SS:[bx],di
+ 027C  B6 01		     1	        mov     dh,DH_VA_READ_WRT_ACCESS        ;verify for read/write access
+ 027E  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ;carry set if access denied
+ 0280  FF 1E 0000 E	     1	        call    device_hlp
+ 0284  5F		     1	        pop     di
+ 0285  72 7B		     1	        jc      error
+ 0287			     1	??0009:
+
+ 0287  83 F9 0A			        cmp     cx,TYPE s_stFIFOinfo
+ 028A  72 76			        jb      error
+
+ 028C  C4 7E FC			        les     di,pDataAddress
+ 028F  F7 44 04 2000		        test    [si].s_stDeviceParms.wDeviceFlag2,DEV_FLAG2_FIFO_AVAILABLE
+ 0294  75 19			        jnz     @f
+ 0296  26: C7 45 06 0000	        mov     ES:[di].s_stFIFOinfo.wFIFOcontrolReg,0
+ 029C  26: C7 05 0000		        mov     ES:[di].s_stFIFOinfo.wFIFOsize,0
+ 02A1  26: C7 45 02 0000	        mov     ES:[di].s_stFIFOinfo.wTxFIFOload,0
+ 02A7  26: C7 45 04 0000	        mov     ES:[di].s_stFIFOinfo.wFIFOflags,0
+ 02AD  EB 5C			        jmp     exit
+ 02AF				@@:
+ 02AF  BB 0010			        mov     bx,16
+
+				        test_DeviceFlag2 (DEV_FLAG2_16650_UART OR \
+				                          DEV_FLAG2_16750_UART OR \
+				                          DEV_FLAG2_16654_UART)
+ 02B2  F7 44 04 0007	     1	        test   [si].s_stDeviceParms.wDeviceFlag2,(DEV_FLAG2_16650_UART OR DEV_FLAG2_16750_UART OR DEV_FLAG2_16654_UART)
+ 02B7  74 0D			        jz      set_FIFO_data
+ 02B9  BB 0020			        mov     bx,32
+
+				        test_DeviceFlag2 (DEV_FLAG2_16750_UART OR DEV_FLAG2_16654_UART)
+ 02BC  F7 44 04 0006	     1	        test   [si].s_stDeviceParms.wDeviceFlag2,(DEV_FLAG2_16750_UART OR DEV_FLAG2_16654_UART)
+ 02C1  74 03			        jz      set_FIFO_data
+ 02C3  BB 0040			        mov     bx,64
+
+ 02C6				set_FIFO_data:
+ 02C6  26: 89 1D		        mov     ES:[di].s_stFIFOinfo.wFIFOsize,bx
+ 02C9  8B 84 009C		        mov     ax,[si].s_stDeviceParms.wFIFOcontrolImage
+ 02CD  26: 89 45 06		        mov     ES:[di].s_stFIFOinfo.wFIFOcontrolReg,ax
+ 02D1  8B 44 7A			        mov     ax,[si].s_stDeviceParms.wUserTxFIFOdepth
+ 02D4  26: 89 45 02		        mov     ES:[di].s_stFIFOinfo.wTxFIFOload,ax
+ 02D8  8B 44 0A			        mov     ax,[si].s_stDeviceParms.wConfigFlags2
+				  IFNDEF NO_ADV_UARTS
+ 02DB  25 FC00			        and     ax,(FIFO_FLG_FUNC_MASK OR FIFO_FLG_HDW_HS_MASK)
+ 02DE  25 EFFF			        and     ax,NOT FIFO_FLG_NO_HDW_HS_SUPPORT
+				  ELSE
+				  ENDIF
+ 02E1  8B 4C 04			        mov     cx,[si].s_stDeviceParms.wDeviceFlag2
+ 02E4  83 E1 0F			        and     cx,FIFO_FLG_TYPE_MASK
+ 02E7  0B C1			        or      ax,cx
+ 02E9  26: 89 45 04		        mov     ES:[di].s_stFIFOinfo.wFIFOflags,ax
+				  IFNDEF NO_COMscope
+ 02ED  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 02F2  75 17			        jnz     exit
+ 02F4  6A 0A			        push    TYPE s_stFIFOinfo
+ 02F6  8B 46 08			        mov     ax,wFunction
+ 02F9  50			        push    ax
+ 02FA  E8 0000 E		        call    _COMscopeDevIOCtl
+ 02FD  83 C4 04			        add     sp,4
+				  ENDIF
+ 0300  EB 09			        jmp     exit
+ 0302				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 0302  53		     1	        push    bx
+ 0303  8B 5E 04		     1	        mov     bx,oErrorCode
+ 0306  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 030A  5B		     1	        pop     bx
+ 030B				exit:
+				        ret
+ 030B  8B E5		   *	    mov    sp, bp
+ 030D  5D		   *	    pop    bp
+ 030E  C3		   *	    ret    00000h
+
+ 030F				GetFIFOinfo ENDP
+
+				;  function 55h
+ 030F				SetFIFO PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+				        LOCAL   pParamAddress:DWORD
+
+ 030F  55		   *	    push   bp
+ 0310  8B EC		   *	    mov    bp, sp
+ 0312  83 C4 FC		   *	    add    sp, 0FFFCh
+ 0315  F7 44 04 2000		        test    [si].s_stDeviceParms.wDeviceFlag2,DEV_FLAG2_FIFO_AVAILABLE
+ 031A  0F 84 00C2		        jz      error
+
+ 031E  33 C9			        xor     cx,cx                   ; use packet count
+				        VerifyPacketParams
+ 0320  0B C9		     1	        or      cx,cx
+ 0322  75 0D		     1	        jnz     ??000A
+ 0324  26: 83 7D 19 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOparamLength,0
+ 0329  0F 84 00B3	     1	        je      error
+ 032D  26: 8B 4D 19	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOparamLength
+ 0331			     1	??000A:
+ 0331  57		     1	        push    di
+ 0332  8D 5E FC		     1	        lea     bx,pParamAddress
+ 0335  26: 8B 45 11	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOparamOffset + 2
+ 0339  26: 8B 7D 0F	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOparamOffset
+ 033D  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 0341  36: 89 3F	     1	        mov     SS:[bx],di
+ 0344  B6 00		     1	        mov     dh,DH_VA_READ_ACCESS            ; verify for read access
+ 0346  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ; carry set if access denied
+ 0348  FF 1E 0000 E	     1	        call    device_hlp
+ 034C  5F		     1	        pop     di
+ 034D  0F 82 008F	     1	        jc      error
+ 0351			     1	??000B:
+
+ 0351  83 F9 08			        cmp     cx,TYPE s_stFIFOcontrol
+ 0354  0F 85 0088		        jne     error
+
+ 0358  C4 7E FC			        les     di,pParamAddress
+				  IFNDEF NO_COMscope
+ 035B  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 0360  75 0C			        jnz     @f
+ 0362  6A 08			        push    TYPE s_stFIFOcontrol
+ 0364  8B 46 08			        mov     ax,wFunction
+ 0367  50			        push    ax
+ 0368  E8 0000 E		        call    _COMscopeDevIOCtl
+ 036B  83 C4 04			        add     sp,4
+ 036E				@@:
+				  ENDIF
+				  IFNDEF NO_ADV_UARTS
+ 036E  26: 8B 45 02		        mov     ax,ES:[di].s_stFIFOcontrol.wFIFOflags
+ 0372  25 FC00			        and     ax,(FIFO_FLG_FUNC_MASK OR FIFO_FLG_HDW_HS_MASK)
+ 0375  8B 54 0A			        mov     dx,[si].s_stDeviceParms.wConfigFlags2
+ 0378  C1 EA 04			        shr     dx,4
+ 037B  81 E2 00C0		        and     dx,FIFO_FLG_HDW_WAS_MASK
+ 037F  0B C2			        or      ax,dx
+ 0381  81 64 0A 03FF		        and     [si].s_stDeviceParms.wConfigFlags2,NOT (FIFO_FLG_FUNC_MASK OR FIFO_FLG_HDW_HS_MASK)
+ 0386  09 44 0A			        or      [si].s_stDeviceParms.wConfigFlags2,ax
+				  ENDIF
+				        test_DeviceFlag2 DEV_FLAG2_16654_UART
+ 0389  F7 44 04 0004	     1	        test   [si].s_stDeviceParms.wDeviceFlag2,DEV_FLAG2_16654_UART
+ 038E  75 05			        jnz     set_64_byte_FIFO
+				        test_DeviceFlag2 DEV_FLAG2_16750_UART
+ 0390  F7 44 04 0002	     1	        test   [si].s_stDeviceParms.wDeviceFlag2,DEV_FLAG2_16750_UART
+
+ 0395				set_64_byte_FIFO:
+ 0395  74 05			        jz      test_16650
+ 0397  BB 0040			        mov     bx,64
+ 039A  EB 0F			        jmp     set_size
+
+ 039C				test_16650:
+				        test_DeviceFlag2 DEV_FLAG2_16650_UART
+ 039C  F7 44 04 0001	     1	        test   [si].s_stDeviceParms.wDeviceFlag2,DEV_FLAG2_16650_UART
+ 03A1  74 05			        jz      set_16550
+ 03A3  BB 0020			        mov     bx,32
+ 03A6  EB 03			        jmp     set_size
+
+ 03A8				set_16550:
+ 03A8  BB 0010			        mov     bx,16
+
+ 03AB				set_size:
+ 03AB  26: 8B 05		        mov     ax,ES:[di].s_stFIFOcontrol.wTxFIFOloadSize
+ 03AE  3B C3			        cmp     ax,bx
+ 03B0  76 02			        jbe     @f
+ 03B2  8B C3			        mov     ax,bx
+ 03B4				@@:
+ 03B4  89 44 7A			        mov     [si].s_stDeviceParms.wUserTxFIFOdepth,ax
+ 03B7  26: F7 45 02 2000	        test    ES:[di].s_stFIFOcontrol.wFIFOflags,FIFO_FLG_NO_DCB_UPDATE
+ 03BD  75 2A			        jnz     exit
+ 03BF  8A 64 2C			        mov     ah,[si].s_stDeviceParms.byFlag1
+ 03C2  E8 0000 E		        call    ProcessFlag1
+ 03C5  8A 64 2D			        mov     ah,[si].s_stDeviceParms.byFlag2
+ 03C8  E8 0000 E		        call    ProcessFlag2
+ 03CB  F7 44 54 0001		        test    [si].s_stDeviceParms.wDeviceStatus2,DEV_ST2_RESTARTSTREAM
+ 03D0  74 03			        jz      @f
+ 03D2  E8 0000 E		        call    StartWriteStream
+ 03D5				@@:
+ 03D5  8A 64 2E			        mov     ah,[si].s_stDeviceParms.byFlag3
+ 03D8  68 0000			        push    WORD PTR FALSE
+ 03DB  E8 0000 E		        call    PROCESSFLAG3
+ 03DE  EB 09			        jmp     exit
+ 03E0				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 03E0  53		     1	        push    bx
+ 03E1  8B 5E 04		     1	        mov     bx,oErrorCode
+ 03E4  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 03E8  5B		     1	        pop     bx
+ 03E9				exit:
+				        ret
+ 03E9  8B E5		   *	    mov    sp, bp
+ 03EB  5D		   *	    pop    bp
+ 03EC  C3		   *	    ret    00000h
+
+ 03ED				SetFIFO ENDP
+
+				;    function 53h
+ 03ED				set_DCB PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+				        LOCAL   pParamAddress:DWORD
+				;        LOCAL   bRestartTransmit:WORD
+
+ 03ED  55		   *	    push   bp
+ 03EE  8B EC		   *	    mov    bp, sp
+ 03F0  83 C4 FC		   *	    add    sp, 0FFFCh
+ 03F3  B9 000B			        mov     cx,TYPE s_stDCB
+				        VerifyPacketParams
+ 03F6  0B C9		     1	        or      cx,cx
+ 03F8  75 0D		     1	        jnz     ??000C
+ 03FA  26: 83 7D 19 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOparamLength,0
+ 03FF  0F 84 018F	     1	        je      error
+ 0403  26: 8B 4D 19	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOparamLength
+ 0407			     1	??000C:
+ 0407  57		     1	        push    di
+ 0408  8D 5E FC		     1	        lea     bx,pParamAddress
+ 040B  26: 8B 45 11	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOparamOffset + 2
+ 040F  26: 8B 7D 0F	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOparamOffset
+ 0413  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 0417  36: 89 3F	     1	        mov     SS:[bx],di
+ 041A  B6 00		     1	        mov     dh,DH_VA_READ_ACCESS            ; verify for read access
+ 041C  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ; carry set if access denied
+ 041E  FF 1E 0000 E	     1	        call    device_hlp
+ 0422  5F		     1	        pop     di
+ 0423  0F 82 016B	     1	        jc      error
+ 0427			     1	??000D:
+				;        cmp     cx,TYPE s_stDCB
+				;        jne     error
+
+ 0427  C4 7E FC			        les     di,pParamAddress
+				  IFNDEF NO_COMscope
+ 042A  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 042F  75 0C			        jnz     @f
+ 0431  6A 0B			        push    TYPE s_stDCB
+ 0433  8B 46 08			        mov     ax,wFunction
+ 0436  50			        push    ax
+ 0437  E8 0000 E		        call    _COMscopeDevIOCtl
+ 043A  83 C4 04			        add     sp,4
+ 043D				@@:
+				  ENDIF
+ 043D  26: 8A 45 09		        mov     al,es:[di].s_stDCB.XonChar
+ 0441  88 44 31			        mov     [si].s_stDeviceParms.byXonChar,al
+
+ 0444  26: 8A 45 0A		        mov     al,es:[di].s_stDCB.XoffChar
+ 0448  88 44 32			        mov     [si].s_stDeviceParms.byXoffChar,al
+
+ 044B  26: 8A 45 08		        mov     al,es:[di].s_stDCB.BreakChar
+ 044F  88 44 30			        mov     [si].s_stDeviceParms.byBreakChar,al
+
+ 0452  26: 8A 45 07		        mov     al,es:[di].s_stDCB.ErrorChar
+ 0456  88 44 2F			        mov     [si].s_stDeviceParms.byErrorChar,al
+
+ 0459  26: 8B 45 02		        mov     ax,es:[di].s_stDCB.RdTimeout
+ 045D  40			        inc     ax
+ 045E  89 44 22			        mov     [si].s_stDeviceParms.wRdTimeout,ax
+
+ 0461  E8 0000 E		        call    CalcTimeout
+ 0464  89 84 009A		        mov     [si].s_stDeviceParms.wReadTimerStart,ax
+ 0468  83 BC 0098 00		        cmp     [si].s_stDeviceParms.wRdTimerCount,0
+ 046D  74 0A			        je      @f
+ 046F  39 84 0098		        cmp     [si].s_stDeviceParms.wRdTimerCount,ax
+ 0473  76 04			        jbe     @f
+ 0475  89 84 0098		        mov     [si].s_stDeviceParms.wRdTimerCount,ax
+ 0479				@@:
+ 0479  26: 8B 05		        mov     ax,es:[di].s_stDCB.WrtTimeout
+ 047C  40			        inc     ax
+ 047D  89 44 20			        mov     [si].s_stDeviceParms.wWrtTimeout,ax
+
+ 0480  E8 0000 E		        call    CalcWriteTimeout
+ 0483  89 44 66			        mov     [si].s_stDeviceParms.wWriteTimerStart,ax
+ 0486  83 7C 64 00		        cmp     [si].s_stDeviceParms.wWrtTimerCount,0
+ 048A  74 08			        je      @f
+ 048C  39 44 64			        cmp     [si].s_stDeviceParms.wWrtTimerCount,ax
+ 048F  76 03			        jbe     @f
+ 0491  89 44 64			        mov     [si].s_stDeviceParms.wWrtTimerCount,ax
+ 0494				@@:
+ 0494  83 64 54 FE		        and     [si].s_stDeviceParms.wDeviceStatus2,(NOT DEV_ST2_RESTARTSTREAM)
+				;        mov     bRestartTransmit,FALSE
+
+				;   process Flags1 bits
+
+ 0498				set_flags1:
+				  IFNDEF NO_COMscope
+				;  save current modem control states
+
+ 0498  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 049B  83 C2 04			        add     dx,MDM_CTL_REG_OFFSET
+				        InByteDel bx
+ 049E  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 04A1			     2	??000E:
+ 04A1  4B		     2	        dec     bx
+ 04A2  75 FD		     2	        jnz     ??000E
+ 04A4  EC		     1	        in      al,dx
+ 04A5  A2 0000 E		        mov     byLastModemOut,al
+				  ENDIF
+				;   process Flags1 bits
+
+ 04A8  26: 8A 65 04		        mov     ah,es:[di].s_stDCB.Flag1
+ 04AC  E8 0000 E		        call    ProcessFlag1
+ 04AF  0F 82 00DF		        jc      error
+				;        or      bRestartTransmit,bx
+
+				;   process Flags2 bits
+
+ 04B3  26: 8A 65 05		        mov     ah,es:[di].s_stDCB.Flag2
+ 04B7  E8 0000 E		        call    ProcessFlag2
+ 04BA  0F 82 00D4		        jc      error
+				;        or      bRestartTransmit,bx
+
+				  IFNDEF NO_COMscope
+				;  get current modem control register and compare it to value when flag
+				;  processing was begun.  If there was a change then process COMscope
+				;  function
+
+ 04BE  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 04C1  83 C2 04			        add     dx,MDM_CTL_REG_OFFSET
+				        InByteDel bx
+ 04C4  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 04C7			     2	??000F:
+ 04C7  4B		     2	        dec     bx
+ 04C8  75 FD		     2	        jnz     ??000F
+ 04CA  EC		     1	        in      al,dx
+
+ 04CB  3A 06 0000 E		        cmp     al,byLastModemOut
+ 04CF  74 2A			        je      @f
+				        COMscopeStream ebx, CSFUNC_TRACE_MODEM_OUT_SIGNALS, CS_MODEM_OUT
+ 04D1  F7 44 4C 0020	     1	        test    [si].s_stDeviceParms.fCOMscopeFunction,CSFUNC_TRACE_MODEM_OUT_SIGNALS
+ 04D6  74 23		     1	        jz      ??0011
+ 04D8  B4 84		     1	        mov     ah,CS_MODEM_OUT
+ 04DA  66| 8B 9C 008C	     1	        mov     ebx,[si].s_stDeviceParms.dwCOMscopeQWrtPtr
+ 04DF  67& 64: 89 03	     1	        mov     FS:[ebx],ax
+ 04E3			     1	??0013:
+ 04E3  66| 3B 5C 1C	     1	        cmp     ebx,[si].s_stDeviceParms.dwCOMscopeBuffExtent
+ 04E7  72 09		     1	        jb      ??0010
+ 04E9  66| 8B 9C 0094	     1	        mov     ebx,[si].s_stDeviceParms.oCOMscopeBuff
+ 04EE  66| 83 EB 02	     1	        sub     ebx,2
+ 04F2			     1	??0010:
+ 04F2  66| 83 C3 02	     1	        add     ebx,2
+ 04F6  66| 89 9C 008C	     1	        mov     [si].s_stDeviceParms.dwCOMscopeQWrtPtr,ebx
+ 04FB			     1	??0011:
+ 04FB				@@:
+				  ENDIF
+
+ 04FB				do_flags3:
+ 04FB  26: 8A 65 06		        mov     ah,es:[di].s_stDCB.Flag3
+ 04FF  68 0000			        push    WORD PTR FALSE
+ 0502  E8 0000 E		        call    PROCESSFLAG3
+ 0505  0F 82 0089		        jc      error
+
+ 0509				set_DCB_exit:
+
+				        AND_DeviceFlag2 (NOT (DEV_FLAG2_SAVE_MSR OR DEV_FLAG2_MONITOR_CTS))
+ 0509  81 64 04 FCFF	     1	        and    [si].s_stDeviceParms.wDeviceFlag2,(NOT (DEV_FLAG2_SAVE_MSR OR DEV_FLAG2_MONITOR_CTS))
+				        test_DeviceFlag2 (DEV_FLAG2_16750_UART OR DEV_FLAG2_TI16550C_UART OR \
+				                          DEV_FLAG2_16650_UART OR DEV_FLAG2_16654_UART)
+ 050E  F7 44 04 000F	     1	        test   [si].s_stDeviceParms.wDeviceFlag2,(DEV_FLAG2_16750_UART OR DEV_FLAG2_TI16550C_UART OR DEV_FLAG2_16650_UART OR DEV_FLAG2_16654_UART)
+ 0513  74 14			        jz      @f
+ 0515  F7 44 0A 0400		        test    [si].s_stDeviceParms.wConfigFlags2,CFG_FLAG2_HDW_CTS_HS
+ 051A  74 0D			        jz      @f
+ 051C  F6 44 2C 08		        test    [si].s_stDeviceParms.byFlag1,F1_ENABLE_CTS_OUTPUT_HS
+ 0520  74 07			        jz      @f
+				        OR_DeviceFlag2 (DEV_FLAG2_MONITOR_CTS OR DEV_FLAG2_SAVE_MSR)
+ 0522  81 4C 04 0300	     1	        or     [si].s_stDeviceParms.wDeviceFlag2,(DEV_FLAG2_MONITOR_CTS OR DEV_FLAG2_SAVE_MSR)
+ 0527  EB 12			        jmp     setup_interrupts
+ 0529				@@:
+ 0529  F7 44 08 0800		        test    [si].s_stDeviceParms.wConfigFlags1,CFG_FLAG1_NO_MODEM_INT
+ 052E  74 0B			        jz      setup_interrupts
+ 0530  F6 44 2C 38		        test    [si].s_stDeviceParms.byFlag1,(F1_ENABLE_CTS_OUTPUT_HS OR \
+				                                              F1_ENABLE_DSR_OUTPUT_HS OR \
+				                                              F1_ENABLE_DCD_OUTPUT_HS)
+ 0534  74 05			        jz      setup_interrupts
+				        OR_DeviceFlag2 DEV_FLAG2_SAVE_MSR
+ 0536  81 4C 04 0100	     1	        or     [si].s_stDeviceParms.wDeviceFlag2,DEV_FLAG2_SAVE_MSR
+
+ 053B				setup_interrupts:
+				; IF modem interrupts can be enabled AND
+				; CTS/DSR/DCD handshaking requested or COMscope modem signal trace enabled THEN
+				; enable modem interrupts
+				; ELSE disable modem interrupts
+
+ 053B  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 053E  83 C2 01			        add     dx,INT_EN_REG_OFFSET
+ 0541  FA			        cli
+				        InByteImm                          ; get interrupt enable register
+ 0542  EC		     1	        in      al,dx
+
+				        AND_DeviceFlag1 (NOT DEV_FLAG1_MDM_INT_ENABLED)
+ 0543  83 64 02 F7	     1	        and    [si].s_stDeviceParms.wDeviceFlag1,(NOT DEV_FLAG1_MDM_INT_ENABLED)
+ 0547  24 F7			        and     al,NOT INT_EN_MODEM_STAT
+
+				        test_DeviceFlag2 DEV_FLAG2_SAVE_MSR
+ 0549  F7 44 04 0100	     1	        test   [si].s_stDeviceParms.wDeviceFlag2,DEV_FLAG2_SAVE_MSR
+ 054E  74 25			        jz      enable_modem_int
+ 0550  8A E0			        mov     ah,al
+ 0552  83 C2 05			        add     dx,MDM_ST_REG_OFFSET - INT_EN_REG_OFFSET
+				        InByteImm
+ 0555  EC		     1	        in      al,dx
+ 0556  83 C2 FB			        add     dx,INT_EN_REG_OFFSET - MDM_ST_REG_OFFSET
+ 0559  8A D8			        mov     bl,al
+ 055B  80 E3 F0			        and     bl,0f0h
+ 055E  3A 9C 009F		        cmp     bl,[si].s_stDeviceParms.byMSRimage
+ 0562  74 06			        je      test_delta_bits
+ 0564  88 9C 009F		        mov     [si].s_stDeviceParms.byMSRimage,bl
+ 0568  0C 01			        or      al,MDM_ST_DELTA_CTS
+
+ 056A				test_delta_bits:
+ 056A  A8 0F			        test    al,MDM_ST_DELTA_MASK
+ 056C  74 03			        jz      restore_AL
+
+ 056E  E8 0000 E		        call    ProcessModemSignals
+
+ 0571				restore_AL:
+ 0571  8A C4			        mov     al,ah
+ 0573  EB 08			        jmp     set_register
+
+ 0575				enable_modem_int:
+				        OR_DeviceFlag1 DEV_FLAG1_MDM_INT_ENABLED
+ 0575  83 4C 02 08	     1	        or     [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_MDM_INT_ENABLED
+ 0579  0C 08			        or      al,INT_EN_MODEM_STAT    ; enable modem interrupts
+ 057B  EB 00			        jmp     set_register
+
+ 057D				set_register:
+				        OutByteDel bx
+ 057D  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 0580			     2	??0014:
+ 0580  4B		     2	        dec     bx
+ 0581  75 FD		     2	        jnz     ??0014
+ 0583  EE		     1	        out     dx,al
+
+ 0584				test_restart_Tx:
+ 0584  F7 44 54 0001		        test    [si].s_stDeviceParms.wDeviceStatus2,DEV_ST2_RESTARTSTREAM
+ 0589  74 10			        jz      exit
+				;        cmp     bRestartTransmit,TRUE
+				;        jne     exit
+ 058B  FA			        cli
+ 058C  E8 0000 E		        call    StartWriteStream
+ 058F  FB			        sti
+ 0590  EB 09			        jmp     exit
+ 0592				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 0592  53		     1	        push    bx
+ 0593  8B 5E 04		     1	        mov     bx,oErrorCode
+ 0596  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 059A  5B		     1	        pop     bx
+ 059B				exit:
+				        ret
+ 059B  8B E5		   *	    mov    sp, bp
+ 059D  5D		   *	    pop    bp
+ 059E  C3		   *	    ret    00000h
+
+ 059F				set_DCB    ENDP
+
+				;   function 73h
+ 059F				get_DCB PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+				        LOCAL   pDataAddress:DWORD
+
+ 059F  55		   *	    push   bp
+ 05A0  8B EC		   *	    mov    bp, sp
+ 05A2  83 C4 FC		   *	    add    sp, 0FFFCh
+ 05A5  B9 000B			        mov     cx,TYPE s_stDCB
+				        VerifyPacketData
+ 05A8  0B C9		     1	        or      cx,cx
+ 05AA  75 0B		     1	        jnz     ??0015
+ 05AC  26: 83 7D 1B 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOdataLength,0
+ 05B1  74 7F		     1	        je      error
+ 05B3  26: 8B 4D 1B	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOdataLength
+ 05B7			     1	??0015:
+ 05B7  57		     1	        push    di
+ 05B8  8D 5E FC		     1	        lea     bx,pDataAddress
+ 05BB  26: 8B 45 15	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOdataOffset + 2
+ 05BF  26: 8B 7D 13	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOdataOffset
+ 05C3  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 05C7  36: 89 3F	     1	        mov     SS:[bx],di
+ 05CA  B6 01		     1	        mov     dh,DH_VA_READ_WRT_ACCESS        ;verify for read/write access
+ 05CC  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ;carry set if access denied
+ 05CE  FF 1E 0000 E	     1	        call    device_hlp
+ 05D2  5F		     1	        pop     di
+ 05D3  72 5D		     1	        jc      error
+ 05D5			     1	??0016:
+
+ 05D5  83 F9 0B			        cmp     cx,TYPE s_stDCB
+ 05D8  72 58			        jb      error
+
+ 05DA  C4 7E FC			        les     di,pDataAddress
+ 05DD  8A 44 31			        mov     al,[si].s_stDeviceParms.byXonChar
+ 05E0  26: 88 45 09		        mov     es:[di].s_stDCB.XonChar,al
+
+ 05E4  8A 44 32			        mov     al,[si].s_stDeviceParms.byXoffChar
+ 05E7  26: 88 45 0A		        mov     es:[di].s_stDCB.XoffChar,al
+
+ 05EB  8A 44 30			        mov     al,[si].s_stDeviceParms.byBreakChar
+ 05EE  26: 88 45 08		        mov     es:[di].s_stDCB.BreakChar,al
+
+ 05F2  8A 44 2F			        mov     al,[si].s_stDeviceParms.byErrorChar
+ 05F5  26: 88 45 07		        mov     es:[di].s_stDCB.ErrorChar,al
+
+ 05F9  8B 44 22			        mov     ax,[si].s_stDeviceParms.wRdTimeout
+ 05FC  48			        dec     ax
+ 05FD  26: 89 45 02		        mov     es:[di].s_stDCB.RdTimeout,ax
+
+ 0601  8B 44 20			        mov     ax,[si].s_stDeviceParms.wWrtTimeout
+ 0604  48			        dec     ax
+ 0605  26: 89 05		        mov     es:[di].s_stDCB.WrtTimeout,ax
+
+ 0608  8A 64 2C			        mov     ah,[si].s_stDeviceParms.byFlag1
+ 060B  26: 88 65 04		        mov     es:[di].s_stDCB.Flag1,ah
+
+ 060F  8A 64 2D			        mov     ah,[si].s_stDeviceParms.byFlag2
+ 0612  26: 88 65 05		        mov     es:[di].s_stDCB.Flag2,ah
+
+ 0616  8A 64 2E			        mov     ah,[si].s_stDeviceParms.byFlag3
+ 0619  26: 88 65 06		        mov     es:[di].s_stDCB.Flag3,ah
+				  IFNDEF NO_COMscope
+ 061D  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 0622  75 17			        jnz     exit
+ 0624  6A 0B			        push    TYPE s_stDCB
+ 0626  8B 46 08			        mov     ax,wFunction
+ 0629  50			        push    ax
+ 062A  E8 0000 E		        call    _COMscopeDevIOCtl
+ 062D  83 C4 04			        add     sp,4
+				  ENDIF
+ 0630  EB 09			        jmp     exit
+ 0632				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 0632  53		     1	        push    bx
+ 0633  8B 5E 04		     1	        mov     bx,oErrorCode
+ 0636  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 063A  5B		     1	        pop     bx
+ 063B				exit:
+				        ret
+ 063B  8B E5		   *	    mov    sp, bp
+ 063D  5D		   *	    pop    bp
+ 063E  C3		   *	    ret    00000h
+
+ 063F				get_DCB    ENDP
+
+				;  function 43h
+ 063F				SetLongBaud PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+				        LOCAL   pParamAddress:DWORD
+				  IFNDEF x16_BIT
+				        LOCAL   ulBaud:DWORD
+				  ENDIF
+ 063F  55		   *	    push   bp
+ 0640  8B EC		   *	    mov    bp, sp
+ 0642  83 C4 F8		   *	    add    sp, 0FFF8h
+ 0645  B9 0004			        mov     cx,TYPE DWORD
+				        VerifyPacketParams
+ 0648  0B C9		     1	        or      cx,cx
+ 064A  75 0B		     1	        jnz     ??0017
+ 064C  26: 83 7D 19 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOparamLength,0
+ 0651  74 7E		     1	        je      error
+ 0653  26: 8B 4D 19	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOparamLength
+ 0657			     1	??0017:
+ 0657  57		     1	        push    di
+ 0658  8D 5E FC		     1	        lea     bx,pParamAddress
+ 065B  26: 8B 45 11	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOparamOffset + 2
+ 065F  26: 8B 7D 0F	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOparamOffset
+ 0663  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 0667  36: 89 3F	     1	        mov     SS:[bx],di
+ 066A  B6 00		     1	        mov     dh,DH_VA_READ_ACCESS            ; verify for read access
+ 066C  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ; carry set if access denied
+ 066E  FF 1E 0000 E	     1	        call    device_hlp
+ 0672  5F		     1	        pop     di
+ 0673  72 5C		     1	        jc      error
+ 0675			     1	??0018:
+				;        cmp     cx,TYPE DWORD
+				;        jb      error
+
+ 0675  C4 7E FC			        les     di,pParamAddress
+				  IFNDEF x16_BIT
+ 0678  66| 26: 8B 05		        mov     eax,ES:[di]
+ 067C  66| 89 46 F8		        mov     ulBaud,eax
+				    IFNDEF NO_COMscope
+ 0680  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 0685  75 28			        jnz     get_baud_rate
+				    ENDIF
+ 0687  F7 44 08 0010		        test    [si].s_stDeviceParms.wConfigFlags1,CFG_FLAG1_NORMALIZE_BAUD
+ 068C  74 15			        jz      @f
+ 068E  80 BC 009E 01		        cmp     [si].s_stDeviceParms.xBaudMultiplier,1
+ 0693  76 0E			        jbe     @f
+ 0695  66| 33 DB		        xor     ebx,ebx
+ 0698  8A 9C 009E		        mov     bl,[si].s_stDeviceParms.xBaudMultiplier
+ 069C  66| F7 E3		        mul     ebx
+ 069F  66| 89 46 F8		        mov     ulBaud,eax
+ 06A3				@@:
+				    IFNDEF NO_COMscope
+ 06A3  6A 04			        push    TYPE DWORD
+ 06A5  8B 46 08			        mov     ax,wFunction
+ 06A8  50			        push    ax
+ 06A9  E8 0000 E		        call    _COMscopeDevIOCtl
+ 06AC  83 C4 04			        add     sp,4
+				    ENDIF
+ 06AF				get_baud_rate:
+ 06AF  66| 8B 46 F8		        mov     eax,ulBaud
+				  ELSE
+				  ENDIF
+ 06B3  8B C8			        mov     cx,ax
+ 06B5  81 E1 7FFF		        and     cx,7fffh      ; limit minimum baud rate
+ 06B9  F7 44 08 0080		        test    [si].s_stDeviceParms.wConfigFlags1,CFG_FLAG1_EXPLICIT_BAUD_DIVISOR
+ 06BE  75 05			        jnz     got_baud
+
+ 06C0  E8 0000 E		        call    CalcBaudRate
+ 06C3  72 0C			        jc      error
+
+ 06C5				got_baud:
+				  IFNDEF x16_BIT
+ 06C5  66| 89 44 26		        mov     [si].s_stDeviceParms.dwBaudRate,eax
+				  ELSE
+				  ENDIF
+ 06C9  89 4C 24			        mov     [si].s_stDeviceParms.wBaudRateDivisor,cx
+ 06CC  E8 0000 E		        call    ProcessBaud
+ 06CF  EB 09			        jmp     exit
+ 06D1				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 06D1  53		     1	        push    bx
+ 06D2  8B 5E 04		     1	        mov     bx,oErrorCode
+ 06D5  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 06D9  5B		     1	        pop     bx
+ 06DA				exit:
+				        ret
+ 06DA  8B E5		   *	    mov    sp, bp
+ 06DC  5D		   *	    pop    bp
+ 06DD  C3		   *	    ret    00000h
+
+ 06DE				SetLongBaud ENDP
+
+				;  function 41h
+ 06DE				SetShortBaud PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+				        LOCAL   pParamAddress:DWORD
+				  IFNDEF x16_BIT
+				        LOCAL   ulBaud:DWORD
+				  ENDIF
+ 06DE  55		   *	    push   bp
+ 06DF  8B EC		   *	    mov    bp, sp
+ 06E1  83 C4 F8		   *	    add    sp, 0FFF8h
+ 06E4  B9 0002			        mov     cx,TYPE WORD
+				        VerifyPacketParams
+ 06E7  0B C9		     1	        or      cx,cx
+ 06E9  75 0D		     1	        jnz     ??0019
+ 06EB  26: 83 7D 19 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOparamLength,0
+ 06F0  0F 84 008E	     1	        je      error
+ 06F4  26: 8B 4D 19	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOparamLength
+ 06F8			     1	??0019:
+ 06F8  57		     1	        push    di
+ 06F9  8D 5E FC		     1	        lea     bx,pParamAddress
+ 06FC  26: 8B 45 11	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOparamOffset + 2
+ 0700  26: 8B 7D 0F	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOparamOffset
+ 0704  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 0708  36: 89 3F	     1	        mov     SS:[bx],di
+ 070B  B6 00		     1	        mov     dh,DH_VA_READ_ACCESS            ; verify for read access
+ 070D  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ; carry set if access denied
+ 070F  FF 1E 0000 E	     1	        call    device_hlp
+ 0713  5F		     1	        pop     di
+ 0714  72 6C		     1	        jc      error
+ 0716			     1	??001A:
+				;        cmp     cx,TYPE WORD
+				;        jb      error
+
+ 0716  C4 7E FC			        les     di,pParamAddress
+				  IFNDEF x16_BIT
+ 0719  66| 33 C0		        xor     eax,eax
+ 071C  26: 8B 05		        mov     ax,ES:[di]
+ 071F  66| 89 46 F8		        mov     ulBaud,eax
+				    IFNDEF NO_COMscope
+				; do not normalize the baudrate for COMscope    
+ 0723  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 0728  75 28			        jnz     get_baud_rate
+				    ENDIF
+ 072A  F7 44 08 0010		        test    [si].s_stDeviceParms.wConfigFlags1,CFG_FLAG1_NORMALIZE_BAUD
+ 072F  74 15			        jz      @f
+ 0731  80 BC 009E 01		        cmp     [si].s_stDeviceParms.xBaudMultiplier,1
+ 0736  76 0E			        jbe     @f
+ 0738  66| 33 DB		        xor     ebx,ebx
+ 073B  8A 9C 009E		        mov     bl,[si].s_stDeviceParms.xBaudMultiplier
+ 073F  66| F7 E3		        mul     ebx
+ 0742  66| 89 46 F8		        mov     ulBaud,eax
+ 0746				@@:
+				    IFNDEF NO_COMscope
+ 0746  6A 02			        push    TYPE WORD
+ 0748  8B 46 08			        mov     ax,wFunction
+ 074B  50			        push    ax
+ 074C  E8 0000 E		        call    _COMscopeDevIOCtl
+ 074F  83 C4 04			        add     sp,4
+				    ENDIF
+ 0752				get_baud_rate:
+ 0752  66| 33 D2		        xor     edx,edx
+ 0755  66| 8B 46 F8		        mov     eax,ulBaud
+				  ELSE
+				  ENDIF
+
+ 0759  8B C8			        mov     cx,ax
+ 075B  81 E1 7FFF		        and     cx,7fffh      ; limit minimum baud rate
+ 075F  F7 44 08 0080		        test    [si].s_stDeviceParms.wConfigFlags1,CFG_FLAG1_EXPLICIT_BAUD_DIVISOR
+ 0764  75 10			        jnz     got_baud
+
+				;  common extension to allow applications that are not aware of "long baud"
+				;  to set 115.2k baud rate
+
+ 0766  3D C200			        cmp     ax,0c200h ;test if WORD value = lower WORD of 115200 baud
+ 0769  75 06			        jne     calc_baud
+				  IFNDEF x16_BIT
+ 076B  66| B8 0001C200		        mov     eax,MAX_LONG_BAUD_RATE    ;force to 115200 baud
+				  ELSE
+				  ENDIF
+ 0771				calc_baud:
+ 0771  E8 0000 E		        call    CalcBaudRate
+ 0774  72 0C			        jc      error
+
+ 0776				got_baud:
+				  IFNDEF x16_BIT
+ 0776  66| 89 44 26		        mov     [si].s_stDeviceParms.dwBaudRate,eax
+				  ELSE
+				  ENDIF
+ 077A  89 4C 24			        mov     [si].s_stDeviceParms.wBaudRateDivisor,cx
+ 077D  E8 0000 E		        call    ProcessBaud
+ 0780  EB 09			        jmp     exit
+ 0782				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 0782  53		     1	        push    bx
+ 0783  8B 5E 04		     1	        mov     bx,oErrorCode
+ 0786  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 078A  5B		     1	        pop     bx
+ 078B				exit:
+				        ret
+ 078B  8B E5		   *	    mov    sp, bp
+ 078D  5D		   *	    pop    bp
+ 078E  C3		   *	    ret    00000h
+
+ 078F				SetShortBaud ENDP
+
+				;  function 42h
+ 078F				SetLineCharacteristics PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+				        LOCAL   pParamAddress:DWORD
+
+ 078F  55		   *	    push   bp
+ 0790  8B EC		   *	    mov    bp, sp
+ 0792  83 C4 FC		   *	    add    sp, 0FFFCh
+ 0795  B9 0003			        mov     cx,3
+				        VerifyPacketParams
+ 0798  0B C9		     1	        or      cx,cx
+ 079A  75 0D		     1	        jnz     ??001B
+ 079C  26: 83 7D 19 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOparamLength,0
+ 07A1  0F 84 00D7	     1	        je      error
+ 07A5  26: 8B 4D 19	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOparamLength
+ 07A9			     1	??001B:
+ 07A9  57		     1	        push    di
+ 07AA  8D 5E FC		     1	        lea     bx,pParamAddress
+ 07AD  26: 8B 45 11	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOparamOffset + 2
+ 07B1  26: 8B 7D 0F	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOparamOffset
+ 07B5  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 07B9  36: 89 3F	     1	        mov     SS:[bx],di
+ 07BC  B6 00		     1	        mov     dh,DH_VA_READ_ACCESS            ; verify for read access
+ 07BE  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ; carry set if access denied
+ 07C0  FF 1E 0000 E	     1	        call    device_hlp
+ 07C4  5F		     1	        pop     di
+ 07C5  0F 82 00B3	     1	        jc      error
+ 07C9			     1	??001C:
+				;        cmp     cx,3
+				;        jb      error
+
+ 07C9  C4 7E FC			        les     di,pParamAddress
+				  IFNDEF NO_COMscope
+ 07CC  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 07D1  75 0C			        jnz     @f
+ 07D3  6A 03			        push    3
+ 07D5  8B 46 08			        mov     ax,wFunction
+ 07D8  50			        push    ax
+ 07D9  E8 0000 E		        call    _COMscopeDevIOCtl
+ 07DC  83 C4 04			        add     sp,4
+ 07DF				@@:
+				  ENDIF
+ 07DF  26: 8A 1D		        mov     bl,ES:[di]
+ 07E2  80 FB 05			        cmp     bl,5
+ 07E5  75 08			        jne     @f
+ 07E7  32 C0			        xor     al,al
+ 07E9  C6 44 3F 1F		        mov     [si].s_stDeviceParms.byDataLengthMask,01fh
+ 07ED  EB 29			        jmp     do_parity
+ 07EF				@@:
+ 07EF  80 FB 06			        cmp     bl,6
+ 07F2  75 08			        jne     @f
+ 07F4  B0 01			        mov     al,LINE_CTL_WL6
+ 07F6  C6 44 3F 3F		        mov     [si].s_stDeviceParms.byDataLengthMask,03fh
+ 07FA  EB 1C			        jmp     do_parity
+ 07FC				@@:
+ 07FC  80 FB 07			        cmp     bl,7
+ 07FF  75 08			        jne     @f
+ 0801  B0 02			        mov     al,LINE_CTL_WL7
+ 0803  C6 44 3F 7F		        mov     [si].s_stDeviceParms.byDataLengthMask,07fh
+ 0807  EB 0F			        jmp     do_parity
+ 0809				@@:
+ 0809  80 FB 08			        cmp     bl,8
+ 080C  75 08			        jne     @f
+ 080E  B0 03			        mov     al,LINE_CTL_WL8
+ 0810  C6 44 3F FF		        mov     [si].s_stDeviceParms.byDataLengthMask,0ffh
+ 0814  EB 02			        jmp     do_parity
+ 0816				@@:
+ 0816  EB 64			        jmp     error
+
+ 0818				do_parity:
+ 0818  47			        inc     di
+ 0819  26: 8A 1D		        mov     bl,ES:[di]
+ 081C  80 FB 00			        cmp     bl,0
+ 081F  75 02			        jne     @f
+ 0821  EB 26			        jmp     do_stop_bits
+ 0823				@@:
+ 0823  80 FB 01			        cmp     bl,1
+ 0826  75 04			        jne     @f
+ 0828  0C 08			        or      al,LINE_CTL_ODD_PARITY
+ 082A  EB 1D			        jmp     do_stop_bits
+ 082C				@@:
+ 082C  80 FB 02			        cmp     bl,2
+ 082F  75 04			        jne     @f
+ 0831  0C 18			        or      al,LINE_CTL_EVEN_PARITY
+ 0833  EB 14			        jmp     do_stop_bits
+ 0835				@@:
+ 0835  80 FB 03			        cmp     bl,3
+ 0838  75 04			        jne     @f
+ 083A  0C 28			        or      al,LINE_CTL_PARITY_1
+ 083C  EB 0B			        jmp     do_stop_bits
+ 083E				@@:
+ 083E  80 FB 04			        cmp     bl,4
+ 0841  75 04			        jne     @f
+ 0843  0C 38			        or      al,LINE_CTL_PARITY_0
+ 0845  EB 02			        jmp     do_stop_bits
+ 0847				@@:
+ 0847  EB 33			        jmp     error
+
+ 0849				do_stop_bits:
+ 0849  8A E0			        mov     ah,al
+ 084B  80 E4 03			        and     ah,3
+ 084E  47			        inc     di
+ 084F  26: 8A 1D		        mov     bl,ES:[di]
+ 0852  80 FB 00			        cmp     bl,0
+ 0855  75 02			        jne     @f
+ 0857  EB 1A			        jmp     output_line_control
+ 0859				@@:
+ 0859  80 FB 01			        cmp     bl,1
+ 085C  75 09			        jne     @f
+ 085E  0C 04			        or      al,LINE_CTL_SB1_5
+ 0860  80 FC 00			        cmp     ah,LINE_CTL_WL5
+ 0863  75 17			        jne     error
+ 0865  EB 0C			        jmp     output_line_control
+ 0867				@@:
+ 0867  80 FB 02			        cmp     bl,2
+ 086A  75 10			        jne     error
+ 086C  0C 04			        or      al,LINE_CTL_SB2
+ 086E  80 FC 00			        cmp     ah,LINE_CTL_WL5
+ 0871  74 09			        je      error
+
+ 0873				output_line_control:
+ 0873  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 0876  83 C2 03			        add     dx,LINE_CTL_REG_OFFSET           ;line control register
+				        OutByteImm
+ 0879  EE		     1	        out     dx,al
+ 087A  EB 09			        jmp     exit
+ 087C				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 087C  53		     1	        push    bx
+ 087D  8B 5E 04		     1	        mov     bx,oErrorCode
+ 0880  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 0884  5B		     1	        pop     bx
+ 0885				exit:
+				        ret
+ 0885  8B E5		   *	    mov    sp, bp
+ 0887  5D		   *	    pop    bp
+ 0888  C3		   *	    ret    00000h
+
+ 0889				SetLineCharacteristics ENDP
+
+				;    function 44h
+ 0889				TXbyteImmediate PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+				        LOCAL   pParamAddress:DWORD
+
+ 0889  55		   *	    push   bp
+ 088A  8B EC		   *	    mov    bp, sp
+ 088C  83 C4 FC		   *	    add    sp, 0FFFCh
+ 088F  B9 0001			        mov     cx,TYPE BYTE
+				        VerifyPacketParams
+ 0892  0B C9		     1	        or      cx,cx
+ 0894  75 0D		     1	        jnz     ??001D
+ 0896  26: 83 7D 19 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOparamLength,0
+ 089B  0F 84 0103	     1	        je      error
+ 089F  26: 8B 4D 19	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOparamLength
+ 08A3			     1	??001D:
+ 08A3  57		     1	        push    di
+ 08A4  8D 5E FC		     1	        lea     bx,pParamAddress
+ 08A7  26: 8B 45 11	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOparamOffset + 2
+ 08AB  26: 8B 7D 0F	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOparamOffset
+ 08AF  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 08B3  36: 89 3F	     1	        mov     SS:[bx],di
+ 08B6  B6 00		     1	        mov     dh,DH_VA_READ_ACCESS            ; verify for read access
+ 08B8  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ; carry set if access denied
+ 08BA  FF 1E 0000 E	     1	        call    device_hlp
+ 08BE  5F		     1	        pop     di
+ 08BF  0F 82 00DF	     1	        jc      error
+ 08C3			     1	??001E:
+				;        cmp     cx,TYPE BYTE
+				;        jne     error
+
+ 08C3  C4 7E FC			        les     di,pParamAddress
+				  IFNDEF NO_COMscope
+ 08C6  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 08CB  75 0C			        jnz     @f
+ 08CD  6A 01			        push    TYPE BYTE
+ 08CF  8B 46 08			        mov     ax,wFunction
+ 08D2  50			        push    ax
+ 08D3  E8 0000 E		        call    _COMscopeDevIOCtl
+ 08D6  83 C4 04			        add     sp,4
+ 08D9				@@:
+				  ENDIF
+				; test if immediate byte is pending
+				; if byte is pending report general failure and try to TX pending byte
+
+				        test_DeviceFlag1 DEV_FLAG1_IMM_BYTE_WAITING
+ 08D9  F7 44 02 0002	     1	        test   [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_IMM_BYTE_WAITING
+ 08DE  74 0E			        jz      get_byte
+ 08E0  8A 5C 33			        mov     bl,[si].s_stDeviceParms.byImmediateByte
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 08E3  53		     1	        push    bx
+ 08E4  8B 5E 04		     1	        mov     bx,oErrorCode
+ 08E7  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 08EB  5B		     1	        pop     bx
+ 08EC  EB 03			        jmp     TX_byte
+
+ 08EE				get_byte:
+ 08EE  26: 8A 1D		        mov     bl,ES:[di]
+
+ 08F1				TX_byte:
+
+				; IF hardware is ready and no hardware handshaking prevents it THEN
+				;  write to hardware ELSE
+				;  store for later write to hardware
+
+ 08F1  53			        push    bx
+ 08F2  E8 0000 E		        call    UpdateModemHandshakeBits
+ 08F5  5B			        pop     bx
+				        RTStoggleOnLoadDX edi
+ 08F6  F7 44 02 0100	     1	        test    [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_RTS_TOG_ENABLED
+ 08FB  74 53		     1	        jz      ??001F
+ 08FD  F7 44 02 0200	     1	        test    [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_RTS_TOG_ON
+ 0902  75 4C		     1	        jnz     ??001F
+ 0904  C7 44 7C 0003	     1	        mov     [si].s_stDeviceParms.wRTScount,DEFAULT_RTS_OFF_DELAY
+ 0909  81 4C 02 0200	     1	        or      [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_RTS_TOG_ON
+ 090E  52		     1	        push    dx
+ 090F  8B 54 3A		     1	        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 0912  83 C2 04		     1	        add     dx,MDM_CTL_REG_OFFSET
+ 0915  50		     1	        push    ax
+ 0916  EC		     2	        in      al,dx
+ 0917  0C 02		     1	        or      al,MDM_CTL_RTS_ACTIVATE
+ 0919  F7 44 4C 0020	     2	        test    [si].s_stDeviceParms.fCOMscopeFunction,CSFUNC_TRACE_MODEM_OUT_SIGNALS
+ 091E  74 23		     2	        jz      ??0021
+ 0920  B4 84		     2	        mov     ah,CS_MODEM_OUT
+ 0922  66| 8B BC 008C	     2	        mov     edi,[si].s_stDeviceParms.dwCOMscopeQWrtPtr
+ 0927  67& 64: 89 07	     2	        mov     FS:[edi],ax
+ 092B			     2	??0023:
+ 092B  66| 3B 7C 1C	     2	        cmp     edi,[si].s_stDeviceParms.dwCOMscopeBuffExtent
+ 092F  72 09		     2	        jb      ??0020
+ 0931  66| 8B BC 0094	     2	        mov     edi,[si].s_stDeviceParms.oCOMscopeBuff
+ 0936  66| 83 EF 02	     2	        sub     edi,2
+ 093A			     2	??0020:
+ 093A  66| 83 C7 02	     2	        add     edi,2
+ 093E  66| 89 BC 008C	     2	        mov     [si].s_stDeviceParms.dwCOMscopeQWrtPtr,edi
+ 0943			     2	??0021:
+ 0943  66| BF 0000 0000 E    3	        mov     edi,DOSIODELAYCNT
+ 0949			     3	??0024:
+ 0949  66| 4F		     3	        dec     edi
+ 094B  75 FC		     3	        jnz     ??0024
+ 094D  EE		     2	        out     dx,al
+ 094E  58		     1	        pop     ax
+ 094F  5A		     1	        pop     dx
+ 0950			     1	??001F:
+ 0950  F6 84 00A5 27		        test    [si].s_stDeviceParms.byHSstatus,TX_WAITING_HDW_MASK
+ 0955  75 42			        jnz     set_immediate_byte
+ 0957  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 095A  83 C2 05			        add     dx,LINE_ST_REG_OFFSET
+ 095D  FA			        cli
+				        InByteImm
+ 095E  EC		     1	        in      al,dx
+ 095F  A8 20			        test    al,LINE_ST_TX_HOLD_EMPTY
+ 0961  74 36			        jz      set_immediate_byte
+ 0963  83 EA 05			        sub     dx,LINE_ST_REG_OFFSET
+ 0966  8A C3			        mov     al,bl
+
+				;        RTStoggleOn di, CSFUNC_TRACE_OUTPUT_STREAM, CS_WRITE_IMM
+				        COMscopeStream edi, CSFUNC_TRACE_OUTPUT_STREAM, CS_WRITE_IMM
+ 0968  F7 44 4C 0004	     1	        test    [si].s_stDeviceParms.fCOMscopeFunction,CSFUNC_TRACE_OUTPUT_STREAM
+ 096D  74 23		     1	        jz      ??0026
+ 096F  B4 81		     1	        mov     ah,CS_WRITE_IMM
+ 0971  66| 8B BC 008C	     1	        mov     edi,[si].s_stDeviceParms.dwCOMscopeQWrtPtr
+ 0976  67& 64: 89 07	     1	        mov     FS:[edi],ax
+ 097A			     1	??0028:
+ 097A  66| 3B 7C 1C	     1	        cmp     edi,[si].s_stDeviceParms.dwCOMscopeBuffExtent
+ 097E  72 09		     1	        jb      ??0025
+ 0980  66| 8B BC 0094	     1	        mov     edi,[si].s_stDeviceParms.oCOMscopeBuff
+ 0985  66| 83 EF 02	     1	        sub     edi,2
+ 0989			     1	??0025:
+ 0989  66| 83 C7 02	     1	        add     edi,2
+ 098D  66| 89 BC 008C	     1	        mov     [si].s_stDeviceParms.dwCOMscopeQWrtPtr,edi
+ 0992			     1	??0026:
+				        OutByteImm
+ 0992  EE		     1	        out     dx,al
+				        AND_DeviceFlag1 (NOT DEV_FLAG1_IMM_BYTE_WAITING)
+ 0993  83 64 02 FD	     1	        and    [si].s_stDeviceParms.wDeviceFlag1,(NOT DEV_FLAG1_IMM_BYTE_WAITING)
+ 0997  EB 12			        jmp     exit
+
+ 0999				set_immediate_byte:
+				        OR_DeviceFlag1 DEV_FLAG1_IMM_BYTE_WAITING
+ 0999  83 4C 02 02	     1	        or     [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_IMM_BYTE_WAITING
+ 099D  88 5C 33			        mov     [si].s_stDeviceParms.byImmediateByte,bl
+ 09A0  EB 09			        jmp     exit
+ 09A2				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 09A2  53		     1	        push    bx
+ 09A3  8B 5E 04		     1	        mov     bx,oErrorCode
+ 09A6  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 09AA  5B		     1	        pop     bx
+ 09AB				exit:
+ 09AB  FB			        sti
+				        ret
+ 09AC  8B E5		   *	    mov    sp, bp
+ 09AE  5D		   *	    pop    bp
+ 09AF  C3		   *	    ret    00000h
+
+ 09B0				TXbyteImmediate ENDP
+
+				;  function 46h
+ 09B0				SetModemControl PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+				        LOCAL   pDataAddress:DWORD, pParamAddress:DWORD
+				        LOCAL   bDoRTS:BYTE, bDoDTR:BYTE
+				        LOCAL   bNoRTS:BYTE, bNoDTR:BYTE
+				        LOCAL   bRTSchanged:BYTE, bDTRchanged:BYTE
+				        LOCAL   bChanged:WORD
+
+ 09B0  55		   *	    push   bp
+ 09B1  8B EC		   *	    mov    bp, sp
+ 09B3  83 C4 F0		   *	    add    sp, 0FFF0h
+ 09B6  C7 46 F0 0000		        mov     bChanged,FALSE
+ 09BB  C6 46 F4 00		        mov     bNoDTR,FALSE
+ 09BF  C6 46 F5 00		        mov     bNoRTS,FALSE
+ 09C3  C6 46 F6 01		        mov     bDoDTR,TRUE
+ 09C7  C6 46 F7 01		        mov     bDoRTS,TRUE
+ 09CB  C6 46 F3 00		        mov     bRTSchanged,FALSE
+ 09CF  C6 46 F2 00		        mov     bDTRchanged,FALSE
+
+ 09D3  B9 0002			        mov     cx,TYPE WORD
+				        VerifyPacketParams
+ 09D6  0B C9		     1	        or      cx,cx
+ 09D8  75 0D		     1	        jnz     ??0029
+ 09DA  26: 83 7D 19 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOparamLength,0
+ 09DF  0F 84 01EF	     1	        je      error
+ 09E3  26: 8B 4D 19	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOparamLength
+ 09E7			     1	??0029:
+ 09E7  57		     1	        push    di
+ 09E8  8D 5E F8		     1	        lea     bx,pParamAddress
+ 09EB  26: 8B 45 11	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOparamOffset + 2
+ 09EF  26: 8B 7D 0F	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOparamOffset
+ 09F3  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 09F7  36: 89 3F	     1	        mov     SS:[bx],di
+ 09FA  B6 00		     1	        mov     dh,DH_VA_READ_ACCESS            ; verify for read access
+ 09FC  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ; carry set if access denied
+ 09FE  FF 1E 0000 E	     1	        call    device_hlp
+ 0A02  5F		     1	        pop     di
+ 0A03  0F 82 01CB	     1	        jc      error
+ 0A07			     1	??002A:
+
+ 0A07  83 F9 02			        cmp     cx,TYPE WORD
+ 0A0A  0F 85 01C4		        jne     error
+
+ 0A0E  B9 0002			        mov     cx,TYPE WORD
+				        VerifyPacketData
+ 0A11  0B C9		     1	        or      cx,cx
+ 0A13  75 0D		     1	        jnz     ??002B
+ 0A15  26: 83 7D 1B 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOdataLength,0
+ 0A1A  0F 84 01B4	     1	        je      error
+ 0A1E  26: 8B 4D 1B	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOdataLength
+ 0A22			     1	??002B:
+ 0A22  57		     1	        push    di
+ 0A23  8D 5E FC		     1	        lea     bx,pDataAddress
+ 0A26  26: 8B 45 15	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOdataOffset + 2
+ 0A2A  26: 8B 7D 13	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOdataOffset
+ 0A2E  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 0A32  36: 89 3F	     1	        mov     SS:[bx],di
+ 0A35  B6 01		     1	        mov     dh,DH_VA_READ_WRT_ACCESS        ;verify for read/write access
+ 0A37  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ;carry set if access denied
+ 0A39  FF 1E 0000 E	     1	        call    device_hlp
+ 0A3D  5F		     1	        pop     di
+ 0A3E  0F 82 0190	     1	        jc      error
+ 0A42			     1	??002C:
+
+ 0A42  83 F9 02			        cmp     cx,TYPE WORD
+ 0A45  0F 82 0189		        jb      error
+
+ 0A49  B5 FC			        mov     ch,NOT 03h
+ 0A4B  F6 44 2C 02		        test    [si].s_stDeviceParms.byFlag1,F1_ENABLE_DTR_INPUT_HS  ;test DTR control bits
+ 0A4F  74 04			        jz      @f
+ 0A51  C6 46 F4 01		        mov     bNoDTR,TRUE
+ 0A55				@@:
+ 0A55  8A 4C 2D			        mov     cl,[si].s_stDeviceParms.byFlag2           ;get RTS control bits
+ 0A58  80 E1 C0			        and     cl,0c0h                 ; and mask
+ 0A5B  80 F9 C0			        cmp     cl,F2_ENABLE_RTS_TOG_ON_XMIT
+ 0A5E  75 06			        jne     @f
+ 0A60  C6 46 F5 01		        mov     bNoRTS,TRUE
+ 0A64  EB 09			        jmp     test_ext
+ 0A66				@@:
+ 0A66  80 F9 80			        cmp     cl,F2_ENABLE_RTS_INPUT_HS
+ 0A69  75 04			        jne     test_ext
+ 0A6B  C6 46 F5 01		        mov     bNoRTS,TRUE
+
+ 0A6F				test_ext:
+ 0A6F  F7 44 08 0100		        test    [si].s_stDeviceParms.wConfigFlags1,CFG_FLAG1_EXT_MODEM_CTL
+ 0A74  74 02			        jz      @f
+ 0A76  B5 E8			        mov     ch,NOT 17h     ; include loopback enable and OUT1
+ 0A78				@@:
+
+ 0A78  C4 7E F8			        les     di,pParamAddress
+ 0A7B  26: 8A 1D		        mov     bl,ES:[di]              ;bl contains on bits
+ 0A7E  84 DD			        test    bl,ch
+ 0A80  0F 85 014E		        jnz     error         ;error if any of bits 2-7 are set
+ 0A84  47			        inc     di
+ 0A85  26: 8A 3D		        mov     bh,ES:[di]              ;bh contains off bits
+ 0A88  89 1E 0000 E		        mov     WORD PTR dwInputData_Return,bx
+ 0A8C  F6 D7			        not     bh
+ 0A8E  84 FD			        test    bh,ch
+ 0A90  0F 85 013E		        jnz     error                 ;error if any of bits 2-7 are clear
+
+ 0A94  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 0A97  83 C2 04			        add     dx,MDM_CTL_REG_OFFSET
+ 0A9A  FA			        cli
+				        InByteDel di
+ 0A9B  BF 0000 E	     2	        mov     di,DOSIODELAYCNT
+ 0A9E			     2	??002D:
+ 0A9E  4F		     2	        dec     di
+ 0A9F  75 FD		     2	        jnz     ??002D
+ 0AA1  EC		     1	        in      al,dx
+ 0AA2  8A E0			        mov     ah,al
+
+ 0AA4				process_DTR:
+ 0AA4  F6 C3 01			        test    bl,01h
+ 0AA7  75 0B			        jnz     @f
+ 0AA9  F6 C7 01			        test    bh,01h
+ 0AAC  75 06			        jnz     @f
+ 0AAE  C6 46 F6 00		        mov     bDoDTR,FALSE
+ 0AB2  EB 22			        jmp     process_RTS
+ 0AB4				@@:
+ 0AB4  F6 C7 01			        test    bh,01h                                  ;off bits
+ 0AB7  74 03			        jz      @f
+ 0AB9  80 E4 FE			        and     ah,NOT 01h
+ 0ABC				@@:
+ 0ABC  F6 C3 01			        test    bl,01h                                  ;on bits  -  on bit takes precidence
+ 0ABF  74 03			        jz      @f
+ 0AC1  80 CC 01			        or      ah,01h
+ 0AC4				@@:
+ 0AC4  3A C4			        cmp     al,ah                   ;test if signal is to be changed
+ 0AC6  74 0E			        je      process_RTS
+ 0AC8  C6 46 F2 01		        mov     bDTRchanged,TRUE
+ 0ACC  80 7E F4 01		        cmp     bNoDTR,TRUE             ;test if it alright to change signal
+ 0AD0  0F 84 00FE		        je      error         ;report error
+ 0AD4  8A C4			        mov     al,ah
+
+ 0AD6				process_RTS:
+ 0AD6  F6 C3 02			        test    bl,02h
+ 0AD9  75 0B			        jnz     @f
+ 0ADB  F6 C7 02			        test    bh,02h
+ 0ADE  75 06			        jnz     @f
+ 0AE0  C6 46 F7 00		        mov     bDoRTS,FALSE
+ 0AE4  EB 22			        jmp     process_EXT
+ 0AE6				@@:
+ 0AE6  F6 C7 02			        test    bh,02h                                  ;off bits
+ 0AE9  74 03			        jz      @f
+ 0AEB  80 E4 FD			        and     ah,NOT 02h
+ 0AEE				@@:
+ 0AEE  F6 C3 02			        test    bl,02h                                  ;on bits - on takes precidence
+ 0AF1  74 03			        jz      @f
+ 0AF3  80 CC 02			        or      ah,02h
+ 0AF6				@@:
+ 0AF6  3A C4			        cmp     al,ah
+ 0AF8  74 0E			        je      process_EXT
+ 0AFA  C6 46 F3 01		        mov     bRTSchanged,TRUE
+ 0AFE  80 7E F5 01		        cmp     bNoRTS,TRUE
+ 0B02  0F 84 00CC		        je      error
+ 0B06  8A C4			        mov     al,ah
+
+ 0B08				process_EXT:
+ 0B08  F7 44 08 0100		        test    [si].s_stDeviceParms.wConfigFlags1,CFG_FLAG1_EXT_MODEM_CTL
+ 0B0D  74 32			        jz      test_change
+
+ 0B0F				process_OUT1:
+ 0B0F  F6 C7 04			        test    bh,04h
+ 0B12  74 03			        jz      @f
+ 0B14  80 E4 FB			        and     ah,NOT 04h
+ 0B17				@@:
+ 0B17  F6 C3 04			        test    bl,04h
+ 0B1A  74 03			        jz      @f
+ 0B1C  80 CC 04			        or      ah,04h
+ 0B1F				@@:
+ 0B1F  3A C4			        cmp     al,ah
+ 0B21  74 06			        je      process_loop
+ 0B23  C6 46 F6 01		        mov     bDoDTR,TRUE  ; using bDoDTR for convienence
+ 0B27  8A C4			        mov     al,ah
+
+ 0B29				process_loop:
+ 0B29  F6 C7 10			        test    bh,10h
+ 0B2C  74 03			        jz      @f
+ 0B2E  80 E4 EF			        and     ah,NOT 10h
+ 0B31				@@:
+ 0B31  F6 C3 10			        test    bl,10h
+ 0B34  74 19			        jz      program_UART
+ 0B36  80 CC 10			        or      ah,10h
+
+ 0B39  3A C4			        cmp     al,ah
+ 0B3B  74 04			        je      test_change
+ 0B3D  8A C4			        mov     al,ah
+ 0B3F  EB 0E			        jmp     program_UART
+
+ 0B41				test_change:
+ 0B41  80 7E F6 01		        cmp     bDoDTR,TRUE
+ 0B45  74 08			        je      program_UART
+ 0B47  80 7E F7 01		        cmp     bDoRTS,TRUE
+ 0B4B  74 02			        je      program_UART
+ 0B4D  EB 2C			        jmp     set_modem_exit
+
+ 0B4F				program_UART:
+ 0B4F  C7 46 F0 0001		        mov     bChanged,TRUE
+ 0B54  50			        push    ax
+				        OutByteImm
+ 0B55  EE		     1	        out     dx,al
+
+				; set DCB flag bits to reflect current signal states
+ 0B56  80 7E F3 01		        cmp     bRTSchanged,TRUE
+ 0B5A  75 0C			        jne     @f
+ 0B5C  80 64 2D 3F		        and     [si].s_stDeviceParms.byFlag2,NOT F2_RTS_HS_MASK
+ 0B60  A8 02			        test    al,MDM_CTL_RTS_ACTIVATE
+ 0B62  74 04			        jz      @f
+ 0B64  80 4C 2D 40		        or      [si].s_stDeviceParms.byFlag2,F2_ENABLE_RTS
+ 0B68				@@:
+ 0B68  80 7E F2 01		        cmp     bDTRchanged,TRUE
+ 0B6C  75 0C			        jne     @f
+ 0B6E  80 64 2C FC		        and     [si].s_stDeviceParms.byFlag1,NOT F1_DTR_HS_MASK
+ 0B72  A8 01			        test    al,MDM_CTL_DTR_ACTIVATE
+ 0B74  74 04			        jz      @f
+ 0B76  80 4C 2C 01		        or      [si].s_stDeviceParms.byFlag1,F1_ENABLE_DTR
+ 0B7A				@@:
+ 0B7A  FB			        sti
+
+ 0B7B				set_modem_exit:
+ 0B7B  C4 7E FC			        les     di,pDataAddress
+ 0B7E  8B 44 50			        mov     ax,[si].s_stDeviceParms.wCOMerror
+ 0B81  26: 89 05		        mov     ES:[di],ax
+				  IFNDEF NO_COMscope
+ 0B84  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 0B89  75 14			        jnz     @f
+ 0B8B  A3 0002 E		        mov     WORD PTR (dwInputData_Return + 2),ax
+ 0B8E  1E			        push    ds
+ 0B8F  07			        pop     es
+ 0B90  BF 0000 E		        mov     di,OFFSET dwInputData_Return
+ 0B93  6A 04			        push    TYPE DWORD
+ 0B95  8B 46 08			        mov     ax,wFunction
+ 0B98  50			        push    ax
+ 0B99  E8 0000 E		        call    _COMscopeDevIOCtl
+ 0B9C  83 C4 04			        add     sp,4
+ 0B9F				@@:
+				  ENDIF
+ 0B9F  83 7E F0 01		        cmp     bChanged,TRUE
+ 0BA3  75 36			        jne     exit
+ 0BA5  58			        pop     ax
+				        COMscopeStream edi, CSFUNC_TRACE_MODEM_OUT_SIGNALS, CS_MODEM_OUT
+ 0BA6  F7 44 4C 0020	     1	        test    [si].s_stDeviceParms.fCOMscopeFunction,CSFUNC_TRACE_MODEM_OUT_SIGNALS
+ 0BAB  74 23		     1	        jz      ??002F
+ 0BAD  B4 84		     1	        mov     ah,CS_MODEM_OUT
+ 0BAF  66| 8B BC 008C	     1	        mov     edi,[si].s_stDeviceParms.dwCOMscopeQWrtPtr
+ 0BB4  67& 64: 89 07	     1	        mov     FS:[edi],ax
+ 0BB8			     1	??0031:
+ 0BB8  66| 3B 7C 1C	     1	        cmp     edi,[si].s_stDeviceParms.dwCOMscopeBuffExtent
+ 0BBC  72 09		     1	        jb      ??002E
+ 0BBE  66| 8B BC 0094	     1	        mov     edi,[si].s_stDeviceParms.oCOMscopeBuff
+ 0BC3  66| 83 EF 02	     1	        sub     edi,2
+ 0BC7			     1	??002E:
+ 0BC7  66| 83 C7 02	     1	        add     edi,2
+ 0BCB  66| 89 BC 008C	     1	        mov     [si].s_stDeviceParms.dwCOMscopeQWrtPtr,edi
+ 0BD0			     1	??002F:
+ 0BD0  EB 09			        jmp     exit
+ 0BD2				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 0BD2  53		     1	        push    bx
+ 0BD3  8B 5E 04		     1	        mov     bx,oErrorCode
+ 0BD6  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 0BDA  5B		     1	        pop     bx
+ 0BDB				exit:
+ 0BDB  FB			        sti
+				        ret
+ 0BDC  8B E5		   *	    mov    sp, bp
+ 0BDE  5D		   *	    pop    bp
+ 0BDF  C3		   *	    ret    00000h
+
+ 0BE0				SetModemControl ENDP
+
+				;  function 47h
+ 0BE0				ForceXOFF PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+ 0BE0  55		   *	    push   bp
+ 0BE1  8B EC		   *	    mov    bp, sp
+ 0BE3  80 8C 00A5 08		        or      [si].s_stDeviceParms.byHSstatus,TX_WAITING_BECAUSE_XOFF_RX
+				  IFNDEF NO_COMscope
+ 0BE8  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 0BED  75 0C			        jnz     @f
+ 0BEF  6A 00			        push    ZERO
+ 0BF1  8B 46 08			        mov     ax,wFunction
+ 0BF4  50			        push    ax
+ 0BF5  E8 0000 E		        call    _COMscopeDevIOCtl
+ 0BF8  83 C4 04			        add     sp,4
+ 0BFB				@@:
+				  ENDIF
+				        ret
+ 0BFB  5D		   *	    pop    bp
+ 0BFC  C3		   *	    ret    00000h
+
+ 0BFD				ForceXOFF ENDP
+
+				;  function 48h
+ 0BFD				ForceXON PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+ 0BFD  55		   *	    push   bp
+ 0BFE  8B EC		   *	    mov    bp, sp
+ 0C00  F6 84 00A5 0F		        test    [si].s_stDeviceParms.byHSstatus,TX_WAITING_SIGNAL
+ 0C05  74 11			        jz      exit
+ 0C07  80 A4 00A5 F0		        and     [si].s_stDeviceParms.byHSstatus,NOT TX_WAITING_SIGNAL
+ 0C0C  F6 84 00A5 3F		        test    [si].s_stDeviceParms.byHSstatus,TX_WAITING_MASK
+ 0C11  75 05			        jnz     exit
+ 0C13  FA			        cli
+ 0C14  E8 0000 E		        call    StartWriteStream
+ 0C17  FB			        sti
+ 0C18				exit:
+				  IFNDEF NO_COMscope
+ 0C18  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 0C1D  75 0C			        jnz     @f
+ 0C1F  6A 00			        push    ZERO
+ 0C21  8B 46 08			        mov     ax,wFunction
+ 0C24  50			        push    ax
+ 0C25  E8 0000 E		        call    _COMscopeDevIOCtl
+ 0C28  83 C4 04			        add     sp,4
+ 0C2B				@@:
+				  ENDIF
+				        ret
+ 0C2B  5D		   *	    pop    bp
+ 0C2C  C3		   *	    ret    00000h
+
+ 0C2D				ForceXON ENDP
+
+				;  function 45h
+ 0C2D				BreakOff PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+
+				        LOCAL   pDataAddress:DWORD
+
+ 0C2D  55		   *	    push   bp
+ 0C2E  8B EC		   *	    mov    bp, sp
+ 0C30  83 C4 FC		   *	    add    sp, 0FFFCh
+ 0C33  B9 0002			        mov     cx,TYPE WORD
+				        VerifyPacketData
+ 0C36  0B C9		     1	        or      cx,cx
+ 0C38  75 0D		     1	        jnz     ??0032
+ 0C3A  26: 83 7D 1B 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOdataLength,0
+ 0C3F  0F 84 0095	     1	        je      error
+ 0C43  26: 8B 4D 1B	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOdataLength
+ 0C47			     1	??0032:
+ 0C47  57		     1	        push    di
+ 0C48  8D 5E FC		     1	        lea     bx,pDataAddress
+ 0C4B  26: 8B 45 15	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOdataOffset + 2
+ 0C4F  26: 8B 7D 13	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOdataOffset
+ 0C53  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 0C57  36: 89 3F	     1	        mov     SS:[bx],di
+ 0C5A  B6 01		     1	        mov     dh,DH_VA_READ_WRT_ACCESS        ;verify for read/write access
+ 0C5C  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ;carry set if access denied
+ 0C5E  FF 1E 0000 E	     1	        call    device_hlp
+ 0C62  5F		     1	        pop     di
+ 0C63  72 73		     1	        jc      error
+ 0C65			     1	??0033:
+
+ 0C65  83 F9 02			        cmp     cx,TYPE WORD
+ 0C68  72 6E			        jb      error
+
+				        test_DeviceFlag1 DEV_FLAG1_RTS_TOG_ON
+ 0C6A  F7 44 02 0200	     1	        test   [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_RTS_TOG_ON
+ 0C6F  74 05			        jz      @f
+ 0C71  C7 44 7C 0002		        mov     [si].s_stDeviceParms.wRTScount,2
+ 0C76				@@:
+ 0C76  C4 7E FC			        les     di,pDataAddress
+ 0C79  8B 44 50			        mov     ax,[si].s_stDeviceParms.wCOMerror
+ 0C7C  26: 89 05		        mov     ES:[di],ax
+				  IFNDEF NO_COMscope
+ 0C7F  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 0C84  75 0C			        jnz     @f
+ 0C86  6A 02			        push    TYPE WORD
+ 0C88  8B 46 08			        mov     ax,wFunction
+ 0C8B  50			        push    ax
+ 0C8C  E8 0000 E		        call    _COMscopeDevIOCtl
+ 0C8F  83 C4 04			        add     sp,4
+ 0C92				@@:
+				  ENDIF
+ 0C92  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 0C95  83 C2 03			        add     dx,LINE_CTL_REG_OFFSET
+				        InByteImm
+ 0C98  EC		     1	        in      al,dx
+ 0C99  24 BF			        and     al,NOT LINE_CTL_SEND_BREAK
+				        COMscopeStream ebx, CSFUNC_TRACE_DEVIOCTL, CS_BREAK_TX
+ 0C9B  F7 44 4C 0040	     1	        test    [si].s_stDeviceParms.fCOMscopeFunction,CSFUNC_TRACE_DEVIOCTL
+ 0CA0  74 23		     1	        jz      ??0035
+ 0CA2  B4 8A		     1	        mov     ah,CS_BREAK_TX
+ 0CA4  66| 8B 9C 008C	     1	        mov     ebx,[si].s_stDeviceParms.dwCOMscopeQWrtPtr
+ 0CA9  67& 64: 89 03	     1	        mov     FS:[ebx],ax
+ 0CAD			     1	??0037:
+ 0CAD  66| 3B 5C 1C	     1	        cmp     ebx,[si].s_stDeviceParms.dwCOMscopeBuffExtent
+ 0CB1  72 09		     1	        jb      ??0034
+ 0CB3  66| 8B 9C 0094	     1	        mov     ebx,[si].s_stDeviceParms.oCOMscopeBuff
+ 0CB8  66| 83 EB 02	     1	        sub     ebx,2
+ 0CBC			     1	??0034:
+ 0CBC  66| 83 C3 02	     1	        add     ebx,2
+ 0CC0  66| 89 9C 008C	     1	        mov     [si].s_stDeviceParms.dwCOMscopeQWrtPtr,ebx
+ 0CC5			     1	??0035:
+				        OutByteDel bx
+ 0CC5  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 0CC8			     2	??0038:
+ 0CC8  4B		     2	        dec     bx
+ 0CC9  75 FD		     2	        jnz     ??0038
+ 0CCB  EE		     1	        out     dx,al
+ 0CCC  80 A4 00A5 DF		        and     [si].s_stDeviceParms.byHSstatus,NOT TX_WAITING_BECAUSE_BREAK_RX
+ 0CD1  FA			        cli
+ 0CD2  E8 0000 E		        call    StartWriteStream
+ 0CD5  FB			        sti
+ 0CD6  EB 09			        jmp     exit
+ 0CD8				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 0CD8  53		     1	        push    bx
+ 0CD9  8B 5E 04		     1	        mov     bx,oErrorCode
+ 0CDC  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 0CE0  5B		     1	        pop     bx
+ 0CE1				exit:
+				        ret
+ 0CE1  8B E5		   *	    mov    sp, bp
+ 0CE3  5D		   *	    pop    bp
+ 0CE4  C3		   *	    ret    00000h
+
+ 0CE5				BreakOff ENDP
+
+				;   function 4bh
+ 0CE5				BreakOn PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+				        LOCAL   pDataAddress:DWORD
+
+ 0CE5  55		   *	    push   bp
+ 0CE6  8B EC		   *	    mov    bp, sp
+ 0CE8  83 C4 FC		   *	    add    sp, 0FFFCh
+ 0CEB  B9 0002			        mov     cx,TYPE WORD
+				        VerifyPacketData
+ 0CEE  0B C9		     1	        or      cx,cx
+ 0CF0  75 0D		     1	        jnz     ??0039
+ 0CF2  26: 83 7D 1B 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOdataLength,0
+ 0CF7  0F 84 0117	     1	        je      error
+ 0CFB  26: 8B 4D 1B	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOdataLength
+ 0CFF			     1	??0039:
+ 0CFF  57		     1	        push    di
+ 0D00  8D 5E FC		     1	        lea     bx,pDataAddress
+ 0D03  26: 8B 45 15	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOdataOffset + 2
+ 0D07  26: 8B 7D 13	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOdataOffset
+ 0D0B  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 0D0F  36: 89 3F	     1	        mov     SS:[bx],di
+ 0D12  B6 01		     1	        mov     dh,DH_VA_READ_WRT_ACCESS        ;verify for read/write access
+ 0D14  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ;carry set if access denied
+ 0D16  FF 1E 0000 E	     1	        call    device_hlp
+ 0D1A  5F		     1	        pop     di
+ 0D1B  0F 82 00F3	     1	        jc      error
+ 0D1F			     1	??003A:
+
+ 0D1F  83 F9 02			        cmp     cx,TYPE WORD
+ 0D22  0F 82 00EC		        jb      error
+
+ 0D26  C4 7E FC			        les     di,pDataAddress
+ 0D29  8B 44 50			        mov     ax,[si].s_stDeviceParms.wCOMerror
+ 0D2C  26: 89 05		        mov     ES:[di],ax
+				  IFNDEF NO_COMscope
+ 0D2F  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 0D34  75 0C			        jnz     @f
+ 0D36  6A 02			        push    TYPE WORD
+ 0D38  8B 46 08			        mov     ax,wFunction
+ 0D3B  50			        push    ax
+ 0D3C  E8 0000 E		        call    _COMscopeDevIOCtl
+ 0D3F  83 C4 04			        add     sp,4
+ 0D42				@@:
+				  ENDIF
+ 0D42  80 8C 00A5 20		        or      [si].s_stDeviceParms.byHSstatus,TX_WAITING_BECAUSE_BREAK_RX
+ 0D47  C7 44 7C 0000		        mov     [si].s_stDeviceParms.wRTScount,0
+ 0D4C  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 0D4F  83 C2 01			        add     dx,INT_EN_REG_OFFSET
+				        InByteDel bx
+ 0D52  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 0D55			     2	??003B:
+ 0D55  4B		     2	        dec     bx
+ 0D56  75 FD		     2	        jnz     ??003B
+ 0D58  EC		     1	        in      al,dx
+ 0D59  24 FD			        and     al,NOT INT_EN_TX_HOLD_EMPTY
+				        OutByteDel bx
+ 0D5B  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 0D5E			     2	??003C:
+ 0D5E  4B		     2	        dec     bx
+ 0D5F  75 FD		     2	        jnz     ??003C
+ 0D61  EE		     1	        out     dx,al
+
+ 0D62  83 C2 04			        add     dx,LINE_ST_REG_OFFSET - INT_EN_REG_OFFSET
+				        IOdelay bx
+ 0D65  BB 0000 E	     1	        mov     bx,DOSIODELAYCNT
+ 0D68			     1	??003D:
+ 0D68  4B		     1	        dec     bx
+ 0D69  75 FD		     1	        jnz     ??003D
+ 0D6B  B9 000A			        mov     cx,10
+
+ 0D6E				test_TX_hold_loop:
+				        InByteImm
+ 0D6E  EC		     1	        in      al,dx
+ 0D6F  A8 40			        test    al,LINE_ST_TX_EMPTY
+ 0D71  75 1D			        jnz     set_break
+				        BlockYield ss, sp
+ 0D73  52		     1	        push    dx
+ 0D74  53		     1	        push    bx
+ 0D75  50		     1	        push    ax
+ 0D76  57		     1	        push    di
+ 0D77  51		     1	        push    cx
+ 0D78  8C D3		     1	        mov     bx,ss
+ 0D7A  8B C4		     1	        mov     ax,sp
+ 0D7C  33 FF		     1	        xor     di,di
+ 0D7E  B9 0064		     1	        mov     cx,100
+ 0D81  32 F6		     1	        xor     dh,dh
+ 0D83  B2 04		     1	        mov     dl,DevHlp_Block
+ 0D85  FF 1E 0000 E	     1	        call    device_hlp
+ 0D89  59		     1	        pop     cx
+ 0D8A  5F		     1	        pop     di
+ 0D8B  58		     1	        pop     ax
+ 0D8C  5B		     1	        pop     bx
+ 0D8D  5A		     1	        pop     dx
+ 0D8E  E2 DE			        loop     test_TX_hold_loop
+
+ 0D90				set_break:
+ 0D90  83 C2 FE			        add     dx,LINE_CTL_REG_OFFSET - LINE_ST_REG_OFFSET
+				        InByteImm
+ 0D93  EC		     1	        in      al,dx
+ 0D94  0C 40			        or      al,LINE_CTL_SEND_BREAK
+				        test_DeviceFlag1 DEV_FLAG1_RTS_TOG_ENABLED
+ 0D96  F7 44 02 0100	     1	        test   [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_RTS_TOG_ENABLED
+ 0D9B  74 48			        jz      out_byte
+				        test_DeviceFlag1 DEV_FLAG1_RTS_TOG_ON
+ 0D9D  F7 44 02 0200	     1	        test   [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_RTS_TOG_ON
+ 0DA2  75 41			        jnz     out_byte
+
+				; special version of RTS_toggle_on
+				        OR_DeviceFlag1 DEV_FLAG1_RTS_TOG_ON
+ 0DA4  81 4C 02 0200	     1	        or     [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_RTS_TOG_ON
+ 0DA9  83 C2 01			        add     dx,MDM_CTL_REG_OFFSET - LINE_CTL_REG_OFFSET
+ 0DAC  50			        push    ax
+				        InByteImm
+ 0DAD  EC		     1	        in      al,dx
+ 0DAE  0C 02			        or      al,MDM_CTL_RTS_ACTIVATE
+
+				        COMscopeStream ebx, CSFUNC_TRACE_MODEM_OUT_SIGNALS, CS_MODEM_OUT
+ 0DB0  F7 44 4C 0020	     1	        test    [si].s_stDeviceParms.fCOMscopeFunction,CSFUNC_TRACE_MODEM_OUT_SIGNALS
+ 0DB5  74 23		     1	        jz      ??003F
+ 0DB7  B4 84		     1	        mov     ah,CS_MODEM_OUT
+ 0DB9  66| 8B 9C 008C	     1	        mov     ebx,[si].s_stDeviceParms.dwCOMscopeQWrtPtr
+ 0DBE  67& 64: 89 03	     1	        mov     FS:[ebx],ax
+ 0DC2			     1	??0041:
+ 0DC2  66| 3B 5C 1C	     1	        cmp     ebx,[si].s_stDeviceParms.dwCOMscopeBuffExtent
+ 0DC6  72 09		     1	        jb      ??003E
+ 0DC8  66| 8B 9C 0094	     1	        mov     ebx,[si].s_stDeviceParms.oCOMscopeBuff
+ 0DCD  66| 83 EB 02	     1	        sub     ebx,2
+ 0DD1			     1	??003E:
+ 0DD1  66| 83 C3 02	     1	        add     ebx,2
+ 0DD5  66| 89 9C 008C	     1	        mov     [si].s_stDeviceParms.dwCOMscopeQWrtPtr,ebx
+ 0DDA			     1	??003F:
+				        OutByteDel bx
+ 0DDA  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 0DDD			     2	??0042:
+ 0DDD  4B		     2	        dec     bx
+ 0DDE  75 FD		     2	        jnz     ??0042
+ 0DE0  EE		     1	        out     dx,al
+ 0DE1  58			        pop     ax
+ 0DE2  83 EA FF			        sub     dx,LINE_CTL_REG_OFFSET - MDM_CTL_REG_OFFSET
+
+ 0DE5				out_byte:
+				        COMscopeStream ebx, CSFUNC_TRACE_DEVIOCTL, CS_BREAK_TX
+ 0DE5  F7 44 4C 0040	     1	        test    [si].s_stDeviceParms.fCOMscopeFunction,CSFUNC_TRACE_DEVIOCTL
+ 0DEA  74 23		     1	        jz      ??0044
+ 0DEC  B4 8A		     1	        mov     ah,CS_BREAK_TX
+ 0DEE  66| 8B 9C 008C	     1	        mov     ebx,[si].s_stDeviceParms.dwCOMscopeQWrtPtr
+ 0DF3  67& 64: 89 03	     1	        mov     FS:[ebx],ax
+ 0DF7			     1	??0046:
+ 0DF7  66| 3B 5C 1C	     1	        cmp     ebx,[si].s_stDeviceParms.dwCOMscopeBuffExtent
+ 0DFB  72 09		     1	        jb      ??0043
+ 0DFD  66| 8B 9C 0094	     1	        mov     ebx,[si].s_stDeviceParms.oCOMscopeBuff
+ 0E02  66| 83 EB 02	     1	        sub     ebx,2
+ 0E06			     1	??0043:
+ 0E06  66| 83 C3 02	     1	        add     ebx,2
+ 0E0A  66| 89 9C 008C	     1	        mov     [si].s_stDeviceParms.dwCOMscopeQWrtPtr,ebx
+ 0E0F			     1	??0044:
+				        OutByteImm
+ 0E0F  EE		     1	        out     dx,al
+
+				; end of special version of RTS_toggle_on
+ 0E10  EB 09			        jmp     exit
+ 0E12				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 0E12  53		     1	        push    bx
+ 0E13  8B 5E 04		     1	        mov     bx,oErrorCode
+ 0E16  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 0E1A  5B		     1	        pop     bx
+ 0E1B				exit:
+				        ret
+ 0E1B  8B E5		   *	    mov    sp, bp
+ 0E1D  5D		   *	    pop    bp
+ 0E1E  C3		   *	    ret    00000h
+
+ 0E1F				BreakOn ENDP
+
+				;   function 63h
+ 0E1F				GetLongBaud PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+				        LOCAL   pDataAddress:DWORD
+				;  IFNDEF x16_BIT
+				;        LOCAL   ulBaudRate:DWORD
+				;  ENDIF
+ 0E1F  55		   *	    push   bp
+ 0E20  8B EC		   *	    mov    bp, sp
+ 0E22  83 C4 FC		   *	    add    sp, 0FFFCh
+ 0E25  B9 000F			        mov     cx,TYPE s_stBaudRate
+				        VerifyPacketData
+ 0E28  0B C9		     1	        or      cx,cx
+ 0E2A  75 0D		     1	        jnz     ??0047
+ 0E2C  26: 83 7D 1B 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOdataLength,0
+ 0E31  0F 84 00AF	     1	        je      error
+ 0E35  26: 8B 4D 1B	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOdataLength
+ 0E39			     1	??0047:
+ 0E39  57		     1	        push    di
+ 0E3A  8D 5E FC		     1	        lea     bx,pDataAddress
+ 0E3D  26: 8B 45 15	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOdataOffset + 2
+ 0E41  26: 8B 7D 13	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOdataOffset
+ 0E45  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 0E49  36: 89 3F	     1	        mov     SS:[bx],di
+ 0E4C  B6 01		     1	        mov     dh,DH_VA_READ_WRT_ACCESS        ;verify for read/write access
+ 0E4E  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ;carry set if access denied
+ 0E50  FF 1E 0000 E	     1	        call    device_hlp
+ 0E54  5F		     1	        pop     di
+ 0E55  0F 82 008B	     1	        jc      error
+ 0E59			     1	??0048:
+
+ 0E59  83 F9 0F			        cmp     cx,TYPE s_stBaudRate
+ 0E5C  0F 82 0084		        jc      error
+
+ 0E60  C4 7E FC			        les     di,pDataAddress
+
+				  IFNDEF x16_BIT
+ 0E63  66| 8B 44 26		        mov     eax,[si].s_stDeviceParms.dwBaudRate
+				    IFNDEF NO_COMscope
+ 0E67  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 0E6C  75 1B			        jnz     @f
+				    ENDIF
+ 0E6E  F7 44 08 0010		        test    [si].s_stDeviceParms.wConfigFlags1,CFG_FLAG1_NORMALIZE_BAUD
+ 0E73  74 14			        jz      @f
+ 0E75  80 BC 009E 01		        cmp     [si].s_stDeviceParms.xBaudMultiplier,1
+ 0E7A  76 0D			        jbe     @f
+				; normalize baudrate
+ 0E7C  66| 33 D2		        xor     edx,edx
+ 0E7F  66| 33 DB		        xor     ebx,ebx
+ 0E82  8A 9C 009E		        mov     bl,[si].s_stDeviceParms.xBaudMultiplier
+ 0E86  66| F7 F3		        div     ebx
+ 0E89				@@:
+ 0E89  66| 26: 89 05		        mov     ES:[di].s_stBaudRate.ulCurrentBaud,eax
+				  ELSE
+				  ENDIF
+ 0E8D  26: C6 45 04 00		        mov     BYTE PTR ES:[di].s_stBaudRate.byCurrentFrac,0
+
+				  IFNDEF x16_BIT
+ 0E92  66| 26: C7 45 05		        mov     DWORD PTR ES:[di].s_stBaudRate.ulLowBaud,MIN_BAUD_RATE
+       00000004
+				  ELSE
+				  ENDIF
+ 0E9B  26: C6 45 09 00		        mov     BYTE PTR ES:[di].s_stBaudRate.byLowFrac,0
+
+				   IFNDEF x16_BIT
+ 0EA0  66| B8 0001C200		        mov     eax, MAX_LONG_BAUD_RATE
+				  IFNDEF NO_COMscope
+ 0EA6  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 0EAB  75 18			        jnz     @f
+				  ENDIF
+ 0EAD  F7 44 08 0010		        test    [si].s_stDeviceParms.wConfigFlags1,CFG_FLAG1_NORMALIZE_BAUD
+ 0EB2  75 11			        jnz     @f
+ 0EB4  80 BC 009E 01		        cmp     [si].s_stDeviceParms.xBaudMultiplier,1
+ 0EB9  76 0A			        jbe     @f
+				; normalize maximum baud rate
+ 0EBB  66| 33 DB		        xor     ebx,ebx
+ 0EBE  8A 9C 009E		        mov     bl,[si].s_stDeviceParms.xBaudMultiplier
+ 0EC2  66| F7 E3		        mul     ebx
+ 0EC5				@@:
+ 0EC5  66| 26: 89 45 0A		        mov     ES:[di].s_stBaudRate.ulHighBaud,eax
+				   ELSE
+				   ENDIF
+ 0ECA  26: C6 45 0E 00		        mov     BYTE PTR ES:[di].s_stBaudRate.byHighFrac,0
+				  IFNDEF NO_COMscope
+ 0ECF  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 0ED4  75 17			        jnz     exit
+ 0ED6  6A 0F			        push    TYPE s_stBaudRate
+ 0ED8  8B 46 08			        mov     ax,wFunction
+ 0EDB  50			        push    ax
+ 0EDC  E8 0000 E		        call    _COMscopeDevIOCtl
+ 0EDF  83 C4 04			        add     sp,4
+				  ENDIF
+ 0EE2  EB 09			        jmp     exit
+ 0EE4				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 0EE4  53		     1	        push    bx
+ 0EE5  8B 5E 04		     1	        mov     bx,oErrorCode
+ 0EE8  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 0EEC  5B		     1	        pop     bx
+ 0EED				exit:
+				        ret
+ 0EED  8B E5		   *	    mov    sp, bp
+ 0EEF  5D		   *	    pop    bp
+ 0EF0  C3		   *	    ret    00000h
+
+ 0EF1				GetLongBaud ENDP
+
+				;   function 61h
+ 0EF1				GetShortBaud PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+				        LOCAL   pDataAddress:DWORD
+
+ 0EF1  55		   *	    push   bp
+ 0EF2  8B EC		   *	    mov    bp, sp
+ 0EF4  83 C4 FC		   *	    add    sp, 0FFFCh
+ 0EF7  B9 0002			        mov     cx,TYPE WORD
+				        VerifyPacketData
+ 0EFA  0B C9		     1	        or      cx,cx
+ 0EFC  75 0B		     1	        jnz     ??0049
+ 0EFE  26: 83 7D 1B 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOdataLength,0
+ 0F03  74 68		     1	        je      error
+ 0F05  26: 8B 4D 1B	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOdataLength
+ 0F09			     1	??0049:
+ 0F09  57		     1	        push    di
+ 0F0A  8D 5E FC		     1	        lea     bx,pDataAddress
+ 0F0D  26: 8B 45 15	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOdataOffset + 2
+ 0F11  26: 8B 7D 13	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOdataOffset
+ 0F15  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 0F19  36: 89 3F	     1	        mov     SS:[bx],di
+ 0F1C  B6 01		     1	        mov     dh,DH_VA_READ_WRT_ACCESS        ;verify for read/write access
+ 0F1E  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ;carry set if access denied
+ 0F20  FF 1E 0000 E	     1	        call    device_hlp
+ 0F24  5F		     1	        pop     di
+ 0F25  72 46		     1	        jc      error
+ 0F27			     1	??004A:
+
+ 0F27  83 F9 02			        cmp     cx,TYPE WORD
+ 0F2A  72 41			        jb      error
+
+ 0F2C  C4 7E FC			        les     di,pDataAddress
+				  IFNDEF x16_BIT
+ 0F2F  66| 8B 44 26		        mov     eax,[si].s_stDeviceParms.dwBaudRate
+				    IFNDEF NO_COMscope
+ 0F33  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 0F38  75 1B			        jnz     @f
+				    ENDIF
+ 0F3A  F7 44 08 0010		        test    [si].s_stDeviceParms.wConfigFlags1,CFG_FLAG1_NORMALIZE_BAUD
+ 0F3F  74 14			        jz      @f
+ 0F41  80 BC 009E 01		        cmp     [si].s_stDeviceParms.xBaudMultiplier,1
+ 0F46  76 0D			        jbe     @f
+ 0F48  66| 33 D2		        xor     edx,edx
+ 0F4B  66| 33 DB		        xor     ebx,ebx
+ 0F4E  8A 9C 009E		        mov     bl,[si].s_stDeviceParms.xBaudMultiplier
+ 0F52  66| F7 F3		        div     ebx
+ 0F55				@@:
+				  ELSE
+				  ENDIF
+ 0F55  26: 89 05		        mov     ES:[di],ax
+				  IFNDEF NO_COMscope
+ 0F58  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 0F5D  75 17			        jnz     exit
+ 0F5F  6A 02			        push    TYPE WORD
+ 0F61  8B 46 08			        mov     ax,wFunction
+ 0F64  50			        push    ax
+ 0F65  E8 0000 E		        call    _COMscopeDevIOCtl
+ 0F68  83 C4 04			        add     sp,4
+				  ENDIF
+ 0F6B  EB 09			        jmp     exit
+ 0F6D				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 0F6D  53		     1	        push    bx
+ 0F6E  8B 5E 04		     1	        mov     bx,oErrorCode
+ 0F71  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 0F75  5B		     1	        pop     bx
+ 0F76				exit:
+				        ret
+ 0F76  8B E5		   *	    mov    sp, bp
+ 0F78  5D		   *	    pop    bp
+ 0F79  C3		   *	    ret    00000h
+
+ 0F7A				GetShortBaud ENDP
+
+				;    function 62h
+ 0F7A				GetLineCharacteristics PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+				        LOCAL   pDataAddress:DWORD
+
+ 0F7A  55		   *	    push   bp
+ 0F7B  8B EC		   *	    mov    bp, sp
+ 0F7D  83 C4 FC		   *	    add    sp, 0FFFCh
+ 0F80  B9 0004			        mov     cx,4
+				        VerifyPacketData
+ 0F83  0B C9		     1	        or      cx,cx
+ 0F85  75 0D		     1	        jnz     ??004B
+ 0F87  26: 83 7D 1B 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOdataLength,0
+ 0F8C  0F 84 00BB	     1	        je      error
+ 0F90  26: 8B 4D 1B	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOdataLength
+ 0F94			     1	??004B:
+ 0F94  57		     1	        push    di
+ 0F95  8D 5E FC		     1	        lea     bx,pDataAddress
+ 0F98  26: 8B 45 15	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOdataOffset + 2
+ 0F9C  26: 8B 7D 13	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOdataOffset
+ 0FA0  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 0FA4  36: 89 3F	     1	        mov     SS:[bx],di
+ 0FA7  B6 01		     1	        mov     dh,DH_VA_READ_WRT_ACCESS        ;verify for read/write access
+ 0FA9  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ;carry set if access denied
+ 0FAB  FF 1E 0000 E	     1	        call    device_hlp
+ 0FAF  5F		     1	        pop     di
+ 0FB0  0F 82 0097	     1	        jc      error
+ 0FB4			     1	??004C:
+
+ 0FB4  83 F9 04			        cmp     cx,4
+ 0FB7  0F 82 0090		        jb      error
+
+ 0FBB  C4 7E FC			        les     di,pDataAddress
+ 0FBE  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 0FC1  83 C2 03			        add     dx,LINE_CTL_REG_OFFSET
+				        InByteImm
+ 0FC4  EC		     1	        in      al,dx
+				;        and     al,NOT LINE_CTL_SEND_BREAK
+ 0FC5  8A D8			        mov     bl,al
+ 0FC7  8A F8			        mov     bh,al
+ 0FC9  8A E0			        mov     ah,al
+ 0FCB  8A C8			        mov     cl,al
+
+				; get number of data bits
+
+ 0FCD  80 E3 03			        and     bl,03h
+ 0FD0  80 C3 05			        add     bl,5
+ 0FD3  26: 88 1D		        mov     ES:[di],bl
+
+				; get parity mode
+
+ 0FD6  32 C0			        xor     al,al
+ 0FD8  80 E7 38			        and     bh,38h
+ 0FDB  80 FF 00			        cmp     bh,0
+ 0FDE  75 02			        jne     @f
+ 0FE0  EB 22			        jmp     store_parity
+ 0FE2				@@:
+ 0FE2  80 FF 08			        cmp     bh,08h
+ 0FE5  75 04			        jne     @f
+ 0FE7  B0 01			        mov     al,1
+ 0FE9  EB 19			        jmp     store_parity
+ 0FEB				@@:
+ 0FEB  80 FF 18			        cmp     bh,18h
+ 0FEE  75 04			        jne     @f
+ 0FF0  0C 02			        or      al,2
+ 0FF2  EB 10			        jmp     store_parity
+ 0FF4				@@:
+ 0FF4  80 FF 28			        cmp     bh,28h
+ 0FF7  75 04			        jne     @f
+ 0FF9  0C 03			        or      al,3
+ 0FFB  EB 07			        jmp     store_parity
+ 0FFD				@@:
+ 0FFD  80 FF 38			        cmp     bh,38h
+ 1000  75 0D			        jne     @f
+ 1002  0C 04			        or      al,4
+
+ 1004				store_parity:
+ 1004  26: 88 45 01		        mov     ES:[di + 1],al
+
+				; get number of stop bits
+
+ 1008  80 E4 04			        and     ah,04h
+ 100B  75 02			        jnz     @f
+ 100D  EB 0B			        jmp     store_stop
+ 100F				@@:
+ 100F  80 FB 05			        cmp     bl,5
+ 1012  75 04			        jne     @f
+ 1014  B4 01			        mov     ah,01
+ 1016  74 02			        jz      store_stop
+ 1018				@@:
+ 1018  B4 02			        mov     ah,02
+
+ 101A				store_stop:
+ 101A  26: 88 65 02		        mov     ES:[di + 2],ah
+
+				; get break status
+
+ 101E  F7 44 08 0400		        test    [si].s_stDeviceParms.wConfigFlags1, CFG_FLAG1_NO_BREAK_REPORT
+ 1023  74 04			        jz      set_break_status
+ 1025  32 C9			        xor     cl,cl
+ 1027  EB 06			        jmp     @f
+				        
+ 1029				set_break_status:        
+ 1029  80 E1 40			        and     cl, LINE_CTL_SEND_BREAK
+ 102C  C0 E9 06			        shr     cl,6
+ 102F				@@:        
+ 102F  26: 88 4D 03		        mov     ES:[di + 3],cl
+				  IFNDEF NO_COMscope
+ 1033  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 1038  75 1A			        jnz     exit
+ 103A  C4 7E FC			        les     di,pDataAddress
+ 103D  6A 04			        push    4
+ 103F  8B 46 08			        mov     ax,wFunction
+ 1042  50			        push    ax
+ 1043  E8 0000 E		        call    _COMscopeDevIOCtl
+ 1046  83 C4 04			        add     sp,4
+				  ENDIF
+ 1049  EB 09			        jmp     exit
+ 104B				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 104B  53		     1	        push    bx
+ 104C  8B 5E 04		     1	        mov     bx,oErrorCode
+ 104F  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 1053  5B		     1	        pop     bx
+ 1054				exit:
+				        ret
+ 1054  8B E5		   *	    mov    sp, bp
+ 1056  5D		   *	    pop    bp
+ 1057  C3		   *	    ret    00000h
+
+ 1058				GetLineCharacteristics ENDP
+
+				;    function 64h
+ 1058				GetComStatus PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+				        LOCAL   pDataAddress:DWORD
+
+ 1058  55		   *	    push   bp
+ 1059  8B EC		   *	    mov    bp, sp
+ 105B  83 C4 FC		   *	    add    sp, 0FFFCh
+ 105E  B9 0001			        mov     cx,TYPE BYTE
+				        VerifyPacketData
+ 1061  0B C9		     1	        or      cx,cx
+ 1063  75 0B		     1	        jnz     ??004D
+ 1065  26: 83 7D 1B 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOdataLength,0
+ 106A  74 4F		     1	        je      error
+ 106C  26: 8B 4D 1B	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOdataLength
+ 1070			     1	??004D:
+ 1070  57		     1	        push    di
+ 1071  8D 5E FC		     1	        lea     bx,pDataAddress
+ 1074  26: 8B 45 15	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOdataOffset + 2
+ 1078  26: 8B 7D 13	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOdataOffset
+ 107C  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 1080  36: 89 3F	     1	        mov     SS:[bx],di
+ 1083  B6 01		     1	        mov     dh,DH_VA_READ_WRT_ACCESS        ;verify for read/write access
+ 1085  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ;carry set if access denied
+ 1087  FF 1E 0000 E	     1	        call    device_hlp
+ 108B  5F		     1	        pop     di
+ 108C  72 2D		     1	        jc      error
+ 108E			     1	??004E:
+
+ 108E  83 F9 01			        cmp     cx,TYPE BYTE
+ 1091  72 28			        jb     error
+
+ 1093  8A 84 00A5		        mov     al,[si].s_stDeviceParms.byHSstatus
+				        test_DeviceFlag1 DEV_FLAG1_IMM_BYTE_WAITING
+ 1097  F7 44 02 0002	     1	        test   [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_IMM_BYTE_WAITING
+ 109C  74 02			        jz      @f
+ 109E  0C 40			        or      al,TX_IMM_BYTE_AVAILABLE
+ 10A0				@@:
+				  IFDEF this_junk
+				  ENDIF
+ 10A0  C4 7E FC			        les     di,pDataAddress
+ 10A3  26: 88 05		        mov     ES:[di],al
+				  IFNDEF NO_COMscope
+ 10A6  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 10AB  75 17			        jnz     exit
+ 10AD  6A 01			        push    TYPE BYTE
+ 10AF  8B 46 08			        mov     ax,wFunction
+ 10B2  50			        push    ax
+ 10B3  E8 0000 E		        call    _COMscopeDevIOCtl
+ 10B6  83 C4 04			        add     sp,4
+				  ENDIF
+ 10B9  EB 09			        jmp     exit
+ 10BB				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 10BB  53		     1	        push    bx
+ 10BC  8B 5E 04		     1	        mov     bx,oErrorCode
+ 10BF  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 10C3  5B		     1	        pop     bx
+ 10C4				exit:
+				        ret
+ 10C4  8B E5		   *	    mov    sp, bp
+ 10C6  5D		   *	    pop    bp
+ 10C7  C3		   *	    ret    00000h
+
+ 10C8				GetComStatus ENDP
+
+				;     function 65h
+ 10C8				GetXmitStatus PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+				        LOCAL   pDataAddress:DWORD
+
+ 10C8  55		   *	    push   bp
+ 10C9  8B EC		   *	    mov    bp, sp
+ 10CB  83 C4 FC		   *	    add    sp, 0FFFCh
+ 10CE  B9 0001			        mov     cx,TYPE BYTE
+				        VerifyPacketData
+ 10D1  0B C9		     1	        or      cx,cx
+ 10D3  75 0D		     1	        jnz     ??004F
+ 10D5  26: 83 7D 1B 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOdataLength,0
+ 10DA  0F 84 0084	     1	        je      error
+ 10DE  26: 8B 4D 1B	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOdataLength
+ 10E2			     1	??004F:
+ 10E2  57		     1	        push    di
+ 10E3  8D 5E FC		     1	        lea     bx,pDataAddress
+ 10E6  26: 8B 45 15	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOdataOffset + 2
+ 10EA  26: 8B 7D 13	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOdataOffset
+ 10EE  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 10F2  36: 89 3F	     1	        mov     SS:[bx],di
+ 10F5  B6 01		     1	        mov     dh,DH_VA_READ_WRT_ACCESS        ;verify for read/write access
+ 10F7  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ;carry set if access denied
+ 10F9  FF 1E 0000 E	     1	        call    device_hlp
+ 10FD  5F		     1	        pop     di
+ 10FE  72 62		     1	        jc      error
+ 1100			     1	??0050:
+
+ 1100  83 F9 01			        cmp     cx,TYPE BYTE
+ 1103  72 5D			        jb      error
+
+ 1105  C4 7E FC			        les     di,pDataAddress
+ 1108  33 C0			        xor     ax,ax
+ 110A  F7 44 52 0004		        test    [si].s_stDeviceParms.wDeviceStatus1,DEV_ST1_TX_IN_PROGRESS
+ 110F  74 03			        jz      @f
+ 1111  80 CC 01			        or      ah,01
+ 1114				@@:
+ 1114  83 7C 5E 00		        cmp     [si].s_stDeviceParms.wXmitQueueCount,0
+ 1118  74 03			        je      @f
+ 111A  80 CC 02			        or      ah,02
+ 111D				@@:
+				        test_DeviceFlag1 DEV_FLAG1_IMM_BYTE_WAITING
+ 111D  F7 44 02 0002	     1	        test   [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_IMM_BYTE_WAITING
+ 1122  74 03			        jz      @f
+ 1124  80 CC 08			        or      ah,08
+ 1127				@@:
+ 1127  F6 44 2D 02		        test    [si].s_stDeviceParms.byFlag2,F2_ENABLE_RCV_XON_XOFF_FLOW
+ 112B  74 0F			        jz      test_hdw_status
+				        test_DeviceFlag1 DEV_FLAG1_EVENT_XOFF_SENT
+ 112D  F7 44 02 0010	     1	        test   [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_EVENT_XOFF_SENT
+ 1132  74 05			        jz      @f
+ 1134  80 CC 10			        or      ah,10h
+ 1137  EB 03			        jmp     test_hdw_status
+ 1139				@@:
+ 1139  80 CC 20			        or      ah,20h
+ 113C				test_hdw_status:
+ 113C  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 113F  83 C2 05			        add     dx,LINE_ST_REG_OFFSET
+				        InByteImm
+ 1142  EC		     1	        in      al,dx
+ 1143  A8 40			        test    al,LINE_ST_TX_EMPTY
+ 1145  75 03			        jnz     @f
+ 1147  80 CC 04			        or      ah,04h
+ 114A				@@:
+ 114A  26: 88 25		        mov     ES:[di],ah
+				  IFNDEF NO_COMscope
+ 114D  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 1152  75 17			        jnz     exit
+ 1154  6A 01			        push    TYPE BYTE
+ 1156  8B 46 08			        mov     ax,wFunction
+ 1159  50			        push    ax
+ 115A  E8 0000 E		        call    _COMscopeDevIOCtl
+ 115D  83 C4 04			        add     sp,4
+				  ENDIF
+ 1160  EB 09			        jmp     exit
+ 1162				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 1162  53		     1	        push    bx
+ 1163  8B 5E 04		     1	        mov     bx,oErrorCode
+ 1166  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 116A  5B		     1	        pop     bx
+ 116B				exit:
+				        ret
+ 116B  8B E5		   *	    mov    sp, bp
+ 116D  5D		   *	    pop    bp
+ 116E  C3		   *	    ret    00000h
+
+ 116F				GetXmitStatus ENDP
+
+				;   function 66h
+ 116F				GetModemOutSignals PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+				        LOCAL   pDataAddress:DWORD
+
+ 116F  55		   *	    push   bp
+ 1170  8B EC		   *	    mov    bp, sp
+ 1172  83 C4 FC		   *	    add    sp, 0FFFCh
+ 1175  B9 0001			        mov     cx,TYPE BYTE
+				        VerifyPacketData
+ 1178  0B C9		     1	        or      cx,cx
+ 117A  75 0B		     1	        jnz     ??0051
+ 117C  26: 83 7D 1B 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOdataLength,0
+ 1181  74 58		     1	        je      error
+ 1183  26: 8B 4D 1B	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOdataLength
+ 1187			     1	??0051:
+ 1187  57		     1	        push    di
+ 1188  8D 5E FC		     1	        lea     bx,pDataAddress
+ 118B  26: 8B 45 15	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOdataOffset + 2
+ 118F  26: 8B 7D 13	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOdataOffset
+ 1193  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 1197  36: 89 3F	     1	        mov     SS:[bx],di
+ 119A  B6 01		     1	        mov     dh,DH_VA_READ_WRT_ACCESS        ;verify for read/write access
+ 119C  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ;carry set if access denied
+ 119E  FF 1E 0000 E	     1	        call    device_hlp
+ 11A2  5F		     1	        pop     di
+ 11A3  72 36		     1	        jc      error
+ 11A5			     1	??0052:
+
+ 11A5  83 F9 01			        cmp     cx,TYPE BYTE
+ 11A8  72 31			        jb      error
+
+ 11AA  C4 7E FC			        les     di,pDataAddress
+ 11AD  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 11B0  83 C2 04			        add     dx,MDM_CTL_REG_OFFSET
+				        InByteDel bx
+ 11B3  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 11B6			     2	??0053:
+ 11B6  4B		     2	        dec     bx
+ 11B7  75 FD		     2	        jnz     ??0053
+ 11B9  EC		     1	        in      al,dx
+ 11BA  F7 44 08 0100		        test    [si].s_stDeviceParms.wConfigFlags1,CFG_FLAG1_EXT_MODEM_CTL
+ 11BF  75 02			        jnz     @f
+ 11C1  24 03			        and     al,03h
+ 11C3				@@:
+ 11C3  26: 88 05		        mov     ES:[di],al
+				  IFNDEF NO_COMscope
+ 11C6  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 11CB  75 17			        jnz     exit
+ 11CD  6A 01			        push    TYPE BYTE
+ 11CF  8B 46 08			        mov     ax,wFunction
+ 11D2  50			        push    ax
+ 11D3  E8 0000 E		        call    _COMscopeDevIOCtl
+ 11D6  83 C4 04			        add     sp,4
+				   ENDIF
+ 11D9  EB 09			        jmp     exit
+ 11DB				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 11DB  53		     1	        push    bx
+ 11DC  8B 5E 04		     1	        mov     bx,oErrorCode
+ 11DF  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 11E3  5B		     1	        pop     bx
+ 11E4				exit:
+				        ret
+ 11E4  8B E5		   *	    mov    sp, bp
+ 11E6  5D		   *	    pop    bp
+ 11E7  C3		   *	    ret    00000h
+
+ 11E8				GetModemOutSignals ENDP
+
+				;  function 67h
+ 11E8				GetModemInSignals PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+				        LOCAL   pDataAddress:DWORD
+
+ 11E8  55		   *	    push   bp
+ 11E9  8B EC		   *	    mov    bp, sp
+ 11EB  83 C4 FC		   *	    add    sp, 0FFFCh
+ 11EE  B9 0001			        mov     cx,TYPE BYTE
+				        VerifyPacketData
+ 11F1  0B C9		     1	        or      cx,cx
+ 11F3  75 0B		     1	        jnz     ??0054
+ 11F5  26: 83 7D 1B 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOdataLength,0
+ 11FA  74 6C		     1	        je      error
+ 11FC  26: 8B 4D 1B	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOdataLength
+ 1200			     1	??0054:
+ 1200  57		     1	        push    di
+ 1201  8D 5E FC		     1	        lea     bx,pDataAddress
+ 1204  26: 8B 45 15	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOdataOffset + 2
+ 1208  26: 8B 7D 13	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOdataOffset
+ 120C  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 1210  36: 89 3F	     1	        mov     SS:[bx],di
+ 1213  B6 01		     1	        mov     dh,DH_VA_READ_WRT_ACCESS        ;verify for read/write access
+ 1215  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ;carry set if access denied
+ 1217  FF 1E 0000 E	     1	        call    device_hlp
+ 121B  5F		     1	        pop     di
+ 121C  72 4A		     1	        jc      error
+ 121E			     1	??0055:
+
+ 121E  83 F9 01			        cmp     cx,TYPE BYTE
+ 1221  72 45			        jb      error
+
+ 1223  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 1226  83 C2 06			        add     dx,MDM_ST_REG_OFFSET
+				        InByteImm
+ 1229  EC		     1	        in      al,dx
+ 122A  88 84 009F		        mov     [si].s_stDeviceParms.byMSRimage,al
+ 122E  80 A4 009F F0		        and     [si].s_stDeviceParms.byMSRimage,0f0h
+
+				;        test    [si].s_stDeviceParms.wConfigFlags1,CFG_FLAG1_NO_MODEM_INT
+				;        jz      fill_field
+				        test_DeviceFlag1 DEV_FLAG1_MDM_INT_ENABLED
+ 1233  F7 44 02 0008	     1	        test   [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_MDM_INT_ENABLED
+ 1238  75 11			        jnz     fill_field
+ 123A  A8 0F			        test    al,MDM_ST_DELTA_MASK
+ 123C  74 0D			        jz      fill_field
+ 123E  E8 0000 E		        call    ProcessModemSignals
+ 1241  F7 44 54 0001		        test    [si].s_stDeviceParms.wDeviceStatus2,DEV_ST2_RESTARTSTREAM
+ 1246  74 03			        jz      fill_field
+				;        jc      fill_field
+ 1248  E8 0000 E		        call    StartWriteStream
+
+ 124B				fill_field:
+ 124B  C4 7E FC			        les     di,pDataAddress
+ 124E  24 F0			        and     al,0f0h
+ 1250  26: 88 05		        mov     ES:[di],al
+				  IFNDEF NO_COMscope
+ 1253  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 1258  75 17			        jnz     exit
+ 125A  6A 01			        push    TYPE BYTE
+ 125C  8B 46 08			        mov     ax,wFunction
+ 125F  50			        push    ax
+ 1260  E8 0000 E		        call    _COMscopeDevIOCtl
+ 1263  83 C4 04			        add     sp,4
+				  ENDIF
+ 1266  EB 09			        jmp     exit
+ 1268				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 1268  53		     1	        push    bx
+ 1269  8B 5E 04		     1	        mov     bx,oErrorCode
+ 126C  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 1270  5B		     1	        pop     bx
+ 1271				exit:
+				        ret
+ 1271  8B E5		   *	    mov    sp, bp
+ 1273  5D		   *	    pop    bp
+ 1274  C3		   *	    ret    00000h
+
+ 1275				GetModemInSignals ENDP
+
+				;   function 68h
+ 1275				GetReceiveQueueCount PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+				        LOCAL   pDataAddress:DWORD
+
+				; test if COMscope requested 6 bytes (getting high water)
+
+ 1275  55		   *	    push   bp
+ 1276  8B EC		   *	    mov    bp, sp
+ 1278  83 C4 FC		   *	    add    sp, 0FFFCh
+ 127B  B9 0004			        mov     cx,4
+ 127E  26: 83 7D 1B 08		        cmp     ES:[di].s_stPacket.GIOpacket.GIOdataLength,8
+ 1283  75 03			        jne     @f
+ 1285  B9 0008			        mov     cx,8
+ 1288				@@:
+				        VerifyPacketData
+ 1288  0B C9		     1	        or      cx,cx
+ 128A  75 0B		     1	        jnz     ??0056
+ 128C  26: 83 7D 1B 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOdataLength,0
+ 1291  74 6B		     1	        je      error
+ 1293  26: 8B 4D 1B	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOdataLength
+ 1297			     1	??0056:
+ 1297  57		     1	        push    di
+ 1298  8D 5E FC		     1	        lea     bx,pDataAddress
+ 129B  26: 8B 45 15	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOdataOffset + 2
+ 129F  26: 8B 7D 13	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOdataOffset
+ 12A3  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 12A7  36: 89 3F	     1	        mov     SS:[bx],di
+ 12AA  B6 01		     1	        mov     dh,DH_VA_READ_WRT_ACCESS        ;verify for read/write access
+ 12AC  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ;carry set if access denied
+ 12AE  FF 1E 0000 E	     1	        call    device_hlp
+ 12B2  5F		     1	        pop     di
+ 12B3  72 49		     1	        jc      error
+ 12B5			     1	??0057:
+
+ 12B5  83 F9 04			        cmp     cx,4
+ 12B8  72 44			        jb      error
+
+ 12BA  8B D1			        mov     dx,cx
+ 12BC  E8 0000 E		        call    GetReceiveQueueLen
+				  IFNDEF NO_COMscope
+ 12BF  66| 89 8C 00B8		        mov     [si].s_stDeviceParms.dwReadBufferLevel,ecx
+				  ENDIF
+ 12C4  C4 7E FC			        les     di,pDataAddress
+ 12C7  26: 89 0D		        mov     ES:[di],cx
+ 12CA  66| 8B 44 10		        mov     eax,[si].s_stDeviceParms.dwReadBufferLength
+ 12CE  26: 89 45 02		        mov     ES:[di + 2],ax
+				  IFNDEF NO_COMscope
+ 12D2  83 FA 08			        cmp     dx,8
+ 12D5  75 12			        jne     test_target
+ 12D7  66| 8B 9C 00B2		        mov     ebx,[si].s_stDeviceParms.dwReadBufferHigh
+ 12DC  66| 3B D8		        cmp     ebx,eax
+ 12DF  76 03			        jbe     @f
+ 12E1  66| 8B D8		        mov     ebx,eax
+ 12E4				@@:
+ 12E4  66| 26: 89 5D 04		        mov     ES:[di + 4],ebx
+
+ 12E9				test_target:
+ 12E9  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 12EE  75 17			        jnz     exit
+ 12F0  6A 04			        push    4
+ 12F2  8B 46 08			        mov     ax,wFunction
+ 12F5  50			        push    ax
+ 12F6  E8 0000 E		        call    _COMscopeDevIOCtl
+ 12F9  83 C4 04			        add     sp,4
+				  ENDIF
+ 12FC  EB 09			        jmp     exit
+ 12FE				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 12FE  53		     1	        push    bx
+ 12FF  8B 5E 04		     1	        mov     bx,oErrorCode
+ 1302  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 1306  5B		     1	        pop     bx
+ 1307				exit:
+				        ret
+ 1307  8B E5		   *	    mov    sp, bp
+ 1309  5D		   *	    pop    bp
+ 130A  C3		   *	    ret    00000h
+
+ 130B				GetReceiveQueueCount ENDP
+
+				;    function 69h
+ 130B				GetTransmitQueueCount PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+				        LOCAL   pDataAddress:DWORD
+
+				; test if COMscope requested 6 bytes (getting high water)
+
+ 130B  55		   *	    push   bp
+ 130C  8B EC		   *	    mov    bp, sp
+ 130E  83 C4 FC		   *	    add    sp, 0FFFCh
+ 1311  B9 0004			        mov     cx,4
+ 1314  26: 83 7D 1B 06		        cmp     ES:[di].s_stPacket.GIOpacket.GIOdataLength,6
+ 1319  75 03			        jne     @f
+ 131B  B9 0006			        mov     cx,6
+ 131E				@@:
+				        VerifyPacketData
+ 131E  0B C9		     1	        or      cx,cx
+ 1320  75 0B		     1	        jnz     ??0058
+ 1322  26: 83 7D 1B 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOdataLength,0
+ 1327  74 5B		     1	        je      error
+ 1329  26: 8B 4D 1B	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOdataLength
+ 132D			     1	??0058:
+ 132D  57		     1	        push    di
+ 132E  8D 5E FC		     1	        lea     bx,pDataAddress
+ 1331  26: 8B 45 15	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOdataOffset + 2
+ 1335  26: 8B 7D 13	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOdataOffset
+ 1339  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 133D  36: 89 3F	     1	        mov     SS:[bx],di
+ 1340  B6 01		     1	        mov     dh,DH_VA_READ_WRT_ACCESS        ;verify for read/write access
+ 1342  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ;carry set if access denied
+ 1344  FF 1E 0000 E	     1	        call    device_hlp
+ 1348  5F		     1	        pop     di
+ 1349  72 39		     1	        jc      error
+ 134B			     1	??0059:
+
+ 134B  83 F9 04			        cmp     cx,4
+ 134E  72 34			        jb      error
+
+ 1350  8B D1			        mov     dx,cx           ;save data count
+ 1352  E8 0000 E		        call    GetXmitQueueLen
+ 1355  C4 7E FC			        les     di,pDataAddress
+ 1358  26: 89 0D		        mov     ES:[di],cx
+ 135B  8B 44 0C			        mov     ax,[si].s_stDeviceParms.wWrtBufferLength
+ 135E  26: 89 45 02		        mov     ES:[di + 2],ax
+				  IFNDEF NO_COMscope
+ 1362  83 FA 06			        cmp     dx,6
+ 1365  75 08			        jne     test_target
+ 1367  8B 84 00B0		        mov     ax,[si].s_stDeviceParms.wWrtBufferHigh
+ 136B  26: 89 45 04		        mov     ES:[di + 4],ax
+
+ 136F				test_target:
+ 136F  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 1374  75 17			        jnz     exit
+ 1376  6A 04			        push    4
+ 1378  8B 46 08			        mov     ax,wFunction
+ 137B  50			        push    ax
+ 137C  E8 0000 E		        call    _COMscopeDevIOCtl
+ 137F  83 C4 04			        add     sp,4
+				  ENDIF
+ 1382  EB 09			        jmp     exit
+ 1384				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 1384  53		     1	        push    bx
+ 1385  8B 5E 04		     1	        mov     bx,oErrorCode
+ 1388  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 138C  5B		     1	        pop     bx
+ 138D				exit:
+				        ret
+ 138D  8B E5		   *	    mov    sp, bp
+ 138F  5D		   *	    pop    bp
+ 1390  C3		   *	    ret    00000h
+
+ 1391				GetTransmitQueueCount ENDP
+
+				;    function 6dh
+ 1391				GetComError PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+				        LOCAL   pDataAddress:DWORD
+
+ 1391  55		   *	    push   bp
+ 1392  8B EC		   *	    mov    bp, sp
+ 1394  83 C4 FC		   *	    add    sp, 0FFFCh
+ 1397  B9 0002			        mov     cx,TYPE WORD
+				        VerifyPacketData
+ 139A  0B C9		     1	        or      cx,cx
+ 139C  75 0B		     1	        jnz     ??005A
+ 139E  26: 83 7D 1B 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOdataLength,0
+ 13A3  74 4D		     1	        je      error
+ 13A5  26: 8B 4D 1B	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOdataLength
+ 13A9			     1	??005A:
+ 13A9  57		     1	        push    di
+ 13AA  8D 5E FC		     1	        lea     bx,pDataAddress
+ 13AD  26: 8B 45 15	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOdataOffset + 2
+ 13B1  26: 8B 7D 13	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOdataOffset
+ 13B5  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 13B9  36: 89 3F	     1	        mov     SS:[bx],di
+ 13BC  B6 01		     1	        mov     dh,DH_VA_READ_WRT_ACCESS        ;verify for read/write access
+ 13BE  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ;carry set if access denied
+ 13C0  FF 1E 0000 E	     1	        call    device_hlp
+ 13C4  5F		     1	        pop     di
+ 13C5  72 2B		     1	        jc      error
+ 13C7			     1	??005B:
+
+ 13C7  83 F9 02			        cmp     cx,TYPE WORD
+ 13CA  72 26			        jb      error
+
+ 13CC  C4 7E FC			        les     di,pDataAddress
+ 13CF  8B 44 50			        mov     ax,[si].s_stDeviceParms.wCOMerror
+ 13D2  83 E0 0F			        and     ax,0fh
+ 13D5  C7 44 50 0000		        mov     [si].s_stDeviceParms.wCOMerror,ZERO
+ 13DA  26: 89 05		        mov     ES:[di],ax
+				  IFNDEF NO_COMscope
+ 13DD  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 13E2  75 17			        jnz     exit
+ 13E4  6A 02			        push    TYPE WORD
+ 13E6  8B 46 08			        mov     ax,wFunction
+ 13E9  50			        push    ax
+ 13EA  E8 0000 E		        call    _COMscopeDevIOCtl
+ 13ED  83 C4 04			        add     sp,4
+				  ENDIF
+ 13F0  EB 09			        jmp     exit
+ 13F2				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 13F2  53		     1	        push    bx
+ 13F3  8B 5E 04		     1	        mov     bx,oErrorCode
+ 13F6  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 13FA  5B		     1	        pop     bx
+ 13FB				exit:
+				        ret
+ 13FB  8B E5		   *	    mov    sp, bp
+ 13FD  5D		   *	    pop    bp
+ 13FE  C3		   *	    ret    00000h
+
+ 13FF				GetComError ENDP
+
+				;    function 72h
+ 13FF				GetComEventInfo PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+				        LOCAL   pDataAddress:DWORD
+
+ 13FF  55		   *	    push   bp
+ 1400  8B EC		   *	    mov    bp, sp
+ 1402  83 C4 FC		   *	    add    sp, 0FFFCh
+ 1405  B9 0002			        mov     cx,TYPE WORD
+				        VerifyPacketData
+ 1408  0B C9		     1	        or      cx,cx
+ 140A  75 0B		     1	        jnz     ??005C
+ 140C  26: 83 7D 1B 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOdataLength,0
+ 1411  74 72		     1	        je      error
+ 1413  26: 8B 4D 1B	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOdataLength
+ 1417			     1	??005C:
+ 1417  57		     1	        push    di
+ 1418  8D 5E FC		     1	        lea     bx,pDataAddress
+ 141B  26: 8B 45 15	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOdataOffset + 2
+ 141F  26: 8B 7D 13	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOdataOffset
+ 1423  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 1427  36: 89 3F	     1	        mov     SS:[bx],di
+ 142A  B6 01		     1	        mov     dh,DH_VA_READ_WRT_ACCESS        ;verify for read/write access
+ 142C  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ;carry set if access denied
+ 142E  FF 1E 0000 E	     1	        call    device_hlp
+ 1432  5F		     1	        pop     di
+ 1433  72 50		     1	        jc      error
+ 1435			     1	??005D:
+
+ 1435  83 F9 02			        cmp     cx,TYPE WORD
+ 1438  72 4B			        jb      error
+
+				;        test    [si].s_stDeviceParms.wConfigFlags1,CFG_FLAG1_NO_MODEM_INT
+				;        jz      store_data
+				        test_DeviceFlag1 DEV_FLAG1_MDM_INT_ENABLED
+ 143A  F7 44 02 0008	     1	        test   [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_MDM_INT_ENABLED
+ 143F  75 21			        jnz     store_data
+ 1441  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 1444  83 C2 06			        add     dx,MDM_ST_REG_OFFSET
+				        InByteImm
+ 1447  EC		     1	        in      al,dx
+ 1448  88 84 009F		        mov     [si].s_stDeviceParms.byMSRimage,al
+ 144C  80 A4 009F F0		        and     [si].s_stDeviceParms.byMSRimage,0f0h
+
+ 1451  A8 0F			        test    al,MDM_ST_DELTA_MASK
+ 1453  74 0D			        jz      store_data
+ 1455  E8 0000 E		        call    ProcessModemSignals
+ 1458  F7 44 54 0001		        test    [si].s_stDeviceParms.wDeviceStatus2,DEV_ST2_RESTARTSTREAM
+ 145D  74 03			        jz      store_data
+				;        jc      store_data
+ 145F  E8 0000 E		        call    StartWriteStream
+
+ 1462				store_data:
+ 1462  C4 7E FC			        les     di,pDataAddress
+ 1465  8B 44 4E			        mov     ax,[si].s_stDeviceParms.wCOMevent
+ 1468  C7 44 4E 0000		        mov     [si].s_stDeviceParms.wCOMevent,ZERO
+ 146D  26: 89 05		        mov     ES:[di],ax
+				  IFNDEF NO_COMscope
+ 1470  F7 46 06 B000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools)
+ 1475  75 17			        jnz     exit
+ 1477  6A 02			        push    TYPE WORD
+ 1479  8B 46 08			        mov     ax,wFunction
+ 147C  50			        push    ax
+ 147D  E8 0000 E		        call    _COMscopeDevIOCtl
+ 1480  83 C4 04			        add     sp,4
+				  ENDIF
+ 1483  EB 09			        jmp     exit
+ 1485				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 1485  53		     1	        push    bx
+ 1486  8B 5E 04		     1	        mov     bx,oErrorCode
+ 1489  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 148D  5B		     1	        pop     bx
+ 148E				exit:
+				        ret
+ 148E  8B E5		   *	    mov    sp, bp
+ 1490  5D		   *	    pop    bp
+ 1491  C3		   *	    ret    00000h
+
+ 1492				GetComEventInfo ENDP
+
+				  IFNDEF NO_COMscope
+				;   function 7bh
+ 1492				GetComFlags PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+				        LOCAL   pDataAddress:DWORD, pParamAddress:DWORD
+
+ 1492  55		   *	    push   bp
+ 1493  8B EC		   *	    mov    bp, sp
+ 1495  83 C4 F8		   *	    add    sp, 0FFF8h
+ 1498  B9 0002			        mov     cx,TYPE WORD
+				        VerifyPacketParams
+ 149B  0B C9		     1	        or      cx,cx
+ 149D  75 0D		     1	        jnz     ??005E
+ 149F  26: 83 7D 19 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOparamLength,0
+ 14A4  0F 84 008A	     1	        je      error
+ 14A8  26: 8B 4D 19	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOparamLength
+ 14AC			     1	??005E:
+ 14AC  57		     1	        push    di
+ 14AD  8D 5E F8		     1	        lea     bx,pParamAddress
+ 14B0  26: 8B 45 11	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOparamOffset + 2
+ 14B4  26: 8B 7D 0F	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOparamOffset
+ 14B8  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 14BC  36: 89 3F	     1	        mov     SS:[bx],di
+ 14BF  B6 00		     1	        mov     dh,DH_VA_READ_ACCESS            ; verify for read access
+ 14C1  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ; carry set if access denied
+ 14C3  FF 1E 0000 E	     1	        call    device_hlp
+ 14C7  5F		     1	        pop     di
+ 14C8  72 68		     1	        jc      error
+ 14CA			     1	??005F:
+
+ 14CA  83 F9 02			        cmp     cx,TYPE WORD
+ 14CD  75 63			        jne     error
+
+ 14CF  06			        push    es
+ 14D0  57			        push    di
+ 14D1  C4 7E F8			        les     di,pParamAddress
+ 14D4  26: 81 3D 2641		        cmp     WORD PTR ES:[di],SIGNATURE
+ 14D9  5F			        pop     di
+ 14DA  07			        pop     es
+ 14DB  74 0B			        je      @f
+
+ 14DD				bad_command:
+				        StoreError oErrorCode,ERROR_I24_BAD_COMMAND
+ 14DD  53		     1	        push    bx
+ 14DE  8B 5E 04		     1	        mov     bx,oErrorCode
+ 14E1  36: C6 07 03	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_BAD_COMMAND
+ 14E5  5B		     1	        pop     bx
+ 14E6  EB 53			        jmp     exit
+ 14E8				@@:
+ 14E8  B9 0004			        mov     cx,4
+				        VerifyPacketData
+ 14EB  0B C9		     1	        or      cx,cx
+ 14ED  75 0B		     1	        jnz     ??0060
+ 14EF  26: 83 7D 1B 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOdataLength,0
+ 14F4  74 3C		     1	        je      error
+ 14F6  26: 8B 4D 1B	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOdataLength
+ 14FA			     1	??0060:
+ 14FA  57		     1	        push    di
+ 14FB  8D 5E FC		     1	        lea     bx,pDataAddress
+ 14FE  26: 8B 45 15	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOdataOffset + 2
+ 1502  26: 8B 7D 13	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOdataOffset
+ 1506  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 150A  36: 89 3F	     1	        mov     SS:[bx],di
+ 150D  B6 01		     1	        mov     dh,DH_VA_READ_WRT_ACCESS        ;verify for read/write access
+ 150F  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ;carry set if access denied
+ 1511  FF 1E 0000 E	     1	        call    device_hlp
+ 1515  5F		     1	        pop     di
+ 1516  72 1A		     1	        jc      error
+ 1518			     1	??0061:
+
+ 1518  83 F9 04			        cmp     cx,4
+ 151B  72 15			        jb      error
+
+ 151D  C4 7E FC			        les     di,pDataAddress
+ 1520  8B 44 50			        mov     ax,[si].s_stDeviceParms.wCOMerror
+ 1523  83 E0 0F			        and     ax,0fh
+ 1526  26: 89 05		        mov     ES:[di],ax
+ 1529  8B 44 4E			        mov     ax,[si].s_stDeviceParms.wCOMevent
+ 152C  26: 89 45 02		        mov     ES:[di + 2],ax
+ 1530  EB 09			        jmp     exit
+
+ 1532				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 1532  53		     1	        push    bx
+ 1533  8B 5E 04		     1	        mov     bx,oErrorCode
+ 1536  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 153A  5B		     1	        pop     bx
+
+ 153B				exit:
+				        ret
+ 153B  8B E5		   *	    mov    sp, bp
+ 153D  5D		   *	    pop    bp
+ 153E  C3		   *	    ret    00000h
+
+ 153F				GetComFlags ENDP
+
+				;    function 7dh
+ 153F				GetCOMscopeData PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+				        LOCAL   pDataAddress:DWORD, pParamAddress:DWORD
+				        LOCAL   dwBuffExtent:DWORD, dwWritePointer:DWORD
+
+ 153F  55		   *	    push   bp
+ 1540  8B EC		   *	    mov    bp, sp
+ 1542  83 C4 F0		   *	    add    sp, 0FFF0h
+ 1545  06			        push    es
+ 1546  57			        push    di
+
+ 1547  B9 0006			        mov     cx,6
+				        VerifyPacketParams
+ 154A  0B C9		     1	        or      cx,cx
+ 154C  75 0D		     1	        jnz     ??0062
+ 154E  26: 83 7D 19 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOparamLength,0
+ 1553  0F 84 010C	     1	        je      error
+ 1557  26: 8B 4D 19	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOparamLength
+ 155B			     1	??0062:
+ 155B  57		     1	        push    di
+ 155C  8D 5E F8		     1	        lea     bx,pParamAddress
+ 155F  26: 8B 45 11	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOparamOffset + 2
+ 1563  26: 8B 7D 0F	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOparamOffset
+ 1567  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 156B  36: 89 3F	     1	        mov     SS:[bx],di
+ 156E  B6 00		     1	        mov     dh,DH_VA_READ_ACCESS            ; verify for read access
+ 1570  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ; carry set if access denied
+ 1572  FF 1E 0000 E	     1	        call    device_hlp
+ 1576  5F		     1	        pop     di
+ 1577  0F 82 00E8	     1	        jc      error
+ 157B			     1	??0063:
+
+ 157B  83 F9 06			        cmp     cx,6
+ 157E  0F 85 00E1		        jne     error
+
+ 1582  B9 0000			        mov     cx,0
+				        VerifyPacketData
+ 1585  0B C9		     1	        or      cx,cx
+ 1587  75 0D		     1	        jnz     ??0064
+ 1589  26: 83 7D 1B 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOdataLength,0
+ 158E  0F 84 00D1	     1	        je      error
+ 1592  26: 8B 4D 1B	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOdataLength
+ 1596			     1	??0064:
+ 1596  57		     1	        push    di
+ 1597  8D 5E FC		     1	        lea     bx,pDataAddress
+ 159A  26: 8B 45 15	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOdataOffset + 2
+ 159E  26: 8B 7D 13	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOdataOffset
+ 15A2  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 15A6  36: 89 3F	     1	        mov     SS:[bx],di
+ 15A9  B6 01		     1	        mov     dh,DH_VA_READ_WRT_ACCESS        ;verify for read/write access
+ 15AB  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ;carry set if access denied
+ 15AD  FF 1E 0000 E	     1	        call    device_hlp
+ 15B1  5F		     1	        pop     di
+ 15B2  0F 82 00AD	     1	        jc      error
+ 15B6			     1	??0065:
+
+ 15B6  8B D9			        mov     bx,cx
+
+ 15B8  C4 7E F8			        les     di,pParamAddress
+ 15BB  66| 26: 8B 4D 02		        mov     ecx,ES:[di + 2]
+ 15C0  26: 81 3D 2641		        cmp     WORD PTR ES:[di],SIGNATURE
+ 15C5  0F 85 008D		        jne     bad_command
+
+				; count can be greater that 64K but only 64k - 4 will be returned.
+				; this is because the device driver is a 16 bit program and cannot access
+				; buffers larger than 64k.  This is not a problem as only four bytes will
+				; be left behind, worst case, when a 64k (32k word) COMscope buffer is
+				; defined.
+
+ 15C9  66| 81 F9 00007FFA	        cmp     ecx,7ffah
+ 15D0  76 06			        jbe     @f
+ 15D2  66| B9 00007FFA		        mov     ecx,7ffah
+ 15D8				@@:
+ 15D8  3B D9			        cmp     bx,cx
+ 15DA  73 02			        jae     @f
+ 15DC  8B CB			        mov     cx,bx
+ 15DE				@@:
+ 15DE  C4 7E FC			        les     di,pDataAddress
+ 15E1  66| 33 D2		        xor     edx,edx
+ 15E4  57			        push    di
+ 15E5  83 C7 04			        add     di,4            ;skip count variable
+ 15E8  F7 44 4C 0FFE		        test    [si].s_stDeviceParms.fCOMscopeFunction,CSFUNC_TRACE_MASK
+ 15ED  74 5E			        jz      got_em_all
+ 15EF  66| 83 E9 04		        sub     ecx,4           ;adjust again for count variable length
+ 15F3  72 58			        jc      got_em_all
+ 15F5  66| 0B C9		        or      ecx,ecx
+ 15F8  74 53			        jz      got_em_all      ;zero bytes were requested
+ 15FA  66| 8B 44 18		        mov     eax,[si].s_stDeviceParms.dwCOMscopeBuffLen
+				;        add     eax,2
+ 15FE  66| D1 E8		        shr     eax,1
+ 1601  66| 3B C8		        cmp     ecx,eax
+ 1604  7E 03			        jle     setup_read_loop
+ 1606  66| 8B C8		        mov     ecx,eax
+
+ 1609				setup_read_loop:
+ 1609  FA			        cli
+ 160A  66| 8B 9C 0090		        mov     ebx,[si].s_stDeviceParms.dwCOMscopeQRdPtr
+ 160F  66| 8B 84 008C		        mov     eax,[si].s_stDeviceParms.dwCOMscopeQWrtPtr
+ 1614  66| 89 46 F0		        mov     dwWritePointer,eax
+ 1618  66| 8B 44 1C		        mov     eax,[si].s_stDeviceParms.dwCOMscopeBuffExtent
+ 161C  66| 89 46 F4		        mov     dwBuffExtent,eax
+
+ 1620				read_loop:
+ 1620  66| 39 5E F0		        cmp     dwWritePointer,ebx
+ 1624  74 21			        je      got_em
+				;        test_DeviceFlag2 DEV_FLAG2_USE_DD_DATA_SEGMENT
+				;        jnz     @f
+ 1626  67& 64: 8B 03		        mov     ax,FS:[ebx]
+				;        jmp     test_wrap
+				;@@:
+				;        mov     ax,[ebx]
+
+ 162A				test_wrap:
+ 162A  66| 3B 5E F4		        cmp     ebx,dwBuffExtent
+ 162E  72 09			        jb      @f
+ 1630  66| 8B 9C 0094		        mov     ebx,[si].s_stDeviceParms.oCOMscopeBuff
+ 1635  66| 83 EB 02		        sub     ebx,2
+ 1639				@@:
+ 1639  66| 83 C3 02		        add     ebx,2
+ 163D  26: 89 05		        mov     ES:[di],ax
+ 1640  83 C7 02			        add     di,2
+ 1643  66| 42			        inc     edx
+ 1645  E2 D9			        loop    read_loop
+ 1647				got_em:
+ 1647  66| 89 9C 0090		        mov     [si].s_stDeviceParms.dwCOMscopeQRdPtr,ebx
+ 164C  FB			        sti
+
+ 164D				got_em_all:
+ 164D  5F			        pop     di
+ 164E  66| 26: 89 15		        mov     ES:[di],edx
+ 1652  8B CA			        mov     cx,dx
+ 1654  EB 18			        jmp     exit
+
+ 1656				bad_command:
+				        StoreError oErrorCode,ERROR_I24_BAD_COMMAND
+ 1656  53		     1	        push    bx
+ 1657  8B 5E 04		     1	        mov     bx,oErrorCode
+ 165A  36: C6 07 03	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_BAD_COMMAND
+ 165E  5B		     1	        pop     bx
+ 165F  33 C9			        xor     cx,cx
+ 1661  EB 0B			        jmp     exit
+ 1663				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 1663  53		     1	        push    bx
+ 1664  8B 5E 04		     1	        mov     bx,oErrorCode
+ 1667  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 166B  5B		     1	        pop     bx
+ 166C  33 C9			        xor     cx,cx
+ 166E				exit:
+ 166E  5F			        pop     di
+ 166F  07			        pop     es
+ 1670  26: 89 4D 1B		        mov     es:[di].s_stPacket.GIOpacket.GIOdataLength,cx ;Length of the data into count
+				        ret
+ 1674  8B E5		   *	    mov    sp, bp
+ 1676  5D		   *	    pop    bp
+ 1677  C3		   *	    ret    00000h
+
+ 1678				GetCOMscopeData ENDP
+
+				;    function 7dh
+ 1678				COMscopeControl PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+				        LOCAL   pDataAddress:DWORD, pParamAddress:DWORD
+
+ 1678  55		   *	    push   bp
+ 1679  8B EC		   *	    mov    bp, sp
+ 167B  83 C4 F8		   *	    add    sp, 0FFF8h
+ 167E  B9 0006			        mov     cx,6
+				        VerifyPacketData
+ 1681  0B C9		     1	        or      cx,cx
+ 1683  75 0D		     1	        jnz     ??0066
+ 1685  26: 83 7D 1B 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOdataLength,0
+ 168A  0F 84 0141	     1	        je      error
+ 168E  26: 8B 4D 1B	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOdataLength
+ 1692			     1	??0066:
+ 1692  57		     1	        push    di
+ 1693  8D 5E FC		     1	        lea     bx,pDataAddress
+ 1696  26: 8B 45 15	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOdataOffset + 2
+ 169A  26: 8B 7D 13	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOdataOffset
+ 169E  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 16A2  36: 89 3F	     1	        mov     SS:[bx],di
+ 16A5  B6 01		     1	        mov     dh,DH_VA_READ_WRT_ACCESS        ;verify for read/write access
+ 16A7  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ;carry set if access denied
+ 16A9  FF 1E 0000 E	     1	        call    device_hlp
+ 16AD  5F		     1	        pop     di
+ 16AE  0F 82 011D	     1	        jc      error
+ 16B2			     1	??0067:
+
+ 16B2  83 F9 06			        cmp     cx,6
+ 16B5  0F 82 0116		        jb      error
+
+ 16B9  B9 0004			        mov     cx,4
+				        VerifyPacketParams
+ 16BC  0B C9		     1	        or      cx,cx
+ 16BE  75 0D		     1	        jnz     ??0068
+ 16C0  26: 83 7D 19 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOparamLength,0
+ 16C5  0F 84 0106	     1	        je      error
+ 16C9  26: 8B 4D 19	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOparamLength
+ 16CD			     1	??0068:
+ 16CD  57		     1	        push    di
+ 16CE  8D 5E F8		     1	        lea     bx,pParamAddress
+ 16D1  26: 8B 45 11	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOparamOffset + 2
+ 16D5  26: 8B 7D 0F	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOparamOffset
+ 16D9  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 16DD  36: 89 3F	     1	        mov     SS:[bx],di
+ 16E0  B6 00		     1	        mov     dh,DH_VA_READ_ACCESS            ; verify for read access
+ 16E2  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ; carry set if access denied
+ 16E4  FF 1E 0000 E	     1	        call    device_hlp
+ 16E8  5F		     1	        pop     di
+ 16E9  0F 82 00E2	     1	        jc      error
+ 16ED			     1	??0069:
+
+ 16ED  83 F9 04			        cmp     cx,4
+ 16F0  0F 85 00DB		        jne     error
+
+ 16F4  C4 7E F8			        les     di,pParamAddress
+ 16F7  26: 8B 4D 02		        mov     cx,ES:[di + 2]
+ 16FB  26: 81 3D 2641		        cmp     WORD PTR ES:[di],SIGNATURE
+ 1700  0F 85 00BD		        jne     bad_command
+
+ 1704  C4 7E FC			        les     di,pDataAddress
+ 1707  F7 44 08 0040		        test    [si].s_stDeviceParms.wConfigFlags1,CFG_FLAG1_COMSCOPE
+ 170C  75 0C			        jnz     @f
+ 170E  66| 33 C9		        xor     ecx,ecx
+ 1711  26: C7 45 02 0000	        mov     WORD PTR ES:[di + 2],FALSE
+ 1717  E9 00C1			        jmp     eexit
+ 171A				@@:
+ 171A  0B C9			        or      cx,cx
+ 171C  74 58			        jz      disable_COMscope
+ 171E  F7 C1 0001		        test    cx,CSFUNC_RESET_BUFFERS
+ 1722  74 1E			        jz      @f
+ 1724  C7 84 00B0 0000		        mov     [si].s_stDeviceParms.wWrtBufferHigh,0
+ 172A  66| C7 84 00B2		        mov     [si].s_stDeviceParms.dwReadBufferHigh,0
+       00000000
+ 1733  66| 8B 84 0094		        mov     eax,[si].s_stDeviceParms.oCOMscopeBuff
+ 1738  66| 89 84 0090		        mov     [si].s_stDeviceParms.dwCOMscopeQRdPtr,eax
+ 173D  66| 89 84 008C		        mov     [si].s_stDeviceParms.dwCOMscopeQWrtPtr,eax
+ 1742				@@:
+ 1742  89 4C 4C			        mov     [si].s_stDeviceParms.fCOMscopeFunction,cx
+
+ 1745  F7 44 08 0800		        test    [si].s_stDeviceParms.wConfigFlags1,CFG_FLAG1_NO_MODEM_INT
+ 174A  75 66			        jnz     exit
+ 174C  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 174F  83 C2 01			        add     dx,INT_EN_REG_OFFSET
+				        InByteImm
+ 1752  EC		     1	        in      al,dx
+ 1753  F7 C1 0010		        test    cx,CSFUNC_TRACE_MODEM_IN_SIGNALS
+ 1757  74 08			        jz      test_disable_mdm_int
+				        OR_DeviceFlag1 DEV_FLAG1_MDM_INT_ENABLED
+ 1759  83 4C 02 08	     1	        or     [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_MDM_INT_ENABLED
+ 175D  0C 08			        or      al,INT_EN_MODEM_STAT
+ 175F  EB 0C			        jmp     out_int_enable_reg
+
+ 1761				test_disable_mdm_int:
+ 1761  F6 44 2C 38		        test    [si].s_stDeviceParms.byFlag1,F1_ENABLE_CTS_OUTPUT_HS OR \
+				                                           F1_ENABLE_DSR_OUTPUT_HS OR \
+				                                           F1_ENABLE_DCD_OUTPUT_HS
+ 1765  75 4B			        jnz     exit
+				        AND_DeviceFlag1 (NOT DEV_FLAG1_MDM_INT_ENABLED)
+ 1767  83 64 02 F7	     1	        and    [si].s_stDeviceParms.wDeviceFlag1,(NOT DEV_FLAG1_MDM_INT_ENABLED)
+ 176B  24 F7			        and     al,NOT INT_EN_MODEM_STAT
+
+ 176D				out_int_enable_reg:
+				        OutByteDel dx
+ 176D  BA 0000 E	     2	        mov     dx,DOSIODELAYCNT
+ 1770			     2	??006A:
+ 1770  4A		     2	        dec     dx
+ 1771  75 FD		     2	        jnz     ??006A
+ 1773  EE		     1	        out     dx,al
+ 1774  EB 3C			        jmp     exit
+
+ 1776				disable_COMscope:
+ 1776  F7 44 08 0800		        test    [si].s_stDeviceParms.wConfigFlags1,CFG_FLAG1_NO_MODEM_INT
+ 177B  75 21			        jnz     @f
+ 177D  F7 44 4C 0010		        test    [si].s_stDeviceParms.fCOMscopeFunction,CSFUNC_TRACE_MODEM_IN_SIGNALS
+ 1782  74 1A			        jz      @f
+ 1784  F6 44 2C 38		        test    [si].s_stDeviceParms.byFlag1,F1_ENABLE_CTS_OUTPUT_HS OR \
+				                                           F1_ENABLE_DSR_OUTPUT_HS OR \
+				                                           F1_ENABLE_DCD_OUTPUT_HS
+ 1788  75 14			        jnz     @f
+ 178A  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 178D  83 C2 01			        add     dx,INT_EN_REG_OFFSET
+				        InByteImm
+ 1790  EC		     1	        in      al,dx
+				        AND_DeviceFlag1 (NOT DEV_FLAG1_MDM_INT_ENABLED)
+ 1791  83 64 02 F7	     1	        and    [si].s_stDeviceParms.wDeviceFlag1,(NOT DEV_FLAG1_MDM_INT_ENABLED)
+ 1795  24 F7			        and     al,(NOT INT_EN_MODEM_STAT)
+				        OutByteDel dx
+ 1797  BA 0000 E	     2	        mov     dx,DOSIODELAYCNT
+ 179A			     2	??006B:
+ 179A  4A		     2	        dec     dx
+ 179B  75 FD		     2	        jnz     ??006B
+ 179D  EE		     1	        out     dx,al
+ 179E				@@:
+ 179E  C7 44 4C 0000		        mov     [si].s_stDeviceParms.fCOMscopeFunction,0
+ 17A3  66| 8B 84 0094		        mov     eax,[si].s_stDeviceParms.oCOMscopeBuff
+ 17A8  66| 89 84 0090		        mov     [si].s_stDeviceParms.dwCOMscopeQRdPtr,eax
+ 17AD  66| 89 84 008C		        mov     [si].s_stDeviceParms.dwCOMscopeQWrtPtr,eax
+
+ 17B2				exit:
+ 17B2  66| 8B 4C 18		        mov     ecx,[si].s_stDeviceParms.dwCOMscopeBuffLen
+ 17B6  66| D1 E9		        shr     ecx,1
+ 17B9  26: C7 45 02 0001	        mov     WORD PTR ES:[di + 2],TRUE
+ 17BF  EB 1A			        jmp     eexit
+
+ 17C1				bad_command:
+				;        StoreError oErrorCode,ERROR_I24_BAD_COMMAND
+ 17C1  C4 7E FC			        les     di,pDataAddress
+ 17C4  26: C7 45 02 0000	        mov     WORD PTR ES:[di + 2],FALSE
+ 17CA  66| 33 C9		        xor     ecx,ecx
+ 17CD  EB 0C			        jmp     eexit
+
+ 17CF				error:
+ 17CF  66| 33 C9		        xor     ecx,ecx
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 17D2  53		     1	        push    bx
+ 17D3  8B 5E 04		     1	        mov     bx,oErrorCode
+ 17D6  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 17DA  5B		     1	        pop     bx
+
+ 17DB				eexit:
+ 17DB  26: C7 05 2641		        mov     WORD PTR ES:[di],SIGNATURE
+ 17E0  66| 26: 89 4D 04		        mov     ES:[di + 4],ecx
+				        ret
+ 17E5  8B E5		   *	    mov    sp, bp
+ 17E7  5D		   *	    pop    bp
+ 17E8  C3		   *	    ret    00000h
+
+ 17E9				COMscopeControl ENDP
+
+				;    function 7fh
+ 17E9				GetDeviceData PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+				        LOCAL   pDataAddress:DWORD, pParamAddress:DWORD
+
+ 17E9  55		   *	    push   bp
+ 17EA  8B EC		   *	    mov    bp, sp
+ 17EC  83 C4 F8		   *	    add    sp, 0FFF8h
+ 17EF  06			        push    es
+ 17F0  57			        push    di
+
+ 17F1  B9 0004			        mov     cx,4
+				        VerifyPacketParams
+ 17F4  0B C9		     1	        or      cx,cx
+ 17F6  75 0D		     1	        jnz     ??006C
+ 17F8  26: 83 7D 19 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOparamLength,0
+ 17FD  0F 84 009C	     1	        je      error
+ 1801  26: 8B 4D 19	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOparamLength
+ 1805			     1	??006C:
+ 1805  57		     1	        push    di
+ 1806  8D 5E F8		     1	        lea     bx,pParamAddress
+ 1809  26: 8B 45 11	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOparamOffset + 2
+ 180D  26: 8B 7D 0F	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOparamOffset
+ 1811  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 1815  36: 89 3F	     1	        mov     SS:[bx],di
+ 1818  B6 00		     1	        mov     dh,DH_VA_READ_ACCESS            ; verify for read access
+ 181A  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ; carry set if access denied
+ 181C  FF 1E 0000 E	     1	        call    device_hlp
+ 1820  5F		     1	        pop     di
+ 1821  72 7A		     1	        jc      error
+ 1823			     1	??006D:
+
+ 1823  83 F9 04			        cmp     cx,4
+ 1826  75 75			        jne     error
+
+ 1828  8B 0E 0000 E		        mov     cx,wEndOfData
+				        VerifyPacketData
+ 182C  0B C9		     1	        or      cx,cx
+ 182E  75 0B		     1	        jnz     ??006E
+ 1830  26: 83 7D 1B 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOdataLength,0
+ 1835  74 66		     1	        je      error
+ 1837  26: 8B 4D 1B	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOdataLength
+ 183B			     1	??006E:
+ 183B  57		     1	        push    di
+ 183C  8D 5E FC		     1	        lea     bx,pDataAddress
+ 183F  26: 8B 45 15	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOdataOffset + 2
+ 1843  26: 8B 7D 13	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOdataOffset
+ 1847  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 184B  36: 89 3F	     1	        mov     SS:[bx],di
+ 184E  B6 01		     1	        mov     dh,DH_VA_READ_WRT_ACCESS        ;verify for read/write access
+ 1850  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ;carry set if access denied
+ 1852  FF 1E 0000 E	     1	        call    device_hlp
+ 1856  5F		     1	        pop     di
+ 1857  72 44		     1	        jc      error
+ 1859			     1	??006F:
+
+ 1859  0B C9			        or      cx,cx
+ 185B  74 4B			        jz      exit
+
+ 185D  8B D9			        mov     bx,cx                   ;save packet defined length
+
+ 185F  C4 7E F8			        les     di,pParamAddress
+ 1862  26: 8B 4D 02		        mov     cx,ES:[di + 2]
+ 1866  26: 81 3D 2641		        cmp     WORD PTR ES:[di],SIGNATURE
+ 186B  75 23			        jne     bad_command
+
+ 186D  3B D9			        cmp     bx,cx
+ 186F  73 02			        jae     @f
+ 1871  8B CB			        mov     cx,bx                   ;force to packet defined length
+ 1873				@@:
+ 1873  3B 0E 0000 E		        cmp     cx,wEndOfData
+ 1877  76 04			        jbe     @f
+ 1879  8B 0E 0000 E		        mov     cx,wEndOfData
+ 187D				@@:
+ 187D  8B D9			        mov     bx,cx                   ; save count
+ 187F  C4 7E FC			        les     di,pDataAddress
+ 1882  56			        push    si
+ 1883  FC			        cld
+ 1884  D1 E9			        shr     cx,1
+ 1886  74 04			        jz      move_byte
+ 1888  F3/ A5			    rep movsw
+ 188A  73 01			        jnc     @f
+
+ 188C				move_byte:
+ 188C  A4			        movsb
+ 188D				@@:
+ 188D  5E			        pop     si
+ 188E  EB 18			        jmp     exit
+
+ 1890				bad_command:
+				        StoreError oErrorCode,ERROR_I24_BAD_COMMAND
+ 1890  53		     1	        push    bx
+ 1891  8B 5E 04		     1	        mov     bx,oErrorCode
+ 1894  36: C6 07 03	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_BAD_COMMAND
+ 1898  5B		     1	        pop     bx
+ 1899  33 DB			        xor     bx,bx
+ 189B  EB 0B			        jmp     exit
+ 189D				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 189D  53		     1	        push    bx
+ 189E  8B 5E 04		     1	        mov     bx,oErrorCode
+ 18A1  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 18A5  5B		     1	        pop     bx
+ 18A6  33 DB			        xor     bx,bx
+ 18A8				exit:
+ 18A8  5F			        pop     di
+ 18A9  07			        pop     es
+ 18AA  26: 89 55 1B		        mov     es:[di].s_stPacket.GIOpacket.GIOdataLength,dx ;Length of the data into count
+				        ret
+ 18AE  8B E5		   *	    mov    sp, bp
+ 18B0  5D		   *	    pop    bp
+ 18B1  C3		   *	    ret    00000h
+
+ 18B2				GetDeviceData ENDP
+				  ENDIF ;NO_COMscope or x16_BIT
+
+				  IFNDEF x16_BIT
+ 18B2				GetCountsSinceLast PROC NEAR C oErrorCode:WORD, wTarget:WORD, wFunction:WORD
+
+				        LOCAL   pDataAddress:DWORD
+
+				; test if app requested 8 bytes
+
+ 18B2  55		   *	    push   bp
+ 18B3  8B EC		   *	    mov    bp, sp
+ 18B5  83 C4 FC		   *	    add    sp, 0FFFCh
+ 18B8  26: 8B 4D 1B		        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOdataLength
+ 18BC  83 F9 08			        cmp     cx,8
+ 18BF  75 67			        jne     error
+
+				        VerifyPacketData
+ 18C1  0B C9		     1	        or      cx,cx
+ 18C3  75 0B		     1	        jnz     ??0070
+ 18C5  26: 83 7D 1B 00	     1	        cmp     ES:[di].s_stPacket.GIOpacket.GIOdataLength,0
+ 18CA  74 5C		     1	        je      error
+ 18CC  26: 8B 4D 1B	     1	        mov     cx,ES:[di].s_stPacket.GIOpacket.GIOdataLength
+ 18D0			     1	??0070:
+ 18D0  57		     1	        push    di
+ 18D1  8D 5E FC		     1	        lea     bx,pDataAddress
+ 18D4  26: 8B 45 15	     1	        mov     ax,ES:[di].s_stPacket.GIOpacket.GIOdataOffset + 2
+ 18D8  26: 8B 7D 13	     1	        mov     di,ES:[di].s_stPacket.GIOpacket.GIOdataOffset
+ 18DC  36: 89 47 02	     1	        mov     SS:[bx+2],ax
+ 18E0  36: 89 3F	     1	        mov     SS:[bx],di
+ 18E3  B6 01		     1	        mov     dh,DH_VA_READ_WRT_ACCESS        ;verify for read/write access
+ 18E5  B2 27		     1	        mov     dl,DevHlp_VerifyAccess          ;carry set if access denied
+ 18E7  FF 1E 0000 E	     1	        call    device_hlp
+ 18EB  5F		     1	        pop     di
+ 18EC  72 3A		     1	        jc      error
+ 18EE			     1	??0071:
+
+ 18EE  C4 7E FC			        les     di,pDataAddress
+ 18F1  FA			        cli
+ 18F2  66| 8B 84 00A8		        mov     eax,[si].s_stDeviceParms.dwReceiveCount
+ 18F7  66| 26: 89 05		        mov     ES:[di],eax
+ 18FB  66| 8B 84 00AC		        mov     eax,[si].s_stDeviceParms.dwTransmitCount
+ 1900  66| 26: 89 45 04		        mov     ES:[di + 4],eax
+ 1905  66| 33 C0		        xor     eax,eax
+ 1908  66| 89 84 00AC		        mov     [si].s_stDeviceParms.dwTransmitCount,eax
+ 190D  66| 89 84 00A8		        mov     [si].s_stDeviceParms.dwReceiveCount,eax
+ 1912  FB			        sti
+				  IFNDEF NO_COMscope
+ 1913  F7 46 06 F000		        test    wTarget,(TARGET_COMscope OR TARGET_OS_tools OR TARGET_Pager)
+ 1918  75 17			        jnz     exit
+ 191A  6A 08			        push    8
+ 191C  8B 46 08			        mov     ax,wFunction
+ 191F  50			        push    ax
+ 1920  E8 0000 E		        call    _COMscopeDevIOCtl
+ 1923  83 C4 04			        add     sp,4
+				  ENDIF
+ 1926  EB 09			        jmp     exit
+ 1928				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 1928  53		     1	        push    bx
+ 1929  8B 5E 04		     1	        mov     bx,oErrorCode
+ 192C  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 1930  5B		     1	        pop     bx
+ 1931				exit:
+				        ret
+ 1931  8B E5		   *	    mov    sp, bp
+ 1933  5D		   *	    pop    bp
+ 1934  C3		   *	    ret    00000h
+
+ 1935				GetCountsSinceLast ENDP
+				  ENDIF ; NOT x16_BIT
+
+ 1935				RES_CODE ENDS
+
+				    END
+

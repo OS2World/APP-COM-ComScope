@@ -1,0 +1,10 @@
+
+.\client.obj: \
+    p:\connect\client\client.c \
+    ..\aerial.h \
+    ..\comm.h \
+    client.mak
+
+.\client.LIB: \
+    .\client.dll \
+    client.mak

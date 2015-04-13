@@ -1,0 +1,71 @@
+:TARGET.SUFFIXES
+:TARGET.SUFFIXES
+:DEPENDENCY..DLL .LIB .c .obj 
+:TARGET.all
+:DEPENDENCY.
+p:\lib\COMi_SPL.LIB
+:RULE..c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Sp1 /Ss /Q /Wall /Fi /Si /O /W2 /Gm /Gd /Ge- /G4 /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+:RULE.{p:\Spooler}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Sp1 /Ss /Q /Wall /Fi /Si /O /W2 /Gm /Gd /Ge- /G4 /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+:RULE.{p:\Spooler\GA}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Sp1 /Ss /Q /Wall /Fi /Si /O /W2 /Gm /Gd /Ge- /G4 /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+:RULE..DLL.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe /NOLOGO p:\lib\%|fF.LIB %s
+:RULE.{p:\Spooler}.DLL.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe /NOLOGO p:\lib\%|fF.LIB %s
+:RULE.{p:\Spooler\GA}.DLL.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe /NOLOGO p:\lib\%|fF.LIB %s
+:TARGET.p:\lib\COMi_SPL.DLL
+:DEPENDENCY.
+.\spooler.obj
+p:\Spooler\comi_spl.RES
+{$(LIB)}OS2LSRTL.lib
+{$(LIB)}OS2386.lib
+{$(LIB)}CPPOM30O.lib
+{$(LIB)}OS2LS_IO.lib
+.\\..\COMi_SPL.def
+:ACTION.Link::Linker
+:COMMAND.
+icc.exe @<<
+ /Q /B" /nobase /nop      /noe /m /nod"
+ /Fe"p:\lib\COMi_SPL.DLL" 
+ OS2LSRTL.lib 
+ OS2386.lib 
+ CPPOM30O.lib 
+ OS2LS_IO.lib 
+ .\\..\COMi_SPL.def
+ .\spooler.obj
+<<
+:ACTION.Bind::Resource Bind
+:COMMAND.
+rc.exe p:\Spooler\comi_spl.RES p:\lib\COMi_SPL.DLL
+:TARGET..\spooler.obj
+:DEPENDENCY.
+p:\Spooler\spooler.c
+{p:\Spooler;$(INCLUDE);}spooler.h
+{p:\Spooler;$(INCLUDE);}port.h
+{p:\Spooler;$(INCLUDE);}help.h
+{p:\Spooler;$(INCLUDE);}COMMON.H
+{p:\Spooler;$(INCLUDE);}COMDD.H
+{p:\Spooler;$(INCLUDE);}IOCTL.H
+{p:\Spooler;$(INCLUDE);}UTILITY.H
+{p:\Spooler;$(INCLUDE);}menu.h
+{p:\Spooler;$(INCLUDE);}usermsg.h
+{p:\Spooler;$(INCLUDE);}SPOOL.H
+{p:\Spooler;$(INCLUDE);}CONFIG.H
+:TARGET.p:\lib\COMi_SPL.LIB
+:DEPENDENCY.
+p:\lib\COMi_SPL.DLL

@@ -1,0 +1,12 @@
+LIBRARY CFG_DEB
+
+DESCRIPTION 'OS/tools COMi configuration library'
+
+EXPORTS
+  GetDriverVersion
+  InstallDevice
+  FillDeviceNameList
+  PortSelectDialog
+  GetPortConfig
+  SpoolerSetupDialog
+

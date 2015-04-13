@@ -1,0 +1,41 @@
+:TARGET.SUFFIXES
+:TARGET.SUFFIXES
+:DEPENDENCY..c .obj 
+:TARGET.all
+:DEPENDENCY.
+F:\work\control.exe
+:RULE..c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Sp1 /Sd /Ss /Q /Fi /Si /O /W1 /Gd /G4 /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+:RULE.{p:\Control}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Sp1 /Sd /Ss /Q /Fi /Si /O /W1 /Gd /G4 /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+:RULE.{p:\Control\GA}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Sp1 /Sd /Ss /Q /Fi /Si /O /W1 /Gd /G4 /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+:TARGET.F:\work\control.exe
+:DEPENDENCY.
+.\control.obj
+{$(LIB)}OS2LSRTL.lib
+{$(LIB)}OS2386.lib
+{$(LIB)}CPPOM30O.lib
+{$(LIB)}OS2LS_UT.lib
+{$(LIB)}OS2LS_IO.lib
+:ACTION.Link::Linker
+:COMMAND.
+icc.exe @<<
+ /Q /B" /nop /optfunc      /noe /m /nod"
+ /Fe"F:\work\control.exe" 
+ OS2LSRTL.lib 
+ OS2386.lib 
+ CPPOM30O.lib 
+ OS2LS_UT.lib 
+ OS2LS_IO.lib 
+ .\control.obj
+<<
+:TARGET..\control.obj
+:DEPENDENCY.
+p:\Control\control.c

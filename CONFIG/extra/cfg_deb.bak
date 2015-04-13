@@ -1,0 +1,17 @@
+LIBRARY CFG_DEB
+
+DESCRIPTION 'OS/tools COMi configuration library'
+
+EXPORTS
+  GetDriverVersion
+  InstallDevice
+  FillDeviceNameList
+  HdwFilterDialog
+  HdwFIFOsetupDialog
+  HdwHandshakeDialog
+  HdwTimeoutDialog
+  HdwBaudRateDialog
+  HdwProtocolDialog
+  PortSelectDialog     
+  SpoolerSetupDialog
+  GetPortConfig

@@ -1,0 +1,34 @@
+
+.\inst_dlg.obj: \
+    p:\Install\inst_dlg.c \
+    {p:\Install;$(INCLUDE);}COMMON.H \
+    {p:\Install;$(INCLUDE);}UTILITY.H \
+    {p:\Install;$(INCLUDE);}CONFIG.H \
+    {p:\Install;$(INCLUDE);}help.h \
+    {p:\Install;$(INCLUDE);}install.h \
+    {p:\Install;$(INCLUDE);}resource.h
+
+.\instutil.obj: \
+    p:\Install\instutil.c \
+    {p:\Install;$(INCLUDE);}COMMON.H \
+    {p:\Install;$(INCLUDE);}UTILITY.H \
+    {p:\Install;$(INCLUDE);}CONFIG.H \
+    {p:\Install;$(INCLUDE);}install.h \
+    {p:\Install;$(INCLUDE);}comdd.h
+
+.\help.obj: \
+    p:\Install\help.c \
+    {p:\Install;$(INCLUDE);}COMMON.H \
+    {p:\Install;$(INCLUDE);}UTILITY.H \
+    {p:\Install;$(INCLUDE);}install.h \
+    {p:\Install;$(INCLUDE);}resource.h
+
+.\winstall.obj: \
+    p:\Install\winstall.c \
+    {p:\Install;$(INCLUDE);}COMMON.H \
+    {p:\Install;$(INCLUDE);}UTILITY.H \
+    {p:\Install;$(INCLUDE);}CONFIG.H \
+    {p:\Install;$(INCLUDE);}help.h \
+    {p:\Install;$(INCLUDE);}install.h \
+    {p:\Install;$(INCLUDE);}instpage.h \
+    {p:\Install;$(INCLUDE);}resource.h

@@ -1,0 +1,33 @@
+  Personal COMi Asynchronous Serial Device Driver
+    version 3.81 Personal
+
+  For OS/2.x and above.
+
+  Includes OS/tools INSTALL, a complete install,
+  uninstall, and configuration program.
+
+  See README.1st for more information on installing
+  Personal COMi
+  
+FileList: 
+
+  FILE_ID_DIZ
+  README.1st
+  VERSION.TXT 
+  INSTALL.EXE
+  COMi.INF
+  INSTALL.HLP
+  CONFIG.HLP   
+  OS2LSRTL.DLL
+  OS2LS_UT.DLL
+  COMi_CFG.DLL
+  PDA_INST.DLL  
+  INIDUMP.EXE
+  pCOMi.SYS    (device driver)
+  IOCTL.C      (source code)
+  IOCTL.H      (source code)
+  LICENSE.TXT  (displayed by INSTALL)
+  NOTICE.TXT   (displayed by INSTALL)
+  INSTALL.ICO  (may be hidden)
+  OS_tools.ini (may be hidden)
+

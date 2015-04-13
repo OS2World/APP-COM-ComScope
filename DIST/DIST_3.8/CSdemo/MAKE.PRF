@@ -1,0 +1,72 @@
+This is a profile make file for the DEMO version of COMi and COMscope
+[COMi]
+Driver=COMDDE.SYS;
+OEM_type=0
+Files=1
+File_1=COMi.INF;
+ProgramSize=96794
+Version=COMi demo version 3.81;
+[PDR]
+Files=4
+File_1=OS2LS_IO.DLL;
+File_2=OS2LS_UT.DLL;
+File_3=COMi_CFG.DLL;
+File_4=OS2LSRTL.DLL;
+PDR Library=SPL_DEMO.PDR;
+ProgramSize=10788
+Version=COMspool version 2.20;
+[Libraries]
+Files=2
+File_1=CONFIG.HLP;
+File_2=COMi_CTL.DLL;
+Base Files=4
+Base_file_1=OS2LS_IO.DLL;
+Base_file_2=OS2LS_UT.DLL;
+Base_file_3=COMi_CFG.DLL;
+Base_file_4=OS2LSRTL.DLL;
+ProgramSize=421034
+[COMscope]
+Version=COMscope demo version 3.80a;
+Files=5
+File_1=CSDEMO.EXE;
+File_2=CSDEMO.HLP;
+File_3=COMscope.ICO;
+File_4=HEXFONTS.FON;
+File_5=OS2LS_PR.DLL;
+ProgramSize=363576
+[Install]
+DD Config Help=CONFIG.HLP;
+DD Config Library=COMi_CFG;
+DD Config Function=InstallDevice;
+Transfer Library=PDA_INST;
+Transfer Function=InstallCOMi;
+Version=OS/tools' Install version 2.20;
+Check Caption One=COMi DEMO Device Driver;
+Check Caption Two=COMscope DEMO;
+Check Caption Three=DEMO Print Spooler Support;
+Check Caption Four=Multi-session and other Utilities;
+Check Caption Five=Install;
+Title=COMscope, COMspool, and COMi Installation;
+DD Name=COMi;
+Banner One=for the Demonstration Versions of;
+Banner Two=COMscope, COMspool, and the COMi Device Driver;
+License File=license.txt;
+License Caption=License Information:;
+Info File=notice.txt;
+Info Caption=Please Note:;
+Files=4
+File_1=INSTALL.EXE;
+File_2=INSTALL.HLP;
+File_3=INSTALL.ICO;
+File_4=PDA_INST.DLL;
+ProgramSize=73426
+[Utilities]
+Files=6
+File_1=SPLIT.EXE;
+File_2=SPLIT.C;
+File_3=IOCTL.C;
+File_4=IOCTL.H;
+File_5=CONTROL.EXE;
+File_6=INIDUMP.EXE;
+ProgramSize=138385
+

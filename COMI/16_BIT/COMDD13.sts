@@ -1,0 +1,131 @@
+PWB-GENERATED FILE: DO NOT MODIFY
+[shared-]
+	mark=cvp "P:\COMI\RESPONSE.C" 135 1 'E ALL "RESPONSE.C"!.135
+	mark=cvp "P:\COMI\RESPONSE.C" 178 1 'E ALL "RESPONSE.C"!.178
+	version=2
+	pmark="P:\COMI\DATA_SEG.ASM" 225 1
+	project="P:\COMI\COMDD13.MAK"
+	buildmode=3
+[edit-]
+	srch=_ErrorExit
+	fSrchRe=0
+	rpl=_response_file_error_return
+	src=_ErrorExit
+	fRplRe=24320
+	file="P:\COMI\DATA_SEG.ASM" 225 1 225 1
+[pwb]
+	screen=60 80
+	winstyle=7
+	wnd=C 2 1 59 80
+[environ]
+	INCLUDE=w:\TOOLKT13\C\INCLUDE;w:\TOOLKT13\MASM\INCLUDE;h:\language\masm\include;w:\v60\include;
+	LIB=w:\toolkt13\lib;w:\v60\libp;
+	HELPFILES=w:\v70\help;
+[build]
+    build: macro DEBUG "1"
+    build: macro BRFLAGS ""
+    build: macro PWBRMAKE "pwbrmake"
+    build: macro NMAKEBSC1 "set"
+    build: macro NMAKEBSC2 "nmake"
+    build: macro BROWSE "0"
+    build: macro BREXCLUDE "i:\\include\\os2.h i:\\masm\\include\\os2.inc i:\\masm\\include\\bseerr.inc I:\\MASM\\INCLUDE\\BSEDEV.INC I:\\MASM\\INCLUDE\\BSEDOS.INC I:\\MASM\\INCLUDE\\BSEERR.INC I:\\MASM\\INCLUDE\\BSESUB.INC I:\\MASM\\INCLUDE\\OS2. \
+        INC I:\\MASM\\INCLUDE\\OS2DEF.INC I:\\MASM\\INCLUDE\\BSE.INC I:\\INCLUDE\\BSE.H I:\\INCLUDE\\BSEDEV.H I:\\INCLUDE\\BSEDOS.H I:\\INCLUDE\\BSESUB.H I:\\INCLUDE\\DOS.H"
+    build: macro CFLAGS_G "/Asnw /W3 /G2 /Dx16_BIT /Zp /BATCH /nologo"
+    build: macro AFLAGS_G "/Cp /W2 /Dx16_BIT /nologo /Zp1 /Sg"
+    build: macro CC "cl"
+    build: macro CFLAGS_D "/Od /Gs"
+    build: macro CFLAGS_R "/Od /Gs"
+    build: macro ASM "ml"
+    build: macro AFLAGS_D "/Sn /Zf /Fl"
+    build: macro AFLAGS_R "/Sn /Zf"
+    build: macro MAPFILE_D "$(PROJ).map"
+    build: macro MAPFILE_R "NUL"
+    build: macro LFLAGS_G " /NOI /NOE /NOD /STACK:0  /BATCH /nologo"
+    build: macro LFLAGS_D " /M /NOF /NOP"
+    build: macro LFLAGS_R " /NOF /NOP"
+    build: macro LINKER "link"
+    build: macro ILINK "ilink"
+    build: macro LRF "echo > NUL"
+    build: macro LLIBS_R ""
+    build: macro LLIBS_D ""
+    build: macro LLIBS_G "w:\\toolkt13\\doscalls.lib"
+    build: macro CVFLAGS " /50 /C\"n16\""
+    build: macro NMFLAGS "/nologo"
+    build: macro BIND "bind"
+    build: all $(PROJ).sys
+    build: target $(PROJ).bsc pwbrmake
+    build: target $(PROJ).sys lrf_sys link_sys
+    build: inference .c.obj cc_c_obj
+    build: inference .c.sbr cc_c_sbr
+    build: inference .asm.obj asm_asm_obj
+    build: inference .asm.sbr asm_asm_sbr
+    build: inference .h.inc h2inc_h_inc
+    build: command pwbrmake "$(PWBRMAKE) @<<\n$(BRFLAGS) $(SBRS)\n<<"
+    build: command nmakebsc1 "$(NMAKEBSC1) MAKEFLAGS="
+    build: command nmakebsc2 "$(NMAKEBSC2) $(NMFLAGS) -f $(PROJFILE) $(PROJ).bsc"
+    build: release command cc_c_obj "$(CC) /c $(CFLAGS_G) $(CFLAGS_R) /Fo$@ $<"
+    build: debug command cc_c_obj "$(CC) /c $(CFLAGS_G) $(CFLAGS_D) /Fo$@ $<"
+    build: release command cc_c_sbr "$(CC) /Zs $(CFLAGS_G) $(CFLAGS_R) /FR$@ $<"
+    build: debug command cc_c_sbr "$(CC) /Zs $(CFLAGS_G) $(CFLAGS_D) /FR$@ $<"
+    build: release command asm_asm_obj "$(ASM) /c $(AFLAGS_G) $(AFLAGS_R) /Fo$@ $<"
+    build: debug command asm_asm_obj "$(ASM) /c $(AFLAGS_G) $(AFLAGS_D) /Fo$@ $<"
+    build: release command asm_asm_sbr "$(ASM) /Zs $(AFLAGS_G) $(AFLAGS_R) /FR$@ $<"
+    build: debug command asm_asm_sbr "$(ASM) /Zs $(AFLAGS_G) $(AFLAGS_D) /FR$@ $<"
+    build: release command h2inc_h_inc "$(H2INC) /c $(CFLAGS_G) $(CFLAGS_R) $<"
+    build: debug command h2inc_h_inc "$(H2INC) /c $(CFLAGS_G) $(CFLAGS_D) $<"
+    build: release command lrf_sys "$(LRF) @<<$(PROJ).lrf\n$(RT_OBJS: = +^\n) $(OBJS: = +^\n)\n$@\n$(MAPFILE_R)\n$(LLIBS_G: = +^\n) +\n$(LLIBS_R: = +^\n) +\n$(LIBS: = +^\n)\n$(DEF_FILE) $(LFLAGS_G) $(LFLAGS_R);\n<<"
+    build: debug command lrf_sys "$(LRF) @<<$(PROJ).lrf\n$(RT_OBJS: = +^\n) $(OBJS: = +^\n)\n$@\n$(MAPFILE_D)\n$(LLIBS_G: = +^\n) +\n$(LLIBS_D: = +^\n) +\n$(LIBS: = +^\n)\n$(DEF_FILE) $(LFLAGS_G) $(LFLAGS_D);\n<<"
+    build: release command link_sys "$(LINKER) @$(PROJ).lrf"
+    build: debug command link_sys "$(LINKER) @$(PROJ).lrf"
+    build: command run "$(PROJ).exe $(RUNFLAGS)"
+    build: command debug "CVP $(CVFLAGS) $(PROJ).exe $(RUNFLAGS)"
+    build: command bind_exe "$(BIND) $@ apilmr.obj api.lib -o $@"
+    build: include dependencies
+    build: include no system
+    build: include .c "^[ \t]*#[ \t]*include[ \t]*\"[ \t]*\\(\\:p\\)[ \t]*\"" case
+    build: include .c "^[ \t]*#[ \t]*include[ \t]*<[ \t]*\\(\\:p\\)[ \t]*>" case system
+    build: include .h "^[ \t]*#[ \t]*include[ \t]*\"[ \t]*\\(\\:p\\)[ \t]*\"" case
+    build: include .h "^[ \t]*#[ \t]*include[ \t]*<[ \t]*\\(\\:p\\)[ \t]*>" case system
+    build: include .asm "^[ \t]*include[ \t]+\\([^ \t]+\\)"
+    build: include .inc "^[ \t]*include[ \t]+\\([^ \t]+\\)"
+    build: include .rc "^[ \t]*rcinclude[ \t]+\\([^ \t]+\\)"
+    build: include .rc "^[ \t]*#[ \t]*include[ \t]*\"[ \t]*\\(\\:p\\)[ \t]*\""
+    build: include .rc "^[ \t]*#[ \t]*include[ \t]*<[ \t]*\\(\\:p\\)[ \t]*>" system
+    build: include .asm "^[ \t]*include[ \t]+)" system
+    build: include .asm "^[ \t]*include[ \t]+([^ \t]+)"
+    build: include .asm "^[ \t]*include[ \t]+i:masminclude\\([^ \t]+\\)" system
+    build: include .asm "^[ \t]*INCLUDE[ \t]+\\([^ \t]+\\)" case
+    build: include .inc "^[ \t]*INCLUDE[ \t]+\\([^ \t]+\\)" case
+    build: message "^SYS[0-9][0-9][0-9][0-9]:\\:b"
+    build: message "^NET[0-9][0-9][0-9][0-9]:\\:b"
+    build: message "^\\(\\{\\:p\\!<[^>]*>\\}\\) \\([0-9]+\\) \\([0-9]+\\)[ ]*:" file line col
+    build: message "^\\(\\:p\\):\\([0-9]+\\):" file line
+    build: message "^[^(]+(\\(\\:p\\)) : error L[0-9]+[ ]*: '_*\\([^']+\\)' : unresolved external" file token
+    build: message "^[^(]+(\\(\\:p\\)) : [^L]+L[124]" file
+    build: message "^LINK [^L]+L[124]"
+    build: message "^ILINK : [^L]+L[124]"
+    build: message "^\\(\\:p\\)(\\(\\:z\\))[ ]*: [^U]+U[124]" file line
+    build: message "^NMAKE : [^U]+U[124]"
+    build: message "^\\:p : [^U]+U[124]\\:d\\:d\\:d"
+    build: message "^\\(\\:p\\)(\\(\\:z\\)) : [^C]+C[124]" file line
+    build: message "^[^C]+C[124][0-9]+: "
+    build: message "^[^D]+D[124][0-9]+ : "
+    build: message "^\\(\\:p\\)(\\([0-9]+\\))[ \t]*:[ \t]*[^A]+A[12456]" file line
+    build: message "^\\(\\:p\\)(\\(\\:z\\)) : [^H]+HI[124]" file line
+    build: message "^[^H]+HI[124][0-9]+: "
+    build: message "^pwbrmake: [^U]+U[124]"
+    build: message "^BIND : [^U]+U[124]"
+    build: message "^\\(\\:p\\)(\\(\\:z\\)) RC:" file line
+    build: message "^RC: error"
+    build: language Assembler
+
+[debug-]
+	target="p:\comi\m16_bit\m16_bit.exe"
+[cvp]
+	wndstate=0 1 1 2 0 1 0 0 0 1 254
+	tilestate=1 42 0 80 0 0 0 67 0 8 0 30 0 0 37 0 12 254
+	command=use auto
+	command=n16
+	command=s1
+	command=oc-
+	command=of-

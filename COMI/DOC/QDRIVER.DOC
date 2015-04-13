@@ -1,0 +1,179 @@
+
+
+
+
+
+                              OS/tools Incorporated
+                         COM/8 Asynchronous Device Driver
+                 Support for Quatech Incorporated Adapter Boards
+
+     Installation
+
+          There is no automatic installation program for the QCOMDD.SYS
+          device driver supplied by Quatech.  You can use the method
+          described in DDRIVER.DOC for the Custom and Evaluation versions of
+          the device driver.
+
+     MCA Adapter Configuration
+
+          When configuring Quatech MCA adapter boards you must select the
+          "Scratchpad" option and NOT the "Interrupt Status" option for each
+          adapter board to be accessed by the QCOMDD.SYS device driver.  If
+          you select the "Interrupt Status" option the devices on that
+          adapter board will not be recognized as valid serial devices.  See
+          Quatech documentation for an explanation of "Scratchpad" versus
+          "Interrupt Status".
+
+          If you want to use the QCOMDD.SYS device driver for non-Quatech
+          serial ports you must have at least one Quatech Asynchronous Serial
+          adapter board installed in any slot in your machine.
+
+     ISA Adapter Configuration
+
+          If you have Quatech ES-100 (eight port), or QS-100 (four port)
+          asynchronous adapter boards, you will be able to take advantage of
+          some Quatech specific features built into the QCOMDD.SYS device
+          driver.
+
+          These features include:
+
+               1.   The capability of using more than one adapter board (QS-
+                    100) on a single interrupt level, spanning multiple
+                    slots.
+
+               2.   Defining interrupt identification registers for each
+                    installed adapter board, therefore giving more dependable
+                    and less error prone operation in the ISA edge sensitive
+                    interrupt environment.
+
+               3.   Access to different baud rate ranges, by changing the
+                    baud rate clock jumpers on the adapter boards and using
+                    the explicit baud rate divisor feature of the QCOMDD.SYS
+                    device driver (bit 11 of the "T" extension mask switch).
+
+          There is one additional command line switch and one additional bit
+          definition for the "T" extension mask switch that will allow you to
+          take advantage of Quatech ISA adapter features.
+
+          An "S" following a "/" on the "DEVICE=QCOMDD.SYS" command line
+          indicates to the device driver that an Interrupt Identification
+          Register address specification follows.  The number following the
+          "S" tells the device driver an I/O address at which to expect an
+          interrupt identification register.  Up to four "S" switches will be
+          recognized and each switch indicates an interrupt identification
+          register for one installed adapter board.
+
+
+
+          The "S" switch is to be used in conjunction with bit 14 of the "T"
+          extension mask switch.  Bit 14 of the extension mask must be set to
+          enable the Quatech Specific features of the QCOMDD.SYS device
+          driver.  See extension mask explanation under Device Driver
+          Configuration in DDRIVER.DOC.
+
+          There is one other Quatech specific switch.  The "s" switch is to
+          be used when you want to use the QCOMDD.SYS device driver with
+          non-Quatech Asynchronous Serial ports.  A "number" is to follow the
+          "s".  The "number" represents the DOS COMx port number of the first
+          QCOMDD.SYS DOS COMx device "connected" to a Quatech adapter board
+          port.
+
+          The "S" switch and the "s" switch are, of course, case sensitive.
+
+          To take advantage of features 1 and 2 (above) you must set bit 14
+          of the extension mask switch for all Quatech ports to be supported
+          (i.e. with a global "T" switch) and specify an interrupt
+          identification register (with the "S" switch) for each Quatech
+          adapter board to be supported.  You must also configure your
+          Quatech adapter boards for the "Interrupt Status" option and NOT
+          the "Scratchpad" option.  See Quatech documentation for details on
+          how to configure your adapter boards for the "Interrupt Status"
+          option.  When taking advantage of these features the device driver
+          can support only one interrupt level for each "DEVICE=QCOMDD.SYS"
+          line in your CONFIG.SYS file.
+
+          If you want to use the QCOMDD.SYS device driver for non-Quatech
+          serial ports you must:
+
+               1.   Have at least one Quatech adapter board installed in your
+                    machine.
+
+               2.   Position the "DEVICE=QCOMDD.SYS" line to be "connected"
+                    to the Quatech adapter(s) before any "DEVICE=QCOMDD.SYS"
+                    line to be "connected" to a non-Quatech serial port in
+                    your CONFIG.SYS file.
+
+               3.   Use the "s" command line switch in any non-Quatech
+                    "DEVICE=QCOMDD.SYS" "connections" to indicate the DOS
+                    COMx port number of the first "connected" Quatech serial
+                    port.
+
+          Example:
+
+          DEVICE=QCOMDD.SYS /i1-10 /p1-380h /C3-6 /T1-4000h /S387h
+
+          DEVICE=QCOMDD.SYS /c1-2 /1i4p3f8h /2i3p2f8h /s3
+
+          The first line tells the first device driver load to:
+
+               1.   /i1-10 - Use interrupt level ten for all logical devices
+                    from one through eight.
+
+               2.   /p1-380h - Use base address 380h for logical device one,
+                    388h for logical device two, 390h for logical device
+                    three, 398h for logical device four, 3A0h for logical
+                    device five, 3A8h for logical device six, 3B0h for
+                    logical device seven, and 3B8h for logical device eight.
+
+
+
+               3.   /C3-6 - Map COM3 to logical port one, COM4 to logical
+                    port two, COM5 to logical port three, COM6 to logical
+                    port four.  The device driver will not try to initialize
+                    any logical port above four.
+
+               4.   /T1-4000h, bit 14 - Enable Quatech feature support for
+                    logical ports one through eight.
+
+               5.   /S387h - Expect an interrupt identification register at
+                    I/O address 387h.
+
+          The second line tells the second device driver load to:
+
+               1.   /C1-2 - Map COM1 to logical port one, COM2 to logical
+                    port two.  The device driver will not try to initialize
+                    any logical port above two.
+
+               2.   /1i4p3f8h - Assign to logical device one a base I/O
+                    address of 3f8h and interrupt level four.
+
+               3.   /2i3p2f8h - Assign to logical device two a base I/O
+                    address of 2f8h and interrupt level three.
+
+               4.   /s3 - Look to COM3 for verification of Quatech adapter
+                    presence.  If COM3 had not been successfully "connected"
+                    by a previous QCOMDD.SYS device driver load, then this
+                    load will fail.
+
+          The first line of the preceding example could be used to "connect"
+          a Quatech QS-100 (four port) adapter board.  The values 387h, 38fh,
+          397h, or 39fh would all be valid interrupt identification register
+          definitions for this assumed configuration of a QS-100.  Only one
+          "S" switch register definition for each Quatech adapter board can
+          and should be used.
+
+          If you are using the evaluation version of the device driver
+          (COMDDE.SYS) you cannot configure the adaptor board for the
+          "Interrupt Status" option unless you turn on bit 14 of the
+          extension mask command line option ("T" switch).  You must specify
+          at least one interrupt identification register address ("S" switch)
+          if you configure your Quatech adapter for "Interrupt Status".  The
+          presence of a Quatech adapter board is not required when using the
+          evaluation version of the COM/8 device driver, and therefore, the
+          "s" switch will have no effect.
+
+          The Quatech supplied version of the COM/8 device driver will not
+          work with the Quatech DS-100 adapter boards as there is no
+          interrupt ID register on these boards.  You must purchase another
+          version of the COM/8 device driver directly from OS/tools for use
+          on Quatech DS-100 adapters.

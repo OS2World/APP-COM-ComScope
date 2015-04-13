@@ -1,0 +1,3444 @@
+
+ WINCOM
+
+ Start         Length     Name                   Class
+ 0001:00000000 00000E1EDH CODE32                 CODE 32-bit
+	at offset 00000000 0075CH bytes from P:\WinCOM32\ga\util.obj (p:\WinCOM32\util.c)
+	at offset 00000760 02F0DH bytes from P:\WinCOM32\ga\wincom.obj (p:\WinCOM32\wincom.c)
+	at offset 00003670 001FDH bytes from P:\WinCOM32\ga\comm.obj (p:\WinCOM32\comm.c)
+	at offset 00003870 023B0H bytes from P:\WinCOM32\ga\dialog.obj (p:\WinCOM32\dialog.c)
+	at offset 00005c20 00507H bytes from P:\WinCOM32\ga\init.obj (p:\WinCOM32\init.c)
+	at offset 00006130 00845H bytes from P:\WinCOM32\ga\strtrans.obj (p:\WinCOM32\strtrans.c)
+	at offset 00006980 00251H bytes from P:\WinCOM32\ga\terminal.obj (p:\WinCOM32\terminal.c)
+	at offset 00006be0 00292H bytes from P:\WinCOM32\ga\thread.obj (p:\WinCOM32\thread.c)
+	at offset 00006e74 0005CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\sprintf.c)
+	at offset 00006ed0 000ACH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\atoi.c)
+	at offset 00006f7c 000ACH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\atol.c)
+	at offset 00007028 000B2H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\edcprol.asm)
+	at offset 000070dc 00117H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\strtol.c)
+	at offset 000071f4 00096H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\edc3216.asm)
+	at offset 0000728c 0000DH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\sel_flat.asm)
+	at offset 0000729c 0015DH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\tsglobal.c)
+	at offset 000073fc 015C9H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\dofmto.c)
+	at offset 000089c8 00189H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\toint.c)
+	at offset 00008b54 000BEH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\dde4strt.c)
+	at offset 00008c14 000FBH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\ctypetbl.c)
+	at offset 00008d10 000F6H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\n_excrit.c)
+	at offset 00008e08 003A8H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\begthrd.c)
+	at offset 000091b0 0001EH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\fastsema.asm)
+	at offset 000091d0 000D1H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\bufprint.c)
+	at offset 000092a4 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\calls.asm)
+	at offset 000092b0 0002AH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\cfree.c)
+	at offset 000092dc 00039H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\cmalloc.c)
+	at offset 00009318 0002AH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\exit.c)
+	at offset 00009344 000B3H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\fmtcomm.c)
+	at offset 000093f8 00004H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\fpninit.asm)
+	at offset 000093fc 00010H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\fpreset.asm)
+	at offset 0000940c 00047H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\interr.c)
+	at offset 00009454 00210H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\prtemsg.c)
+	at offset 00009664 0000DH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\sctdt.c)
+	at offset 00009674 001F8H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\setuparg.asm)
+	at offset 0000986c 0001BH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\weakfmt.c)
+	at offset 00009888 00007H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\cppinit.asm)
+	at offset 00009890 00396H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\edcinit.c)
+	at offset 00009c28 001D2H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\edcterm.c)
+	at offset 00009dfc 00027H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\localcnv.c)
+	at offset 00009e24 00007H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\matherr.c)
+	at offset 00009e2c 00080H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\n_dumpwk.c)
+	at offset 00009eac 0006BH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\n_excpta.asm)
+	at offset 00009f18 00033H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\wctomb.c)
+	at offset 00009f4c 00007H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\weakcput.c)
+	at offset 00009f54 007F1H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\n_except.c)
+	at offset 0000a748 00191H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\endthrd.c)
+	at offset 0000a8dc 000D7H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\fastsem.c)
+	at offset 0000a9b4 000B7H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\freethrd.c)
+	at offset 0000aa6c 0000BH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\threadid.c)
+	at offset 0000aa78 00032H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\crt_fd.c)
+	at offset 0000aaac 000A3H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\ltoa.c)
+	at offset 0000ab50 000E2H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\rcalloc.c)
+	at offset 0000ac34 00366H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\rheapmin.c)
+	at offset 0000af9c 0011DH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\rinit.c)
+	at offset 0000b0bc 01870H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\rmalloc.c)
+	at offset 0000c92c 0003CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\strspn.asm)
+	at offset 0000c968 00010H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\terminat.c)
+	at offset 0000c978 00005H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\wctdt.c)
+	at offset 0000c980 00009H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\wk_exit.c)
+	at offset 0000c98c 00007H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\wk_tmem.c)
+	at offset 0000c994 0000EH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\bts.asm)
+	at offset 0000c9a4 00017H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\cweak.c)
+	at offset 0000c9bc 00007H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\edcmxdef.c)
+	at offset 0000c9c4 00007H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\fclweak.c)
+	at offset 0000c9cc 00151H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\fflush.c)
+	at offset 0000cb20 0023DH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\fillb.c)
+	at offset 0000cd60 000C5H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\freefcb.c)
+	at offset 0000ce28 0015FH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\getenv.c)
+	at offset 0000cf88 00015H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\incdec.asm)
+	at offset 0000cfa0 0000BH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\localcns.c)
+	at offset 0000cfac 00040H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\mbrlen.c)
+	at offset 0000cfec 000C6H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\setupenv.c)
+	at offset 0000d0b4 00035H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\uwrite.c)
+	at offset 0000d0ec 00117H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\wctombd.c)
+	at offset 0000d204 00006H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\w_raise.c)
+	at offset 0000d20c 003CFH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\rcreate.c)
+	at offset 0000d5dc 00003H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\wflush.c)
+	at offset 0000d5e0 00005H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\wk_rmem.c)
+	at offset 0000d5e8 00003H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\wk_walk.c)
+	at offset 0000d5ec 001A1H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\flush.c)
+	at offset 0000d790 0032DH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\flushb.c)
+	at offset 0000dac0 00100H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\mbrlend.c)
+	at offset 0000dbc0 00527H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\nlssetup.c)
+	at offset 0000e0e8 000B5H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\strnicmp.c)
+	at offset 0000e1a0 0004DH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\wmemfile.c)
+
+ 0002:00000000 000000019H CODE16                 CODE 16-bit
+	at offset 00000000 00019H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\edc3216.asm)
+
+ 0003:00000000 000000030H _MSGSEG32              CODE 32-bit
+	at offset 00000000 00030H bytes from F:\IBMCPP\LIB\OS2386.lib (.\msgseg32.asm)
+
+ 0004:00000000 000000110H CONST32_RO             CONST 32-bit
+	at offset 00000000 00049H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\dofmto.c)
+	at offset 0000004c 00088H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\prtemsg.c)
+	at offset 000000d4 00014H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\edcinit.c)
+	at offset 000000e8 00025H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\ltoa.c)
+
+ 0005:00000000 000000008H LIBDATA16              DATA16 16-bit
+	at offset 00000000 00008H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\edc3216.asm)
+
+ 0006:00000000 00000212CH DATA32                 DATA 32-bit
+	at offset 00000000 00024H bytes from P:\WinCOM32\ga\util.obj (p:\WinCOM32\util.c)
+	at offset 00000024 00798H bytes from P:\WinCOM32\ga\wincom.obj (p:\WinCOM32\wincom.c)
+	at offset 000007bc 00034H bytes from P:\WinCOM32\ga\dialog.obj (p:\WinCOM32\dialog.c)
+	at offset 000007f0 00058H bytes from P:\WinCOM32\ga\init.obj (p:\WinCOM32\init.c)
+	at offset 00000848 001ECH bytes from P:\WinCOM32\ga\strtrans.obj (p:\WinCOM32\strtrans.c)
+	at offset 00000a34 000A8H bytes from P:\WinCOM32\ga\terminal.obj (p:\WinCOM32\terminal.c)
+	at offset 00000adc 00048H bytes from P:\WinCOM32\ga\thread.obj (p:\WinCOM32\thread.c)
+	at offset 00000b24 00004H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\exeentry.asm)
+	at offset 00000b28 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\tsglobal.c)
+	at offset 00000b34 00008H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\dofmto.c)
+	at offset 00000b3c 00108H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\ctypetbl.c)
+	at offset 00000c44 0009CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\begthrd.c)
+	at offset 00000ce0 00002H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\fpreset.asm)
+	at offset 00000ce4 00004H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\prtemsg.c)
+	at offset 00000ce8 00010H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\setuparg.asm)
+	at offset 00000cf8 00274H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\edcinit.c)
+	at offset 00000f6c 00074H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\lccmap.c)
+	at offset 00000fe0 000ACH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\n_except.c)
+	at offset 0000108c 00024H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\endthrd.c)
+	at offset 000010b0 00004H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\crt_fd.c)
+	at offset 000010b4 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\rheapmin.c)
+	at offset 000010c0 00028H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\rmalloc.c)
+	at offset 000010e8 00010H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\fflush.c)
+	at offset 000010f8 00010H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\getenv.c)
+	at offset 00001108 002C8H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\lclocale.c)
+	at offset 000013d0 00004H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\localcns.c)
+	at offset 000013d4 00004H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\wctombd.c)
+	at offset 000013d8 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\rcreate.c)
+	at offset 000013e4 00268H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\lccoll.c)
+	at offset 0000164c 00538H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\lcctype.c)
+	at offset 00001b84 00050H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\lcmon.c)
+	at offset 00001bd4 00028H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\lcnum.c)
+	at offset 00001bfc 00048H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\lcresp.c)
+	at offset 00001c44 00074H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\lcsyntax.c)
+	at offset 00001cb8 00418H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\lctime.c)
+	at offset 000020d0 00058H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\lctod.c)
+	at offset 00002128 00004H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\mbrlend.c)
+
+ 0006:0000212C 000000000H CTOR_DTOR1             DATA 32-bit
+
+ 0006:0000212C 000000000H CTOR_DTOR2             DATA 32-bit
+
+ 0006:0000212C 000000000H CTOR_DTOR3             DATA 32-bit
+
+ 0006:0000212C 00000001CH EDC1                   EDC_CLASS 32-bit
+	at offset 00000000 0001CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\n_excpta.asm)
+
+ 0006:00002148 000000348H EDC2                   EDC_CLASS 32-bit
+	at offset 00000000 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\sprintf.c)
+	at offset 0000000c 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\atoi.c)
+	at offset 00000018 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\atol.c)
+	at offset 00000024 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\strtol.c)
+	at offset 00000030 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\tsglobal.c)
+	at offset 0000003c 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\dofmto.c)
+	at offset 00000048 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\toint.c)
+	at offset 00000054 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\ctypetbl.c)
+	at offset 00000060 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\n_excrit.c)
+	at offset 0000006c 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\begthrd.c)
+	at offset 00000078 00018H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\fastsema.asm)
+	at offset 00000090 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\bufprint.c)
+	at offset 0000009c 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\calls.asm)
+	at offset 000000a8 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\cfree.c)
+	at offset 000000b4 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\cmalloc.c)
+	at offset 000000c0 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\exit.c)
+	at offset 000000cc 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\fpninit.asm)
+	at offset 000000d8 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\fpreset.asm)
+	at offset 000000e4 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\interr.c)
+	at offset 000000f0 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\prtemsg.c)
+	at offset 000000fc 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\setuparg.asm)
+	at offset 00000108 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\weakfmt.c)
+	at offset 00000114 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\cppinit.asm)
+	at offset 00000120 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\edcinit.c)
+	at offset 0000012c 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\edcterm.c)
+	at offset 00000138 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\lccmap.c)
+	at offset 00000144 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\localcnv.c)
+	at offset 00000150 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\matherr.c)
+	at offset 0000015c 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\n_dumpwk.c)
+	at offset 00000168 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\wctomb.c)
+	at offset 00000174 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\weakcput.c)
+	at offset 00000180 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\n_except.c)
+	at offset 0000018c 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\endthrd.c)
+	at offset 00000198 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\fastsem.c)
+	at offset 000001a4 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\freethrd.c)
+	at offset 000001b0 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\threadid.c)
+	at offset 000001bc 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\ltoa.c)
+	at offset 000001c8 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\rheapmin.c)
+	at offset 000001d4 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\rmalloc.c)
+	at offset 000001e0 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\strspn.asm)
+	at offset 000001ec 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\terminat.c)
+	at offset 000001f8 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\wk_exit.c)
+	at offset 00000204 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\bts.asm)
+	at offset 00000210 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\edcmxdef.c)
+	at offset 0000021c 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\fclweak.c)
+	at offset 00000228 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\fflush.c)
+	at offset 00000234 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\fillb.c)
+	at offset 00000240 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\freefcb.c)
+	at offset 0000024c 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\getenv.c)
+	at offset 00000258 00018H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\incdec.asm)
+	at offset 00000270 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\lclocale.c)
+	at offset 0000027c 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\localcns.c)
+	at offset 00000288 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\mbrlen.c)
+	at offset 00000294 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\setupenv.c)
+	at offset 000002a0 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\uwrite.c)
+	at offset 000002ac 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\wctombd.c)
+	at offset 000002b8 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\flush.c)
+	at offset 000002c4 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\flushb.c)
+	at offset 000002d0 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\lccoll.c)
+	at offset 000002dc 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\lcctype.c)
+	at offset 000002e8 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\lcmon.c)
+	at offset 000002f4 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\lcnum.c)
+	at offset 00000300 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\lcresp.c)
+	at offset 0000030c 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\lcsyntax.c)
+	at offset 00000318 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\lctime.c)
+	at offset 00000324 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\lctod.c)
+	at offset 00000330 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\mbrlend.c)
+	at offset 0000033c 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\strnicmp.c)
+
+ 0006:00002490 000000004H EDC3                   EDC_CLASS 32-bit
+	at offset 00000000 00004H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\n_excpta.asm)
+
+ 0006:00002494 0000000CCH BSS32                  BSS 32-bit
+	at offset 00000000 00034H bytes from P:\WinCOM32\ga\wincom.obj (p:\WinCOM32\wincom.c)
+	at offset 00000034 00018H bytes from P:\WinCOM32\ga\dialog.obj (p:\WinCOM32\dialog.c)
+	at offset 0000004c 00008H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\dde4strt.c)
+	at offset 00000054 00008H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\ctypetbl.c)
+	at offset 0000005c 00004H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\prtemsg.c)
+	at offset 00000060 0001CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\edcinit.c)
+	at offset 0000007c 0000CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\n_except.c)
+	at offset 00000088 00004H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\rinit.c)
+	at offset 0000008c 00010H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\lclocale.c)
+	at offset 0000009c 0001CH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\lcctype.c)
+	at offset 000000b8 0000BH bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\lcmon.c)
+	at offset 000000c4 00002H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\lcnum.c)
+	at offset 000000c8 00003H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\lctime.c)
+
+ 0006:00002560 000000588H c_common               BSS 32-bit
+
+ 0006:00002AF0 00000C000H STACK32                STACK 32-bit
+	at offset 00000000 08000H bytes from F:\IBMCPP\LIB\CPPOM30.lib (D:\SwordCSD\crt\exeentry.asm)
+
+
+ Origin   Group
+ 0000:0   FLAT
+ 0006:0   DGROUP
+
+  Address         Publics by Name
+
+ 0001:00006ED0       atoi
+ 0001:00006F7C       atol
+ 0006:000024C8       bCLP_StatusActivated
+ 0006:00002498       bIsTheFirst
+ 0006:000024A8       bMaximized
+ 0006:000024AC       bMinimized
+ 0000:00000000  Imp  BreakOff             (OS2LS_IO.21)
+ 0000:00000000  Imp  BreakOn              (OS2LS_IO.20)
+ 0006:0000249C       bResetCounter
+ 0006:000024A0       bSearchProfileApps
+ 0006:00000710       bUseProfile
+ 0000:00000000  Imp  CenterDlgBox         (OS2LS_UT.4)
+ 0006:00000714       chAnsi
+ 0000:00000000  Imp  CheckButton          (OS2LS_UT.3)
+ 0000:00000000  Imp  Checked              (OS2LS_UT.22)
+ 0001:000000D0       ClearScreen
+ 0006:0000071C       ClrTable
+ 0001:00000C20       ComCommand
+ 0000:00000000  Imp  ControlEnable        (OS2LS_UT.7)
+ 0001:00001B40       CreatePS
+ 0001:00000BF0       CreateThread
+ 0000:00000000  Imp  DOS32FLATTOSEL       (DOSCALLS.425)
+ 0003:00000012       Dos32GetMessage
+ 0003:00000012       DOS32GETMESSAGE
+ 0000:00000000  Imp  DOS32IQUERYMESSAGECP (MSG.8)
+ 0000:00000000  Imp  DOS32SELTOFLAT       (DOSCALLS.426)
+ 0000:00000000  Imp  DOS32TRUEGETMESSAGE  (MSG.6)
+ 0000:00000000  Imp  DosAllocMem          (DOSCALLS.299)
+ 0000:00000000  Imp  DosClose             (DOSCALLS.257)
+ 0000:00000000  Imp  DosCloseEventSem     (DOSCALLS.326)
+ 0000:00000000  Imp  DosCreateEventSem    (DOSCALLS.324)
+ 0000:00000000  Imp  DosCreateThread      (DOSCALLS.311)
+ 0000:00000000  Imp  DosEnterCritSec      (DOSCALLS.232)
+ 0000:00000000  Imp  DosExit              (DOSCALLS.234)
+ 0000:00000000  Imp  DosExitCritSec       (DOSCALLS.233)
+ 0000:00000000  Imp  DosExitList          (DOSCALLS.296)
+ 0000:00000000  Imp  DOSFLATTOSEL         (DOSCALLS.425)
+ 0000:00000000  Imp  DosFreeMem           (DOSCALLS.304)
+ 0000:00000000  Imp  DosFreeModule        (DOSCALLS.322)
+ 0000:00000000  Imp  DosGetInfoBlocks     (DOSCALLS.312)
+ 0003:00000012       DOSGETMESSAGE
+ 0003:00000012       DosGetMessage
+ 0000:00000000  Imp  DosLoadModule        (DOSCALLS.318)
+ 0000:00000000  Imp  DosOpen              (DOSCALLS.273)
+ 0000:00000000  Imp  DosOpenEventSem      (DOSCALLS.325)
+ 0000:00000000  Imp  DosPostEventSem      (DOSCALLS.328)
+ 0000:00000000  Imp  DosQueryDBCSEnv      (NLS.6)
+ 0000:00000000  Imp  DosQueryHType        (DOSCALLS.224)
+ 0000:00000000  Imp  DosQueryProcAddr     (DOSCALLS.321)
+ 0000:00000000  Imp  DosQuerySysInfo      (DOSCALLS.348)
+ 0000:00000000  Imp  DosRaiseException    (DOSCALLS.356)
+ 0000:00000000  Imp  DosRead              (DOSCALLS.281)
+ 0000:00000000  Imp  DosResetEventSem     (DOSCALLS.327)
+ 0000:00000000  Imp  DosSetExceptionHandler (DOSCALLS.354)
+ 0000:00000000  Imp  DosSetFilePtr        (DOSCALLS.256)
+ 0000:00000000  Imp  DosSetPriority       (DOSCALLS.236)
+ 0000:00000000  Imp  DosSetSignalExceptionFocus (DOSCALLS.378)
+ 0000:00000000  Imp  DosSleep             (DOSCALLS.229)
+ 0001:0000663C       DoStringTransfer
+ 0000:00000000  Imp  DosUnsetExceptionHandler (DOSCALLS.355)
+ 0000:00000000  Imp  DosWaitEventSem      (DOSCALLS.329)
+ 0000:00000000  Imp  DosWrite             (DOSCALLS.282)
+ 0001:00000618       ErrorNotify
+ 0001:00009318       exit
+ 0001:00003594       ExitRoutine
+ 0001:0000C9CC       fflush
+ 0001:000056A8       FillProcStringXferDlg1
+ 0001:00005430       FillProcStringXferDlg2
+ 0001:00003BC0       FillSetColorDlg
+ 0000:00000000  Imp  FlushComBuffer       (OS2LS_IO.14)
+ 0001:00001C1C       fnwpClient
+ 0001:00003D90       fnwpPortSelectDlg
+ 0001:000058D0       fnwpProcStringXferDlg
+ 0001:00003870       fnwpProcTerminalDlg
+ 0001:00003CFA       fnwpSetColorDlg
+ 0000:00000000  Imp  ForceXoff            (OS2LS_IO.25)
+ 0000:00000000  Imp  ForceXon             (OS2LS_IO.24)
+ 0001:00000948       FrameSubProc
+ 0001:000092B0       free
+ 0000:00000000  Imp  GetBaudRate          (OS2LS_IO.4)
+ 0001:000037F0       GetComByte
+ 0001:00003740       GetComString
+ 0001:00003780       GetComWord
+ 0000:00000000  Imp  GetDCB               (OS2LS_IO.15)
+ 0001:0000CE28       getenv
+ 0000:00000000  Imp  GetLineCharacteristics (OS2LS_IO.3)
+ 0001:000005E0       GetMessageBuffer
+ 0000:00000000  Imp  GpiCharStringAt      (PMGPI.359)
+ 0000:00000000  Imp  GpiSetBackColor      (PMGPI.504)
+ 0000:00000000  Imp  GpiSetBackMix        (PMGPI.505)
+ 0000:00000000  Imp  GpiSetColor          (PMGPI.517)
+ 0006:00002654       habAnchorBlock
+ 0001:00001676       Help
+ 0006:00002AC4       hevKillReadThreadSem
+ 0006:0000272C       hevKillThreadSem
+ 0006:00002564       hevKillWriteThreadSem
+ 0006:00002AE0       hevRestartThreadSem
+ 0006:00002720       hevStartReadSem
+ 0006:00002560       hevStartReadThreadSem
+ 0006:00002864       hevStartThreadSem
+ 0006:00002838       hevStartWriteSem
+ 0006:00002568       hevStartWriteThreadSem
+ 0006:000024A4       hProfileInstance
+ 0006:00002AC8       hwndClient
+ 0006:000028C4       hwndFrame
+ 0006:000024B0       iDebugLevel
+ 0001:00005256       InitEnableProcStringXferDlg1
+ 0001:00004FD0       InitEnableProcStringXferDlg2
+ 0001:00002CAE       KillThread
+ 0001:00009E08       localeconv
+ 0001:00006D9A       LoopThread
+ 0001:00002DE4       main
+ 0001:000004A0       MakeBinaryString
+ 0001:00000506       MakeLongString
+ 0001:000092DC       malloc
+ 0001:0000CFB8       mbrlen
+ 0001:00000708       MenuCheckSeries
+ 0000:00000000  Imp  MenuItemCheck        (OS2LS_UT.6)
+ 0000:00000000  Imp  MenuItemEnable       (OS2LS_UT.9)
+ 0000:00000000  Imp  MessageBox           (OS2LS_UT.29)
+ 0001:0000065A       OpenPort
+ 0001:00000B60       PaintWindow
+ 0001:00000406       PauseThread
+ 0006:00002728       pfnCloseProfile
+ 0006:0000283C       pfnGetProfileData
+ 0006:00002AD4       pfnGetProfileString
+ 0006:00002AE4       pfnInitializeProfile
+ 0006:00002724       pfnManageProfile
+ 0006:00002868       pfnSaveProfileData
+ 0006:00002ADC       pfnSaveProfileString
+ 0001:0000349E       pfnUpdateProfileOptions
+ 0006:00000738       pstThread
+ 0001:00000000       QueryAnsiClr
+ 0001:00006130       ReadCharacters
+ 0001:00006BE0       ReadLoopThread
+ 0001:000062E0       ReadString
+ 0001:00000030       SaveWindowPositions
+ 0001:0000199E       Scroll
+ 0000:00000000  Imp  SendByteImmediate    (OS2LS_IO.17)
+ 0001:00003706       SendComByte
+ 0001:00003670       SendComString
+ 0001:000036B0       SendComWord
+ 0000:00000000  Imp  SendDCB              (OS2LS_IO.19)
+ 0001:000003B0       SendXonXoff
+ 0000:00000000  Imp  SetBaudRate          (OS2LS_IO.6)
+ 0000:00000000  Imp  SetLineCharacteristics (OS2LS_IO.5)
+ 0001:000002C2       SetScreenColors
+ 0003:00000000       sig32
+ 0001:00005D10       StartSystem
+ 0001:00000760       StatusProc
+ 0006:00002878       stComCtl
+ 0006:00000EB0       stderr
+ 0006:00000EA8       stdin
+ 0006:00000EAC       stdout
+ 0006:00002574       stIOctlInst
+ 0006:000028CC       stProfile
+ 0001:0000E0E8       strnicmp
+ 0001:0000C92C       strspn
+ 0001:000070DC       strtol
+ 0006:00002580       stThisWindow
+ 0006:00002840       swpLastPosition
+ 0006:00000834       szCurrentPortName
+ 0006:0000073C       szErrorMessage
+ 0006:00000790       szHelp
+ 0006:0000079C       szHelpMessage
+ 0006:00002658       szMsg
+ 0006:000007E8       szOff
+ 0006:000007E5       szOn
+ 0006:000007A8       szTitle
+ 0006:000006E8       szWinCOMAppName
+ 0006:00002730       szWinCOMIniPath
+ 0006:000006E0       szWinCOMProfile
+ 0006:00000728       szWinCOMVersion
+ 0001:00004460       TCProcStringXferDlg
+ 0001:00006980       TerminalRead
+ 0001:00003FBE       UnloadProcStringXferDlg
+ 0001:00003A90       UnloadSetColorDlg
+ 0000:00000000  Imp  VIO16ASSOCIATE       (VIOCALLS.55)
+ 0000:00000000  Imp  VIO16CREATEPS        (VIOCALLS.56)
+ 0000:00000000  Imp  VIO16DESTROYPS       (VIOCALLS.61)
+ 0000:00000000  Imp  VIO16GETBUF          (VIOCALLS.31)
+ 0000:00000000  Imp  VIO16GETCURPOS       (VIOCALLS.9)
+ 0000:00000000  Imp  VIO16GETDEVICECELLSIZE (VIOCALLS.58)
+ 0000:00000000  Imp  VIO16GETORG          (VIOCALLS.59)
+ 0000:00000000  Imp  VIO16SETANSI         (VIOCALLS.5)
+ 0000:00000000  Imp  VIO16SETCURPOS       (VIOCALLS.15)
+ 0000:00000000  Imp  VIO16SETORG          (VIOCALLS.63)
+ 0000:00000000  Imp  VIO16SHOWPS          (VIOCALLS.66)
+ 0000:00000000  Imp  VIO16WRTNATTR        (VIOCALLS.26)
+ 0000:00000000  Imp  VIO16WRTNCELL        (VIOCALLS.52)
+ 0000:00000000  Imp  VIO16WRTTTY          (VIOCALLS.19)
+ 0001:0000381C       WaitComByte
+ 0001:00009F24       wctomb
+ 0000:00000000  Imp  WIN16DEFAVIOWINDOWPROC (PMVIOP.30)
+ 0000:00000000  Imp  WinBeginPaint        (PMWIN.703)
+ 0000:00000000  Imp  WinCalcFrameRect     (PMWIN.704)
+ 0000:00000000  Imp  WinCreateMsgQueue    (PMWIN.716)
+ 0000:00000000  Imp  WinCreateStdWindow   (PMWIN.908)
+ 0000:00000000  Imp  WinCreateWindow      (PMWIN.909)
+ 0000:00000000  Imp  WinDefDlgProc        (PMWIN.910)
+ 0000:00000000  Imp  WinDefWindowProc     (PMWIN.911)
+ 0000:00000000  Imp  WinDestroyMsgQueue   (PMWIN.726)
+ 0000:00000000  Imp  WinDestroyWindow     (PMWIN.728)
+ 0000:00000000  Imp  WinDismissDlg        (PMWIN.729)
+ 0000:00000000  Imp  WinDispatchMsg       (PMWIN.912)
+ 0000:00000000  Imp  WinDlgBox            (PMWIN.923)
+ 0001:00005C20       WindowInit
+ 0000:00000000  Imp  WinDrawBorder        (PMWIN.731)
+ 0000:00000000  Imp  WinEndPaint          (PMWIN.738)
+ 0000:00000000  Imp  WinFillRect          (PMWIN.743)
+ 0000:00000000  Imp  WinGetMsg            (PMWIN.915)
+ 0000:00000000  Imp  WinInitialize        (PMWIN.763)
+ 0000:00000000  Imp  WinInvalidateRect    (PMWIN.765)
+ 0000:00000000  Imp  WinMapWindowPoints   (PMWIN.788)
+ 0000:00000000  Imp  WinMessageBox        (PMWIN.789)
+ 0000:00000000  Imp  WinOpenWindowDC      (PMWIN.794)
+ 0000:00000000  Imp  WinPostMsg           (PMWIN.919)
+ 0000:00000000  Imp  WinQueryActiveWindow (PMWIN.799)
+ 0000:00000000  Imp  WinQueryDlgItemText  (PMWIN.815)
+ 0000:00000000  Imp  WinQueryDlgItemTextLength (PMWIN.816)
+ 0000:00000000  Imp  WinQuerySysValue     (PMWIN.829)
+ 0000:00000000  Imp  WinQueryWindow       (PMWIN.834)
+ 0000:00000000  Imp  WinQueryWindowPos    (PMWIN.837)
+ 0000:00000000  Imp  WinQueryWindowRect   (PMWIN.840)
+ 0000:00000000  Imp  WinQueryWindowText   (PMWIN.841)
+ 0000:00000000  Imp  WinRegisterClass     (PMWIN.926)
+ 0000:00000000  Imp  WinSendDlgItemMsg    (PMWIN.903)
+ 0000:00000000  Imp  WinSendMsg           (PMWIN.920)
+ 0000:00000000  Imp  WinSetDlgItemText    (PMWIN.859)
+ 0000:00000000  Imp  WinSetFocus          (PMWIN.860)
+ 0000:00000000  Imp  WinSetWindowPos      (PMWIN.875)
+ 0000:00000000  Imp  WinSetWindowPtr      (PMWIN.876)
+ 0000:00000000  Imp  WinSetWindowText     (PMWIN.877)
+ 0000:00000000  Imp  WinShowWindow        (PMWIN.883)
+ 0000:00000000  Imp  WinSubclassWindow    (PMWIN.929)
+ 0000:00000000  Imp  WinTerminate         (PMWIN.888)
+ 0000:00000000  Imp  WinWindowFromID      (PMWIN.899)
+ 0001:000016C4       WndSize
+ 0001:00006420       WriteCharacters
+ 0001:0000658E       WriteString
+ 0006:000007EC       wUpdateDelay
+ 0006:000024E0       _argc
+ 0006:000024E4       _argv
+ 0001:0000912C       _beginthread
+ 0001:0000C994       _bit_test_set
+ 0001:000091D0       _bufprint
+ 0001:000092A4       _callback_opt_sys
+ 0001:0000A9A4       _CloseSem
+ 0001:00009888       _cppinit
+ 0001:0000A97C       _CreateSem
+ 0001:00008D10       _critlib_except
+ 0001:00008E08       _CrtGetLocalData
+ 0001:000090E4       _CrtInitThread
+ 0001:000098E0       _CRT_init
+ 0006:000010B0       _crt_msg_handle
+ 0001:00009C28       _CRT_term
+ 0006:000024FC       _CRT_usage_count
+ 0006:000024E8       _ctype
+ 0006:00000C40       _ctypeModule
+ 0006:00002544       _ctype_cmask
+ 0006:00002540       _ctype_ctypeidx
+ 0006:0000253C       _ctype_lower
+ 0006:00002534       _ctype_loweridx
+ 0006:00002548       _ctype_mask
+ 0006:00002538       _ctype_upper
+ 0006:00002530       _ctype_upperidx
+ 0006:00000F74       _C_charmap
+ 0006:000015E4       _C_collate
+ 0006:00001B30       _C_ctype
+ 0006:00001F30       _C_dtconv
+ 0006:0000127C       _C_lconv
+ 0006:000012BC       _C_locale
+ 0006:00001B84       _C_monetary
+ 0006:00001BD8       _C_numeric
+ 0006:00001C20       _C_resp
+ 0006:00001C68       _C_syntax
+ 0006:00001FE0       _C_time
+ 0006:000020DC       _C_tod
+ 0006:00000F60       _daylight
+ 0006:0000256C       _dbg_mem_sem
+ 0001:0000CF90       _dec_test
+ 0001:00007294       _DosFlatToSel
+ 0001:0000728C       _DosSelToFlat
+ 0006:00002494       _edata
+ 0006:000024F4       _edcinit_fin
+ 0006:0000286C       _eh_base
+ 0006:00002AF0       _end
+ 0001:0000A748       _endthread
+ 0006:000028BC       _environ
+ 0001:000073DC       _errno
+ 0001:00009EAC       _Exception
+ 0001:0000A6C4       _exception_dllinit
+ 0001:0000A6F4       _exception_procinit
+ 0006:00000B24       _exeentry
+ 0001:00008B54       _exestart
+ 0001:00009FC0       _EXE_Exception
+ 0001:0000C980       _exit_weak
+ 0001:0000C9C4       _fcloseall_weak
+ 0001:0000CB20       _fillb
+ 0006:0000213C       _firsteib
+ 0001:0000D5EC       _Flush
+ 0001:0000D790       _flushb
+ 0001:000093F8       _fpninit
+ 0001:000093FC       _fpreset
+ 0001:00008C14       _freeCtype
+ 0001:0000C9B8       _freeCtype_weak
+ 0001:0000CD60       _FreeFCB
+ 0001:0000C9B0       _freeLocale_weak
+ 0001:0000A9B4       _freeThreadStorage
+ 0001:00009F54       _get_eib
+ 0001:00009EDC       _get_seglim
+ 0001:0000C9A8       _iconv_term_weak
+ 0001:0000CF88       _inc
+ 0001:00008C30       _init_ctype
+ 0001:0000C9B4       _init_ctype_weak
+ 0001:000075F4       _insert_thou_sep
+ 0001:0000940C       _internal_err
+ 0001:0000B698       _int_rfree
+ 0001:0000D47C       _int_uaddmem
+ 0001:0000AD40       _int_uheapmin
+ 0001:0000C5A8       _int_umalloc
+ 0006:00002490       _lasteib
+ 0001:0000A140       _Lib_excpt
+ 0006:000024F8       _locale_initialized
+ 0001:0000C9AC       _localInit_weak
+ 0001:0000AAAC       _ltoa
+ 0001:00009E24       _matherr
+ 0006:00000FE0       _matherr_ptr
+ 0001:0000C9BC       _Math_Exception_Def
+ 0006:00000FDC       _mb_cur_max
+ 0001:000094A0       _MesgServ
+ 0001:00009FB0       _mig_eib_store
+ 0001:00009394       _nConv
+ 0001:0000A968       _OpenSem
+ 0006:000028C0       _osmajor
+ 0006:000028C1       _osminor
+ 0006:00000F68       _osmode
+ 0006:00000F5C       _PGLOBAL_PTR
+ 0001:00009454       _PrintErrMsg
+ 0001:0000A000       _recreate_exception
+ 0001:00009ED0       _Regen_exception
+ 0006:000028C8       _reg_heap
+ 0001:000091C0       _ReleaseSem
+ 0001:000091B0       _RequestSem
+ 0001:0000AFE0       _rmem_init
+ 0001:0000AF9C       _rmem_term
+ 0001:0000B4BC       _rnode_delete
+ 0001:00009674       _setuparg
+ 0001:0000CFEC       _setupenv
+ 0001:0000AA78       _set_crt_msg_handle
+ 0001:00009344       _signedAssign
+ 0001:00006E74       _sprintfieee
+ 0001:00006EB0       _sprintf_ansi
+ 0001:0000C968       _terminate
+ 0006:00002ACC       _TerminateAndDumpSem
+ 0001:00009EC4       _Test_and_reset
+ 0001:00009890       _test_handle
+ 0006:00000F64       _timezone
+ 0001:000089C8       _toint
+ 0006:00002870       _tzname
+ 0001:0000D3BC       _uaddmem
+ 0001:0000AB50       _ucalloc
+ 0001:0000D20C       _ucreate
+ 0001:0000B50C       _ufree
+ 0001:0000AC90       _uheapmin
+ 0001:0000B5E0       _umalloc
+ 0001:0000D0B4       _uwrite
+ 0006:00002AD8       _walk_used
+ 0001:00009F4C       _wcputs
+ 0001:0000E1C8       _wfgetposMem
+ 0001:0000986C       _wfloatfmt
+ 0001:0000E1A8       _wfsetposMem
+ 0001:0000E1C0       _wOpenMemory
+ 0001:0000E1A4       _wreadbSyncMem
+ 0001:0000E1BC       _wRemoveMem
+ 0001:0000E1B8       _wrewindMem
+ 0001:0000E1B0       _wSeekMem
+ 0001:0000E1DC       _wtellMem
+ 0001:0000E1A0       _wuwriteMem
+ 0001:0000D5DC       _w_int_uflush
+ 0001:0000D5E4       _w_int_unlink_item
+ 0001:0000D204       _w_raise
+ 0001:00009E2C       _w_Terminate_and_dump
+ 0001:0000C990       _w_tmem_init
+ 0001:0000C98C       _w_tmem_term
+ 0001:0000D5E0       _w_uheap_verify
+ 0001:0000D5E8       _w_walking
+ 0001:0000A738       __Async_exception_flag
+ 0001:0000738C       __broken_time_ptr
+ 0001:0000E038       __charmap_init
+ 0001:0000E034       __collate_init
+ 0001:0000729C       __conv_buf
+ 0001:000073EC       __cppstore
+ 0001:0000E048       __ctype_init
+ 0001:0000737C       __cvt_buf_ptr
+ 0006:000024EC       __c_local_ctype
+ 0001:000072E0       __default_heap
+ 0001:00008438       __dofmto
+ 0001:000073CC       __doserrno
+ 0001:000073BC       __dttm_ptr
+ 0001:000071F4       __EDC3216
+ 0001:00007028       __EDCThunkProlog
+ 0001:0000A278       __Exception
+ 0005:00000000       __fac
+ 0001:0000739C       __flags
+ 0001:0000A900       __handleCollision
+ 0001:0000735C       __internal_buf_ptr
+ 0001:0000736C       __lcvt_buf_ptr
+ 0006:00000FD8       __lc_charmap
+ 0006:00001648       __lc_collate
+ 0006:00001B80       __lc_ctype
+ 0006:000013CC       __lc_locale
+ 0006:00001BD0       __lc_monetary
+ 0006:00001BF8       __lc_numeric
+ 0006:00001C40       __lc_resp
+ 0006:00001CB4       __lc_syntax
+ 0006:000020CC       __lc_time
+ 0006:00002124       __lc_tod
+ 0001:00009DFC       __localeconv_dummy
+ 0001:0000CFA0       __localeconv_std
+ 0006:000013D0       __localeconv_std_flag
+ 0001:0000E04C       __locale_init
+ 0001:0000DAC0       __mbrlen_dbcs
+ 0006:00002128       __mbrlen_dbcs_flag
+ 0001:0000CFAC       __mbrlen_dummy
+ 0001:0000C9A4       __method_weak
+ 0001:0000DECC       __monetary_init
+ 0001:0000DE78       __numeric_init
+ 0001:0000A8DC       __pendingRequest
+ 0001:0000734C       __perror_msg_ptr
+ 0001:00007310       __random_seed
+ 0001:0000DBC8       __resp_init
+ 0001:00008BE4       __RunExitList
+ 0001:0000A728       __Saved_return_address
+ 0001:00009664       __sctordtorInit
+ 0001:0000966C       __sctordtorTerm
+ 0001:000073AC       __strerror_msg_ptr
+ 0001:0000732C       __strtok_pos
+ 0001:00007300       __swprintf_buf
+ 0001:000072F0       __swprintf_size
+ 0001:0000DBC4       __syntax_init
+ 0001:0000733C       __tempname_ptr
+ 0001:0000AA6C       __threadid
+ 0001:0000DBE8       __time_init
+ 0001:0000DBC0       __tod_init
+ 0001:00007320       __version
+ 0001:0000D0EC       __wctomb_dbcs
+ 0006:000013D4       __wctomb_dbcs_flag
+ 0001:00009F18       __wctomb_dummy
+ 0001:0000C978       __wctordtorInit
+ 0001:0000C97C       __wctordtorTerm
+
+  Address         Publics by Value
+
+ 0000:00000000  Imp  DosSetFilePtr        (DOSCALLS.256)
+ 0000:00000000  Imp  WinDrawBorder        (PMWIN.731)
+ 0000:00000000  Imp  WinInitialize        (PMWIN.763)
+ 0000:00000000  Imp  BreakOn              (OS2LS_IO.20)
+ 0000:00000000  Imp  WinDismissDlg        (PMWIN.729)
+ 0000:00000000  Imp  Checked              (OS2LS_UT.22)
+ 0000:00000000  Imp  VIO16WRTNATTR        (VIOCALLS.26)
+ 0000:00000000  Imp  DosFreeModule        (DOSCALLS.322)
+ 0000:00000000  Imp  SendDCB              (OS2LS_IO.19)
+ 0000:00000000  Imp  DosRead              (DOSCALLS.281)
+ 0000:00000000  Imp  WinSetDlgItemText    (PMWIN.859)
+ 0000:00000000  Imp  VIO16ASSOCIATE       (VIOCALLS.55)
+ 0000:00000000  Imp  DosQueryHType        (DOSCALLS.224)
+ 0000:00000000  Imp  MenuItemEnable       (OS2LS_UT.9)
+ 0000:00000000  Imp  WinDestroyWindow     (PMWIN.728)
+ 0000:00000000  Imp  WinQuerySysValue     (PMWIN.829)
+ 0000:00000000  Imp  WinQueryWindowPos    (PMWIN.837)
+ 0000:00000000  Imp  DosRaiseException    (DOSCALLS.356)
+ 0000:00000000  Imp  DosCreateEventSem    (DOSCALLS.324)
+ 0000:00000000  Imp  WinShowWindow        (PMWIN.883)
+ 0000:00000000  Imp  DosExitList          (DOSCALLS.296)
+ 0000:00000000  Imp  GpiSetBackMix        (PMGPI.505)
+ 0000:00000000  Imp  WinBeginPaint        (PMWIN.703)
+ 0000:00000000  Imp  ControlEnable        (OS2LS_UT.7)
+ 0000:00000000  Imp  WinDestroyMsgQueue   (PMWIN.726)
+ 0000:00000000  Imp  DosClose             (DOSCALLS.257)
+ 0000:00000000  Imp  WinQueryWindowText   (PMWIN.841)
+ 0000:00000000  Imp  MenuItemCheck        (OS2LS_UT.6)
+ 0000:00000000  Imp  ForceXon             (OS2LS_IO.24)
+ 0000:00000000  Imp  VIO16WRTNCELL        (VIOCALLS.52)
+ 0000:00000000  Imp  DosExit              (DOSCALLS.234)
+ 0000:00000000  Imp  BreakOff             (OS2LS_IO.21)
+ 0000:00000000  Imp  WinMessageBox        (PMWIN.789)
+ 0000:00000000  Imp  WinCreateStdWindow   (PMWIN.908)
+ 0000:00000000  Imp  WinMapWindowPoints   (PMWIN.788)
+ 0000:00000000  Imp  DosOpen              (DOSCALLS.273)
+ 0000:00000000  Imp  DosLoadModule        (DOSCALLS.318)
+ 0000:00000000  Imp  DosSleep             (DOSCALLS.229)
+ 0000:00000000  Imp  WinDefDlgProc        (PMWIN.910)
+ 0000:00000000  Imp  WinQueryWindowRect   (PMWIN.840)
+ 0000:00000000  Imp  DOS32FLATTOSEL       (DOSCALLS.425)
+ 0000:00000000  Imp  WinCreateWindow      (PMWIN.909)
+ 0000:00000000  Imp  DosResetEventSem     (DOSCALLS.327)
+ 0000:00000000  Imp  DosCreateThread      (DOSCALLS.311)
+ 0000:00000000  Imp  DosCloseEventSem     (DOSCALLS.326)
+ 0000:00000000  Imp  WinRegisterClass     (PMWIN.926)
+ 0000:00000000  Imp  DosWaitEventSem      (DOSCALLS.329)
+ 0000:00000000  Imp  WinInvalidateRect    (PMWIN.765)
+ 0000:00000000  Imp  DosQueryProcAddr     (DOSCALLS.321)
+ 0000:00000000  Imp  DosPostEventSem      (DOSCALLS.328)
+ 0000:00000000  Imp  WinQueryDlgItemTextLength (PMWIN.816)
+ 0000:00000000  Imp  GpiSetBackColor      (PMGPI.504)
+ 0000:00000000  Imp  DosGetInfoBlocks     (DOSCALLS.312)
+ 0000:00000000  Imp  WinOpenWindowDC      (PMWIN.794)
+ 0000:00000000  Imp  DosQueryDBCSEnv      (NLS.6)
+ 0000:00000000  Imp  DosSetSignalExceptionFocus (DOSCALLS.378)
+ 0000:00000000  Imp  DosOpenEventSem      (DOSCALLS.325)
+ 0000:00000000  Imp  WinWindowFromID      (PMWIN.899)
+ 0000:00000000  Imp  GetDCB               (OS2LS_IO.15)
+ 0000:00000000  Imp  DosEnterCritSec      (DOSCALLS.232)
+ 0000:00000000  Imp  WinCalcFrameRect     (PMWIN.704)
+ 0000:00000000  Imp  WinSetWindowPtr      (PMWIN.876)
+ 0000:00000000  Imp  WinSubclassWindow    (PMWIN.929)
+ 0000:00000000  Imp  FlushComBuffer       (OS2LS_IO.14)
+ 0000:00000000  Imp  WinDispatchMsg       (PMWIN.912)
+ 0000:00000000  Imp  DosUnsetExceptionHandler (DOSCALLS.355)
+ 0000:00000000  Imp  VIO16SETCURPOS       (VIOCALLS.15)
+ 0000:00000000  Imp  VIO16DESTROYPS       (VIOCALLS.61)
+ 0000:00000000  Imp  WinSetWindowText     (PMWIN.877)
+ 0000:00000000  Imp  GpiCharStringAt      (PMGPI.359)
+ 0000:00000000  Imp  VIO16GETCURPOS       (VIOCALLS.9)
+ 0000:00000000  Imp  WinQueryDlgItemText  (PMWIN.815)
+ 0000:00000000  Imp  DosSetPriority       (DOSCALLS.236)
+ 0000:00000000  Imp  WinDefWindowProc     (PMWIN.911)
+ 0000:00000000  Imp  DosQuerySysInfo      (DOSCALLS.348)
+ 0000:00000000  Imp  SendByteImmediate    (OS2LS_IO.17)
+ 0000:00000000  Imp  DOS32SELTOFLAT       (DOSCALLS.426)
+ 0000:00000000  Imp  WinSendDlgItemMsg    (PMWIN.903)
+ 0000:00000000  Imp  WinCreateMsgQueue    (PMWIN.716)
+ 0000:00000000  Imp  WinSetWindowPos      (PMWIN.875)
+ 0000:00000000  Imp  DosExitCritSec       (DOSCALLS.233)
+ 0000:00000000  Imp  WinQueryWindow       (PMWIN.834)
+ 0000:00000000  Imp  MessageBox           (OS2LS_UT.29)
+ 0000:00000000  Imp  CheckButton          (OS2LS_UT.3)
+ 0000:00000000  Imp  VIO16SETANSI         (VIOCALLS.5)
+ 0000:00000000  Imp  GpiSetColor          (PMGPI.517)
+ 0000:00000000  Imp  CenterDlgBox         (OS2LS_UT.4)
+ 0000:00000000  Imp  WinFillRect          (PMWIN.743)
+ 0000:00000000  Imp  DOS32TRUEGETMESSAGE  (MSG.6)
+ 0000:00000000  Imp  DosAllocMem          (DOSCALLS.299)
+ 0000:00000000  Imp  DosFreeMem           (DOSCALLS.304)
+ 0000:00000000  Imp  WinSendMsg           (PMWIN.920)
+ 0000:00000000  Imp  WinEndPaint          (PMWIN.738)
+ 0000:00000000  Imp  WinSetFocus          (PMWIN.860)
+ 0000:00000000  Imp  SetBaudRate          (OS2LS_IO.6)
+ 0000:00000000  Imp  DOS32IQUERYMESSAGECP (MSG.8)
+ 0000:00000000  Imp  WinQueryActiveWindow (PMWIN.799)
+ 0000:00000000  Imp  VIO16GETDEVICECELLSIZE (VIOCALLS.58)
+ 0000:00000000  Imp  WIN16DEFAVIOWINDOWPROC (PMVIOP.30)
+ 0000:00000000  Imp  VIO16GETBUF          (VIOCALLS.31)
+ 0000:00000000  Imp  VIO16GETORG          (VIOCALLS.59)
+ 0000:00000000  Imp  SetLineCharacteristics (OS2LS_IO.5)
+ 0000:00000000  Imp  VIO16SETORG          (VIOCALLS.63)
+ 0000:00000000  Imp  DosSetExceptionHandler (DOSCALLS.354)
+ 0000:00000000  Imp  GetLineCharacteristics (OS2LS_IO.3)
+ 0000:00000000  Imp  VIO16SHOWPS          (VIOCALLS.66)
+ 0000:00000000  Imp  WinPostMsg           (PMWIN.919)
+ 0000:00000000  Imp  GetBaudRate          (OS2LS_IO.4)
+ 0000:00000000  Imp  VIO16WRTTTY          (VIOCALLS.19)
+ 0000:00000000  Imp  WinTerminate         (PMWIN.888)
+ 0000:00000000  Imp  DOSFLATTOSEL         (DOSCALLS.425)
+ 0000:00000000  Imp  VIO16CREATEPS        (VIOCALLS.56)
+ 0000:00000000  Imp  WinDlgBox            (PMWIN.923)
+ 0000:00000000  Imp  WinGetMsg            (PMWIN.915)
+ 0000:00000000  Imp  ForceXoff            (OS2LS_IO.25)
+ 0000:00000000  Imp  DosWrite             (DOSCALLS.282)
+ 0001:00000000       QueryAnsiClr
+ 0001:00000030       SaveWindowPositions
+ 0001:000000D0       ClearScreen
+ 0001:000002C2       SetScreenColors
+ 0001:000003B0       SendXonXoff
+ 0001:00000406       PauseThread
+ 0001:000004A0       MakeBinaryString
+ 0001:00000506       MakeLongString
+ 0001:000005E0       GetMessageBuffer
+ 0001:00000618       ErrorNotify
+ 0001:0000065A       OpenPort
+ 0001:00000708       MenuCheckSeries
+ 0001:00000760       StatusProc
+ 0001:00000948       FrameSubProc
+ 0001:00000B60       PaintWindow
+ 0001:00000BF0       CreateThread
+ 0001:00000C20       ComCommand
+ 0001:00001676       Help
+ 0001:000016C4       WndSize
+ 0001:0000199E       Scroll
+ 0001:00001B40       CreatePS
+ 0001:00001C1C       fnwpClient
+ 0001:00002CAE       KillThread
+ 0001:00002DE4       main
+ 0001:0000349E       pfnUpdateProfileOptions
+ 0001:00003594       ExitRoutine
+ 0001:00003670       SendComString
+ 0001:000036B0       SendComWord
+ 0001:00003706       SendComByte
+ 0001:00003740       GetComString
+ 0001:00003780       GetComWord
+ 0001:000037F0       GetComByte
+ 0001:0000381C       WaitComByte
+ 0001:00003870       fnwpProcTerminalDlg
+ 0001:00003A90       UnloadSetColorDlg
+ 0001:00003BC0       FillSetColorDlg
+ 0001:00003CFA       fnwpSetColorDlg
+ 0001:00003D90       fnwpPortSelectDlg
+ 0001:00003FBE       UnloadProcStringXferDlg
+ 0001:00004460       TCProcStringXferDlg
+ 0001:00004FD0       InitEnableProcStringXferDlg2
+ 0001:00005256       InitEnableProcStringXferDlg1
+ 0001:00005430       FillProcStringXferDlg2
+ 0001:000056A8       FillProcStringXferDlg1
+ 0001:000058D0       fnwpProcStringXferDlg
+ 0001:00005C20       WindowInit
+ 0001:00005D10       StartSystem
+ 0001:00006130       ReadCharacters
+ 0001:000062E0       ReadString
+ 0001:00006420       WriteCharacters
+ 0001:0000658E       WriteString
+ 0001:0000663C       DoStringTransfer
+ 0001:00006980       TerminalRead
+ 0001:00006BE0       ReadLoopThread
+ 0001:00006D9A       LoopThread
+ 0001:00006E74       _sprintfieee
+ 0001:00006EB0       _sprintf_ansi
+ 0001:00006ED0       atoi
+ 0001:00006F7C       atol
+ 0001:00007028       __EDCThunkProlog
+ 0001:000070DC       strtol
+ 0001:000071F4       __EDC3216
+ 0001:0000728C       _DosSelToFlat
+ 0001:00007294       _DosFlatToSel
+ 0001:0000729C       __conv_buf
+ 0001:000072E0       __default_heap
+ 0001:000072F0       __swprintf_size
+ 0001:00007300       __swprintf_buf
+ 0001:00007310       __random_seed
+ 0001:00007320       __version
+ 0001:0000732C       __strtok_pos
+ 0001:0000733C       __tempname_ptr
+ 0001:0000734C       __perror_msg_ptr
+ 0001:0000735C       __internal_buf_ptr
+ 0001:0000736C       __lcvt_buf_ptr
+ 0001:0000737C       __cvt_buf_ptr
+ 0001:0000738C       __broken_time_ptr
+ 0001:0000739C       __flags
+ 0001:000073AC       __strerror_msg_ptr
+ 0001:000073BC       __dttm_ptr
+ 0001:000073CC       __doserrno
+ 0001:000073DC       _errno
+ 0001:000073EC       __cppstore
+ 0001:000075F4       _insert_thou_sep
+ 0001:00008438       __dofmto
+ 0001:000089C8       _toint
+ 0001:00008B54       _exestart
+ 0001:00008BE4       __RunExitList
+ 0001:00008C14       _freeCtype
+ 0001:00008C30       _init_ctype
+ 0001:00008D10       _critlib_except
+ 0001:00008E08       _CrtGetLocalData
+ 0001:000090E4       _CrtInitThread
+ 0001:0000912C       _beginthread
+ 0001:000091B0       _RequestSem
+ 0001:000091C0       _ReleaseSem
+ 0001:000091D0       _bufprint
+ 0001:000092A4       _callback_opt_sys
+ 0001:000092B0       free
+ 0001:000092DC       malloc
+ 0001:00009318       exit
+ 0001:00009344       _signedAssign
+ 0001:00009394       _nConv
+ 0001:000093F8       _fpninit
+ 0001:000093FC       _fpreset
+ 0001:0000940C       _internal_err
+ 0001:00009454       _PrintErrMsg
+ 0001:000094A0       _MesgServ
+ 0001:00009664       __sctordtorInit
+ 0001:0000966C       __sctordtorTerm
+ 0001:00009674       _setuparg
+ 0001:0000986C       _wfloatfmt
+ 0001:00009888       _cppinit
+ 0001:00009890       _test_handle
+ 0001:000098E0       _CRT_init
+ 0001:00009C28       _CRT_term
+ 0001:00009DFC       __localeconv_dummy
+ 0001:00009E08       localeconv
+ 0001:00009E24       _matherr
+ 0001:00009E2C       _w_Terminate_and_dump
+ 0001:00009EAC       _Exception
+ 0001:00009EC4       _Test_and_reset
+ 0001:00009ED0       _Regen_exception
+ 0001:00009EDC       _get_seglim
+ 0001:00009F18       __wctomb_dummy
+ 0001:00009F24       wctomb
+ 0001:00009F4C       _wcputs
+ 0001:00009F54       _get_eib
+ 0001:00009FB0       _mig_eib_store
+ 0001:00009FC0       _EXE_Exception
+ 0001:0000A000       _recreate_exception
+ 0001:0000A140       _Lib_excpt
+ 0001:0000A278       __Exception
+ 0001:0000A6C4       _exception_dllinit
+ 0001:0000A6F4       _exception_procinit
+ 0001:0000A728       __Saved_return_address
+ 0001:0000A738       __Async_exception_flag
+ 0001:0000A748       _endthread
+ 0001:0000A8DC       __pendingRequest
+ 0001:0000A900       __handleCollision
+ 0001:0000A968       _OpenSem
+ 0001:0000A97C       _CreateSem
+ 0001:0000A9A4       _CloseSem
+ 0001:0000A9B4       _freeThreadStorage
+ 0001:0000AA6C       __threadid
+ 0001:0000AA78       _set_crt_msg_handle
+ 0001:0000AAAC       _ltoa
+ 0001:0000AB50       _ucalloc
+ 0001:0000AC90       _uheapmin
+ 0001:0000AD40       _int_uheapmin
+ 0001:0000AF9C       _rmem_term
+ 0001:0000AFE0       _rmem_init
+ 0001:0000B4BC       _rnode_delete
+ 0001:0000B50C       _ufree
+ 0001:0000B5E0       _umalloc
+ 0001:0000B698       _int_rfree
+ 0001:0000C5A8       _int_umalloc
+ 0001:0000C92C       strspn
+ 0001:0000C968       _terminate
+ 0001:0000C978       __wctordtorInit
+ 0001:0000C97C       __wctordtorTerm
+ 0001:0000C980       _exit_weak
+ 0001:0000C98C       _w_tmem_term
+ 0001:0000C990       _w_tmem_init
+ 0001:0000C994       _bit_test_set
+ 0001:0000C9A4       __method_weak
+ 0001:0000C9A8       _iconv_term_weak
+ 0001:0000C9AC       _localInit_weak
+ 0001:0000C9B0       _freeLocale_weak
+ 0001:0000C9B4       _init_ctype_weak
+ 0001:0000C9B8       _freeCtype_weak
+ 0001:0000C9BC       _Math_Exception_Def
+ 0001:0000C9C4       _fcloseall_weak
+ 0001:0000C9CC       fflush
+ 0001:0000CB20       _fillb
+ 0001:0000CD60       _FreeFCB
+ 0001:0000CE28       getenv
+ 0001:0000CF88       _inc
+ 0001:0000CF90       _dec_test
+ 0001:0000CFA0       __localeconv_std
+ 0001:0000CFAC       __mbrlen_dummy
+ 0001:0000CFB8       mbrlen
+ 0001:0000CFEC       _setupenv
+ 0001:0000D0B4       _uwrite
+ 0001:0000D0EC       __wctomb_dbcs
+ 0001:0000D204       _w_raise
+ 0001:0000D20C       _ucreate
+ 0001:0000D3BC       _uaddmem
+ 0001:0000D47C       _int_uaddmem
+ 0001:0000D5DC       _w_int_uflush
+ 0001:0000D5E0       _w_uheap_verify
+ 0001:0000D5E4       _w_int_unlink_item
+ 0001:0000D5E8       _w_walking
+ 0001:0000D5EC       _Flush
+ 0001:0000D790       _flushb
+ 0001:0000DAC0       __mbrlen_dbcs
+ 0001:0000DBC0       __tod_init
+ 0001:0000DBC4       __syntax_init
+ 0001:0000DBC8       __resp_init
+ 0001:0000DBE8       __time_init
+ 0001:0000DE78       __numeric_init
+ 0001:0000DECC       __monetary_init
+ 0001:0000E034       __collate_init
+ 0001:0000E038       __charmap_init
+ 0001:0000E048       __ctype_init
+ 0001:0000E04C       __locale_init
+ 0001:0000E0E8       strnicmp
+ 0001:0000E1A0       _wuwriteMem
+ 0001:0000E1A4       _wreadbSyncMem
+ 0001:0000E1A8       _wfsetposMem
+ 0001:0000E1B0       _wSeekMem
+ 0001:0000E1B8       _wrewindMem
+ 0001:0000E1BC       _wRemoveMem
+ 0001:0000E1C0       _wOpenMemory
+ 0001:0000E1C8       _wfgetposMem
+ 0001:0000E1DC       _wtellMem
+ 0003:00000000       sig32
+ 0003:00000012       Dos32GetMessage
+ 0003:00000012       DOS32GETMESSAGE
+ 0003:00000012       DosGetMessage
+ 0003:00000012       DOSGETMESSAGE
+ 0005:00000000       __fac
+ 0006:000006E0       szWinCOMProfile
+ 0006:000006E8       szWinCOMAppName
+ 0006:00000710       bUseProfile
+ 0006:00000714       chAnsi
+ 0006:0000071C       ClrTable
+ 0006:00000728       szWinCOMVersion
+ 0006:00000738       pstThread
+ 0006:0000073C       szErrorMessage
+ 0006:00000790       szHelp
+ 0006:0000079C       szHelpMessage
+ 0006:000007A8       szTitle
+ 0006:000007E5       szOn
+ 0006:000007E8       szOff
+ 0006:000007EC       wUpdateDelay
+ 0006:00000834       szCurrentPortName
+ 0006:00000B24       _exeentry
+ 0006:00000C40       _ctypeModule
+ 0006:00000EA8       stdin
+ 0006:00000EAC       stdout
+ 0006:00000EB0       stderr
+ 0006:00000F5C       _PGLOBAL_PTR
+ 0006:00000F60       _daylight
+ 0006:00000F64       _timezone
+ 0006:00000F68       _osmode
+ 0006:00000F74       _C_charmap
+ 0006:00000FD8       __lc_charmap
+ 0006:00000FDC       _mb_cur_max
+ 0006:00000FE0       _matherr_ptr
+ 0006:000010B0       _crt_msg_handle
+ 0006:0000127C       _C_lconv
+ 0006:000012BC       _C_locale
+ 0006:000013CC       __lc_locale
+ 0006:000013D0       __localeconv_std_flag
+ 0006:000013D4       __wctomb_dbcs_flag
+ 0006:000015E4       _C_collate
+ 0006:00001648       __lc_collate
+ 0006:00001B30       _C_ctype
+ 0006:00001B80       __lc_ctype
+ 0006:00001B84       _C_monetary
+ 0006:00001BD0       __lc_monetary
+ 0006:00001BD8       _C_numeric
+ 0006:00001BF8       __lc_numeric
+ 0006:00001C20       _C_resp
+ 0006:00001C40       __lc_resp
+ 0006:00001C68       _C_syntax
+ 0006:00001CB4       __lc_syntax
+ 0006:00001F30       _C_dtconv
+ 0006:00001FE0       _C_time
+ 0006:000020CC       __lc_time
+ 0006:000020DC       _C_tod
+ 0006:00002124       __lc_tod
+ 0006:00002128       __mbrlen_dbcs_flag
+ 0006:0000213C       _firsteib
+ 0006:00002490       _lasteib
+ 0006:00002494       _edata
+ 0006:00002498       bIsTheFirst
+ 0006:0000249C       bResetCounter
+ 0006:000024A0       bSearchProfileApps
+ 0006:000024A4       hProfileInstance
+ 0006:000024A8       bMaximized
+ 0006:000024AC       bMinimized
+ 0006:000024B0       iDebugLevel
+ 0006:000024C8       bCLP_StatusActivated
+ 0006:000024E0       _argc
+ 0006:000024E4       _argv
+ 0006:000024E8       _ctype
+ 0006:000024EC       __c_local_ctype
+ 0006:000024F4       _edcinit_fin
+ 0006:000024F8       _locale_initialized
+ 0006:000024FC       _CRT_usage_count
+ 0006:00002530       _ctype_upperidx
+ 0006:00002534       _ctype_loweridx
+ 0006:00002538       _ctype_upper
+ 0006:0000253C       _ctype_lower
+ 0006:00002540       _ctype_ctypeidx
+ 0006:00002544       _ctype_cmask
+ 0006:00002548       _ctype_mask
+ 0006:00002560       hevStartReadThreadSem
+ 0006:00002564       hevKillWriteThreadSem
+ 0006:00002568       hevStartWriteThreadSem
+ 0006:0000256C       _dbg_mem_sem
+ 0006:00002574       stIOctlInst
+ 0006:00002580       stThisWindow
+ 0006:00002654       habAnchorBlock
+ 0006:00002658       szMsg
+ 0006:00002720       hevStartReadSem
+ 0006:00002724       pfnManageProfile
+ 0006:00002728       pfnCloseProfile
+ 0006:0000272C       hevKillThreadSem
+ 0006:00002730       szWinCOMIniPath
+ 0006:00002838       hevStartWriteSem
+ 0006:0000283C       pfnGetProfileData
+ 0006:00002840       swpLastPosition
+ 0006:00002864       hevStartThreadSem
+ 0006:00002868       pfnSaveProfileData
+ 0006:0000286C       _eh_base
+ 0006:00002870       _tzname
+ 0006:00002878       stComCtl
+ 0006:000028BC       _environ
+ 0006:000028C0       _osmajor
+ 0006:000028C1       _osminor
+ 0006:000028C4       hwndFrame
+ 0006:000028C8       _reg_heap
+ 0006:000028CC       stProfile
+ 0006:00002AC4       hevKillReadThreadSem
+ 0006:00002AC8       hwndClient
+ 0006:00002ACC       _TerminateAndDumpSem
+ 0006:00002AD4       pfnGetProfileString
+ 0006:00002AD8       _walk_used
+ 0006:00002ADC       pfnSaveProfileString
+ 0006:00002AE0       hevRestartThreadSem
+ 0006:00002AE4       pfnInitializeProfile
+ 0006:00002AF0       _end
+
+
+Line numbers for P:\WinCOM32\ga\util.obj(p:\WinCOM32\util.c)
+
+	Record Number of Start of Source: 0
+	Number of Primary Source Records: 0
+	Source & Listing Files: 50
+	File  1) p:\WinCOM32\util.c
+	File  2) p:\WinCOM32\wCommon.h
+	File  3) f:\IBMCPP\INCLUDE\OS2\os2.h
+	File  4) f:\IBMCPP\INCLUDE\OS2\os2def.h
+	File  5) f:\IBMCPP\INCLUDE\OS2\bse.h
+	File  6) f:\IBMCPP\INCLUDE\OS2\bsedos.h
+	File  7) f:\IBMCPP\INCLUDE\OS2\bsetib.h
+	File  8) f:\IBMCPP\INCLUDE\OS2\bsememf.h
+	File  9) f:\IBMCPP\INCLUDE\OS2\bsexcpt.h
+	File 10) f:\IBMCPP\INCLUDE\OS2\bsesub.h
+	File 11) f:\IBMCPP\INCLUDE\OS2\bseerr.h
+	File 12) f:\IBMCPP\INCLUDE\OS2\pm.h
+	File 13) f:\IBMCPP\INCLUDE\OS2\pmwin.h
+	File 14) f:\IBMCPP\INCLUDE\OS2\pmtypes.h
+	File 15) f:\IBMCPP\INCLUDE\OS2\pmmle.h
+	File 16) f:\IBMCPP\INCLUDE\OS2\pmshl.h
+	File 17) f:\IBMCPP\INCLUDE\OS2\pmerr.h
+	File 18) f:\IBMCPP\INCLUDE\OS2\pmerr.h
+	File 19) f:\IBMCPP\INCLUDE\OS2\pmsei.h
+	File 20) f:\IBMCPP\INCLUDE\OS2\pmhelp.h
+	File 21) f:\IBMCPP\INCLUDE\OS2\os2nls.h
+	File 22) f:\IBMCPP\INCLUDE\OS2\pmgpi.h
+	File 23) f:\IBMCPP\INCLUDE\OS2\pmbitmap.h
+	File 24) f:\IBMCPP\INCLUDE\OS2\pmerr.h
+	File 25) f:\IBMCPP\INCLUDE\OS2\pmdev.h
+	File 26) f:\IBMCPP\INCLUDE\OS2\pmwp.h
+	File 27) f:\IBMCPP\INCLUDE\OS2\pmerr.h
+	File 28) f:\IBMCPP\INCLUDE\OS2\pmavio.h
+	File 29) f:\IBMCPP\INCLUDE\OS2\pmspl.h
+	File 30) f:\IBMCPP\INCLUDE\OS2\pmerr.h
+	File 31) f:\IBMCPP\INCLUDE\OS2\pmpic.h
+	File 32) f:\IBMCPP\INCLUDE\OS2\pmord.h
+	File 33) f:\IBMCPP\INCLUDE\OS2\pmfont.h
+	File 34) f:\IBMCPP\INCLUDE\OS2\pmstddlg.h
+	File 35) f:\IBMCPP\INCLUDE\ctype.h
+	File 36) f:\IBMCPP\INCLUDE\string.h
+	File 37) f:\IBMCPP\INCLUDE\stdlib.h
+	File 38) f:\IBMCPP\INCLUDE\stdio.h
+	File 39) f:\IBMCPP\INCLUDE\memory.h
+	File 40) f:\IBMCPP\INCLUDE\malloc.h
+	File 41) f:\IBMCPP\INCLUDE\time.h
+	File 42) p:\comi\COMDD.H
+	File 43) p:\include\Utility.h
+	File 44) p:\include\IOCtl.h
+	File 45) p:\include\Profile.h
+	File 46) p:\include\COMcontrol.h
+	File 47) p:\include\ioctl.h
+	File 48) p:\include\Config.h
+	File 49) p:\WinCOM32\WinCOM.h
+	File 50) p:\WinCOM32\dialog.h
+
+
+Line numbers for P:\WinCOM32\ga\util.obj(p:\WinCOM32\util.c) segment CODE32 (@0x00000000)
+
+	 Source    Src File    Seg:Offset
+	Line Num    Index          (0X)
+	--------   --------   -------------
+	   276          1     0001:00000000
+	   277          1     0001:00000006
+	   278          1     0001:00000014
+	   276          1     0001:00000018
+	   279          1     0001:00000022
+	   283          1     0001:00000030
+	   286          1     0001:0000004b
+	   288          1     0001:00000059
+	   289          1     0001:0000006b
+	   291          1     0001:00000094
+	   292          1     0001:000000a7
+	   293          1     0001:000000b2
+	   294          1     0001:000000b9
+	   295          1     0001:000000c0
+	   297          1     0001:000000c7
+	   211          1     0001:000000d0
+	   218          1     0001:000000dd
+	   213          1     0001:000000f6
+	   219          1     0001:00000114
+	   226          1     0001:00000124
+	   227          1     0001:00000132
+	   228          1     0001:00000138
+	   229          1     0001:00000155
+	   230          1     0001:0000017e
+	   231          1     0001:00000184
+	   239          1     0001:0000019f
+	   238          1     0001:000001a5
+	   236          1     0001:000001ba
+	   237          1     0001:000001be
+	   240          1     0001:000001e9
+	   241          1     0001:00000204
+	   246          1     0001:00000211
+	   251          1     0001:00000244
+	   256          1     0001:00000260
+	   261          1     0001:0000028c
+	   266          1     0001:000002bb
+	   188          1     0001:000002c2
+	   197          1     0001:000002cf
+	   198          1     0001:000002d3
+	   200          1     0001:000002f9
+	   201          1     0001:0000030b
+	   203          1     0001:00000317
+	   204          1     0001:0000031c
+	   205          1     0001:00000346
+	   206          1     0001:0000037e
+	   207          1     0001:0000039e
+	   208          1     0001:000003a9
+	   174          1     0001:000003b0
+	   178          1     0001:000003c6
+	   179          1     0001:000003de
+	   180          1     0001:000003e6
+	   182          1     0001:000003ec
+	   184          1     0001:000003f0
+	   185          1     0001:00000402
+	   142          1     0001:00000406
+	   148          1     0001:0000041e
+	   155          1     0001:00000436
+	   150          1     0001:00000437
+	   149          1     0001:0000043c
+	   151          1     0001:00000445
+	   152          1     0001:00000449
+	   153          1     0001:00000450
+	   154          1     0001:0000045b
+	   156          1     0001:00000469
+	   157          1     0001:00000479
+	   158          1     0001:0000047e
+	   160          1     0001:00000483
+	   159          1     0001:00000484
+	   161          1     0001:00000491
+	   128          1     0001:000004a0
+	   131          1     0001:000004ab
+	   133          1     0001:000004af
+	   135          1     0001:000004cc
+	   136          1     0001:000004e0
+	   135          1     0001:000004e6
+	   137          1     0001:000004f2
+	   139          1     0001:000004ff
+	    86          1     0001:00000506
+	    89          1     0001:0000051c
+	    91          1     0001:00000520
+	    93          1     0001:00000541
+	    95          1     0001:00000560
+	    96          1     0001:00000566
+	    98          1     0001:0000056d
+	   101          1     0001:00000584
+	   102          1     0001:00000586
+	   104          1     0001:00000588
+	   105          1     0001:0000058a
+	   107          1     0001:0000058c
+	   108          1     0001:0000058e
+	   110          1     0001:00000590
+	   113          1     0001:00000592
+	   116          1     0001:00000594
+	   117          1     0001:00000599
+	   119          1     0001:000005a0
+	    93          1     0001:000005a2
+	   122          1     0001:000005ae
+	   123          1     0001:000005c0
+	   125          1     0001:000005cd
+	    76          1     0001:000005e0
+	    77          1     0001:000005e1
+	    78          1     0001:000005ea
+	    79          1     0001:000005f3
+	    81          1     0001:0000060b
+	    67          1     0001:00000618
+	    68          1     0001:0000061a
+	    70          1     0001:00000624
+	    71          1     0001:0000063c
+	    73          1     0001:00000657
+	    41          1     0001:0000065a
+	    47          1     0001:0000067a
+	    49          1     0001:000006ac
+	    52          1     0001:000006bc
+	    54          1     0001:000006d1
+	    60          1     0001:000006e4
+	    61          1     0001:000006eb
+	    63          1     0001:000006f8
+	    27          1     0001:00000708
+	    31          1     0001:0000070c
+	    33          1     0001:00000726
+	    34          1     0001:0000072d
+	    36          1     0001:00000740
+	    31          1     0001:00000750
+	    38          1     0001:00000757
+
+
+Line numbers for P:\WinCOM32\ga\wincom.obj(p:\WinCOM32\wincom.c)
+
+	Record Number of Start of Source: 0
+	Number of Primary Source Records: 0
+	Source & Listing Files: 51
+	File  1) p:\WinCOM32\wincom.c
+	File  2) p:\WinCOM32\wCommon.h
+	File  3) p:\WinCOM32\wCommon.h
+	File  4) p:\WinCOM32\wCommon.h
+	File  5) p:\WinCOM32\wCommon.h
+	File  6) p:\WinCOM32\wCommon.h
+	File  7) p:\WinCOM32\wCommon.h
+	File  8) p:\WinCOM32\wCommon.h
+	File  9) p:\WinCOM32\wCommon.h
+	File 10) p:\WinCOM32\wCommon.h
+	File 11) p:\WinCOM32\wCommon.h
+	File 12) p:\WinCOM32\wCommon.h
+	File 13) p:\WinCOM32\wCommon.h
+	File 14) p:\WinCOM32\wCommon.h
+	File 15) p:\WinCOM32\wCommon.h
+	File 16) p:\WinCOM32\wCommon.h
+	File 17) p:\WinCOM32\wCommon.h
+	File 18) p:\WinCOM32\wCommon.h
+	File 19) p:\WinCOM32\wCommon.h
+	File 20) p:\WinCOM32\wCommon.h
+	File 21) p:\WinCOM32\wCommon.h
+	File 22) p:\WinCOM32\wCommon.h
+	File 23) p:\WinCOM32\wCommon.h
+	File 24) p:\WinCOM32\wCommon.h
+	File 25) p:\WinCOM32\wCommon.h
+	File 26) p:\WinCOM32\wCommon.h
+	File 27) p:\WinCOM32\wCommon.h
+	File 28) p:\WinCOM32\wCommon.h
+	File 29) p:\WinCOM32\wCommon.h
+	File 30) p:\WinCOM32\wCommon.h
+	File 31) p:\WinCOM32\wCommon.h
+	File 32) p:\WinCOM32\wCommon.h
+	File 33) p:\WinCOM32\wCommon.h
+	File 34) p:\WinCOM32\wCommon.h
+	File 35) p:\WinCOM32\wCommon.h
+	File 36) p:\WinCOM32\wCommon.h
+	File 37) p:\WinCOM32\wCommon.h
+	File 38) p:\WinCOM32\wCommon.h
+	File 39) p:\WinCOM32\wCommon.h
+	File 40) p:\WinCOM32\wCommon.h
+	File 41) p:\WinCOM32\wCommon.h
+	File 42) p:\WinCOM32\wCommon.h
+	File 43) p:\WinCOM32\wCommon.h
+	File 44) p:\WinCOM32\wCommon.h
+	File 45) p:\WinCOM32\wCommon.h
+	File 46) p:\WinCOM32\wCommon.h
+	File 47) p:\WinCOM32\wCommon.h
+	File 48) p:\WinCOM32\wCommon.h
+	File 49) p:\WinCOM32\wCommon.h
+	File 50) p:\WinCOM32\usermsg.h
+	File 51) p:\WinCOM32\dialog.h
+
+
+Line numbers for P:\WinCOM32\ga\wincom.obj(p:\WinCOM32\wincom.c) segment CODE32 (@0x00000000)
+
+	 Source    Src File    Seg:Offset
+	Line Num    Index          (0X)
+	--------   --------   -------------
+	  1487          1     0001:00000760
+	  1491          1     0001:0000077c
+	  1501          1     0001:00000783
+	  1492          1     0001:00000789
+	  1507          1     0001:000007a5
+	  1509          1     0001:000007b1
+	  1510          1     0001:000007c1
+	  1512          1     0001:000007ce
+	  1513          1     0001:000007d6
+	  1514          1     0001:000007de
+	  1518          1     0001:000007e9
+	  1516          1     0001:000007ec
+	  1517          1     0001:000007f3
+	  1519          1     0001:00000800
+	  1520          1     0001:00000808
+	  1522          1     0001:0000081e
+	  1527          1     0001:00000832
+	  1524          1     0001:00000835
+	  1525          1     0001:0000083c
+	  1529          1     0001:0000084d
+	  1531          1     0001:00000856
+	  1534          1     0001:00000860
+	  1532          1     0001:00000862
+	  1533          1     0001:00000868
+	  1537          1     0001:00000878
+	  1539          1     0001:0000087e
+	  1538          1     0001:00000891
+	  1541          1     0001:000008a6
+	  1542          1     0001:000008c9
+	  1543          1     0001:000008e6
+	  1544          1     0001:000008e9
+	  1549          1     0001:000008ec
+	  1547          1     0001:000008f7
+	  1548          1     0001:00000901
+	  1581          1     0001:00000912
+	  1582          1     0001:0000091b
+	  1585          1     0001:00000920
+	  1587          1     0001:0000093f
+	  1239          1     0001:00000948
+	  1246          1     0001:0000096f
+	  1248          1     0001:00000976
+	  1247          1     0001:0000097c
+	  1255          1     0001:00000994
+	  1256          1     0001:000009b0
+	  1262          1     0001:000009b4
+	  1263          1     0001:000009c8
+	  1264          1     0001:000009cd
+	  1265          1     0001:000009d2
+	  1266          1     0001:000009d7
+	  1267          1     0001:000009dc
+	  1270          1     0001:000009e5
+	  1271          1     0001:000009f5
+	  1279          1     0001:00000a1d
+	  1280          1     0001:00000a40
+	  1287          1     0001:00000a50
+	  1281          1     0001:00000a5e
+	  1282          1     0001:00000a7b
+	  1293          1     0001:00000aab
+	  1294          1     0001:00000ab6
+	  1300          1     0001:00000aba
+	  1301          1     0001:00000ac4
+	  1302          1     0001:00000acb
+	  1303          1     0001:00000ad2
+	  1304          1     0001:00000ad6
+	  1305          1     0001:00000add
+	  1312          1     0001:00000ae0
+	  1314          1     0001:00000aef
+	  1315          1     0001:00000afa
+	  1316          1     0001:00000b01
+	  1317          1     0001:00000b08
+	  1318          1     0001:00000b0f
+	  1321          1     0001:00000b13
+	  1323          1     0001:00000b21
+	  1325          1     0001:00000b48
+	  1129          1     0001:00000b60
+	  1133          1     0001:00000b67
+	  1137          1     0001:00000b8e
+	  1138          1     0001:00000b94
+	  1142          1     0001:00000ba0
+	  1143          1     0001:00000ba6
+	  1144          1     0001:00000bad
+	  1149          1     0001:00000bbc
+	  1150          1     0001:00000bc5
+	  1157          1     0001:00000bd9
+	  1158          1     0001:00000be2
+	  1165          1     0001:00000bf0
+	  1164          1     0001:00000bf5
+	  1166          1     0001:00000c1a
+	   828          1     0001:00000c20
+	   833          1     0001:00000c43
+	   837          1     0001:00000c4b
+	   840          1     0001:00000d28
+	   841          1     0001:00000d34
+	   842          1     0001:00000d3d
+	   843          1     0001:00000d4e
+	   845          1     0001:00000d56
+	   846          1     0001:00000d63
+	   848          1     0001:00000d80
+	   849          1     0001:00000d9b
+	   850          1     0001:00000db1
+	   851          1     0001:00000dc0
+	   853          1     0001:00000dcb
+	   855          1     0001:00000dd0
+	   857          1     0001:00000de9
+	   859          1     0001:00000e03
+	   860          1     0001:00000e06
+	   861          1     0001:00000e1d
+	   863          1     0001:00000e20
+	   864          1     0001:00000e30
+	   865          1     0001:00000e3b
+	   867          1     0001:00000e43
+	   868          1     0001:00000e53
+	   870          1     0001:00000e5b
+	   872          1     0001:00000e74
+	   874          1     0001:00000e8e
+	   875          1     0001:00000e91
+	   876          1     0001:00000ea8
+	   878          1     0001:00000eaa
+	   879          1     0001:00000eba
+	   880          1     0001:00000ec5
+	   882          1     0001:00000ecd
+	   883          1     0001:00000edd
+	   885          1     0001:00000ee5
+	   887          1     0001:00000efe
+	   889          1     0001:00000f18
+	     0          0     0001:00000760
+	   890          1     0001:00000f1b
+	   891          1     0001:00000f32
+	   893          1     0001:00000f34
+	   894          1     0001:00000f44
+	   895          1     0001:00000f4f
+	   897          1     0001:00000f57
+	   898          1     0001:00000f67
+	   900          1     0001:00000f6f
+	   902          1     0001:00000f88
+	   903          1     0001:00000f94
+	   904          1     0001:00000fae
+	   906          1     0001:00000fbe
+	   907          1     0001:00000fce
+	   908          1     0001:00000fd9
+	   910          1     0001:00000fe1
+	   911          1     0001:00000ff1
+	   913          1     0001:00000ff9
+	   915          1     0001:00001012
+	   917          1     0001:0000102c
+	   918          1     0001:0000102f
+	   919          1     0001:00001046
+	   921          1     0001:00001048
+	   922          1     0001:00001058
+	   923          1     0001:00001063
+	   925          1     0001:0000106b
+	   926          1     0001:0000107b
+	   928          1     0001:00001083
+	   930          1     0001:0000109c
+	   932          1     0001:000010b6
+	   933          1     0001:000010b9
+	   934          1     0001:000010d0
+	   936          1     0001:000010d2
+	   937          1     0001:000010e2
+	   938          1     0001:000010ed
+	   940          1     0001:000010f5
+	   941          1     0001:00001105
+	   947          1     0001:0000110d
+	   943          1     0001:00001110
+	   944          1     0001:00001122
+	   945          1     0001:00001134
+	   946          1     0001:00001146
+	   948          1     0001:0000115e
+	   949          1     0001:00001165
+	   950          1     0001:00001174
+	   952          1     0001:0000117c
+	   953          1     0001:0000118e
+	   954          1     0001:000011a0
+	   955          1     0001:000011b2
+	   956          1     0001:000011c4
+	   957          1     0001:000011d3
+	   959          1     0001:000011de
+	   961          1     0001:000011ec
+	   960          1     0001:000011f1
+	   962          1     0001:00001205
+	   964          1     0001:0000120d
+	   965          1     0001:00001219
+	   972          1     0001:00001222
+	   967          1     0001:00001227
+	   966          1     0001:00001230
+	   973          1     0001:00001241
+	   975          1     0001:00001246
+	   977          1     0001:0000124e
+	   978          1     0001:00001252
+	   979          1     0001:00001267
+	   982          1     0001:0000126c
+	   983          1     0001:0000126e
+	   985          1     0001:00001287
+	   986          1     0001:00001299
+	   988          1     0001:0000129e
+	   990          1     0001:000012a7
+	   991          1     0001:000012ab
+	   992          1     0001:000012bd
+	   993          1     0001:000012db
+	   996          1     0001:000012e3
+	   997          1     0001:000012e6
+	   998          1     0001:000012fc
+	  1000          1     0001:0000131a
+	  1002          1     0001:00001322
+	  1003          1     0001:0000132d
+	  1011          1     0001:00001335
+	  1012          1     0001:0000133b
+	  1013          1     0001:00001342
+	  1015          1     0001:00001348
+	  1016          1     0001:0000134e
+	  1017          1     0001:00001355
+	  1019          1     0001:0000135a
+	  1020          1     0001:00001360
+	  1021          1     0001:00001367
+	  1023          1     0001:0000136c
+	  1024          1     0001:0000136e
+	  1025          1     0001:00001386
+	  1026          1     0001:00001398
+	  1027          1     0001:000013aa
+	  1028          1     0001:000013b6
+	  1029          1     0001:000013cb
+	  1031          1     0001:000013d3
+	  1032          1     0001:000013d5
+	  1033          1     0001:000013ed
+	  1034          1     0001:000013ff
+	  1035          1     0001:00001411
+	  1036          1     0001:0000141d
+	  1037          1     0001:00001432
+	  1048          1     0001:0000143a
+	  1050          1     0001:00001443
+	  1052          1     0001:00001455
+	  1051          1     0001:0000145c
+	  1053          1     0001:00001470
+	  1057          1     0001:00001472
+	  1056          1     0001:00001475
+	  1058          1     0001:00001487
+	  1060          1     0001:000014a2
+	  1061          1     0001:000014b4
+	  1063          1     0001:000014bc
+	  1064          1     0001:000014cf
+	  1066          1     0001:000014d7
+	  1067          1     0001:000014ea
+	  1069          1     0001:000014f2
+	  1070          1     0001:000014ff
+	  1072          1     0001:00001507
+	  1073          1     0001:00001514
+	  1075          1     0001:0000151c
+	  1076          1     0001:00001531
+	  1078          1     0001:00001539
+	  1079          1     0001:0000154e
+	  1081          1     0001:00001556
+	  1082          1     0001:00001569
+	     0          0     0001:00000760
+	  1083          1     0001:00001577
+	  1085          1     0001:0000157f
+	  1087          1     0001:00001587
+	  1089          1     0001:000015ae
+	  1091          1     0001:000015b5
+	  1092          1     0001:000015b7
+	  1093          1     0001:000015cf
+	  1094          1     0001:000015e1
+	  1095          1     0001:000015f6
+	  1097          1     0001:000015f8
+	  1099          1     0001:00001600
+	  1100          1     0001:00001602
+	  1101          1     0001:0000161a
+	  1102          1     0001:0000162c
+	  1104          1     0001:00001641
+	  1105          1     0001:0000164a
+	  1107          1     0001:0000165f
+	  1108          1     0001:0000166e
+	  1111          1     0001:00001676
+	  1114          1     0001:00001690
+	  1120          1     0001:000016a0
+	  1126          1     0001:000016bf
+	  1336          1     0001:000016c4
+	  1339          1     0001:000016e9
+	  1341          1     0001:000016f8
+	  1353          1     0001:0000170b
+	  1355          1     0001:00001735
+	  1354          1     0001:0000173c
+	  1356          1     0001:0000176e
+	  1357          1     0001:0000178c
+	  1358          1     0001:000017b6
+	  1366          1     0001:000017d4
+	  1367          1     0001:000017f4
+	  1372          1     0001:0000182d
+	  1377          1     0001:00001859
+	  1382          1     0001:00001885
+	  1391          1     0001:000018ba
+	  1392          1     0001:000018c9
+	  1393          1     0001:00001906
+	  1394          1     0001:00001920
+	  1395          1     0001:00001946
+	  1396          1     0001:00001964
+	  1397          1     0001:00001982
+	  1398          1     0001:00001991
+	  1408          1     0001:0000199e
+	  1416          1     0001:000019c2
+	  1414          1     0001:000019c6
+	  1428          1     0001:000019fa
+	  1430          1     0001:00001a0c
+	  1431          1     0001:00001a23
+	  1434          1     0001:00001a38
+	  1437          1     0001:00001a4e
+	  1439          1     0001:00001a60
+	  1440          1     0001:00001a76
+	  1443          1     0001:00001a8a
+	  1449          1     0001:00001aa0
+	  1459          1     0001:00001ac4
+	  1465          1     0001:00001ad3
+	  1470          1     0001:00001b02
+	  1476          1     0001:00001b20
+	  1477          1     0001:00001b32
+	  1208          1     0001:00001b40
+	  1211          1     0001:00001b4d
+	  1219          1     0001:00001b60
+	  1216          1     0001:00001b68
+	  1217          1     0001:00001b6e
+	  1220          1     0001:00001b9e
+	  1225          1     0001:00001bb5
+	  1226          1     0001:00001be4
+	  1227          1     0001:00001c19
+	   397          1     0001:00001c1c
+	   418          1     0001:00001c48
+	   421          1     0001:00001dd6
+	   425          1     0001:00001ddc
+	   422          1     0001:00001de6
+	   423          1     0001:00001df1
+	   427          1     0001:00001e0e
+	   428          1     0001:00001e22
+	   429          1     0001:00001e2e
+	   430          1     0001:00001e38
+	   431          1     0001:00001e4d
+	   433          1     0001:00001e5b
+	   435          1     0001:00001e72
+	   436          1     0001:00001e86
+	   437          1     0001:00001e92
+	   438          1     0001:00001e9c
+	   439          1     0001:00001eb1
+	   441          1     0001:00001ebf
+	   443          1     0001:00001ed6
+	   444          1     0001:00001eea
+	   445          1     0001:00001ef6
+	   446          1     0001:00001f00
+	   447          1     0001:00001f15
+	   449          1     0001:00001f23
+	   451          1     0001:00001f3a
+	   452          1     0001:00001f4e
+	   453          1     0001:00001f5a
+	   454          1     0001:00001f64
+	   455          1     0001:00001f79
+	   457          1     0001:00001f87
+	   459          1     0001:00001f9e
+	   460          1     0001:00001fb2
+	   461          1     0001:00001fbe
+	   462          1     0001:00001fc8
+	   463          1     0001:00001fdd
+	   465          1     0001:00001feb
+	   467          1     0001:00002002
+	   468          1     0001:00002016
+	   469          1     0001:00002022
+	   470          1     0001:0000202c
+	   471          1     0001:00002041
+	   473          1     0001:0000204f
+	   475          1     0001:00002066
+	   476          1     0001:0000207a
+	   477          1     0001:00002086
+	   478          1     0001:00002090
+	   479          1     0001:000020a5
+	   481          1     0001:000020b3
+	   483          1     0001:000020ca
+	   484          1     0001:000020de
+	   485          1     0001:000020ea
+	   486          1     0001:000020f4
+	   487          1     0001:00002109
+	   495          1     0001:00002117
+	   506          1     0001:0000212a
+	   528          1     0001:00002176
+	     0          0     0001:00000760
+	   530          1     0001:00002181
+	   529          1     0001:00002187
+	   533          1     0001:000021a3
+	   531          1     0001:000021a5
+	   536          1     0001:000021d0
+	   538          1     0001:000021e5
+	   539          1     0001:00002200
+	   540          1     0001:00002209
+	   541          1     0001:00002214
+	   543          1     0001:0000221f
+	   551          1     0001:0000224a
+	   552          1     0001:0000225c
+	   561          1     0001:00002264
+	   562          1     0001:0000226f
+	   563          1     0001:00002275
+	   565          1     0001:000022a4
+	   569          1     0001:000022d8
+	   571          1     0001:0000230b
+	   572          1     0001:0000230e
+	   574          1     0001:00002315
+	   580          1     0001:00002323
+	   581          1     0001:0000235b
+	   584          1     0001:000023a0
+	   585          1     0001:000023b2
+	   588          1     0001:000023b8
+	   589          1     0001:000023ca
+	   592          1     0001:000023d0
+	   593          1     0001:000023f0
+	   596          1     0001:000023f8
+	   597          1     0001:0000241a
+	   600          1     0001:00002420
+	   607          1     0001:00002449
+	   613          1     0001:0000244e
+	   614          1     0001:00002486
+	   617          1     0001:000024c8
+	   618          1     0001:000024da
+	   621          1     0001:000024e0
+	   622          1     0001:000024f2
+	   625          1     0001:000024f8
+	   626          1     0001:0000251a
+	   629          1     0001:00002520
+	   630          1     0001:00002540
+	   633          1     0001:00002548
+	   640          1     0001:00002571
+	   642          1     0001:00002576
+	   643          1     0001:00002593
+	   644          1     0001:000025b4
+	   646          1     0001:000025bc
+	   647          1     0001:000025cd
+	   648          1     0001:000025de
+	   653          1     0001:000025e4
+	   654          1     0001:000025f6
+	   656          1     0001:0000260b
+	   658          1     0001:00002618
+	   659          1     0001:00002631
+	   661          1     0001:00002643
+	   663          1     0001:00002665
+	   664          1     0001:00002681
+	   665          1     0001:00002695
+	   667          1     0001:000026a1
+	   668          1     0001:000026b6
+	   671          1     0001:000026bc
+	   672          1     0001:000026c5
+	   673          1     0001:000026da
+	   674          1     0001:000026e6
+	   676          1     0001:000026f4
+	   678          1     0001:000026fc
+	   683          1     0001:0000270f
+	   684          1     0001:0000273b
+	   685          1     0001:00002744
+	   687          1     0001:0000274c
+	   689          1     0001:0000275d
+	   690          1     0001:0000276d
+	   692          1     0001:0000277e
+	   693          1     0001:00002789
+	   695          1     0001:000027a4
+	   696          1     0001:000027b8
+	   698          1     0001:000027c7
+	   699          1     0001:000027d0
+	   700          1     0001:000027fe
+	   703          1     0001:00002809
+	   702          1     0001:0000280d
+	   704          1     0001:00002817
+	   705          1     0001:00002845
+	   707          1     0001:00002853
+	   709          1     0001:00002878
+	   710          1     0001:0000288c
+	   715          1     0001:0000289b
+	   717          1     0001:000028a0
+	   718          1     0001:000028d4
+	   725          1     0001:000028dc
+	   730          1     0001:000028f1
+	   726          1     0001:00002925
+	   742          1     0001:0000294c
+	   756          1     0001:00002965
+	   753          1     0001:00002968
+	   754          1     0001:00002983
+	   757          1     0001:000029de
+	   760          1     0001:00002a2d
+	   762          1     0001:00002a3e
+	   764          1     0001:00002a72
+	   766          1     0001:00002a83
+	   767          1     0001:00002a92
+	   772          1     0001:00002a98
+	   774          1     0001:00002a9d
+	   773          1     0001:00002aae
+	   775          1     0001:00002ac3
+	   776          1     0001:00002ad5
+	   777          1     0001:00002ae7
+	   778          1     0001:00002afc
+	   781          1     0001:00002b04
+	   782          1     0001:00002b22
+	   795          1     0001:00002b28
+	   796          1     0001:00002b36
+	   798          1     0001:00002b3f
+	   802          1     0001:00002b4c
+	   803          1     0001:00002b51
+	   805          1     0001:00002b77
+	   806          1     0001:00002b83
+	   807          1     0001:00002ba2
+	   808          1     0001:00002bc6
+	   810          1     0001:00002bd9
+	   811          1     0001:00002be9
+	   812          1     0001:00002bfc
+	   814          1     0001:00002c12
+	   815          1     0001:00002c31
+	     0          0     0001:00000760
+	   816          1     0001:00002c45
+	   819          1     0001:00002c54
+	   820          1     0001:00002c69
+	   822          1     0001:00002c6c
+	   824          1     0001:00002ca0
+	  1169          1     0001:00002cae
+	  1170          1     0001:00002cc4
+	  1174          1     0001:00002ccf
+	  1175          1     0001:00002ce1
+	  1176          1     0001:00002cf0
+	  1177          1     0001:00002cf6
+	  1179          1     0001:00002cfc
+	  1180          1     0001:00002d07
+	  1182          1     0001:00002d1e
+	  1183          1     0001:00002d23
+	  1185          1     0001:00002d34
+	  1186          1     0001:00002d44
+	  1188          1     0001:00002d46
+	  1190          1     0001:00002d56
+	  1192          1     0001:00002d5f
+	  1193          1     0001:00002d6a
+	  1194          1     0001:00002d75
+	  1196          1     0001:00002d8c
+	  1197          1     0001:00002d91
+	  1199          1     0001:00002da4
+	  1200          1     0001:00002db4
+	  1202          1     0001:00002db6
+	  1204          1     0001:00002dc6
+	  1205          1     0001:00002ddd
+	   164          1     0001:00002de4
+	   173          1     0001:00002e01
+	   175          1     0001:00002e0e
+	   177          1     0001:00002e28
+	   179          1     0001:00002e39
+	   182          1     0001:00002eb0
+	   183          1     0001:00002eb9
+	   186          1     0001:00002ec8
+	   187          1     0001:00002ed9
+	   189          1     0001:00002efd
+	   191          1     0001:00002f02
+	   192          1     0001:00002f0b
+	   195          1     0001:00002f18
+	   196          1     0001:00002f22
+	   197          1     0001:00002f2f
+	   199          1     0001:00002f51
+	   201          1     0001:00002f54
+	   203          1     0001:00002f5e
+	   204          1     0001:00002f68
+	   206          1     0001:00002f6c
+	   175          1     0001:00002f7e
+	   213          1     0001:00002f8b
+	   214          1     0001:00002fae
+	   216          1     0001:00002fd0
+	   214          1     0001:00002fd8
+	   222          1     0001:00002fe1
+	   219          1     0001:00002fe6
+	   220          1     0001:00002fef
+	   224          1     0001:00002ffb
+	   227          1     0001:0000300a
+	   225          1     0001:00003011
+	   229          1     0001:0000301c
+	   235          1     0001:0000303a
+	   231          1     0001:0000303f
+	   232          1     0001:0000304d
+	   236          1     0001:0000306b
+	   237          1     0001:00003094
+	   238          1     0001:000030bd
+	   239          1     0001:000030e6
+	   261          1     0001:0000310c
+	   245          1     0001:0000311d
+	   257          1     0001:00003132
+	   243          1     0001:0000313e
+	   253          1     0001:00003148
+	   254          1     0001:0000314f
+	   256          1     0001:00003156
+	   240          1     0001:00003163
+	   241          1     0001:0000316d
+	   242          1     0001:00003177
+	   244          1     0001:00003184
+	   258          1     0001:00003194
+	   259          1     0001:000031b2
+	   263          1     0001:000031d4
+	   265          1     0001:000031eb
+	   266          1     0001:00003206
+	   267          1     0001:00003227
+	   295          1     0001:0000324f
+	   299          1     0001:0000325b
+	   300          1     0001:00003264
+	   302          1     0001:0000326d
+	   312          1     0001:0000326f
+	   304          1     0001:0000327f
+	   317          1     0001:000032b1
+	   322          1     0001:000032ca
+	   324          1     0001:000032d6
+	   331          1     0001:000032dc
+	   329          1     0001:000032ea
+	   330          1     0001:000032f3
+	   338          1     0001:000032f9
+	   332          1     0001:0000331d
+	   333          1     0001:00003326
+	   334          1     0001:00003330
+	   336          1     0001:00003339
+	   350          1     0001:00003349
+	   359          1     0001:00003356
+	   361          1     0001:0000336c
+	   367          1     0001:00003379
+	   368          1     0001:00003388
+	   369          1     0001:00003391
+	   375          1     0001:000033a6
+	   371          1     0001:000033a7
+	   372          1     0001:000033ae
+	   373          1     0001:000033b9
+	   374          1     0001:000033c2
+	   376          1     0001:000033d6
+	   378          1     0001:000033e4
+	   380          1     0001:000033f4
+	   381          1     0001:00003420
+	   380          1     0001:00003430
+	   386          1     0001:00003449
+	   387          1     0001:00003455
+	   388          1     0001:0000345d
+	   389          1     0001:00003466
+	   390          1     0001:00003474
+	   391          1     0001:0000347b
+	   392          1     0001:00003484
+	   393          1     0001:0000348d
+	     0          0     0001:00000760
+	   394          1     0001:00003496
+	   141          1     0001:0000349e
+	   144          1     0001:000034d2
+	   145          1     0001:000034e7
+	   146          1     0001:000034fc
+	   147          1     0001:0000350c
+	   148          1     0001:00003534
+	   151          1     0001:00003538
+	   152          1     0001:00003551
+	   153          1     0001:00003561
+	   161          1     0001:00003593
+	   112          1     0001:00003594
+	   115          1     0001:0000359c
+	   116          1     0001:000035a6
+	   118          1     0001:000035af
+	   120          1     0001:000035bc
+	   122          1     0001:000035d9
+	   123          1     0001:000035e2
+	   124          1     0001:000035fe
+	   131          1     0001:00003622
+	   132          1     0001:0000363e
+	   133          1     0001:00003652
+	   136          1     0001:0000365d
+	   137          1     0001:00003669
+
+
+Line numbers for P:\WinCOM32\ga\comm.obj(p:\WinCOM32\comm.c)
+
+	Record Number of Start of Source: 0
+	Number of Primary Source Records: 0
+	Source & Listing Files: 49
+	File  1) p:\WinCOM32\comm.c
+	File  2) p:\WinCOM32\wCommon.h
+	File  3) p:\WinCOM32\wCommon.h
+	File  4) p:\WinCOM32\wCommon.h
+	File  5) p:\WinCOM32\wCommon.h
+	File  6) p:\WinCOM32\wCommon.h
+	File  7) p:\WinCOM32\wCommon.h
+	File  8) p:\WinCOM32\wCommon.h
+	File  9) p:\WinCOM32\wCommon.h
+	File 10) p:\WinCOM32\wCommon.h
+	File 11) p:\WinCOM32\wCommon.h
+	File 12) p:\WinCOM32\wCommon.h
+	File 13) p:\WinCOM32\wCommon.h
+	File 14) p:\WinCOM32\wCommon.h
+	File 15) p:\WinCOM32\wCommon.h
+	File 16) p:\WinCOM32\wCommon.h
+	File 17) p:\WinCOM32\wCommon.h
+	File 18) p:\WinCOM32\wCommon.h
+	File 19) p:\WinCOM32\wCommon.h
+	File 20) p:\WinCOM32\wCommon.h
+	File 21) p:\WinCOM32\wCommon.h
+	File 22) p:\WinCOM32\wCommon.h
+	File 23) p:\WinCOM32\wCommon.h
+	File 24) p:\WinCOM32\wCommon.h
+	File 25) p:\WinCOM32\wCommon.h
+	File 26) p:\WinCOM32\wCommon.h
+	File 27) p:\WinCOM32\wCommon.h
+	File 28) p:\WinCOM32\wCommon.h
+	File 29) p:\WinCOM32\wCommon.h
+	File 30) p:\WinCOM32\wCommon.h
+	File 31) p:\WinCOM32\wCommon.h
+	File 32) p:\WinCOM32\wCommon.h
+	File 33) p:\WinCOM32\wCommon.h
+	File 34) p:\WinCOM32\wCommon.h
+	File 35) p:\WinCOM32\wCommon.h
+	File 36) p:\WinCOM32\wCommon.h
+	File 37) p:\WinCOM32\wCommon.h
+	File 38) p:\WinCOM32\wCommon.h
+	File 39) p:\WinCOM32\wCommon.h
+	File 40) p:\WinCOM32\wCommon.h
+	File 41) p:\WinCOM32\wCommon.h
+	File 42) p:\WinCOM32\wCommon.h
+	File 43) p:\WinCOM32\wCommon.h
+	File 44) p:\WinCOM32\wCommon.h
+	File 45) p:\WinCOM32\wCommon.h
+	File 46) p:\WinCOM32\wCommon.h
+	File 47) p:\WinCOM32\wCommon.h
+	File 48) p:\WinCOM32\wCommon.h
+	File 49) p:\WinCOM32\wCommon.h
+
+
+Line numbers for P:\WinCOM32\ga\comm.obj(p:\WinCOM32\comm.c) segment CODE32 (@0x00000000)
+
+	 Source    Src File    Seg:Offset
+	Line Num    Index          (0X)
+	--------   --------   -------------
+	    90          1     0001:00003670
+	    93          1     0001:00003679
+	    95          1     0001:00003696
+	    75          1     0001:000036b0
+	    78          1     0001:000036b1
+	    81          1     0001:000036ba
+	    82          1     0001:000036c1
+	    79          1     0001:000036d1
+	    80          1     0001:000036eb
+	    84          1     0001:000036f5
+	    64          1     0001:00003706
+	    67          1     0001:0000370e
+	    69          1     0001:00003722
+	    53          1     0001:00003740
+	    56          1     0001:00003749
+	    58          1     0001:00003766
+	    37          1     0001:00003780
+	    40          1     0001:00003789
+	    41          1     0001:000037a1
+	    43          1     0001:000037a8
+	    44          1     0001:000037ad
+	    46          1     0001:000037b4
+	    47          1     0001:000037ba
+	    49          1     0001:000037bc
+	    48          1     0001:000037e1
+	    26          1     0001:000037f0
+	    29          1     0001:000037f8
+	    31          1     0001:0000380b
+	    13          1     0001:0000381c
+	    17          1     0001:00003830
+	    18          1     0001:00003838
+	    19          1     0001:0000384d
+	    20          1     0001:00003854
+	    21          1     0001:0000385c
+	    22          1     0001:00003862
+
+
+Line numbers for P:\WinCOM32\ga\dialog.obj(p:\WinCOM32\dialog.c)
+
+	Record Number of Start of Source: 0
+	Number of Primary Source Records: 0
+	Source & Listing Files: 53
+	File  1) p:\WinCOM32\dialog.c
+	File  2) p:\WinCOM32\wCommon.h
+	File  3) p:\WinCOM32\wCommon.h
+	File  4) p:\WinCOM32\wCommon.h
+	File  5) p:\WinCOM32\wCommon.h
+	File  6) p:\WinCOM32\wCommon.h
+	File  7) p:\WinCOM32\wCommon.h
+	File  8) p:\WinCOM32\wCommon.h
+	File  9) p:\WinCOM32\wCommon.h
+	File 10) p:\WinCOM32\wCommon.h
+	File 11) p:\WinCOM32\wCommon.h
+	File 12) p:\WinCOM32\wCommon.h
+	File 13) p:\WinCOM32\wCommon.h
+	File 14) p:\WinCOM32\wCommon.h
+	File 15) p:\WinCOM32\wCommon.h
+	File 16) p:\WinCOM32\wCommon.h
+	File 17) p:\WinCOM32\wCommon.h
+	File 18) p:\WinCOM32\wCommon.h
+	File 19) p:\WinCOM32\wCommon.h
+	File 20) p:\WinCOM32\wCommon.h
+	File 21) p:\WinCOM32\wCommon.h
+	File 22) p:\WinCOM32\wCommon.h
+	File 23) p:\WinCOM32\wCommon.h
+	File 24) p:\WinCOM32\wCommon.h
+	File 25) p:\WinCOM32\wCommon.h
+	File 26) p:\WinCOM32\wCommon.h
+	File 27) p:\WinCOM32\wCommon.h
+	File 28) p:\WinCOM32\wCommon.h
+	File 29) p:\WinCOM32\wCommon.h
+	File 30) p:\WinCOM32\wCommon.h
+	File 31) p:\WinCOM32\wCommon.h
+	File 32) p:\WinCOM32\wCommon.h
+	File 33) p:\WinCOM32\wCommon.h
+	File 34) p:\WinCOM32\wCommon.h
+	File 35) p:\WinCOM32\wCommon.h
+	File 36) p:\WinCOM32\wCommon.h
+	File 37) p:\WinCOM32\wCommon.h
+	File 38) p:\WinCOM32\wCommon.h
+	File 39) p:\WinCOM32\wCommon.h
+	File 40) p:\WinCOM32\wCommon.h
+	File 41) p:\WinCOM32\wCommon.h
+	File 42) p:\WinCOM32\wCommon.h
+	File 43) p:\WinCOM32\wCommon.h
+	File 44) p:\WinCOM32\wCommon.h
+	File 45) p:\WinCOM32\wCommon.h
+	File 46) p:\WinCOM32\wCommon.h
+	File 47) p:\WinCOM32\wCommon.h
+	File 48) p:\WinCOM32\wCommon.h
+	File 49) p:\WinCOM32\wCommon.h
+	File 50) p:\include\utility.h
+	File 51) p:\WinCOM32\dialog.h
+	File 52) p:\WinCOM32\usermsg.h
+	File 53) p:\WinCOM32\atom.h
+
+
+Line numbers for P:\WinCOM32\ga\dialog.obj(p:\WinCOM32\dialog.c) segment CODE32 (@0x00000000)
+
+	 Source    Src File    Seg:Offset
+	Line Num    Index          (0X)
+	--------   --------   -------------
+	   958          1     0001:00003870
+	   962          1     0001:00003871
+	   966          1     0001:00003895
+	   967          1     0001:0000389a
+	   969          1     0001:000038a2
+	   968          1     0001:000038a6
+	   970          1     0001:000038ba
+	   971          1     0001:000038c8
+	   972          1     0001:000038d8
+	   973          1     0001:000038e4
+	   974          1     0001:000038f6
+	   975          1     0001:00003901
+	   976          1     0001:00003913
+	   977          1     0001:00003923
+	   978          1     0001:00003935
+	   980          1     0001:0000393a
+	   981          1     0001:00003945
+	   983          1     0001:0000394a
+	   986          1     0001:00003966
+	   987          1     0001:0000397a
+	   989          1     0001:0000398c
+	   990          1     0001:00003998
+	   991          1     0001:000039ac
+	   993          1     0001:000039ba
+	   994          1     0001:000039c5
+	   995          1     0001:000039d9
+	   997          1     0001:000039e8
+	   998          1     0001:000039f4
+	   999          1     0001:00003a08
+	  1001          1     0001:00003a18
+	  1002          1     0001:00003a24
+	  1003          1     0001:00003a36
+	  1004          1     0001:00003a43
+	  1006          1     0001:00003a48
+	  1007          1     0001:00003a55
+	  1009          1     0001:00003a58
+	  1011          1     0001:00003a6a
+	  1013          1     0001:00003a6c
+	  1015          1     0001:00003a7e
+	   921          1     0001:00003a90
+	   922          1     0001:00003aa4
+	   923          1     0001:00003ab1
+	   925          1     0001:00003ab4
+	   926          1     0001:00003aca
+	   928          1     0001:00003ad8
+	   929          1     0001:00003aea
+	   931          1     0001:00003af4
+	   932          1     0001:00003b06
+	   934          1     0001:00003b10
+	   935          1     0001:00003b22
+	   937          1     0001:00003b2c
+	   939          1     0001:00003b34
+	   940          1     0001:00003b46
+	   942          1     0001:00003b54
+	   943          1     0001:00003b66
+	   945          1     0001:00003b70
+	   946          1     0001:00003b82
+	   948          1     0001:00003b8c
+	   949          1     0001:00003b9e
+	   951          1     0001:00003ba8
+	   953          1     0001:00003bb0
+	   887          1     0001:00003bc0
+	   888          1     0001:00003bd4
+	   889          1     0001:00003bdf
+	   891          1     0001:00003be5
+	   892          1     0001:00003bee
+	   894          1     0001:00003c04
+	   895          1     0001:00003c0d
+	   897          1     0001:00003c20
+	   898          1     0001:00003c29
+	   900          1     0001:00003c3c
+	   901          1     0001:00003c45
+	   903          1     0001:00003c58
+	   905          1     0001:00003c68
+	   906          1     0001:00003c71
+	   908          1     0001:00003c87
+	   909          1     0001:00003c90
+	   911          1     0001:00003ca6
+	   912          1     0001:00003caf
+	   914          1     0001:00003cc5
+	   915          1     0001:00003cce
+	   917          1     0001:00003ce4
+	   918          1     0001:00003cf4
+	   858          1     0001:00003cfa
+	   862          1     0001:00003d0f
+	   863          1     0001:00003d14
+	   864          1     0001:00003d1d
+	   865          1     0001:00003d26
+	   866          1     0001:00003d34
+	   868          1     0001:00003d36
+	   871          1     0001:00003d4c
+	   872          1     0001:00003d5a
+	   876          1     0001:00003d5c
+	   878          1     0001:00003d6c
+	   879          1     0001:00003d7a
+	   881          1     0001:00003d7c
+	   883          1     0001:00003d8c
+	   802          1     0001:00003d90
+	   807          1     0001:00003dac
+	   810          1     0001:00003dc7
+	   811          1     0001:00003dcf
+	   812          1     0001:00003dda
+	   814          1     0001:00003de0
+	   815          1     0001:00003deb
+	   817          1     0001:00003df0
+	   820          1     0001:00003e0c
+	   821          1     0001:00003e18
+	   822          1     0001:00003e29
+	   823          1     0001:00003e39
+	   824          1     0001:00003e42
+	   825          1     0001:00003e54
+	   826          1     0001:00003e60
+	   827          1     0001:00003e7e
+	   828          1     0001:00003e87
+	   829          1     0001:00003e99
+	   830          1     0001:00003eab
+	   831          1     0001:00003ebd
+	   832          1     0001:00003ecc
+	   833          1     0001:00003ee1
+	   834          1     0001:00003ee7
+	   836          1     0001:00003efe
+	   837          1     0001:00003f13
+	   838          1     0001:00003f30
+	   839          1     0001:00003f57
+	   840          1     0001:00003f66
+	     0          0     0001:00003870
+	   844          1     0001:00003f68
+	   846          1     0001:00003f87
+	   847          1     0001:00003f94
+	   849          1     0001:00003f96
+	   851          1     0001:00003fb5
+	   362          1     0001:00003fbe
+	   364          1     0001:00003fdc
+	   372          1     0001:00003fe0
+	   365          1     0001:00003feb
+	   366          1     0001:00003fee
+	   373          1     0001:00004007
+	   374          1     0001:0000400d
+	   376          1     0001:00004021
+	   377          1     0001:00004028
+	   378          1     0001:0000402c
+	   380          1     0001:00004038
+	   381          1     0001:00004047
+	   383          1     0001:00004056
+	   386          1     0001:0000405c
+	   388          1     0001:0000405f
+	   391          1     0001:0000407a
+	   392          1     0001:0000408d
+	   393          1     0001:00004099
+	   395          1     0001:0000409c
+	   397          1     0001:000040a5
+	   398          1     0001:000040b9
+	   400          1     0001:000040c2
+	   402          1     0001:000040c9
+	   404          1     0001:000040de
+	   405          1     0001:000040e1
+	   406          1     0001:000040f4
+	   407          1     0001:00004101
+	   409          1     0001:00004117
+	   410          1     0001:00004127
+	   413          1     0001:0000412c
+	   414          1     0001:0000412f
+	   415          1     0001:00004149
+	   416          1     0001:0000414e
+	   417          1     0001:00004152
+	   419          1     0001:00004168
+	   420          1     0001:0000416c
+	   421          1     0001:0000417e
+	   424          1     0001:00004180
+	   425          1     0001:00004183
+	   428          1     0001:0000419c
+	   427          1     0001:000041a2
+	   429          1     0001:000041b3
+	   430          1     0001:000041bf
+	   431          1     0001:000041d3
+	   433          1     0001:000041d8
+	   436          1     0001:000041ed
+	   437          1     0001:00004201
+	   439          1     0001:0000420a
+	   441          1     0001:00004211
+	   442          1     0001:00004238
+	   445          1     0001:00004244
+	   446          1     0001:0000424b
+	   448          1     0001:00004253
+	   449          1     0001:00004262
+	   452          1     0001:00004271
+	   454          1     0001:00004288
+	   455          1     0001:0000428b
+	   456          1     0001:000042a2
+	   457          1     0001:000042ad
+	   459          1     0001:000042b0
+	   461          1     0001:000042b7
+	   462          1     0001:000042cb
+	   464          1     0001:000042d4
+	   469          1     0001:000042db
+	   471          1     0001:000042ef
+	   472          1     0001:000042f6
+	   473          1     0001:000042fa
+	   475          1     0001:00004306
+	   476          1     0001:00004315
+	   478          1     0001:00004324
+	   481          1     0001:0000432c
+	   482          1     0001:0000432f
+	   483          1     0001:0000435a
+	   486          1     0001:00004360
+	   487          1     0001:00004367
+	   489          1     0001:0000436f
+	   490          1     0001:0000437e
+	   493          1     0001:0000438d
+	   495          1     0001:000043a6
+	   496          1     0001:000043a9
+	   497          1     0001:000043be
+	   498          1     0001:000043c5
+	   501          1     0001:000043da
+	   500          1     0001:000043dd
+	   502          1     0001:000043ec
+	   503          1     0001:000043f3
+	   504          1     0001:00004408
+	   505          1     0001:00004413
+	   507          1     0001:00004418
+	   508          1     0001:0000441f
+	   511          1     0001:00004424
+	   512          1     0001:00004427
+	   513          1     0001:00004440
+	   516          1     0001:0000444c
+	   520          1     0001:00004460
+	   522          1     0001:0000446b
+	   524          1     0001:0000446e
+	   527          1     0001:00004520
+	   529          1     0001:00004538
+	   530          1     0001:00004545
+	   531          1     0001:00004552
+	   533          1     0001:00004568
+	   534          1     0001:00004575
+	   535          1     0001:00004582
+	   538          1     0001:00004592
+	   540          1     0001:00004598
+	   542          1     0001:000045b0
+	   543          1     0001:000045bd
+	   544          1     0001:000045ca
+	   546          1     0001:000045e0
+	   547          1     0001:000045ed
+	   548          1     0001:000045fa
+	   551          1     0001:0000460a
+	   553          1     0001:00004610
+	   555          1     0001:00004628
+	   556          1     0001:00004635
+	   557          1     0001:00004642
+	   558          1     0001:0000464f
+	   559          1     0001:0000465c
+	   561          1     0001:0000466c
+	   563          1     0001:00004674
+	     0          0     0001:00003870
+	   564          1     0001:00004683
+	   566          1     0001:00004695
+	   567          1     0001:000046a2
+	   569          1     0001:000046b2
+	   570          1     0001:000046c1
+	   571          1     0001:000046ce
+	   572          1     0001:000046d6
+	   577          1     0001:000046f7
+	   579          1     0001:000046fc
+	   580          1     0001:0000470b
+	   581          1     0001:00004718
+	   582          1     0001:00004725
+	   583          1     0001:00004732
+	   584          1     0001:0000473f
+	   585          1     0001:00004747
+	   590          1     0001:00004768
+	   592          1     0001:00004770
+	   594          1     0001:00004784
+	   595          1     0001:00004791
+	   596          1     0001:0000479e
+	   597          1     0001:000047ae
+	   600          1     0001:000047b4
+	   601          1     0001:000047c3
+	   602          1     0001:000047d0
+	   604          1     0001:000047e0
+	   606          1     0001:000047e8
+	   608          1     0001:00004800
+	   609          1     0001:0000480d
+	   610          1     0001:0000481a
+	   611          1     0001:00004827
+	   612          1     0001:00004834
+	   613          1     0001:00004841
+	   614          1     0001:0000484e
+	   615          1     0001:0000485b
+	   616          1     0001:00004868
+	   617          1     0001:00004875
+	   618          1     0001:00004882
+	   619          1     0001:0000488f
+	   620          1     0001:0000489c
+	   621          1     0001:000048af
+	   624          1     0001:000048b4
+	   625          1     0001:000048c3
+	   626          1     0001:000048d0
+	   628          1     0001:000048e2
+	   629          1     0001:000048ef
+	   631          1     0001:000048ff
+	   633          1     0001:00004917
+	   634          1     0001:00004924
+	   635          1     0001:00004931
+	   636          1     0001:0000493e
+	   637          1     0001:0000494b
+	   638          1     0001:00004958
+	   639          1     0001:00004965
+	   640          1     0001:00004972
+	   641          1     0001:0000497f
+	   642          1     0001:0000498f
+	   645          1     0001:00004994
+	   646          1     0001:000049a3
+	   647          1     0001:000049b0
+	   648          1     0001:000049bd
+	   650          1     0001:000049cf
+	   651          1     0001:000049dc
+	   652          1     0001:000049e9
+	   653          1     0001:000049f6
+	   654          1     0001:00004a06
+	   657          1     0001:00004a08
+	   658          1     0001:00004a17
+	   659          1     0001:00004a24
+	   660          1     0001:00004a31
+	   662          1     0001:00004a41
+	   663          1     0001:00004a50
+	   666          1     0001:00004a60
+	   668          1     0001:00004a68
+	   669          1     0001:00004a77
+	   670          1     0001:00004a84
+	   671          1     0001:00004a91
+	   672          1     0001:00004a9e
+	   673          1     0001:00004aab
+	   674          1     0001:00004ab8
+	   675          1     0001:00004ac5
+	   676          1     0001:00004ad2
+	   677          1     0001:00004ae2
+	   679          1     0001:00004ae8
+	   680          1     0001:00004af7
+	   681          1     0001:00004b04
+	   682          1     0001:00004b11
+	   683          1     0001:00004b1e
+	   684          1     0001:00004b2b
+	   685          1     0001:00004b38
+	   686          1     0001:00004b45
+	   687          1     0001:00004b52
+	   688          1     0001:00004b62
+	   690          1     0001:00004b68
+	   692          1     0001:00004b7c
+	   693          1     0001:00004b89
+	   694          1     0001:00004b96
+	   695          1     0001:00004ba3
+	   696          1     0001:00004bb3
+	   699          1     0001:00004bb8
+	   700          1     0001:00004bc7
+	   701          1     0001:00004bd4
+	   702          1     0001:00004be1
+	   704          1     0001:00004bf1
+	   706          1     0001:00004bf6
+	   708          1     0001:00004c0e
+	   709          1     0001:00004c1b
+	   710          1     0001:00004c28
+	   711          1     0001:00004c35
+	   712          1     0001:00004c42
+	   713          1     0001:00004c4f
+	   714          1     0001:00004c5c
+	   715          1     0001:00004c69
+	   716          1     0001:00004c76
+	   717          1     0001:00004c83
+	   718          1     0001:00004c90
+	   719          1     0001:00004c9d
+	   720          1     0001:00004caa
+	   721          1     0001:00004cb7
+	   722          1     0001:00004cc4
+	   723          1     0001:00004cd1
+	   724          1     0001:00004cde
+	   725          1     0001:00004ceb
+	   726          1     0001:00004cf8
+	   727          1     0001:00004d05
+	   728          1     0001:00004d12
+	   729          1     0001:00004d1f
+	     0          0     0001:00003870
+	   730          1     0001:00004d32
+	   733          1     0001:00004d38
+	   734          1     0001:00004d47
+	   735          1     0001:00004d54
+	   736          1     0001:00004d61
+	   737          1     0001:00004d6e
+	   738          1     0001:00004d7b
+	   739          1     0001:00004d88
+	   741          1     0001:00004d9a
+	   742          1     0001:00004da7
+	   744          1     0001:00004db7
+	   746          1     0001:00004dcb
+	   747          1     0001:00004dd8
+	   749          1     0001:00004de8
+	   750          1     0001:00004df7
+	   752          1     0001:00004e09
+	   753          1     0001:00004e16
+	   754          1     0001:00004e23
+	   755          1     0001:00004e33
+	   758          1     0001:00004e38
+	   759          1     0001:00004e47
+	   760          1     0001:00004e54
+	   762          1     0001:00004e64
+	   763          1     0001:00004e73
+	   764          1     0001:00004e80
+	   766          1     0001:00004e92
+	   767          1     0001:00004e9f
+	   768          1     0001:00004eac
+	   769          1     0001:00004eb9
+	   770          1     0001:00004ec9
+	   773          1     0001:00004ecc
+	   774          1     0001:00004edb
+	   775          1     0001:00004ee8
+	   776          1     0001:00004ef5
+	   778          1     0001:00004f05
+	   779          1     0001:00004f14
+	   780          1     0001:00004f21
+	   781          1     0001:00004f2e
+	   782          1     0001:00004f3b
+	   783          1     0001:00004f48
+	   784          1     0001:00004f5a
+	   786          1     0001:00004f6c
+	   788          1     0001:00004f7c
+	   790          1     0001:00004f7e
+	   791          1     0001:00004f92
+	   793          1     0001:00004fa4
+	   794          1     0001:00004fb4
+	   796          1     0001:00004fb6
+	   798          1     0001:00004fbe
+	   295          1     0001:00004fd0
+	   296          1     0001:00004fe6
+	   297          1     0001:00004fed
+	   299          1     0001:00004ff3
+	   301          1     0001:00004fff
+	   302          1     0001:0000500c
+	   303          1     0001:00005019
+	   304          1     0001:00005026
+	   305          1     0001:00005033
+	   306          1     0001:00005040
+	   307          1     0001:0000504d
+	   308          1     0001:0000505a
+	   309          1     0001:00005067
+	   310          1     0001:00005074
+	   311          1     0001:00005081
+	   312          1     0001:0000508e
+	   313          1     0001:0000509b
+	   314          1     0001:000050a8
+	   315          1     0001:000050b5
+	   316          1     0001:000050c2
+	   317          1     0001:000050cf
+	   318          1     0001:000050dc
+	   319          1     0001:000050e9
+	   320          1     0001:000050f6
+	   321          1     0001:00005103
+	   322          1     0001:00005110
+	   323          1     0001:00005123
+	   324          1     0001:00005130
+	   325          1     0001:00005140
+	   328          1     0001:00005147
+	   330          1     0001:0000514f
+	   331          1     0001:0000515e
+	   332          1     0001:0000516b
+	   333          1     0001:00005178
+	   336          1     0001:00005188
+	   338          1     0001:00005191
+	   339          1     0001:000051a0
+	   340          1     0001:000051ad
+	   342          1     0001:000051bd
+	   343          1     0001:000051c5
+	   346          1     0001:000051e3
+	   347          1     0001:000051f2
+	   348          1     0001:000051ff
+	   349          1     0001:0000520c
+	   350          1     0001:00005219
+	   351          1     0001:00005226
+	   352          1     0001:0000522e
+	   359          1     0001:0000524f
+	   249          1     0001:00005256
+	   250          1     0001:0000526b
+	   251          1     0001:00005272
+	   253          1     0001:00005279
+	   255          1     0001:00005283
+	   256          1     0001:00005290
+	   257          1     0001:0000529d
+	   258          1     0001:000052aa
+	   259          1     0001:000052b7
+	   260          1     0001:000052c4
+	   261          1     0001:000052d1
+	   262          1     0001:000052de
+	   263          1     0001:000052eb
+	   264          1     0001:000052f8
+	   265          1     0001:00005305
+	   266          1     0001:00005318
+	   268          1     0001:0000531f
+	   270          1     0001:0000532b
+	   271          1     0001:0000533a
+	   272          1     0001:00005347
+	   273          1     0001:00005354
+	   274          1     0001:00005361
+	   275          1     0001:0000536e
+	   276          1     0001:0000537b
+	   277          1     0001:00005388
+	   278          1     0001:00005395
+	   279          1     0001:000053a5
+	   282          1     0001:000053ac
+	   283          1     0001:000053bb
+	     0          0     0001:00003870
+	   284          1     0001:000053c8
+	   285          1     0001:000053d5
+	   286          1     0001:000053e2
+	   287          1     0001:000053ef
+	   288          1     0001:000053fc
+	   289          1     0001:00005409
+	   290          1     0001:00005416
+	   292          1     0001:00005426
+	   180          1     0001:00005430
+	   182          1     0001:00005446
+	   183          1     0001:00005453
+	   188          1     0001:0000545a
+	   189          1     0001:00005460
+	   191          1     0001:00005472
+	   192          1     0001:00005484
+	   193          1     0001:0000548d
+	   195          1     0001:000054a4
+	   196          1     0001:000054b6
+	   197          1     0001:000054bf
+	   199          1     0001:000054d4
+	   201          1     0001:000054e6
+	   202          1     0001:00005501
+	   203          1     0001:00005518
+	   205          1     0001:00005527
+	   206          1     0001:0000552d
+	   208          1     0001:00005540
+	   210          1     0001:00005552
+	   211          1     0001:0000556d
+	   212          1     0001:00005584
+	   214          1     0001:00005593
+	   216          1     0001:00005599
+	   217          1     0001:000055a6
+	   220          1     0001:000055b6
+	   221          1     0001:000055bf
+	   223          1     0001:000055d4
+	   224          1     0001:000055dd
+	   226          1     0001:000055f4
+	   228          1     0001:00005606
+	   229          1     0001:0000560f
+	   231          1     0001:00005624
+	   233          1     0001:00005636
+	   234          1     0001:0000563f
+	   235          1     0001:00005651
+	   236          1     0001:0000565b
+	   238          1     0001:0000566d
+	   240          1     0001:00005676
+	   241          1     0001:00005688
+	   243          1     0001:0000568a
+	   245          1     0001:0000569c
+	   133          1     0001:000056a8
+	   141          1     0001:000056a9
+	   135          1     0001:000056c9
+	   136          1     0001:000056d8
+	   142          1     0001:000056eb
+	   143          1     0001:000056ff
+	   144          1     0001:0000570b
+	   145          1     0001:00005720
+	   146          1     0001:00005734
+	   147          1     0001:00005740
+	   148          1     0001:00005755
+	   149          1     0001:00005769
+	   150          1     0001:00005775
+	   151          1     0001:0000578a
+	   152          1     0001:0000579e
+	   156          1     0001:000057b0
+	   157          1     0001:000057b6
+	   158          1     0001:000057c6
+	   159          1     0001:000057cf
+	   160          1     0001:000057e1
+	   161          1     0001:000057ea
+	   163          1     0001:000057fe
+	   168          1     0001:00005810
+	   167          1     0001:00005813
+	   169          1     0001:00005836
+	   170          1     0001:00005847
+	   171          1     0001:00005863
+	   172          1     0001:0000587a
+	   173          1     0001:00005886
+	   174          1     0001:0000589c
+	   175          1     0001:000058b0
+	   176          1     0001:000058bf
+	    49          1     0001:000058d0
+	    55          1     0001:000058e9
+	    59          1     0001:000059a0
+	    60          1     0001:000059a6
+	    61          1     0001:000059af
+	    62          1     0001:000059b8
+	    63          1     0001:000059be
+	    64          1     0001:000059cb
+	    65          1     0001:000059e5
+	    67          1     0001:000059ea
+	    68          1     0001:000059f5
+	    69          1     0001:00005a0f
+	    71          1     0001:00005a14
+	    72          1     0001:00005a1f
+	    73          1     0001:00005a39
+	    75          1     0001:00005a3e
+	    76          1     0001:00005a49
+	    77          1     0001:00005a63
+	    79          1     0001:00005a68
+	    80          1     0001:00005a74
+	    82          1     0001:00005a7c
+	    83          1     0001:00005a8e
+	    85          1     0001:00005a94
+	    86          1     0001:00005a9f
+	    88          1     0001:00005aa4
+	    91          1     0001:00005ae4
+	    92          1     0001:00005ae9
+	    93          1     0001:00005b09
+	    94          1     0001:00005b20
+	    96          1     0001:00005b27
+	    97          1     0001:00005b34
+	   101          1     0001:00005b60
+	   103          1     0001:00005b68
+	   104          1     0001:00005b78
+	   105          1     0001:00005b8e
+	   110          1     0001:00005b95
+	   112          1     0001:00005b9a
+	   115          1     0001:00005bb0
+	   117          1     0001:00005bbb
+	   118          1     0001:00005bc8
+	   120          1     0001:00005bca
+	   121          1     0001:00005bd7
+	   123          1     0001:00005bdc
+	   125          1     0001:00005bf9
+	   127          1     0001:00005bfc
+	     0          0     0001:00003870
+	   129          1     0001:00005c19
+
+
+Line numbers for P:\WinCOM32\ga\init.obj(p:\WinCOM32\init.c)
+
+	Record Number of Start of Source: 0
+	Number of Primary Source Records: 0
+	Source & Listing Files: 50
+	File  1) p:\WinCOM32\init.c
+	File  2) p:\WinCOM32\wCommon.h
+	File  3) p:\WinCOM32\wCommon.h
+	File  4) p:\WinCOM32\wCommon.h
+	File  5) p:\WinCOM32\wCommon.h
+	File  6) p:\WinCOM32\wCommon.h
+	File  7) p:\WinCOM32\wCommon.h
+	File  8) p:\WinCOM32\wCommon.h
+	File  9) p:\WinCOM32\wCommon.h
+	File 10) p:\WinCOM32\wCommon.h
+	File 11) p:\WinCOM32\wCommon.h
+	File 12) p:\WinCOM32\wCommon.h
+	File 13) p:\WinCOM32\wCommon.h
+	File 14) p:\WinCOM32\wCommon.h
+	File 15) p:\WinCOM32\wCommon.h
+	File 16) p:\WinCOM32\wCommon.h
+	File 17) p:\WinCOM32\wCommon.h
+	File 18) p:\WinCOM32\wCommon.h
+	File 19) p:\WinCOM32\wCommon.h
+	File 20) p:\WinCOM32\wCommon.h
+	File 21) p:\WinCOM32\wCommon.h
+	File 22) p:\WinCOM32\wCommon.h
+	File 23) p:\WinCOM32\wCommon.h
+	File 24) p:\WinCOM32\wCommon.h
+	File 25) p:\WinCOM32\wCommon.h
+	File 26) p:\WinCOM32\wCommon.h
+	File 27) p:\WinCOM32\wCommon.h
+	File 28) p:\WinCOM32\wCommon.h
+	File 29) p:\WinCOM32\wCommon.h
+	File 30) p:\WinCOM32\wCommon.h
+	File 31) p:\WinCOM32\wCommon.h
+	File 32) p:\WinCOM32\wCommon.h
+	File 33) p:\WinCOM32\wCommon.h
+	File 34) p:\WinCOM32\wCommon.h
+	File 35) p:\WinCOM32\wCommon.h
+	File 36) p:\WinCOM32\wCommon.h
+	File 37) p:\WinCOM32\wCommon.h
+	File 38) p:\WinCOM32\wCommon.h
+	File 39) p:\WinCOM32\wCommon.h
+	File 40) p:\WinCOM32\wCommon.h
+	File 41) p:\WinCOM32\wCommon.h
+	File 42) p:\WinCOM32\wCommon.h
+	File 43) p:\WinCOM32\wCommon.h
+	File 44) p:\WinCOM32\wCommon.h
+	File 45) p:\WinCOM32\wCommon.h
+	File 46) p:\WinCOM32\wCommon.h
+	File 47) p:\WinCOM32\wCommon.h
+	File 48) p:\WinCOM32\wCommon.h
+	File 49) p:\WinCOM32\wCommon.h
+	File 50) p:\WinCOM32\dialog.h
+
+
+Line numbers for P:\WinCOM32\ga\init.obj(p:\WinCOM32\init.c) segment CODE32 (@0x00000000)
+
+	 Source    Src File    Seg:Offset
+	Line Num    Index          (0X)
+	--------   --------   -------------
+	    44          1     0001:00005c20
+	    82          1     0001:00005c24
+	    83          1     0001:00005c28
+	    88          1     0001:00005c2c
+	    85          1     0001:00005c30
+	    90          1     0001:00005c34
+	    86          1     0001:00005c38
+	    92          1     0001:00005c3c
+	    46          1     0001:00005c43
+	    45          1     0001:00005c46
+	    47          1     0001:00005c4d
+	    89          1     0001:00005c54
+	    48          1     0001:00005c58
+	    49          1     0001:00005c5f
+	    94          1     0001:00005c66
+	    51          1     0001:00005c6a
+	    52          1     0001:00005c73
+	    54          1     0001:00005c82
+	    55          1     0001:00005c8c
+	    56          1     0001:00005c96
+	    57          1     0001:00005ca0
+	    58          1     0001:00005caa
+	    59          1     0001:00005cb4
+	    81          1     0001:00005cbe
+	    84          1     0001:00005cc4
+	    87          1     0001:00005cca
+	    91          1     0001:00005cd0
+	    93          1     0001:00005cd6
+	    95          1     0001:00005cda
+	   101          1     0001:00005cde
+	   102          1     0001:00005ce2
+	    96          1     0001:00005ce6
+	   103          1     0001:00005cea
+	    97          1     0001:00005cee
+	    98          1     0001:00005cf2
+	    99          1     0001:00005cf6
+	   100          1     0001:00005cfa
+	   104          1     0001:00005d00
+	   107          1     0001:00005d10
+	   115          1     0001:00005d2b
+	   117          1     0001:00005d33
+	   119          1     0001:00005d4b
+	   123          1     0001:00005d4e
+	   120          1     0001:00005d56
+	   121          1     0001:00005d5f
+	   122          1     0001:00005d68
+	   129          1     0001:00005d8d
+	   130          1     0001:00005d9f
+	   131          1     0001:00005db1
+	   132          1     0001:00005dc3
+	   133          1     0001:00005dd5
+	   134          1     0001:00005de7
+	   135          1     0001:00005df9
+	   136          1     0001:00005e0b
+	   137          1     0001:00005e20
+	   140          1     0001:00005e33
+	   141          1     0001:00005e48
+	   143          1     0001:00005e4a
+	   146          1     0001:00005e5f
+	   148          1     0001:00005e6c
+	   149          1     0001:00005e7d
+	   151          1     0001:00005e9a
+	   153          1     0001:00005eb5
+	   154          1     0001:00005ec0
+	   156          1     0001:00005ee2
+	   158          1     0001:00005eed
+	   160          1     0001:00005ef0
+	   161          1     0001:00005f0d
+	   162          1     0001:00005f2a
+	   163          1     0001:00005f44
+	   164          1     0001:00005f58
+	   166          1     0001:00005f74
+	   168          1     0001:00005f8f
+	   169          1     0001:00005f99
+	   170          1     0001:00005fa2
+	   171          1     0001:00005fad
+	   173          1     0001:00005fd0
+	   175          1     0001:00005fdd
+	   176          1     0001:00005fef
+	   178          1     0001:0000600b
+	   179          1     0001:00006020
+	   180          1     0001:00006026
+	   181          1     0001:0000603b
+	   182          1     0001:0000603e
+	   183          1     0001:00006066
+	   184          1     0001:00006072
+	   185          1     0001:00006082
+	   187          1     0001:0000609d
+	   188          1     0001:000060af
+	   189          1     0001:000060c1
+	   190          1     0001:000060d3
+	   191          1     0001:000060e8
+	   192          1     0001:000060f1
+	   193          1     0001:000060fa
+	   198          1     0001:0000610c
+	   199          1     0001:0000611f
+
+
+Line numbers for P:\WinCOM32\ga\strtrans.obj(p:\WinCOM32\strtrans.c)
+
+	Record Number of Start of Source: 0
+	Number of Primary Source Records: 0
+	Source & Listing Files: 50
+	File  1) p:\WinCOM32\strtrans.c
+	File  2) p:\WinCOM32\wCommon.h
+	File  3) p:\WinCOM32\wCommon.h
+	File  4) p:\WinCOM32\wCommon.h
+	File  5) p:\WinCOM32\wCommon.h
+	File  6) p:\WinCOM32\wCommon.h
+	File  7) p:\WinCOM32\wCommon.h
+	File  8) p:\WinCOM32\wCommon.h
+	File  9) p:\WinCOM32\wCommon.h
+	File 10) p:\WinCOM32\wCommon.h
+	File 11) p:\WinCOM32\wCommon.h
+	File 12) p:\WinCOM32\wCommon.h
+	File 13) p:\WinCOM32\wCommon.h
+	File 14) p:\WinCOM32\wCommon.h
+	File 15) p:\WinCOM32\wCommon.h
+	File 16) p:\WinCOM32\wCommon.h
+	File 17) p:\WinCOM32\wCommon.h
+	File 18) p:\WinCOM32\wCommon.h
+	File 19) p:\WinCOM32\wCommon.h
+	File 20) p:\WinCOM32\wCommon.h
+	File 21) p:\WinCOM32\wCommon.h
+	File 22) p:\WinCOM32\wCommon.h
+	File 23) p:\WinCOM32\wCommon.h
+	File 24) p:\WinCOM32\wCommon.h
+	File 25) p:\WinCOM32\wCommon.h
+	File 26) p:\WinCOM32\wCommon.h
+	File 27) p:\WinCOM32\wCommon.h
+	File 28) p:\WinCOM32\wCommon.h
+	File 29) p:\WinCOM32\wCommon.h
+	File 30) p:\WinCOM32\wCommon.h
+	File 31) p:\WinCOM32\wCommon.h
+	File 32) p:\WinCOM32\wCommon.h
+	File 33) p:\WinCOM32\wCommon.h
+	File 34) p:\WinCOM32\wCommon.h
+	File 35) p:\WinCOM32\wCommon.h
+	File 36) p:\WinCOM32\wCommon.h
+	File 37) p:\WinCOM32\wCommon.h
+	File 38) p:\WinCOM32\wCommon.h
+	File 39) p:\WinCOM32\wCommon.h
+	File 40) p:\WinCOM32\wCommon.h
+	File 41) p:\WinCOM32\wCommon.h
+	File 42) p:\WinCOM32\wCommon.h
+	File 43) p:\WinCOM32\wCommon.h
+	File 44) p:\WinCOM32\wCommon.h
+	File 45) p:\WinCOM32\wCommon.h
+	File 46) p:\WinCOM32\wCommon.h
+	File 47) p:\WinCOM32\wCommon.h
+	File 48) p:\WinCOM32\wCommon.h
+	File 49) p:\WinCOM32\wCommon.h
+	File 50) p:\WinCOM32\dialog.h
+
+
+Line numbers for P:\WinCOM32\ga\strtrans.obj(p:\WinCOM32\strtrans.c) segment CODE32 (@0x00000000)
+
+	 Source    Src File    Seg:Offset
+	Line Num    Index          (0X)
+	--------   --------   -------------
+	   239          1     0001:00006130
+	   252          1     0001:00006158
+	   247          1     0001:0000615b
+	   248          1     0001:00006173
+	   249          1     0001:0000617a
+	   254          1     0001:00006190
+	   256          1     0001:000061ac
+	   257          1     0001:000061b0
+	   258          1     0001:000061ca
+	   259          1     0001:000061da
+	   262          1     0001:000061e0
+	   264          1     0001:000061e7
+	   265          1     0001:000061ef
+	   266          1     0001:00006200
+	   267          1     0001:00006207
+	   270          1     0001:0000620c
+	   271          1     0001:00006213
+	   273          1     0001:00006224
+	   274          1     0001:0000623c
+	   275          1     0001:00006250
+	   278          1     0001:0000625b
+	   279          1     0001:00006264
+	   280          1     0001:0000626f
+	   281          1     0001:00006284
+	   282          1     0001:0000628b
+	   283          1     0001:000062c5
+	   196          1     0001:000062e0
+	   201          1     0001:00006309
+	   203          1     0001:00006311
+	   204          1     0001:00006314
+	   205          1     0001:00006321
+	   208          1     0001:00006325
+	   210          1     0001:00006341
+	   211          1     0001:00006344
+	   212          1     0001:0000635e
+	   213          1     0001:00006368
+	   217          1     0001:00006372
+	   218          1     0001:0000637c
+	   220          1     0001:00006382
+	   221          1     0001:00006392
+	   225          1     0001:0000639c
+	   227          1     0001:000063ac
+	   229          1     0001:000063c6
+	   231          1     0001:000063d2
+	   232          1     0001:00006407
+	   145          1     0001:00006420
+	   153          1     0001:0000643d
+	   157          1     0001:00006441
+	   160          1     0001:00006470
+	   162          1     0001:00006493
+	   163          1     0001:000064ab
+	   164          1     0001:000064b8
+	   168          1     0001:000064c5
+	   170          1     0001:000064d2
+	   172          1     0001:000064d6
+	   173          1     0001:000064e2
+	   174          1     0001:000064e7
+	   175          1     0001:000064e9
+	   176          1     0001:000064f8
+	   177          1     0001:000064fa
+	   178          1     0001:00006509
+	   179          1     0001:0000650b
+	   180          1     0001:00006524
+	   181          1     0001:00006534
+	   184          1     0001:00006536
+	   185          1     0001:0000654d
+	   186          1     0001:0000655a
+	   188          1     0001:00006567
+	   157          1     0001:00006571
+	   192          1     0001:00006581
+	   116          1     0001:0000658e
+	   123          1     0001:000065aa
+	   125          1     0001:000065c8
+	   126          1     0001:000065de
+	   127          1     0001:000065e8
+	   131          1     0001:000065f0
+	   133          1     0001:000065fa
+	   134          1     0001:000065ff
+	   136          1     0001:0000661d
+	   138          1     0001:00006629
+	   141          1     0001:00006631
+	    32          1     0001:0000663c
+	    35          1     0001:00006659
+	    33          1     0001:00006660
+	    36          1     0001:0000666a
+	    34          1     0001:00006670
+	    41          1     0001:00006678
+	    45          1     0001:00006688
+	    47          1     0001:0000668e
+	    48          1     0001:00006694
+	    49          1     0001:000066a2
+	    54          1     0001:000066c0
+	    56          1     0001:000066d0
+	    60          1     0001:000066de
+	    62          1     0001:000066e9
+	    64          1     0001:00006704
+	    66          1     0001:00006720
+	    68          1     0001:0000672a
+	    69          1     0001:00006750
+	    71          1     0001:00006755
+	    72          1     0001:0000676f
+	    73          1     0001:00006777
+	    76          1     0001:0000677c
+	    77          1     0001:00006798
+	    68          1     0001:000067aa
+	    78          1     0001:000067ac
+	    79          1     0001:000067cf
+	    81          1     0001:000067ea
+	    82          1     0001:000067f1
+	    85          1     0001:00006800
+	    86          1     0001:00006804
+	    87          1     0001:00006820
+	    88          1     0001:0000682e
+	    90          1     0001:00006861
+	    92          1     0001:00006867
+	    93          1     0001:00006871
+	    94          1     0001:00006876
+	    96          1     0001:00006878
+	    95          1     0001:0000687c
+	    98          1     0001:00006890
+	    99          1     0001:0000689a
+	   101          1     0001:000068d0
+	   102          1     0001:000068ef
+	   103          1     0001:00006903
+	   104          1     0001:00006917
+	     0          0     0001:00006130
+	   105          1     0001:00006926
+	    64          1     0001:0000693a
+	   108          1     0001:00006948
+	   110          1     0001:0000694c
+	    54          1     0001:0000695b
+	   112          1     0001:00006964
+	   113          1     0001:0000696d
+
+
+Line numbers for P:\WinCOM32\ga\terminal.obj(p:\WinCOM32\terminal.c)
+
+	Record Number of Start of Source: 0
+	Number of Primary Source Records: 0
+	Source & Listing Files: 49
+	File  1) p:\WinCOM32\terminal.c
+	File  2) p:\WinCOM32\wCommon.h
+	File  3) p:\WinCOM32\wCommon.h
+	File  4) p:\WinCOM32\wCommon.h
+	File  5) p:\WinCOM32\wCommon.h
+	File  6) p:\WinCOM32\wCommon.h
+	File  7) p:\WinCOM32\wCommon.h
+	File  8) p:\WinCOM32\wCommon.h
+	File  9) p:\WinCOM32\wCommon.h
+	File 10) p:\WinCOM32\wCommon.h
+	File 11) p:\WinCOM32\wCommon.h
+	File 12) p:\WinCOM32\wCommon.h
+	File 13) p:\WinCOM32\wCommon.h
+	File 14) p:\WinCOM32\wCommon.h
+	File 15) p:\WinCOM32\wCommon.h
+	File 16) p:\WinCOM32\wCommon.h
+	File 17) p:\WinCOM32\wCommon.h
+	File 18) p:\WinCOM32\wCommon.h
+	File 19) p:\WinCOM32\wCommon.h
+	File 20) p:\WinCOM32\wCommon.h
+	File 21) p:\WinCOM32\wCommon.h
+	File 22) p:\WinCOM32\wCommon.h
+	File 23) p:\WinCOM32\wCommon.h
+	File 24) p:\WinCOM32\wCommon.h
+	File 25) p:\WinCOM32\wCommon.h
+	File 26) p:\WinCOM32\wCommon.h
+	File 27) p:\WinCOM32\wCommon.h
+	File 28) p:\WinCOM32\wCommon.h
+	File 29) p:\WinCOM32\wCommon.h
+	File 30) p:\WinCOM32\wCommon.h
+	File 31) p:\WinCOM32\wCommon.h
+	File 32) p:\WinCOM32\wCommon.h
+	File 33) p:\WinCOM32\wCommon.h
+	File 34) p:\WinCOM32\wCommon.h
+	File 35) p:\WinCOM32\wCommon.h
+	File 36) p:\WinCOM32\wCommon.h
+	File 37) p:\WinCOM32\wCommon.h
+	File 38) p:\WinCOM32\wCommon.h
+	File 39) p:\WinCOM32\wCommon.h
+	File 40) p:\WinCOM32\wCommon.h
+	File 41) p:\WinCOM32\wCommon.h
+	File 42) p:\WinCOM32\wCommon.h
+	File 43) p:\WinCOM32\wCommon.h
+	File 44) p:\WinCOM32\wCommon.h
+	File 45) p:\WinCOM32\wCommon.h
+	File 46) p:\WinCOM32\wCommon.h
+	File 47) p:\WinCOM32\wCommon.h
+	File 48) p:\WinCOM32\wCommon.h
+	File 49) p:\WinCOM32\wCommon.h
+
+
+Line numbers for P:\WinCOM32\ga\terminal.obj(p:\WinCOM32\terminal.c) segment CODE32 (@0x00000000)
+
+	 Source    Src File    Seg:Offset
+	Line Num    Index          (0X)
+	--------   --------   -------------
+	    13          1     0001:00006980
+	    22          1     0001:000069a9
+	    18          1     0001:000069ae
+	    19          1     0001:000069c6
+	    20          1     0001:000069d0
+	    23          1     0001:000069d6
+	    25          1     0001:00006a0c
+	    27          1     0001:00006a16
+	    29          1     0001:00006a31
+	    30          1     0001:00006a43
+	    31          1     0001:00006a4d
+	    33          1     0001:00006a52
+	    35          1     0001:00006a5e
+	    36          1     0001:00006a64
+	    38          1     0001:00006a7e
+	    39          1     0001:00006a90
+	    41          1     0001:00006a9a
+	    42          1     0001:00006a9e
+	    44          1     0001:00006ad5
+	    47          1     0001:00006ada
+	    49          1     0001:00006af5
+	    50          1     0001:00006b0b
+	    51          1     0001:00006b15
+	    53          1     0001:00006b1a
+	    55          1     0001:00006b25
+	    56          1     0001:00006b2b
+	    58          1     0001:00006b46
+	    59          1     0001:00006b5c
+	    61          1     0001:00006b66
+	    62          1     0001:00006b8e
+	    63          1     0001:00006b95
+	    23          1     0001:00006bbb
+	    67          1     0001:00006bc8
+
+
+Line numbers for P:\WinCOM32\ga\thread.obj(p:\WinCOM32\thread.c)
+
+	Record Number of Start of Source: 0
+	Number of Primary Source Records: 0
+	Source & Listing Files: 50
+	File  1) p:\WinCOM32\thread.c
+	File  2) p:\WinCOM32\wCommon.h
+	File  3) p:\WinCOM32\wCommon.h
+	File  4) p:\WinCOM32\wCommon.h
+	File  5) p:\WinCOM32\wCommon.h
+	File  6) p:\WinCOM32\wCommon.h
+	File  7) p:\WinCOM32\wCommon.h
+	File  8) p:\WinCOM32\wCommon.h
+	File  9) p:\WinCOM32\wCommon.h
+	File 10) p:\WinCOM32\wCommon.h
+	File 11) p:\WinCOM32\wCommon.h
+	File 12) p:\WinCOM32\wCommon.h
+	File 13) p:\WinCOM32\wCommon.h
+	File 14) p:\WinCOM32\wCommon.h
+	File 15) p:\WinCOM32\wCommon.h
+	File 16) p:\WinCOM32\wCommon.h
+	File 17) p:\WinCOM32\wCommon.h
+	File 18) p:\WinCOM32\wCommon.h
+	File 19) p:\WinCOM32\wCommon.h
+	File 20) p:\WinCOM32\wCommon.h
+	File 21) p:\WinCOM32\wCommon.h
+	File 22) p:\WinCOM32\wCommon.h
+	File 23) p:\WinCOM32\wCommon.h
+	File 24) p:\WinCOM32\wCommon.h
+	File 25) p:\WinCOM32\wCommon.h
+	File 26) p:\WinCOM32\wCommon.h
+	File 27) p:\WinCOM32\wCommon.h
+	File 28) p:\WinCOM32\wCommon.h
+	File 29) p:\WinCOM32\wCommon.h
+	File 30) p:\WinCOM32\wCommon.h
+	File 31) p:\WinCOM32\wCommon.h
+	File 32) p:\WinCOM32\wCommon.h
+	File 33) p:\WinCOM32\wCommon.h
+	File 34) p:\WinCOM32\wCommon.h
+	File 35) p:\WinCOM32\wCommon.h
+	File 36) p:\WinCOM32\wCommon.h
+	File 37) p:\WinCOM32\wCommon.h
+	File 38) p:\WinCOM32\wCommon.h
+	File 39) p:\WinCOM32\wCommon.h
+	File 40) p:\WinCOM32\wCommon.h
+	File 41) p:\WinCOM32\wCommon.h
+	File 42) p:\WinCOM32\wCommon.h
+	File 43) p:\WinCOM32\wCommon.h
+	File 44) p:\WinCOM32\wCommon.h
+	File 45) p:\WinCOM32\wCommon.h
+	File 46) p:\WinCOM32\wCommon.h
+	File 47) p:\WinCOM32\wCommon.h
+	File 48) p:\WinCOM32\wCommon.h
+	File 49) p:\WinCOM32\wCommon.h
+	File 50) p:\WinCOM32\dialog.h
+
+
+Line numbers for P:\WinCOM32\ga\thread.obj(p:\WinCOM32\thread.c) segment CODE32 (@0x00000000)
+
+	 Source    Src File    Seg:Offset
+	Line Num    Index          (0X)
+	--------   --------   -------------
+	    62          1     0001:00006be0
+	    63          1     0001:00006bfd
+	    64          1     0001:00006c08
+	    76          1     0001:00006c0b
+	    65          1     0001:00006c12
+	    78          1     0001:00006c24
+	    69          1     0001:00006c26
+	    77          1     0001:00006c32
+	    79          1     0001:00006c4a
+	    81          1     0001:00006c5c
+	    83          1     0001:00006c6a
+	    84          1     0001:00006c72
+	    85          1     0001:00006c74
+	    87          1     0001:00006c8d
+	    89          1     0001:00006c9a
+	    90          1     0001:00006cb6
+	    92          1     0001:00006cbb
+	    93          1     0001:00006cc9
+	    94          1     0001:00006cd0
+	    97          1     0001:00006cd2
+	    98          1     0001:00006ce5
+	    89          1     0001:00006cef
+	   100          1     0001:00006d0b
+	   102          1     0001:00006d1d
+	   103          1     0001:00006d23
+	   106          1     0001:00006d2c
+	   107          1     0001:00006d35
+	   109          1     0001:00006d48
+	   110          1     0001:00006d56
+	   111          1     0001:00006d5a
+	    79          1     0001:00006d68
+	   114          1     0001:00006d74
+	   115          1     0001:00006d7c
+	   116          1     0001:00006d87
+	   117          1     0001:00006d93
+	    30          1     0001:00006d9a
+	    31          1     0001:00006db2
+	    39          1     0001:00006dba
+	    32          1     0001:00006dbc
+	    33          1     0001:00006dc5
+	    40          1     0001:00006ddf
+	    42          1     0001:00006df4
+	    45          1     0001:00006e04
+	    49          1     0001:00006e1c
+	    46          1     0001:00006e1d
+	    47          1     0001:00006e26
+	    48          1     0001:00006e29
+	    50          1     0001:00006e3d
+	    51          1     0001:00006e46
+	    53          1     0001:00006e48
+	    40          1     0001:00006e51
+	    57          1     0001:00006e56
+	    58          1     0001:00006e61
+	    59          1     0001:00006e6a
+
+Program entry point at 0001:00008B54

@@ -1,0 +1,15 @@
+LIBRARY SERIAL
+DESCRIPTION 'Serial Port Library'
+PROTMODE
+DATA MULTIPLE NONSHARED LOADONCALL
+CODE LOADONCALL
+EXPORTS
+   SplPdEnumPort	
+   SplPdInitPort
+   SplPdInstallPort
+   SplPdGetPortIcon
+   SplPdQueryPort
+   SplPdSetPort
+   SplPdRemovePort
+   SplPdTermPort
+

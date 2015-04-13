@@ -1,0 +1,9 @@
+The demonstration version of the COMi device driver limits the number of write requests to 1000 for each COMi load during each OS/2 session.  Once any application has written to any device, or combination of devices, 1000 times, the device driver will stop transmitting and begin returning to the calling program with a "characters written" count of zero.
+
+Once the device driver stops accepting write requests, you can reset the counter to half the last "DosOpen" starting count by performing a first level "DosClose" on any device for that COMi load, then re-opening that device again with a first level "DosOpen".  You can continue this process until the counter can only be reset to zero.  Once this happens, the device driver will stop receiving, and therefore, become un-usable until you re-boot your machine.
+
+NOTE:
+When the demonstration version of the COMi device driver initializes, it writes an "EVALUATION ONLY" warning message to the screen.  This message will remain on screen until the <ENTER> key is pressed.
+
+The purpose of this message is to insure that anyone using the demonstration device driver is aware that it has limitations.
+

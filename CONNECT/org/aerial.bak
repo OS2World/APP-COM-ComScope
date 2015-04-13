@@ -1,0 +1,35 @@
+#ifndef _INCL_AERIAL_H_
+
+#define CMD_BUFF_SIZE 4096
+
+#define AERIAL_SERVER_PORT 19841833
+#define AERIAL_CLIENT_PORT 19841834
+
+typedef struct
+  {
+  USHORT cbSize;
+  USHORT usRetryCount;
+  ULONG ulTimeout;
+  ULONG ulMessageNumber;
+  USHORT fRequestType;
+  BYTE byData;
+  }xMSG;
+
+//typedef MSG *PMSG;
+
+/*
+** streams (connect) response structure
+*/
+typedef struct
+  {
+  ULONG ulMessageNumber;
+  ULONG ulReturnCode;
+  }CONRSP;
+
+typedef struct sockaddr_in SOCKADDRIN;
+
+typedef struct sockaddr SOCKADDR;
+
+#define _INCL_AERIAL_H_
+
+#endif

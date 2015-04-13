@@ -1,0 +1,63 @@
+:TARGET.SUFFIXES
+:TARGET.SUFFIXES
+:DEPENDENCY..LIB .c .dll .obj 
+:TARGET.all
+:DEPENDENCY.
+p:\lib\OS2ls_pr.LIB
+:RULE..c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Sp1 /Sd /Ss /Q /Fi /Si /O /W1 /Gm /Gd /Ge- /G4 /Gs /Gn /Ms /Gf /Gi /Ft- /C %s
+:RULE.{p:\profile}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Sp1 /Sd /Ss /Q /Fi /Si /O /W1 /Gm /Gd /Ge- /G4 /Gs /Gn /Ms /Gf /Gi /Ft- /C %s
+:RULE.{p:\profile\GA}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Sp1 /Sd /Ss /Q /Fi /Si /O /W1 /Gm /Gd /Ge- /G4 /Gs /Gn /Ms /Gf /Gi /Ft- /C %s
+:RULE..dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe /NOLOGO p:\lib\%|fF.LIB %s
+:RULE.{p:\profile}.dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe /NOLOGO p:\lib\%|fF.LIB %s
+:RULE.{p:\profile\GA}.dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe /NOLOGO p:\lib\%|fF.LIB %s
+:TARGET.p:\lib\OS2ls_pr.dll
+:DEPENDENCY.
+.\profile.obj
+p:\profile\Profile.Res
+{$(LIB)}OS2LSRTL.lib
+{$(LIB)}OS2386.lib
+{$(LIB)}CPPOM30O.lib
+{$(LIB)}OS2LS_UT.lib
+.\\..\OS2LS_PR.def
+:ACTION.Link::Linker
+:COMMAND.
+icc.exe @<<
+ /Q /B" /nobase /nop /optfunc      /noe /m /nod"
+ /Fe"p:\lib\OS2ls_pr.dll" 
+ OS2LSRTL.lib 
+ OS2386.lib 
+ CPPOM30O.lib 
+ OS2LS_UT.lib 
+ .\\..\OS2LS_PR.def
+ .\profile.obj
+<<
+:ACTION.Bind::Resource Bind
+:COMMAND.
+rc.exe p:\profile\Profile.Res p:\lib\OS2ls_pr.dll
+:TARGET..\profile.obj
+:DEPENDENCY.
+p:\profile\profile.c
+{p:\profile;$(INCLUDE);}COMMON.H
+{p:\profile;$(INCLUDE);}profile.h
+{p:\profile;$(INCLUDE);}UTILITY.H
+:TARGET.p:\lib\OS2ls_pr.LIB
+:DEPENDENCY.
+p:\lib\OS2ls_pr.dll

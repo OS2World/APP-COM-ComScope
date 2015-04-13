@@ -1,0 +1,38 @@
+Creating Profile W:\dist\beta\_SEALEVEL\os_tools.ini
+from W:\dist\beta\_SEALEVEL\MAKE.PRF
+sz - COMi, Version, OS/COM version 4.0 S
+sz - COMi, Driver, SCOMDD.SYS
+ # - COMi, OEM_type, 1
+ # - COMi, Files, 1
+sz - COMi, File_1, OSCOM.INF
+ # - COMi, ProgramSize, 92450
+sz - Install, Apps Path, C:\COMM
+sz - Install, Libs Path, C:\COMM
+sz - Install, DD Config Help, CONFIG.HLP
+sz - Install, DD Config Library, COMi_CFG
+sz - Install, DD Config Function, InstallDevice
+sz - Install, DD Name, OS/COM
+sz - Install, Transfer Library, PDA_INST
+sz - Install, Transfer Function, InstallCOMi
+sz - Install, Version, OS/tools' Install, version 2.30
+sz - Install, Check Caption One, OS/COM Device Driver
+sz - Install, Check Caption Two, COMscope
+sz - Install, Check Caption Three, Print Spooler Utilities
+sz - Install, Check Caption Four, Other Utilities
+sz - Install, Check Caption Five, OS/COM Configuration and Installation
+sz - Install, Title, OS/COM Device Driver Installation
+sz - Install, Banner One, OS/COM Serial Device Driver
+sz - Install, Banner Two, for Sealevel Systems Serial Adapters
+sz - Install, License File, license.txt
+sz - Install, License Caption, License Information:
+ # - Install, Files, 9
+sz - Install, File_1, INSTALL.EXE
+sz - Install, File_2, INSTALL.HLP
+sz - Install, File_3, INSTALL.ICO
+sz - Install, File_4, CONFIG.HLP
+sz - Install, File_5, PDA_INST.DLL
+sz - Install, File_6, OS2LS_UT.DLL
+sz - Install, File_7, COMi_CFG.DLL
+sz - Install, File_8, OS2LSRTL.DLL
+sz - Install, File_9, INIDUMP.EXE
+ # - Install, ProgramSize, 590512

@@ -1,0 +1,46 @@
+:TARGET.SUFFIXES
+:TARGET.SUFFIXES
+:DEPENDENCY..c .obj 
+:TARGET.all
+:DEPENDENCY.
+f:\work\lib\PROFDEB.dll
+:RULE..c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Sp1 /Sd /Ss /Tx /Fi /Si /Ti /Op- /W1 /Gm /Gd /Ge- /G4 /Gn /Tm /Ms /Gf /Gi /Fb* /Ft- /C %s
+:RULE.{p:\profile}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Sp1 /Sd /Ss /Tx /Fi /Si /Ti /Op- /W1 /Gm /Gd /Ge- /G4 /Gn /Tm /Ms /Gf /Gi /Fb* /Ft- /C %s
+:RULE.{p:\profile\debug}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Sp1 /Sd /Ss /Tx /Fi /Si /Ti /Op- /W1 /Gm /Gd /Ge- /G4 /Gn /Tm /Ms /Gf /Gi /Fb* /Ft- /C %s
+:TARGET.f:\work\lib\PROFDEB.dll
+:DEPENDENCY.
+p:\profile\profile.obj
+.\profile.obj
+{$(LIB)}OS2LSRTL.lib
+{$(LIB)}OS2386.lib
+{$(LIB)}CPPOM30O.lib
+{$(LIB)}UTIL_DEB.lib
+p:\profile\\..\PROFDEB.def
+:ACTION.Link::Linker
+:COMMAND.
+icc.exe @<<
+ /Q /B" /de /br /nop      /noe /m /nod"
+ /Fe"f:\work\lib\PROFDEB.dll" 
+ OS2LSRTL.lib 
+ OS2386.lib 
+ CPPOM30O.lib 
+ UTIL_DEB.lib 
+ p:\profile\\..\PROFDEB.def
+ p:\profile\profile.obj
+ .\profile.obj
+<<
+:TARGET..\profile.obj
+:DEPENDENCY.
+p:\profile\profile.c
+{p:\profile;$(INCLUDE);}COMMON.H
+{p:\profile;$(INCLUDE);}profile.h
+{p:\profile;$(INCLUDE);}UTILITY.H

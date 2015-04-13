@@ -1,0 +1,133 @@
+
+ OS2LS_PR
+
+ Start         Length     Name                   Class
+ 0001:00000000 000001CCCH CODE32                 CODE 32-bit
+	at offset 00000000 01CCBH bytes from P:\profile\GA\profile.obj (p:\profile\profile.c)
+
+ 0002:00000000 00000000CH CONST32_RO             CONST 32-bit
+	at offset 00000000 00009H bytes from P:\profile\GA\profile.obj (p:\profile\profile.c)
+
+ 0003:00000000 0000003D8H DATA32                 DATA 32-bit
+	at offset 00000000 003D4H bytes from P:\profile\GA\profile.obj (p:\profile\profile.c)
+	at offset 000003d4 00004H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\dllstub.asm)
+
+ 0003:000003D8 000000000H CTOR_DTOR1             DATA 32-bit
+
+ 0003:000003D8 000000000H CTOR_DTOR2             DATA 32-bit
+
+ 0003:000003D8 000000000H CTOR_DTOR3             DATA 32-bit
+
+ 0003:000003D8 000000000H EDC1                   EDC_CLASS 32-bit
+
+ 0003:000003D8 000000000H EDC2                   EDC_CLASS 32-bit
+
+ 0003:000003D8 000000000H EDC3                   EDC_CLASS 32-bit
+
+ 0003:000003D8 000000028H BSS32                  BSS 32-bit
+	at offset 00000000 00028H bytes from P:\profile\GA\profile.obj (p:\profile\profile.c)
+
+ 0003:00000400 000000064H c_common               BSS 32-bit
+
+
+ Origin   Group
+ 0000:0   FLAT
+ 0003:0   DGROUP
+
+ Address       Export                  Alias
+
+ 0001:000002B0 CloseProfile            CloseProfile
+ 0001:000000C4 GetProfileData          GetProfileData
+ 0001:000001C4 GetProfileString        GetProfileString
+ 0001:00000016 GetProfileWindowPos     GetProfileWindowPos
+ 0001:00000438 InitializeProfile       InitializeProfile
+ 0001:00000898 ManageProfile           ManageProfile
+ 0001:00000140 SaveProfileData         SaveProfileData
+ 0001:00000226 SaveProfileString       SaveProfileString
+ 0001:00000080 SaveProfileWindowPos    SaveProfileWindowPos
+
+  Address         Publics by Name
+
+ 0000:00000000  Imp  CenterDlgBox         (OS2LS_UT.4)
+ 0000:00000000  Imp  CheckButton          (OS2LS_UT.3)
+ 0000:00000000  Imp  Checked              (OS2LS_UT.22)
+ 0001:000002B0       CloseProfile
+ 0000:00000000  Imp  DosDelete            (DOSCALLS.259)
+ 0000:00000000  Imp  free                 (OS2LSRTL.88)
+ 0001:000000C4       GetProfileData
+ 0001:000001C4       GetProfileString
+ 0001:00000016       GetProfileWindowPos
+ 0001:00000438       InitializeProfile
+ 0000:00000000  Imp  malloc               (OS2LSRTL.167)
+ 0001:00000898       ManageProfile
+ 0000:00000000  Imp  MessageBox           (OS2LS_UT.29)
+ 0000:00000000  Imp  PrfCloseProfile      (PMSHAPI.103)
+ 0000:00000000  Imp  PrfOpenProfile       (PMSHAPI.102)
+ 0000:00000000  Imp  PrfQueryProfileData  (PMSHAPI.117)
+ 0000:00000000  Imp  PrfQueryProfileSize  (PMSHAPI.101)
+ 0000:00000000  Imp  PrfQueryProfileString (PMSHAPI.115)
+ 0000:00000000  Imp  PrfWriteProfileData  (PMSHAPI.118)
+ 0000:00000000  Imp  PrfWriteProfileString (PMSHAPI.116)
+ 0001:00000140       SaveProfileData
+ 0001:00000226       SaveProfileString
+ 0001:00000080       SaveProfileWindowPos
+ 0003:00000400       szDialogTitle
+ 0000:00000000  Imp  WinDefDlgProc        (PMWIN.910)
+ 0000:00000000  Imp  WinDismissDlg        (PMWIN.729)
+ 0000:00000000  Imp  WinDlgBox            (PMWIN.923)
+ 0000:00000000  Imp  WinEnableWindow      (PMWIN.735)
+ 0000:00000000  Imp  WinGetLastError      (PMWIN.753)
+ 0000:00000000  Imp  WinMessageBox        (PMWIN.789)
+ 0000:00000000  Imp  WinQueryDlgItemText  (PMWIN.815)
+ 0000:00000000  Imp  WinSendDlgItemMsg    (PMWIN.903)
+ 0000:00000000  Imp  WinSendMsg           (PMWIN.920)
+ 0000:00000000  Imp  WinSetDlgItemText    (PMWIN.859)
+ 0000:00000000  Imp  WinSetFocus          (PMWIN.860)
+ 0000:00000000  Imp  WinWindowFromID      (PMWIN.899)
+ 0001:00000000       _DLL_InitTerm
+ 0000:00000000  Imp  _itoa                (OS2LSRTL.152)
+ 0000:00000000  Imp  _sprintfieee         (OS2LSRTL.32)
+
+  Address         Publics by Value
+
+ 0000:00000000  Imp  _itoa                (OS2LSRTL.152)
+ 0000:00000000  Imp  malloc               (OS2LSRTL.167)
+ 0000:00000000  Imp  WinWindowFromID      (PMWIN.899)
+ 0000:00000000  Imp  WinEnableWindow      (PMWIN.735)
+ 0000:00000000  Imp  WinQueryDlgItemText  (PMWIN.815)
+ 0000:00000000  Imp  WinGetLastError      (PMWIN.753)
+ 0000:00000000  Imp  WinSendDlgItemMsg    (PMWIN.903)
+ 0000:00000000  Imp  WinSetDlgItemText    (PMWIN.859)
+ 0000:00000000  Imp  PrfCloseProfile      (PMSHAPI.103)
+ 0000:00000000  Imp  Checked              (OS2LS_UT.22)
+ 0000:00000000  Imp  WinDlgBox            (PMWIN.923)
+ 0000:00000000  Imp  DosDelete            (DOSCALLS.259)
+ 0000:00000000  Imp  WinSendMsg           (PMWIN.920)
+ 0000:00000000  Imp  PrfQueryProfileData  (PMSHAPI.117)
+ 0000:00000000  Imp  PrfWriteProfileData  (PMSHAPI.118)
+ 0000:00000000  Imp  MessageBox           (OS2LS_UT.29)
+ 0000:00000000  Imp  PrfQueryProfileSize  (PMSHAPI.101)
+ 0000:00000000  Imp  WinMessageBox        (PMWIN.789)
+ 0000:00000000  Imp  PrfWriteProfileString (PMSHAPI.116)
+ 0000:00000000  Imp  CheckButton          (OS2LS_UT.3)
+ 0000:00000000  Imp  CenterDlgBox         (OS2LS_UT.4)
+ 0000:00000000  Imp  WinSetFocus          (PMWIN.860)
+ 0000:00000000  Imp  _sprintfieee         (OS2LSRTL.32)
+ 0000:00000000  Imp  WinDefDlgProc        (PMWIN.910)
+ 0000:00000000  Imp  PrfQueryProfileString (PMSHAPI.115)
+ 0000:00000000  Imp  WinDismissDlg        (PMWIN.729)
+ 0000:00000000  Imp  free                 (OS2LSRTL.88)
+ 0000:00000000  Imp  PrfOpenProfile       (PMSHAPI.102)
+ 0001:00000000       _DLL_InitTerm
+ 0001:00000016       GetProfileWindowPos
+ 0001:00000080       SaveProfileWindowPos
+ 0001:000000C4       GetProfileData
+ 0001:00000140       SaveProfileData
+ 0001:000001C4       GetProfileString
+ 0001:00000226       SaveProfileString
+ 0001:000002B0       CloseProfile
+ 0001:00000438       InitializeProfile
+ 0001:00000898       ManageProfile
+ 0003:00000400       szDialogTitle
+
+Program entry point at 0001:00000000

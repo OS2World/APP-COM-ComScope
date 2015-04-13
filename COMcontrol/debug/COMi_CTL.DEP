@@ -1,0 +1,20 @@
+.\comcontrol.asm .\comcontrol.obj: \
+    p:\COMcontrol\comcontrol.c \
+    {p:\COMcontrol;$(INCLUDE);}COMMON.H \
+    {p:\COMcontrol;$(INCLUDE);}COMDD.H \
+    {p:\COMcontrol;$(INCLUDE);}utility.h \
+    {p:\COMcontrol;$(INCLUDE);}ioctl.h \
+    {p:\COMcontrol;$(INCLUDE);}resource.H \
+    {p:\COMcontrol;$(INCLUDE);}help.h \
+    {p:\COMcontrol;$(INCLUDE);}ComControl.h
+
+.\prot_hlp.asm .\prot_hlp.obj: \
+    p:\COMcontrol\prot_hlp.c \
+    {p:\COMcontrol;$(INCLUDE);}COMMON.H \
+    {p:\COMcontrol;$(INCLUDE);}COMDD.H \
+    {p:\COMcontrol;$(INCLUDE);}utility.h \
+    {p:\COMcontrol;$(INCLUDE);}ioctl.h \
+    {p:\COMcontrol;$(INCLUDE);}resource.H
+
+F:\Work\lib\CTL_DEB.LIB: \
+    f:\Work\lib\CTL_DEB.dll

@@ -1,0 +1,99 @@
+
+.\util.obj: \
+    p:\WinCOM32\util.c \
+    {p:\WinCOM32;$(INCLUDE);}wCommon.h \
+    {p:\WinCOM32;$(INCLUDE);}dialog.h \
+    {p:\WinCOM32;$(INCLUDE);}COMDD.H \
+    {p:\WinCOM32;$(INCLUDE);}Utility.h \
+    {p:\WinCOM32;$(INCLUDE);}IOCtl.h \
+    {p:\WinCOM32;$(INCLUDE);}Profile.h \
+    {p:\WinCOM32;$(INCLUDE);}COMcontrol.h \
+    {p:\WinCOM32;$(INCLUDE);}Config.h \
+    {p:\WinCOM32;$(INCLUDE);}WinCOM.h
+
+.\thread.obj: \
+    p:\WinCOM32\thread.c \
+    {p:\WinCOM32;$(INCLUDE);}wCommon.h \
+    {p:\WinCOM32;$(INCLUDE);}dialog.h \
+    {p:\WinCOM32;$(INCLUDE);}COMDD.H \
+    {p:\WinCOM32;$(INCLUDE);}Utility.h \
+    {p:\WinCOM32;$(INCLUDE);}IOCtl.h \
+    {p:\WinCOM32;$(INCLUDE);}Profile.h \
+    {p:\WinCOM32;$(INCLUDE);}COMcontrol.h \
+    {p:\WinCOM32;$(INCLUDE);}Config.h \
+    {p:\WinCOM32;$(INCLUDE);}WinCOM.h
+
+.\terminal.obj: \
+    p:\WinCOM32\terminal.c \
+    {p:\WinCOM32;$(INCLUDE);}wCommon.h \
+    {p:\WinCOM32;$(INCLUDE);}COMDD.H \
+    {p:\WinCOM32;$(INCLUDE);}Utility.h \
+    {p:\WinCOM32;$(INCLUDE);}IOCtl.h \
+    {p:\WinCOM32;$(INCLUDE);}Profile.h \
+    {p:\WinCOM32;$(INCLUDE);}COMcontrol.h \
+    {p:\WinCOM32;$(INCLUDE);}Config.h \
+    {p:\WinCOM32;$(INCLUDE);}WinCOM.h
+
+.\strtrans.obj: \
+    p:\WinCOM32\strtrans.c \
+    {p:\WinCOM32;$(INCLUDE);}wCommon.h \
+    {p:\WinCOM32;$(INCLUDE);}dialog.h \
+    {p:\WinCOM32;$(INCLUDE);}COMDD.H \
+    {p:\WinCOM32;$(INCLUDE);}Utility.h \
+    {p:\WinCOM32;$(INCLUDE);}IOCtl.h \
+    {p:\WinCOM32;$(INCLUDE);}Profile.h \
+    {p:\WinCOM32;$(INCLUDE);}COMcontrol.h \
+    {p:\WinCOM32;$(INCLUDE);}Config.h \
+    {p:\WinCOM32;$(INCLUDE);}WinCOM.h
+
+.\init.obj: \
+    p:\WinCOM32\init.c \
+    {p:\WinCOM32;$(INCLUDE);}wCommon.h \
+    {p:\WinCOM32;$(INCLUDE);}dialog.h \
+    {p:\WinCOM32;$(INCLUDE);}COMDD.H \
+    {p:\WinCOM32;$(INCLUDE);}Utility.h \
+    {p:\WinCOM32;$(INCLUDE);}IOCtl.h \
+    {p:\WinCOM32;$(INCLUDE);}Profile.h \
+    {p:\WinCOM32;$(INCLUDE);}COMcontrol.h \
+    {p:\WinCOM32;$(INCLUDE);}Config.h \
+    {p:\WinCOM32;$(INCLUDE);}WinCOM.h
+
+.\dialog.obj: \
+    p:\WinCOM32\dialog.c \
+    {p:\WinCOM32;$(INCLUDE);}wCommon.h \
+    {p:\WinCOM32;$(INCLUDE);}usermsg.h \
+    {p:\WinCOM32;$(INCLUDE);}dialog.h \
+#    {p:\WinCOM32;$(INCLUDE);}CLP.h \
+    {p:\WinCOM32;$(INCLUDE);}COMDD.H \
+    {p:\WinCOM32;$(INCLUDE);}Utility.h \
+    {p:\WinCOM32;$(INCLUDE);}IOCtl.h \
+    {p:\WinCOM32;$(INCLUDE);}Profile.h \
+    {p:\WinCOM32;$(INCLUDE);}COMcontrol.h \
+    {p:\WinCOM32;$(INCLUDE);}Config.h \
+    {p:\WinCOM32;$(INCLUDE);}WinCOM.h \
+    {p:\WinCOM32;$(INCLUDE);}atom.h
+
+.\comm.obj: \
+    p:\WinCOM32\comm.c \
+    {p:\WinCOM32;$(INCLUDE);}wCommon.h \
+    {p:\WinCOM32;$(INCLUDE);}COMDD.H \
+    {p:\WinCOM32;$(INCLUDE);}Utility.h \
+    {p:\WinCOM32;$(INCLUDE);}IOCtl.h \
+    {p:\WinCOM32;$(INCLUDE);}Profile.h \
+    {p:\WinCOM32;$(INCLUDE);}COMcontrol.h \
+    {p:\WinCOM32;$(INCLUDE);}Config.h \
+    {p:\WinCOM32;$(INCLUDE);}WinCOM.h
+
+.\wincom.obj: \
+    p:\WinCOM32\wincom.c \
+    {p:\WinCOM32;$(INCLUDE);}wCommon.h \
+    {p:\WinCOM32;$(INCLUDE);}usermsg.h \
+    {p:\WinCOM32;$(INCLUDE);}dialog.h \
+#   {p:\WinCOM32;$(INCLUDE);}CLP.h \
+    {p:\WinCOM32;$(INCLUDE);}COMDD.H \
+    {p:\WinCOM32;$(INCLUDE);}Utility.h \
+    {p:\WinCOM32;$(INCLUDE);}IOCtl.h \
+    {p:\WinCOM32;$(INCLUDE);}Profile.h \
+    {p:\WinCOM32;$(INCLUDE);}COMcontrol.h \
+    {p:\WinCOM32;$(INCLUDE);}Config.h \
+    {p:\WinCOM32;$(INCLUDE);}WinCOM.h

@@ -1,0 +1,10 @@
+
+.\page.obj: \
+    p:\Install\PDB\page.c \
+    {p:\Install\PDB;$(INCLUDE);}install.h
+
+f:\work\lib\PDB_DEB.LIB: \
+    f:\work\lib\PDB_DEB.dll
+
+f:\work\lib\PDB_INST.LIB: \
+    p:\Install\PDB\PDB_INST.DLL

@@ -1,0 +1,80 @@
+:TARGET.SUFFIXES
+:TARGET.SUFFIXES
+:DEPENDENCY..LIB .PDR .c .obj 
+:TARGET.all
+:DEPENDENCY.
+p:\lib\SPL_DEMO.LIB
+:RULE..c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Fo$*.obj /DINCLUDE_COMDD /DDEMO /Sp1 /Sd /Ss /Q /Wall /Fi /Si /O /W2 /Gm /Gd /Ge- /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+:RULE.{p:\include}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Fo$*.obj /DINCLUDE_COMDD /DDEMO /Sp1 /Sd /Ss /Q /Wall /Fi /Si /O /W2 /Gm /Gd /Ge- /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+:RULE.{P:\spooler}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Fo$*.obj /DINCLUDE_COMDD /DDEMO /Sp1 /Sd /Ss /Q /Wall /Fi /Si /O /W2 /Gm /Gd /Ge- /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+:RULE.{P:\spooler\Demo}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Fo$*.obj /DINCLUDE_COMDD /DDEMO /Sp1 /Sd /Ss /Q /Wall /Fi /Si /O /W2 /Gm /Gd /Ge- /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+:RULE..PDR.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe %|dpfF.LIB %s
+:RULE.{p:\include}.PDR.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe %|dpfF.LIB %s
+:RULE.{P:\spooler}.PDR.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe %|dpfF.LIB %s
+:RULE.{P:\spooler\Demo}.PDR.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe %|dpfF.LIB %s
+:TARGET.p:\lib\SPL_DEMO.PDR
+:DEPENDENCY.
+.\spooler.obj
+P:\spooler\comi_spl.RES
+{$(LIB)}OS2LSRTL.lib
+{$(LIB)}OS2LS_UT.lib
+{$(LIB)}OS2LS_IO.lib
+{$(LIB)}CPPOM30O.lib
+{$(LIB)}OS2386.lib
+p:\Spooler\SPL_DEMO.def
+SPL_DEMO.mak
+:ACTION.Link::Linker
+:COMMAND.
+icc.exe @<<
+ /Q /B" /exepack:2 /nobase /packd /optfunc      /ig /noe /m /l /nod"
+ /Fe"p:\lib\SPL_DEMO.PDR" 
+ OS2LSRTL.lib 
+ OS2LS_UT.lib 
+ OS2LS_IO.lib 
+ CPPOM30O.lib 
+ OS2386.lib 
+ p:\Spooler\SPL_DEMO.def
+ .\spooler.obj
+<<
+:ACTION.Bind::Resource Bind
+:COMMAND.
+rc.exe P:\spooler\comi_spl.RES p:\lib\SPL_DEMO.PDR
+:TARGET..\spooler.obj
+:DEPENDENCY.
+P:\spooler\spooler.c
+{P:\spooler;$(INCLUDE);}spooler.h
+{P:\spooler;$(INCLUDE);}port.h
+{P:\spooler;$(INCLUDE);}help.h
+{P:\spooler;$(INCLUDE);}ioctl.h
+{P:\spooler;$(INCLUDE);}menu.h
+{P:\spooler;$(INCLUDE);}usermsg.h
+{P:\spooler;$(INCLUDE);}SPOOL.H
+SPL_DEMO.mak
+:TARGET.p:\lib\SPL_DEMO.LIB
+:DEPENDENCY.
+p:\lib\SPL_DEMO.PDR
+SPL_DEMO.mak

@@ -1,0 +1,48 @@
+This is a profile make file for Personal COMi
+[COMi]
+Driver=pCOMi.SYS;
+OEM_type=0
+Max Device Count=4
+Files=1
+File_1=COMi.INF;
+Version= Personal COMi version 3.83;
+ProgramSize=89426
+[Install]
+Apps Path=D:\COMM;
+Libs Path=D:\COMM;
+DD Config Help=CONFIG.HLP;
+DD Config Library=COMi_CFG;
+DD Config Function=InstallDevice;
+DD Name=COMi;
+Transfer Library=PDA_INST;
+Transfer Function=InstallCOMi;
+Version=OS/tools' Install version 2.20;
+Check Caption One=COMi Device Driver;
+Check Caption Two=COMscope;
+Check Caption Three=Print Spooler Utilities;
+Check Caption Four=Sample Source Code;
+Check Caption Five=COMi Configuration and Installation;
+Title=Personal COMi Installation;
+Banner One=for the Personal version of the COMi;
+Banner Two=Asynchronous Serial Device Driver;
+License File=license.txt;
+License Caption=License Information:;
+Info File=notice.txt;
+Info Caption=Please Note:;
+Files=8
+File_1=INSTALL.EXE;
+File_2=INSTALL.HLP;
+File_3=INSTALL.ICO;
+File_4=CONFIG.HLP;
+File_5=PDA_INST.DLL;
+File_6=OS2LS_UT.DLL;
+File_7=COMi_CFG.DLL;
+File_8=OS2LSRTL.DLL;
+ProgramSize=524602
+[Utilities]
+Files=3
+File_1=IOCTL.C;
+File_2=IOCTL.H;
+File_3=INIDUMP.DLL;
+ProgramSize=49663
+

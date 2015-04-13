@@ -1,0 +1,1683 @@
+Microsoft (R) Macro Assembler Version 6.00     		    08/24/02 23:27:45
+PCI.asm							     Page 1 - 1
+
+
+				;************************************************************************
+				;
+				; $Revision: $
+				;
+				; $Log: $
+				;
+				;************************************************************************
+
+				  IFNDEF x16_BIT
+				.386P
+				  ELSE
+				  ENDIF
+				.NOLISTMACRO                   ;suppress macro expansion in listing
+
+				.XLIST
+				.LIST
+
+ 0000				RES_DATA SEGMENT
+
+				    EXTRN bSharedInterrupts     :WORD
+				;  IFNDEF x16_BIT
+				;    EXTRN IDCaccessPM           :DWORD
+				;    EXTRN IDCaccessPDS          :WORD
+				;  ENDIF
+				;    EXTRN device_hlp            :DWORD
+				    EXTRN wPCIvendor            :WORD
+				    EXTRN wPCIdevice            :WORD
+				    EXTRN byOEMtype             :BYTE
+				    EXTRN wIntIDregister        :WORD
+				    EXTRN byAdapterType         :BYTE
+				;    EXTRN byIntStatusMask       :BYTE
+				  IFDEF OEM
+				    EXTRN bOEMpresent           :WORD
+				  ENDIF
+
+ 0000				RES_DATA ENDS
+
+ 0000				_DATA SEGMENT
+
+				.XLIST
+				.LIST
+				;    EXTRN _szMessage            :BYTE
+				    EXTRN _bPCI_BIOSpresent     :WORD
+				;    EXTRN _dwPCIvector          :DWORD
+				    EXTRN _wLoadFlags           :WORD
+
+				;    EXTRN _Ring0Vector          :DWORD
+
+				;    EXTRN _PCItable             :WORD
+				;    EXTRN _bIsTheFirst          :WORD
+
+				    EXTRN _OEMHLPname           :BYTE
+				    EXTRN _OEMHLPhandle         :WORD
+				    EXTRN _Action               :WORD
+
+				    EXTRN _stPCIdata_BIOSinfo   :s_stPCIdata_BIOSinfo
+				    EXTRN _stPCIdata_Config     :s_stPCIdata_Config
+				    EXTRN _stPCIdata_Device     :s_stPCIdata_Device
+
+				    EXTRN _stPCIparam_ClassCode :s_stPCIparam_ClassCode
+				    EXTRN _stPCIparam_Config    :s_stPCIparam_Config
+				    EXTRN _stPCIparam_Device    :s_stPCIparam_Device
+
+				;    EXTRN _byInitIntORmask           :BYTE
+				    EXTRN _byInitIntANDmask          :BYTE
+				    EXTRN _wPCIadapterCount          :WORD
+				    EXTRN _byNextPCIslot             :BYTE
+				    EXTRN _ConnectechPCIadapterTable :WORD
+				    EXTRN _GlobetekPCIadapterTable   :WORD
+				    EXTRN _MoxaPCIadapterTable       :WORD
+				    EXTRN _SealevelPCIadapterTable   :WORD
+				    EXTRN _ClassCodeTable            :DWORD
+				    EXTRN _stPCIadapterTable     :s_stPCIadapter
+				    EXTRN _wPCIcount                 :WORD
+
+				.LIST
+
+ 0000				_DATA ENDS
+
+				        EXTRN   DOSDEVIOCTL             :FAR
+				        EXTRN   DOSOPEN                 :FAR
+				        EXTRN   DOSCLOSE                :FAR
+
+ = 0004				FA_SYSTEM       equ     4               ; system file attribute
+ = 0080				OEMHLP_CAT      equ     80h             ; DOSDEVIOCTL category
+ = 0001				OPN_EXIST       equ     0001h           ; open an existing file/create a file
+ = 0042				OPN_RDWRACC     equ     0042h           ; read/write access
+
+ = 0080				OEMHLP_CATEGORY                 equ 080h
+ = 000B				OEMHLP_FUNC_PCI                 equ 00bh
+ = 0000				OEMHLP_GET_PCI_BIOS_INFO        equ 000h
+ = 0001				OEMHLP_PCI_DEVICE               equ 001h
+ = 0002				OEMHLP_PCI_CLASSCODE            equ 002h
+ = 0003				OEMHLP_PCI_GET_DATA             equ 003h
+ = 0004				OEMHLP_PCI_SET_DATA             equ 004h
+
+ = 0000				PCICFG_VENMDL_REG        equ 000h
+ = 003C				PCICFG_IRQ_REG           equ 03ch
+ = 0008				PCICFG_CLASSCODE_REV_REG equ 008h
+ = 0009				PCICFG_CLASSCODE_REG     equ 009h
+ = FF00				PCICFG_MSK_IRQ_PIN       equ 00000ff00h
+ = 00FF				PCICFG_MSK_IRQ_LINE      equ 0000000ffh
+
+ = 001C				MX_PCICFG_INTIDADDR_REG equ 001ch
+ = 0018				MX_PCICFG_BASEADDR_REG  equ 0018h
+ = 001C				GT_PCICFG_BASEADDR_REG  equ 001ch
+ = 0018				SL_PCICFG_BASEADDR_REG  equ 0018h
+ = 0014				BH_PCICFG_BASEADDR_REG  equ 0014h
+
+ = 0010				PCICFG_BASEADDR_REG_0  equ 0010h
+ = 0014				PCICFG_BASEADDR_REG_1  equ 0014h
+ = 0018				PCICFG_BASEADDR_REG_2  equ 0018h
+ = 001C				PCICFG_BASEADDR_REG_3  equ 001ch
+ = 0020				PCICFG_BASEADDR_REG_4  equ 0020h
+ = 0024				PCICFG_BASEADDR_REG_5  equ 0024h
+
+ = 0001				PCI_CONFIG_BASE_IO     equ 0001h
+ = 0001				PCICFG_MSK_IS_IO_SPACE equ 0001h
+ = 0004				PCI_CONFIG_CMD         equ 0004h
+
+ 0000				RES_CODE SEGMENT
+				    ASSUME CS:RCGROUP, ES:nothing, SS:nothing, GS:RDGROUP, DS:DGROUP
+
+				    EXTRN SetRing0Access                :NEAR
+
+				;--------------------------------------------------------------
+				; Test for PCI BIOS
+				;
+				;extern WORD FindPCIAdapter(WORD wAdapterNum,BYTE *pxIRQ, WORD awPorts[]);
+				;--------------------------------------------------------------
+ 0000				GetAllSerialPCIAdapters PROC FAR C USES BX CX DI SI
+
+				   SetDS DGROUP
+				   SetGS RDGROUP
+				;  int 3
+
+ 000D  E8 0276			        call    HookPCI_BIOS
+ 0010  73 06			        jnc     find_adapters
+ 0012  B8 0000			        mov     ax,FALSE
+ 0015  E9 00CD			        jmp     exit
+
+ 0018				find_adapters:
+ 0018  C6 06 0000 E 02		        mov     _stPCIparam_ClassCode.xSubFuncNum,OEMHLP_PCI_CLASSCODE
+				        
+ 001D  B9 0001			        mov     cx, MAX_PCI_ADAPTERS
+
+ 0020  BF 0000 E		        mov     di, OFFSET _ClassCodeTable
+ 0023  C6 06 0005 E 00		        mov     _stPCIparam_ClassCode.xIndex,0
+ 0028  BB 0000			        mov     bx,0
+ 002B  66| 8B 05		        mov     eax, [di]
+				        
+ 002E  66| A3 0001 E		        mov     _stPCIparam_ClassCode.dwClassCode, eax
+ 0032  BE 0000 E		        mov     si, OFFSET _stPCIadapterTable
+				        
+ 0035				class_loop:        
+ 0035  52			        push    dx
+ 0036  53			        push    bx
+ 0037  1E			        push    ds
+ 0038  68 0000 E		        push    OFFSET _stPCIdata_Device
+ 003B  1E			        push    ds
+ 003C  68 0000 E		        push    OFFSET _stPCIparam_ClassCode
+ 003F  6A 0B			        push    OEMHLP_FUNC_PCI
+ 0041  68 0080			        push    OEMHLP_CATEGORY
+ 0044  FF 36 0000 E		        push    _OEMHLPhandle
+ 0048  9A ---- 0000 E		        call    FAR PTR DOSDEVIOCTL
+ 004D  5B			        pop     bx
+ 004E  5A			        pop     dx
+ 004F  0B C0			        or      ax,ax
+ 0051  75 07			        jnz     next_class
+ 0053  A0 0000 E		        mov     al,_stPCIdata_Device.xReturnCode
+ 0056  0A C0			        or      al,al
+ 0058  74 17			        jz      got_any_PCI_adapter
+
+ 005A				next_class:
+ 005A  83 C7 04			        add     di, TYPE DWORD 
+ 005D  66| 83 3D 00		        cmp     DWORD PTR [di], 0
+ 0061  74 73			        je      not_any_PCI_adapters 
+ 0063  66| 8B 05		        mov     eax, [di]
+ 0066  66| A3 0001 E		        mov     _stPCIparam_ClassCode.dwClassCode, eax
+ 006A  C6 06 0005 E 00		        mov     _stPCIparam_ClassCode.xIndex,0
+ 006F  EB C4			        jmp     class_loop
+
+ 0071				got_any_PCI_adapter::
+ 0071  8A 26 0001 E		        mov     ah,_stPCIdata_Device.xBusNum
+ 0075  88 64 01			        mov     [si].s_stPCIadapter.xBusNum, ah
+ 0078  88 26 0001 E		        mov     _stPCIparam_Config.xBusNum, ah
+ 007C  8A 26 0002 E		        mov     ah,_stPCIdata_Device.xDevFuncNum
+ 0080  88 26 0002 E		        mov     _stPCIparam_Config.xDevFuncNum, ah
+ 0084  88 24			        mov     [si].s_stPCIadapter.xDevFuncNum, ah
+ 0086  8A 26 0005 E		        mov     ah,_stPCIparam_ClassCode.xIndex
+ 008A  88 64 02			        mov     [si].s_stPCIadapter.xIndex, ah
+ 008D  66| A1 0001 E		        mov     eax, _stPCIparam_ClassCode.dwClassCode
+ 0091  66| 89 44 08		        mov     [si].s_stPCIadapter.dwClassCode, eax
+				        
+ 0095  C6 06 0004 E 04		        mov     _stPCIparam_Config.xSize, 4
+				        
+ 009A  B8 0000			        mov     ax,PCICFG_VENMDL_REG
+ 009D  E8 0246			        call    GetPCIdata
+ 00A0  66| A1 0001 E		        mov     eax,_stPCIdata_Config.dwData
+				IFDEF OEM
+				 IFDEF Moxa
+				 ELSE
+				  IFDEF Globetek
+				  ELSE
+				   IFDEF Sealevel
+				   ELSE
+				    IFDEF ConnecTech
+ 00A4  3D 11B0			        cmp     ax, PCI_VENDOR_CONNECTECH
+ 00A7  74 06			        je      accept_OEM_adapter
+				    ENDIF
+				   ENDIF
+				  ENDIF
+				 ENDIF
+ 00A9  FE 06 0005 E		        inc     _stPCIparam_ClassCode.xIndex
+ 00AD  EB 86			        jmp     class_loop
+				        
+ 00AF				accept_OEM_adapter: 
+ 00AF  65: C7 06 0000 E		        mov     GS:bOEMpresent, TRUE       
+       0001
+				ENDIF        
+ 00B6  89 44 04			        mov     [si].s_stPCIadapter.usVendorID, ax
+ 00B9  66| C1 E8 10		        shr     eax,16
+ 00BD  89 44 06			        mov     [si].s_stPCIadapter.usDeviceID, ax
+ 00C0  FF 06 0000 E		        inc     _wPCIadapterCount
+ 00C4  FE 06 0005 E		        inc     _stPCIparam_ClassCode.xIndex
+ 00C8  83 C6 18			        add     si, TYPE s_stPCIadapter
+ 00CB  E2 06			        loop    class_loop_x
+				        
+ 00CD  B8 0001			        mov     ax, TRUE
+ 00D0  F8			        clc
+ 00D1  EB 07			        jmp     close_hook
+				        
+ 00D3				class_loop_x:        
+ 00D3  E9 FF5F			        jmp     class_loop
+				        
+ 00D6				not_any_PCI_adapters:
+ 00D6  B8 0000			        mov     ax, FALSE
+ 00D9  F9			        stc
+				        
+ 00DA				close_hook:
+ 00DA  50			        push    ax
+ 00DB  FF 36 0000 E		        push    _OEMHLPhandle
+ 00DF  9A ---- 0000 E		        call    FAR PTR DOSCLOSE
+ 00E4  58			        pop     ax
+
+ 00E5				exit:        
+				        ret
+ 00E5  5E		   *	    pop    si
+ 00E6  5F		   *	    pop    di
+ 00E7  59		   *	    pop    cx
+ 00E8  5B		   *	    pop    bx
+ 00E9  CB		   *	    ret    00000h
+
+ 00EA				GetAllSerialPCIAdapters ENDP
+
+ 00EA				LoadPCIAdapter PROC FAR C USES BX DX ES DI SI, wAdapterNumber:WORD, pxIRQ:FAR PTR, awPorts:FAR PTR 
+
+				       LOCAL bAddrStored:WORD
+				       
+				   SetDS DGROUP
+				;  int 3
+
+ 00F9  8B 5E 06			        mov     bx,wAdapterNumber
+ 00FC  6B DB 18			        imul    bx,TYPE s_stPCIadapter
+ 00FF  BE 0000 E		        mov     si, OFFSET _stPCIadapterTable
+ 0102  03 F3			        add     si, bx
+ 0104  80 3C 00			        cmp     [si].s_stPCIadapter.xDevFuncNum, ZERO
+ 0107  75 06			        jnz     hook_PCI
+ 0109  B8 FFF0			        mov     ax,0fff0h
+ 010C  E9 011E			        jmp     exit
+				        
+ 010F				hook_PCI:
+ 010F  E8 0174			        call    HookPCI_BIOS
+ 0112  73 06			        jnc     load_PCI_adapter
+ 0114  B8 FFFF			        mov     ax,0ffffh
+ 0117  E9 0113			        jmp     exit
+
+ 011A				load_PCI_adapter:
+ 011A  8A 44 01			        mov     al, [si].s_stPCIadapter.xBusNum
+ 011D  A2 0001 E		        mov     _stPCIparam_Config.xBusNum, al
+ 0120  8A 04			        mov     al, [si].s_stPCIadapter.xDevFuncNum
+ 0122  A2 0002 E		        mov     _stPCIparam_Config.xDevFuncNum, al
+				        
+ 0125  C6 06 0004 E 02		        mov     _stPCIparam_Config.xSize, 2
+				       
+ 012A  B8 0004			        mov     ax, PCI_CONFIG_CMD
+ 012D  E8 01B6			        call    GetPCIdata
+ 0130  66| A1 0001 E		        mov     eax, _stPCIdata_Config.dwData
+ 0134  A9 0001			        test    ax, 1
+ 0137  75 0C			        jnz     load_adapter
+				        ; PCI COM controller is disabled - enable it
+ 0139  66| BB 00000001		        mov     ebx, 1
+ 013F  B8 0004			        mov     ax, PCI_CONFIG_CMD;
+ 0142  E8 01D5			        call    SetPCIdata
+				        
+ 0145				load_adapter:          
+ 0145  C6 06 0004 E 04		        mov     _stPCIparam_Config.xSize,4
+ 014A  8B 54 06			        mov     dx, [si].s_stPCIadapter.usDeviceID  ; set device ID for all calls to adapter load functions
+				        
+ 014D  81 7C 04 1393		        cmp     [si].s_stPCIadapter.usVendorID, PCI_VENDOR_MOXA
+ 0152  75 15			        jne     test_sealevel
+ 0154  FF 76 0E			        push    WORD PTR awPorts + 2
+ 0157  FF 76 0C			        push    WORD PTR awPorts
+ 015A  FF 76 0A			        push    WORD PTR pxIRQ + 2
+ 015D  FF 76 08			        push    WORD PTR pxIRQ
+ 0160  E8 03B3			        call    LoadMoxaPCI
+ 0163  83 C4 08			        add     sp,8
+ 0166  E9 00C4			        jmp     exit
+				        
+ 0169				test_sealevel:
+ 0169  81 7C 04 135E		        cmp     [si].s_stPCIadapter.usVendorID, PCI_VENDOR_SEALEVEL
+ 016E  75 15			        jne     test_globetek
+ 0170  FF 76 0E			        push    WORD PTR awPorts + 2
+ 0173  FF 76 0C			        push    WORD PTR awPorts
+ 0176  FF 76 0A			        push    WORD PTR pxIRQ + 2
+ 0179  FF 76 08			        push    WORD PTR pxIRQ
+ 017C  E8 0515			        call    LoadSealevelPCI
+ 017F  83 C4 08			        add     sp,8
+ 0182  E9 00A8			        jmp     exit
+
+ 0185				test_globetek:
+ 0185  81 7C 04 151A		        cmp     [si].s_stPCIadapter.usVendorID, PCI_VENDOR_GLOBETEK       
+ 018A  75 15			        jne     test_blueheat
+ 018C  FF 76 0E			        push    WORD PTR awPorts + 2
+ 018F  FF 76 0C			        push    WORD PTR awPorts
+ 0192  FF 76 0A			        push    WORD PTR pxIRQ + 2
+ 0195  FF 76 08			        push    WORD PTR pxIRQ
+ 0198  E8 0483			        call    LoadGlobetekPCI
+ 019B  83 C4 08			        add     sp,8
+ 019E  E9 008C			        jmp     exit
+
+ 01A1				test_blueheat:
+ 01A1  81 7C 04 11B0		        cmp     [si].s_stPCIadapter.usVendorID, PCI_VENDOR_CONNECTECH
+ 01A6  75 14			        jne     any_vendor
+ 01A8  FF 76 0E			        push    WORD PTR awPorts + 2
+ 01AB  FF 76 0C			        push    WORD PTR awPorts
+ 01AE  FF 76 0A			        push    WORD PTR pxIRQ + 2
+ 01B1  FF 76 08			        push    WORD PTR pxIRQ
+ 01B4  E8 055E			        call    LoadBlueHeatPCI
+ 01B7  83 C4 08			        add     sp,8
+ 01BA  EB 71			        jmp     exit
+
+ 01BC				any_vendor::
+ 01BC  B8 003C			        mov     ax,PCICFG_IRQ_REG
+ 01BF  E8 0124			        call    GetPCIdata
+ 01C2  66| A1 0001 E		        mov     eax,_stPCIdata_Config.dwData  
+ 01C6  0A E4			        or      ah,ah
+ 01C8  74 04			        jz      no_IRQ
+ 01CA  3C 0F			        cmp     al,0fh
+ 01CC  76 05			        jna     store_IRQ
+ 01CE				no_IRQ:        
+ 01CE  B8 FFFE			        mov     ax,0fffeh
+ 01D1  EB 5A			        jmp     exit
+
+ 01D3				store_IRQ:
+ 01D3  C4 7E 08			        les     di,pxIRQ
+ 01D6  26: 88 05		        mov     ES:[di],al
+
+ 01D9  C7 46 FE 0000		        mov     bAddrStored, FALSE
+ 01DE  C4 7E 0C			        les     di,awPorts
+ 01E1  BB 0010			        mov     bx,PCICFG_BASEADDR_REG_0
+				;        mov     cx, 1
+				;        cmp     [si].s_stPCIadapter.dwClassCode, PCI_CLASSCODE_MULTIPORT
+				;        jne     addr_loop
+ 01E4  B9 0006			        mov     cx, 6
+				        
+ 01E7				addr_loop:       
+ 01E7  8B C3			        mov     ax,bx 
+ 01E9  E8 00FA			        call    GetPCIdata
+ 01EC  66| A1 0001 E		        mov     eax,_stPCIdata_Config.dwData
+ 01F0  A9 0001			        test    ax, 1
+ 01F3  74 18			        jz      next_reg
+ 01F5  66| 83 E0 FE		        and     eax,0fffffffeh
+ 01F9  74 12			        jz      next_reg
+ 01FB  8B D0			        mov     dx,ax
+ 01FD  E8 0843			        call    PCIhdwQuickTest
+ 0200  72 0B			        jc      next_reg
+ 0202  26: 89 05		        mov     ES:[di],ax
+ 0205  83 C7 02			        add     di,TYPE WORD
+ 0208  C7 46 FE 0001		        mov     bAddrStored, TRUE;
+ 020D				next_reg:        
+ 020D  83 C3 04			        add     bx, 4
+ 0210  E2 D5			        loop    addr_loop
+				        
+ 0212  26: C7 05 0000		        mov     WORD PTR ES:[di],0
+ 0217  33 C0			        xor     ax,ax
+ 0219  83 7E FE 01		        cmp     bAddrStored, TRUE
+ 021D  74 03			        je      close_hook
+ 021F  B8 FFFC			        mov     ax, 0fffch
+				        
+ 0222				close_hook:
+ 0222  50			        push    ax
+ 0223  FF 36 0000 E		        push    _OEMHLPhandle
+ 0227  9A ---- 0000 E		        call    FAR PTR DOSCLOSE
+ 022C  58			        pop     ax
+ 022D				exit:
+				        ret
+ 022D  5E		   *	    pop    si
+ 022E  5F		   *	    pop    di
+ 022F  07		   *	    pop    es
+ 0230  5A		   *	    pop    dx
+ 0231  5B		   *	    pop    bx
+ 0232  8B E5		   *	    mov    sp, bp
+ 0234  5D		   *	    pop    bp
+ 0235  CB		   *	    ret    00000h
+
+ 0236				LoadPCIAdapter ENDP
+
+ 0236				FindPCISerialAdapter PROC FAR C USES BX CX DX SI DI ES DS GS, wAdapterNumber:WORD, pxIRQ:FAR PTR, awPorts:FAR PTR
+
+				   SetDS DGROUP
+				   SetGS RDGROUP
+				;  int 3
+
+ 024B  E8 0038			        call    HookPCI_BIOS
+ 024E  73 05			        jnc     test_PCI
+ 0250  B8 FFFF			        mov     ax,0ffffh
+ 0253  EB 26			        jmp     exit
+
+ 0255				test_PCI:
+				;        mov     cx,8
+				;        xor     bx,bx
+				;        mov     bx,wAdapterNumber
+
+ 0255				test_PCI_loop:
+ 0255  FF 76 0E			        push    WORD PTR awPorts + 2
+ 0258  FF 76 0C			        push    WORD PTR awPorts
+ 025B  FF 76 0A			        push    WORD PTR pxIRQ + 2
+ 025E  FF 76 08			        push    WORD PTR pxIRQ
+ 0261  FF 76 06			        push    WORD PTR wAdapterNumber
+
+ 0264  E8 00EC			        call    GetPCIAdapter
+ 0267  83 C4 0A			        add     sp,10
+ 026A  0B C0			        or      ax,ax
+ 026C  74 02			        jz      found_adapter
+
+				;IncSlot:
+				;        inc     _byNextPCIslot
+				;        mov     bl,_byNextPCIslot
+				;        loop    test_PCI_loop
+				;        mov     ax,0fff0h
+ 026E  EB 00			        jmp     close_hook
+
+ 0270				found_adapter:
+				;        inc     _byNextPCIslot
+
+ 0270				close_hook:
+ 0270  50			        push    ax
+ 0271  FF 36 0000 E		        push    _OEMHLPhandle
+ 0275  9A ---- 0000 E		        call    FAR PTR DOSCLOSE
+ 027A  58			        pop     ax
+ 027B				exit:
+				        ret
+ 027B  0F A9		   *	    pop    gs
+ 027D  1F		   *	    pop    ds
+ 027E  07		   *	    pop    es
+ 027F  5F		   *	    pop    di
+ 0280  5E		   *	    pop    si
+ 0281  5A		   *	    pop    dx
+ 0282  59		   *	    pop    cx
+ 0283  5B		   *	    pop    bx
+ 0284  5D		   *	    pop    bp
+ 0285  CB		   *	    ret    00000h
+
+ 0286				FindPCISerialAdapter ENDP
+
+ 0286				HookPCI_BIOS PROC NEAR USES DS
+
+				   SetDS DGROUP
+ 028B  1E			        push    ds
+ 028C  68 0000 E		        push    OFFSET _OEMHLPname      ; device name
+ 028F  1E			        push    ds
+ 0290  68 0000 E		        push    OFFSET _OEMHLPhandle    ; file handle
+ 0293  1E			        push    ds
+ 0294  68 0000 E		        push    OFFSET _Action          ; action taken
+ 0297  6A 00			        push    0                       ; high order half of file size
+ 0299  6A 00			        push    0                       ; low order half of file size
+ 029B  6A 04			        push    FA_SYSTEM               ; file attribute
+ 029D  6A 01			        push    OPN_EXIST               ; fail if it does not exist
+ 029F  6A 42			        push    OPN_RDWRACC             ; get read/write access
+ 02A1  6A 00			        push    0                       ; reserved
+ 02A3  6A 00			        push    0                       ; reserved
+ 02A5  9A ---- 0000 E		        call    FAR PTR DOSOPEN         ; get a handle for OEMHLP$
+ 02AA  0B C0			        or      ax,ax
+ 02AC  75 2F			        jnz     failed
+
+ 02AE  C6 06 0000 E 00		        mov     _stPCIparam_Device.xSubFuncNum,OEMHLP_GET_PCI_BIOS_INFO
+ 02B3  1E			        push    ds
+ 02B4  68 0000 E		        push    OFFSET _stPCIdata_BIOSinfo
+ 02B7  1E			        push    ds
+ 02B8  68 0000 E		        push    OFFSET _stPCIparam_Device
+ 02BB  6A 0B			        push    OEMHLP_FUNC_PCI
+ 02BD  68 0080			        push    OEMHLP_CATEGORY
+ 02C0  FF 36 0000 E		        push    _OEMHLPhandle
+ 02C4  9A ---- 0000 E		        call    FAR PTR DOSDEVIOCTL
+ 02C9  0B C0			        or      ax,ax
+ 02CB  75 10			        jnz     failed
+ 02CD  A0 0000 E		        mov     al,_stPCIdata_BIOSinfo.xReturnCode
+ 02D0  0A C0			        or      al,al
+ 02D2  75 09			        jnz     failed
+ 02D4  C7 06 0000 E 0001	        mov     _bPCI_BIOSpresent,TRUE
+ 02DA  F8			        clc
+ 02DB  EB 07			        jmp     exit
+ 02DD				failed:
+ 02DD  C7 06 0000 E 0000	        mov     _bPCI_BIOSpresent,FALSE
+ 02E3  F9			        stc
+ 02E4				exit:
+				        ret
+ 02E4  1F		   *	    pop    ds
+ 02E5  C3		   *	    ret    00000h
+
+ 02E6				HookPCI_BIOS ENDP
+
+ 02E6				GetPCIdata PROC NEAR USES DS; AL = configure register number
+
+				    SetDS DGROUP
+ 02EB  C6 06 0000 E 03		        mov     _stPCIparam_Config.xSubFuncNum,OEMHLP_PCI_GET_DATA
+ 02F0  A2 0003 E		        mov     _stPCIparam_Config.xConfigReg,al
+				;        mov     al,_stPCIdata_Device.xDevFuncNum
+				;        mov     _stPCIparam_Config.xDevFuncNum,al
+				;        mov     _stPCIparam_Config.xSize,4
+				;        mov     al,_stPCIdata_Device.xBusNum
+				;        mov     _stPCIparam_Config.xBusNum,al
+ 02F3  1E			        push    ds
+ 02F4  68 0000 E		        push    OFFSET _stPCIdata_Config
+ 02F7  1E			        push    ds
+ 02F8  68 0000 E		        push    OFFSET _stPCIparam_Config
+ 02FB  6A 0B			        push    OEMHLP_FUNC_PCI
+ 02FD  68 0080			        push    OEMHLP_CATEGORY
+ 0300  FF 36 0000 E		        push    _OEMHLPhandle
+ 0304  9A ---- 0000 E		        call    FAR PTR DOSDEVIOCTL
+ 0309  0B C0			        or      ax,ax
+ 030B  75 0A			        jnz     bad_call
+ 030D  A0 0000 E		        mov     al,_stPCIdata_Config.xReturnCode
+ 0310  0A C0			        or      al,al
+ 0312  75 03			        jnz     bad_call
+ 0314  F8			        clc
+ 0315  EB 01			        jmp     exit
+
+ 0317				bad_call:
+ 0317  F9			        stc
+ 0318				exit:
+				        ret
+ 0318  1F		   *	    pop    ds
+ 0319  C3		   *	    ret    00000h
+
+ 031A				GetPCIdata ENDP
+
+ 031A				SetPCIdata PROC NEAR USES DS; AL = configure register number, EBX = value to write
+
+				    SetDS DGROUP
+ 031F  C6 06 0000 E 04		        mov     _stPCIparam_Config.xSubFuncNum,OEMHLP_PCI_SET_DATA
+ 0324  A2 0003 E		        mov     _stPCIparam_Config.xConfigReg,al
+				;        mov     al,_stPCIdata_Device.xDevFuncNum
+				;        mov     _stPCIparam_Config.xDevFuncNum,al
+				;        mov     _stPCIparam_Config.xSize,4
+				;        mov     al,_stPCIdata_Device.xBusNum
+				;        mov     _stPCIparam_Config.xBusNum,al
+ 0327  66| 89 1E 0005 E		        mov     _stPCIparam_Config.dwData,ebx
+ 032C  1E			        push    ds
+ 032D  68 0000 E		        push    OFFSET _stPCIdata_Config
+ 0330  1E			        push    ds
+ 0331  68 0000 E		        push    OFFSET _stPCIparam_Config
+ 0334  6A 0B			        push    OEMHLP_FUNC_PCI
+ 0336  68 0080			        push    OEMHLP_CATEGORY
+ 0339  FF 36 0000 E		        push    _OEMHLPhandle
+ 033D  9A ---- 0000 E		        call    FAR PTR DOSDEVIOCTL
+ 0342  0B C0			        or      ax,ax
+ 0344  75 0A			        jnz     bad_call
+ 0346  A0 0000 E		        mov     al,_stPCIdata_Config.xReturnCode
+ 0349  0A C0			        or      al,al
+ 034B  75 03			        jnz     bad_call
+ 034D  F8			        clc
+ 034E  EB 01			        jmp     exit
+
+ 0350				bad_call:
+ 0350  F9			        stc
+ 0351				exit:
+				        ret
+ 0351  1F		   *	    pop    ds
+ 0352  C3		   *	    ret    00000h
+
+ 0353				SetPCIdata ENDP
+
+ 0353				GetPCIAdapter PROC NEAR C USES BX DX ES DI, wAdapterNumber:WORD, pxIRQ:FAR PTR, awPorts:FAR PTR ; BX = PCI slot
+
+				;        LOCAL wAdapterIndex:WORD
+				;  int 3
+				;        mov     wAdapterIndex, 0
+ 0353  55		   *	    push   bp
+ 0354  8B EC		   *	    mov    bp, sp
+ 0356  53		   *	    push   bx
+ 0357  52		   *	    push   dx
+ 0358  06		   *	    push   es
+ 0359  57		   *	    push   di
+ 035A  8B 5E 04			        mov     bx,wAdapterNumber
+
+ 035D				adapter_loop:
+ 035D  E8 00F6			        call    GetSerialPCIAdapter
+ 0360  72 0E			        jc      no_adapter
+
+				; is the count the same as the adapter number?  If it isn't then reject it and find another
+ 0362  8B 46 04			        mov     ax,wAdapterNumber
+ 0365  3B 06 0000 E		        cmp     ax,_wPCIcount
+ 0369  74 0B			        je      do_adapter
+
+				;        inc     wAdapterIndex
+				;        cmp     wAdapterIndex, MAX_PCI_ADAPTERS
+				;        jb      adapter_loop
+ 036B  33 C0			        xor     ax,ax
+ 036D  E9 00E0			        jmp     exit
+
+ 0370				no_adapter:
+ 0370  B8 FFFF			        mov     ax,0ffffh
+ 0373  E9 00DA			        jmp     exit
+				        
+ 0376				do_adapter:
+ 0376  65: 8B 16 0000 E		        mov     dx, GS:wPCIdevice  ; set device ID for all calls to adapter load functions
+				        
+ 037B  65: 81 3E 0000 E		        cmp     GS:wPCIvendor, PCI_VENDOR_MOXA
+       1393
+ 0382  75 15			        jne     test_sealevel
+ 0384  FF 76 0C			        push    WORD PTR awPorts + 2
+ 0387  FF 76 0A			        push    WORD PTR awPorts
+ 038A  FF 76 08			        push    WORD PTR pxIRQ + 2
+ 038D  FF 76 06			        push    WORD PTR pxIRQ
+ 0390  E8 0183			        call    LoadMoxaPCI
+ 0393  83 C4 08			        add     sp,8
+ 0396  E9 00B7			        jmp     exit
+				        
+ 0399				test_sealevel:
+ 0399  65: 81 3E 0000 E		        cmp     GS:wPCIvendor, PCI_VENDOR_SEALEVEL
+       135E
+ 03A0  75 15			        jne     test_globetek
+ 03A2  FF 76 0C			        push    WORD PTR awPorts + 2
+ 03A5  FF 76 0A			        push    WORD PTR awPorts
+ 03A8  FF 76 08			        push    WORD PTR pxIRQ + 2
+ 03AB  FF 76 06			        push    WORD PTR pxIRQ
+ 03AE  E8 02E3			        call    LoadSealevelPCI
+ 03B1  83 C4 08			        add     sp,8
+ 03B4  E9 0099			        jmp     exit
+
+ 03B7				test_globetek:
+ 03B7  65: 81 3E 0000 E		        cmp     GS:wPCIvendor, PCI_VENDOR_GLOBETEK       
+       151A
+ 03BE  75 14			        jne     test_blueheat
+ 03C0  FF 76 0C			        push    WORD PTR awPorts + 2
+ 03C3  FF 76 0A			        push    WORD PTR awPorts
+ 03C6  FF 76 08			        push    WORD PTR pxIRQ + 2
+ 03C9  FF 76 06			        push    WORD PTR pxIRQ
+ 03CC  E8 024F			        call    LoadGlobetekPCI
+ 03CF  83 C4 08			        add     sp,8
+ 03D2  EB 7C			        jmp     exit
+
+ 03D4				test_blueheat:
+ 03D4  65: 81 3E 0000 E		        cmp     GS:wPCIvendor, PCI_VENDOR_CONNECTECH
+       11B0
+ 03DB  75 14			        jne     get_any_vendor
+ 03DD  FF 76 0C			        push    WORD PTR awPorts + 2
+ 03E0  FF 76 0A			        push    WORD PTR awPorts
+ 03E3  FF 76 08			        push    WORD PTR pxIRQ + 2
+ 03E6  FF 76 06			        push    WORD PTR pxIRQ
+ 03E9  E8 0329			        call    LoadBlueHeatPCI
+ 03EC  83 C4 08			        add     sp,8
+ 03EF  EB 5F			        jmp     exit
+
+ 03F1				get_any_vendor:
+ 03F1  B8 003C			        mov     ax,PCICFG_IRQ_REG
+ 03F4  E8 FEEF			        call    GetPCIdata
+ 03F7  66| A1 0001 E		        mov     eax,_stPCIdata_Config.dwData
+ 03FB  3C 0F			        cmp     al,0fh
+ 03FD  76 05			        jna     store_IRQ
+ 03FF  B8 FFFE			        mov     ax,0fffeh
+ 0402  EB 4C			        jmp     exit
+
+ 0404				store_IRQ:
+ 0404  C4 7E 06			        les     di,pxIRQ
+ 0407  26: 88 05		        mov     ES:[di],al
+
+ 040A  B8 0008			        mov     ax,PCICFG_CLASSCODE_REV_REG
+ 040D  E8 FED6			        call    GetPCIdata
+ 0410  66| A1 0001 E		        mov     eax,_stPCIdata_Config.dwData
+
+ 0414  B8 0014			        mov     ax,PCICFG_BASEADDR_REG_1
+ 0417  E8 FECC			        call    GetPCIdata
+ 041A  66| A1 0001 E		        mov     eax,_stPCIdata_Config.dwData
+
+ 041E  B8 0018			        mov     ax,PCICFG_BASEADDR_REG_2
+ 0421  E8 FEC2			        call    GetPCIdata
+ 0424  66| A1 0001 E		        mov     eax,_stPCIdata_Config.dwData
+
+ 0428  B8 001C			        mov     ax,PCICFG_BASEADDR_REG_3
+ 042B  E8 FEB8			        call    GetPCIdata
+ 042E  66| A1 0001 E		        mov     eax,_stPCIdata_Config.dwData
+
+ 0432  B8 0018			        mov     ax,MX_PCICFG_BASEADDR_REG
+ 0435  E8 FEAE			        call    GetPCIdata
+ 0438  66| A1 0001 E		        mov     eax,_stPCIdata_Config.dwData
+ 043C  66| 83 E0 FE		        and     eax,0fffffffeh
+ 0440  C4 7E 0A			        les     di,awPorts
+ 0443  26: 89 05		        mov     ES:[di],ax
+ 0446  83 C7 02			        add     di,TYPE WORD
+ 0449  26: C7 05 0000		        mov     WORD PTR ES:[di],0
+
+ 044E  33 C0			        xor     ax,ax
+ 0450				exit:
+				        ret
+ 0450  5F		   *	    pop    di
+ 0451  07		   *	    pop    es
+ 0452  5A		   *	    pop    dx
+ 0453  5B		   *	    pop    bx
+ 0454  5D		   *	    pop    bp
+ 0455  C3		   *	    ret    00000h
+
+ 0456				GetPCIAdapter ENDP
+
+ 0456				GetSerialPCIAdapter PROC NEAR USES BX CX DI SI ; on successful return:
+				                                                     ; edx = class code, ax = found index,
+				                                                     ; GS:wPCIvendor = vendor ID, GS:wPCIdevice = device ID
+				; int 3
+				    SetDS DGROUP
+ 045E  C6 06 0000 E 02		        mov     _stPCIparam_ClassCode.xSubFuncNum,OEMHLP_PCI_CLASSCODE
+				        
+ 0463  B9 0001			        mov     cx, MAX_PCI_ADAPTERS
+
+ 0466  BF 0000 E		        mov     di, OFFSET _ClassCodeTable
+ 0469  C6 06 0005 E 00		        mov     _stPCIparam_ClassCode.xIndex,0
+ 046E  BB 0000			        mov     bx,0
+ 0471  66| 8B 05		        mov     eax, [di]
+				        
+ 0474  66| A3 0001 E		        mov     _stPCIparam_ClassCode.dwClassCode, eax
+ 0478  BE 0000 E		        mov     si, OFFSET _stPCIadapterTable
+				        
+ 047B				class_loop:        
+ 047B  52			        push    dx
+ 047C  53			        push    bx
+ 047D  1E			        push    ds
+ 047E  68 0000 E		        push    OFFSET _stPCIdata_Device
+ 0481  1E			        push    ds
+ 0482  68 0000 E		        push    OFFSET _stPCIparam_ClassCode
+ 0485  6A 0B			        push    OEMHLP_FUNC_PCI
+ 0487  68 0080			        push    OEMHLP_CATEGORY
+ 048A  FF 36 0000 E		        push    _OEMHLPhandle
+ 048E  9A ---- 0000 E		        call    FAR PTR DOSDEVIOCTL
+ 0493  5B			        pop     bx
+ 0494  5A			        pop     dx
+ 0495  0B C0			        or      ax,ax
+ 0497  75 0F			        jnz     next_class
+ 0499  8A 26 0001 E		        mov     ah,_stPCIdata_Device.xBusNum
+ 049D  8A 26 0002 E		        mov     ah,_stPCIdata_Device.xDevFuncNum
+ 04A1  A0 0000 E		        mov     al,_stPCIdata_Device.xReturnCode
+ 04A4  0A C0			        or      al,al
+ 04A6  74 12			        jz      got_PCI_adapter
+
+ 04A8				next_class:
+ 04A8  83 C7 04			        add     di, TYPE DWORD 
+ 04AB  66| 83 3D 00		        cmp     DWORD PTR [di], 0
+ 04AF  74 5F			        je      no_PCI_adapter 
+ 04B1  66| 8B 05		        mov     eax, [di]
+ 04B4  66| A3 0001 E		        mov     _stPCIparam_ClassCode.dwClassCode, eax
+ 04B8  EB C1			        jmp     class_loop
+
+ 04BA				got_PCI_adapter::
+				;        inc     _stPCIparam_ClassCode.xIndex
+				;        jmp     class_loop
+				        
+ 04BA  B8 0000			        mov     ax,PCICFG_VENMDL_REG
+ 04BD  E8 FE26			        call    GetPCIdata
+ 04C0  66| A1 0001 E		        mov     eax,_stPCIdata_Config.dwData
+ 04C4  8B D0			        mov     dx,ax
+ 04C6  66| C1 E8 10		        shr     eax,16
+ 04CA  92			        xchg    dx,ax
+ 04CB  83 7C 04 00		        cmp     [si].s_stPCIadapter.usVendorID, ZERO
+ 04CF  74 2C			        je      done
+				        
+ 04D1				index_loop:        
+ 04D1  39 44 04			        cmp     [si].s_stPCIadapter.usVendorID,ax
+ 04D4  75 0F			        jne     inc_table_index
+ 04D6  39 54 06			        cmp     [si].s_stPCIadapter.usDeviceID,dx
+ 04D9  75 0A			        jne     inc_table_index
+ 04DB  FE 06 0005 E		        inc     _stPCIparam_ClassCode.xIndex
+ 04DF  83 C6 18			        add     si, TYPE s_stPCIadapter
+ 04E2  EB 97			        jmp     class_loop
+				        
+ 04E4  43			        inc     bx
+				        
+ 04E5				inc_table_index:        
+ 04E5  83 7C 04 00		        cmp     [si].s_stPCIadapter.usVendorID, ZERO
+ 04E9  75 E6			        jne     index_loop
+
+ 04EB  38 1E 0005 E		        cmp     _stPCIparam_ClassCode.xIndex, bl
+ 04EF  74 0C			        je      done
+				;        mov     _stPCIparam_ClassCode.xIndex, bl
+				;        jmp     class_loop
+				        
+ 04F1  86 DF			        xchg    bl,bh
+ 04F3  E8 027C			        call    GetOEMadapter
+ 04F6  86 DF			        xchg    bl,bh
+ 04F8  E8 0277			        call    GetOEMadapter
+ 04FB  72 13			        jc      no_PCI_adapter
+				        
+ 04FD				done:     
+ 04FD  65: 89 16 0000 E		        mov     GS:wPCIdevice,dx
+ 0502  65: A3 0000 E		        mov     GS:wPCIvendor,ax
+ 0506  66| 8B 16 0001 E		        mov     edx, DWORD PTR _stPCIparam_ClassCode.dwClassCode
+ 050B  8B C3			        mov     ax, bx
+ 050D  F8			        clc
+ 050E  EB 01			        jmp     exit
+
+ 0510				no_PCI_adapter::
+ 0510  F9			        stc
+
+ 0511				exit:
+				        ret
+ 0511  5E		   *	    pop    si
+ 0512  5F		   *	    pop    di
+ 0513  59		   *	    pop    cx
+ 0514  5B		   *	    pop    bx
+ 0515  C3		   *	    ret    00000h
+
+ 0516				GetSerialPCIAdapter ENDP
+
+ 0516				LoadMoxaPCI PROC NEAR C USES BX DX ES DI, pxIRQ:FAR PTR, awPorts:FAR PTR ; DX = device ID
+
+				;  int 3
+				;        mov     dx, GS:wPCIdevice
+ 0516  55		   *	    push   bp
+ 0517  8B EC		   *	    mov    bp, sp
+ 0519  53		   *	    push   bx
+ 051A  52		   *	    push   dx
+ 051B  06		   *	    push   es
+ 051C  57		   *	    push   di
+ 051D  65: C7 06 0000 E		        mov     GS:bSharedInterrupts,TRUE
+       0001
+
+ 0524  B8 003C			        mov     ax,PCICFG_IRQ_REG
+ 0527  E8 FDBC			        call    GetPCIdata
+ 052A  66| A1 0001 E		        mov     eax,_stPCIdata_Config.dwData
+ 052E  3C 0F			        cmp     al,0fh
+ 0530  76 05			        jna     store_IRQ
+ 0532  B8 FFFE			        mov     ax,0fffeh
+ 0535  EB 6B			        jmp     exit
+
+ 0537				store_IRQ:
+ 0537  C4 7E 04			        les     di,pxIRQ
+ 053A  26: 88 05		        mov     ES:[di],al
+
+ 053D  B8 0010			        mov     ax,010h
+ 0540  E8 FDA3			        call    GetPCIdata
+ 0543  66| A1 0001 E		        mov     eax,_stPCIdata_Config.dwData
+
+ 0547  B8 0014			        mov     ax,PCICFG_BASEADDR_REG_1
+ 054A  E8 FD99			        call    GetPCIdata
+ 054D  66| A1 0001 E		        mov     eax,_stPCIdata_Config.dwData
+				        
+ 0551  B8 001C			        mov     ax,MX_PCICFG_INTIDADDR_REG
+ 0554  E8 FD8F			        call    GetPCIdata
+ 0557  66| A1 0001 E		        mov     eax,_stPCIdata_Config.dwData
+ 055B  66| 83 E0 FE		        and     eax,0fffffffeh
+ 055F  65: A3 0000 E		        mov     GS:wIntIDregister,ax
+ 0563  65: C6 06 0000 E		        mov     GS:byAdapterType,HDWTYPE_SIX
+       06
+
+ 0569  B8 0018			        mov     ax,MX_PCICFG_BASEADDR_REG
+ 056C  E8 FD77			        call    GetPCIdata
+ 056F  66| A1 0001 E		        mov     eax,_stPCIdata_Config.dwData
+ 0573  66| 83 E0 FE		        and     eax,0fffffffeh
+ 0577  B9 0008			        mov     cx,8
+ 057A  81 FA 1680		        cmp     dx,PCI_DEVICE_MX_C168H
+ 057E  74 08			        je      @f
+ 0580  B9 0004			        mov     cx,4
+ 0583  C6 06 0000 E 0F		        mov     _byInitIntANDmask, 00fh  ; force upper nibble bits off during interrupt tests
+ 0588				@@:
+ 0588  C4 7E 08			        les     di,awPorts
+
+ 058B				addr_loop:
+ 058B  26: 89 05		        mov     ES:[di],ax
+ 058E  83 C7 02			        add     di,TYPE WORD
+ 0591  83 C0 08			        add     ax,8
+ 0594  E2 F5			        loop    addr_loop
+
+ 0596  26: C7 05 0000		        mov     WORD PTR ES:[di],0
+
+ 059B  33 C0			        xor     ax,ax
+ 059D  EB 03			        jmp     exit
+
+ 059F				no_adapter:
+ 059F  B8 FFFF			        mov     ax,0ffffh
+
+ 05A2				exit:
+				        ret
+ 05A2  5F		   *	    pop    di
+ 05A3  07		   *	    pop    es
+ 05A4  5A		   *	    pop    dx
+ 05A5  5B		   *	    pop    bx
+ 05A6  5D		   *	    pop    bp
+ 05A7  C3		   *	    ret    00000h
+
+ 05A8				LoadMoxaPCI ENDP
+
+ 05A8				LoadSunixPCI PROC NEAR C USES BX DX ES DI, pxIRQ:FAR PTR, awPorts:FAR PTR ;DX = device ID
+
+				        LOCAL wAddrOffset:WORD
+				;  int 3
+				;        mov     dx, GS:wPCIdevice
+
+ 05A8  55		   *	    push   bp
+ 05A9  8B EC		   *	    mov    bp, sp
+ 05AB  83 C4 FE		   *	    add    sp, 0FFFEh
+ 05AE  53		   *	    push   bx
+ 05AF  52		   *	    push   dx
+ 05B0  06		   *	    push   es
+ 05B1  57		   *	    push   di
+ 05B2  65: C7 06 0000 E		        mov     GS:bSharedInterrupts,TRUE
+       0001
+
+ 05B9  B8 003C			        mov     ax,PCICFG_IRQ_REG
+ 05BC  E8 FD27			        call    GetPCIdata
+ 05BF  66| A1 0001 E		        mov     eax,_stPCIdata_Config.dwData
+ 05C3  3C 0F			        cmp     al,0fh
+ 05C5  76 05			        jna     store_IRQ
+ 05C7  B8 FFFE			        mov     ax,0fffeh
+ 05CA  EB 4A			        jmp     exit
+
+ 05CC				store_IRQ:
+ 05CC  C4 7E 04			        les     di,pxIRQ
+ 05CF  26: 88 05		        mov     ES:[di],al
+
+ 05D2  B8 0014			        mov     ax,PCICFG_BASEADDR_REG_1
+ 05D5  E8 FD0E			        call    GetPCIdata
+ 05D8  66| A1 0001 E		        mov     eax,_stPCIdata_Config.dwData
+				        
+ 05DC  B8 001C			        mov     ax,GT_PCICFG_BASEADDR_REG
+ 05DF  E8 FD04			        call    GetPCIdata
+ 05E2  66| A1 0001 E		        mov     eax,_stPCIdata_Config.dwData
+ 05E6  66| 83 E0 FE		        and     eax,0fffffffeh
+ 05EA  C4 7E 08			        les     di,awPorts
+
+ 05ED  B9 0008			        mov     cx,8
+ 05F0  BA 1008			        mov     dx,PCI_DEVICE_GT_1008
+ 05F3  74 0B			        je      addr_loop
+ 05F5  B9 0004			        mov     cx,4
+ 05F8  BA 1004			        mov     dx,PCI_DEVICE_GT_1004
+ 05FB  74 03			        je      addr_loop
+ 05FD  B9 0002			        mov     cx,2
+
+ 0600				addr_loop:
+ 0600  26: 89 05		        mov     ES:[di],ax
+ 0603  83 C7 02			        add     di,TYPE WORD
+ 0606  83 C0 08			        add     ax,8
+ 0609  E2 F5			        loop    addr_loop
+
+ 060B  26: C7 05 0000		        mov     WORD PTR ES:[di],0
+				; set status register
+
+ 0610  65: A3 0000 E		        mov     GS:wIntIDregister,ax
+ 0614  33 C0			        xor     ax,ax
+				        
+ 0616				exit:
+				        ret
+ 0616  5F		   *	    pop    di
+ 0617  07		   *	    pop    es
+ 0618  5A		   *	    pop    dx
+ 0619  5B		   *	    pop    bx
+ 061A  8B E5		   *	    mov    sp, bp
+ 061C  5D		   *	    pop    bp
+ 061D  C3		   *	    ret    00000h
+
+ 061E				LoadSunixPCI ENDP
+
+ 061E				LoadGlobetekPCI PROC NEAR C USES BX DX ES DI, pxIRQ:FAR PTR, awPorts:FAR PTR ;DX = device ID
+
+				        LOCAL wAddrOffset:WORD
+				;  int 3
+				;        mov     dx, GS:wPCIdevice
+
+ 061E  55		   *	    push   bp
+ 061F  8B EC		   *	    mov    bp, sp
+ 0621  83 C4 FE		   *	    add    sp, 0FFFEh
+ 0624  53		   *	    push   bx
+ 0625  52		   *	    push   dx
+ 0626  06		   *	    push   es
+ 0627  57		   *	    push   di
+ 0628  65: C7 06 0000 E		        mov     GS:bSharedInterrupts,TRUE
+       0001
+
+ 062F  B8 003C			        mov     ax,PCICFG_IRQ_REG
+ 0632  E8 FCB1			        call    GetPCIdata
+ 0635  66| A1 0001 E		        mov     eax,_stPCIdata_Config.dwData
+ 0639  3C 0F			        cmp     al,0fh
+ 063B  76 05			        jna     store_IRQ
+ 063D  B8 FFFE			        mov     ax,0fffeh
+ 0640  EB 4A			        jmp     exit
+
+ 0642				store_IRQ:
+ 0642  C4 7E 04			        les     di,pxIRQ
+ 0645  26: 88 05		        mov     ES:[di],al
+
+ 0648  B8 0014			        mov     ax,PCICFG_BASEADDR_REG_1
+ 064B  E8 FC98			        call    GetPCIdata
+ 064E  66| A1 0001 E		        mov     eax,_stPCIdata_Config.dwData
+				        
+ 0652  B8 001C			        mov     ax,GT_PCICFG_BASEADDR_REG
+ 0655  E8 FC8E			        call    GetPCIdata
+ 0658  66| A1 0001 E		        mov     eax,_stPCIdata_Config.dwData
+ 065C  66| 83 E0 FE		        and     eax,0fffffffeh
+ 0660  C4 7E 08			        les     di,awPorts
+
+ 0663  B9 0008			        mov     cx,8
+ 0666  BA 1008			        mov     dx,PCI_DEVICE_GT_1008
+ 0669  74 0B			        je      addr_loop
+ 066B  B9 0004			        mov     cx,4
+ 066E  BA 1004			        mov     dx,PCI_DEVICE_GT_1004
+ 0671  74 03			        je      addr_loop
+ 0673  B9 0002			        mov     cx,2
+
+ 0676				addr_loop:
+ 0676  26: 89 05		        mov     ES:[di],ax
+ 0679  83 C7 02			        add     di,TYPE WORD
+ 067C  83 C0 08			        add     ax,8
+ 067F  E2 F5			        loop    addr_loop
+
+ 0681  26: C7 05 0000		        mov     WORD PTR ES:[di],0
+				; set status register
+
+ 0686  65: A3 0000 E		        mov     GS:wIntIDregister,ax
+ 068A  33 C0			        xor     ax,ax
+				        
+ 068C				exit:
+				        ret
+ 068C  5F		   *	    pop    di
+ 068D  07		   *	    pop    es
+ 068E  5A		   *	    pop    dx
+ 068F  5B		   *	    pop    bx
+ 0690  8B E5		   *	    mov    sp, bp
+ 0692  5D		   *	    pop    bp
+ 0693  C3		   *	    ret    00000h
+
+ 0694				LoadGlobetekPCI ENDP
+
+ 0694				LoadSealevelPCI PROC NEAR C USES BX DX ES DI, pxIRQ:FAR PTR, awPorts:FAR PTR ; DX = device ID
+
+				;  int 3
+				;        mov     dx, GS:wPCIdevice
+				        
+ 0694  55		   *	    push   bp
+ 0695  8B EC		   *	    mov    bp, sp
+ 0697  53		   *	    push   bx
+ 0698  52		   *	    push   dx
+ 0699  06		   *	    push   es
+ 069A  57		   *	    push   di
+ 069B  65: C7 06 0000 E		        mov     GS:bSharedInterrupts,TRUE
+       0001
+
+ 06A2  B8 003C			        mov     ax,PCICFG_IRQ_REG
+ 06A5  E8 FC3E			        call    GetPCIdata
+ 06A8  66| A1 0001 E		        mov     eax,_stPCIdata_Config.dwData
+ 06AC  3C 0F			        cmp     al,0fh
+ 06AE  76 05			        jna     store_IRQ
+ 06B0  B8 FFFE			        mov     ax,0fffeh                                                                      
+				        
+ 06B3  EB 5A			        jmp     exit
+
+ 06B5				store_IRQ:
+ 06B5  C4 7E 04			        les     di,pxIRQ
+ 06B8  26: 88 05		        mov     ES:[di],al
+
+ 06BB  B8 0014			        mov     ax,PCICFG_BASEADDR_REG_1
+ 06BE  E8 FC25			        call    GetPCIdata
+ 06C1  66| A1 0001 E		        mov     eax,_stPCIdata_Config.dwData
+				        
+ 06C5  B8 0018			        mov     ax,SL_PCICFG_BASEADDR_REG
+ 06C8  E8 FC1B			        call    GetPCIdata
+ 06CB  66| A1 0001 E		        mov     eax,_stPCIdata_Config.dwData
+ 06CF  66| 83 E0 FE		        and     eax,0fffffffeh
+
+ 06D3  83 0E 0000 E 10		        or      _wLoadFlags,LOAD_FLAG1_FORCE_4X_TEST
+				        
+				IFDEF Sealevel_PCI_IntIDreg
+				ENDIF
+ 06D8  C4 7E 08			        les     di,awPorts
+				;        cmp     dx,PCI_DEVICE_SL_7101
+ 06DB  0B D2			        or      dx,dx
+ 06DD  74 29			        jz      done
+ 06DF  86 D6			        xchg    dl,dh
+ 06E1  83 E2 0F			        and     dx,000fh
+				;        jne     test_7801
+				;        mov     ES:[di],ax
+				;        add     di,TYPE WORD
+				;        jmp     done
+
+				;test_7801:
+				;        mov     cx,8
+ 06E4  83 FA 09			        cmp     dx, 9
+ 06E7  72 12			        jb      set_loop
+ 06E9  80 FA 03			        cmp     dl, 03h
+ 06EC  77 05			        ja      @f
+ 06EE  BA 0002			        mov     dx, 02h    
+ 06F1  EB 08			        jmp     set_loop
+ 06F3				@@:
+ 06F3  83 FA 05			        cmp     dx,05h        
+ 06F6  75 03			        jne     set_loop
+ 06F8  BA 0004			        mov     dx,04h
+				        
+ 06FB				set_loop:        
+ 06FB  8B CA			        mov     cx,dx
+				;        cmp     dx,PCI_DEVICE_SL_7801
+				;        jne     fill_the_rest
+
+ 06FD				addr_loop:
+ 06FD  26: 89 05		        mov     ES:[di],ax
+ 0700  83 C7 02			        add     di,TYPE WORD
+ 0703  83 C0 08			        add     ax,8
+ 0706  E2 F5			        loop    addr_loop
+				        
+				IFDEF this_junk
+				ENDIF
+ 0708				done:
+ 0708  26: C7 05 0000		        mov     WORD PTR ES:[di],0
+ 070D  33 C0			        xor     ax,ax
+				        
+ 070F				exit:
+				        ret
+ 070F  5F		   *	    pop    di
+ 0710  07		   *	    pop    es
+ 0711  5A		   *	    pop    dx
+ 0712  5B		   *	    pop    bx
+ 0713  5D		   *	    pop    bp
+ 0714  C3		   *	    ret    00000h
+
+ 0715				LoadSealevelPCI ENDP
+
+ 0715				LoadBlueHeatPCI PROC NEAR C USES BX DX ES DI, pxIRQ:FAR PTR, awPorts:FAR PTR ; DX = device ID
+
+				;  int 3
+				;        mov     dx, GS:wPCIdevice
+
+ 0715  55		   *	    push   bp
+ 0716  8B EC		   *	    mov    bp, sp
+ 0718  53		   *	    push   bx
+ 0719  52		   *	    push   dx
+ 071A  06		   *	    push   es
+ 071B  57		   *	    push   di
+ 071C  65: C7 06 0000 E		        mov     GS:bSharedInterrupts,TRUE
+       0001
+
+ 0723  B8 003C			        mov     ax,PCICFG_IRQ_REG
+ 0726  E8 FBBD			        call    GetPCIdata
+ 0729  66| A1 0001 E		        mov     eax,_stPCIdata_Config.dwData
+ 072D  C4 7E 04			        les     di,pxIRQ
+ 0730  3C 0F			        cmp     al,0fh
+ 0732  76 05			        jna     store_IRQ
+ 0734  B8 FFFE			        mov     ax,0fffeh
+ 0737  EB 33			        jmp     exit
+
+ 0739				store_IRQ:
+ 0739  26: 88 05		        mov     ES:[di],al
+
+ 073C  B8 0014			        mov     ax,PCICFG_BASEADDR_REG_1
+ 073F  E8 FBA4			        call    GetPCIdata
+ 0742  66| A1 0001 E		        mov     eax,_stPCIdata_Config.dwData
+				        
+ 0746  B8 0014			        mov     ax,BH_PCICFG_BASEADDR_REG
+ 0749  E8 FB9A			        call    GetPCIdata
+ 074C  66| A1 0001 E		        mov     eax,_stPCIdata_Config.dwData
+ 0750  66| 83 E0 FE		        and     eax,0fffffffeh
+ 0754  B9 0008			        mov     cx,8
+ 0757  C4 7E 08			        les     di,awPorts
+
+ 075A				addr_loop:
+ 075A  26: 89 05		        mov     ES:[di],ax
+ 075D  83 C7 02			        add     di,TYPE WORD
+ 0760  83 C0 08			        add     ax,8
+ 0763  E2 F5			        loop    addr_loop
+
+ 0765  26: C7 05 0000		        mov     WORD PTR ES:[di],0
+				;        mov     GS:wIntIDregister,ax
+
+ 076A  33 C0			        xor     ax,ax
+
+ 076C				exit:
+				        ret
+ 076C  5F		   *	    pop    di
+ 076D  07		   *	    pop    es
+ 076E  5A		   *	    pop    dx
+ 076F  5B		   *	    pop    bx
+ 0770  5D		   *	    pop    bp
+ 0771  C3		   *	    ret    00000h
+
+ 0772				LoadBlueHeatPCI ENDP
+
+ 0772				GetOEMadapter PROC NEAR USES CX DS; AX = Vendor, DX = device ID, BX = index
+
+				    SetDS DGROUP
+ 0778  C6 06 0000 E 01		        mov     _stPCIparam_Device.xSubFuncNum,OEMHLP_PCI_DEVICE
+ 077D  A3 0003 E		        mov     _stPCIparam_Device.wVendorID, ax
+
+ 0780  52			        push    dx
+ 0781  53			        push    bx
+ 0782  89 16 0001 E		        mov     _stPCIparam_Device.wDeviceID,dx
+ 0786  88 1E 0005 E		        mov     _stPCIparam_Device.xIndex,bl
+ 078A  1E			        push    ds
+ 078B  68 0000 E		        push    OFFSET _stPCIdata_Device
+ 078E  1E			        push    ds
+ 078F  68 0000 E		        push    OFFSET _stPCIparam_Device
+ 0792  6A 0B			        push    OEMHLP_FUNC_PCI
+ 0794  68 0080			        push    OEMHLP_CATEGORY
+ 0797  FF 36 0000 E		        push    _OEMHLPhandle
+ 079B  9A ---- 0000 E		        call    FAR PTR DOSDEVIOCTL
+ 07A0  5B			        pop     bx
+ 07A1  5A			        pop     dx
+ 07A2  0B C0			        or      ax,ax
+ 07A4  75 0A			        jnz     no_device
+ 07A6  A0 0000 E		        mov     al,_stPCIdata_Device.xReturnCode
+ 07A9  0A C0			        or      al,al
+ 07AB  75 03			        jnz     no_device
+
+ 07AD  F8			        clc
+ 07AE  EB 01			        jmp     exit
+
+ 07B0				no_device:
+ 07B0  F9			        stc
+
+ 07B1				exit:
+				        ret
+ 07B1  1F		   *	    pop    ds
+ 07B2  59		   *	    pop    cx
+ 07B3  C3		   *	    ret    00000h
+
+ 07B4				GetOEMadapter ENDP
+
+ 07B4				FindOEMAdapter PROC FAR C USES BX CX DX SI DI ES DS GS, wAdapterNumber:WORD, pxIRQ:FAR PTR, awPorts:FAR PTR
+
+				   SetDS DGROUP
+				   SetGS RDGROUP
+				;  int 3
+
+ 07C9  E8 FABA			        call    HookPCI_BIOS
+ 07CC  73 06			        jnc     find_PCI
+ 07CE  B8 FFFF			        mov     ax,0ffffh
+ 07D1  E9 00B1			        jmp     exit
+
+ 07D4				find_PCI:
+				;        mov     cx,MAX_PCI_ADAPTERS
+ 07D4  8B 5E 06			        mov     bx, wAdapterNumber
+
+ 07D7				find_PCI_loop:
+				ifdef OEM
+ 07D7  65: 80 3E 0000 E		        cmp     byOEMtype, OEM_SEALEVELR
+       0A
+ 07DD  74 62			        je      test_Sealevel
+ 07DF  65: 80 3E 0000 E		        cmp     byOEMtype, OEM_SEALEVEL
+       01
+ 07E5  74 5A			        je      test_Sealevel
+ 07E7  83 7E 06 FF		        cmp     wAdapterNumber, 0ffffh  ; find only OEM adapter
+ 07EB  75 1A			        jne     test_Moxa
+ 07ED  65: 80 3E 0000 E		        cmp     byOEMtype, OEM_MOXA
+       0B
+ 07F3  74 12			        je      test_Moxa
+ 07F5  65: 80 3E 0000 E		        cmp     byOEMtype, OEM_GLOBETEK
+       08
+ 07FB  74 0A			        je      test_Moxa
+				;        je      test_Globetek
+ 07FD  65: 80 3E 0000 E		        cmp     byOEMtype, OEM_CONNECTECH
+       07
+ 0803  74 57			        je      test_Connectech
+ 0805  EB 73			        jmp     close_hook
+				endif
+ 0807				test_Moxa:
+ 0807  FF 76 0E			        push    WORD PTR awPorts + 2
+ 080A  FF 76 0C			        push    WORD PTR awPorts
+ 080D  FF 76 0A			        push    WORD PTR pxIRQ + 2
+ 0810  FF 76 08			        push    WORD PTR pxIRQ
+ 0813  FF 76 06			        push    WORD PTR wAdapterNumber
+ 0816  E8 0077			        call    FindMoxaPCI
+ 0819  83 C4 0A			        add     sp,10
+ 081C  0B C0			        or      ax,ax
+ 081E  74 5A			        jz      found_adapter
+				ifdef Moxa
+				endif
+ 0820				test_Globetek:
+ 0820  FF 76 0E			        push    WORD PTR awPorts + 2
+ 0823  FF 76 0C			        push    WORD PTR awPorts
+ 0826  FF 76 0A			        push    WORD PTR pxIRQ + 2
+ 0829  FF 76 08			        push    WORD PTR pxIRQ
+ 082C  FF 76 06			        push    WORD PTR wAdapterNumber
+ 082F  E8 00D0			        call    FindGlobetekPCI
+ 0832  83 C4 0A			        add     sp,10
+ 0835  0B C0			        or      ax,ax
+ 0837  74 41			        jz      found_adapter
+				ifdef OEM
+ 0839  83 7E 06 FF		        cmp     wAdapterNumber, 0ffffh  ; find any adapter
+ 083D  75 02			        jne     test_Sealevel
+ 083F  EB 34			        jmp     IncSlot
+				endif
+
+ 0841				test_Sealevel:
+ 0841  FF 76 0E			        push    WORD PTR awPorts + 2
+ 0844  FF 76 0C			        push    WORD PTR awPorts
+ 0847  FF 76 0A			        push    WORD PTR pxIRQ + 2
+ 084A  FF 76 08			        push    WORD PTR pxIRQ
+ 084D  FF 76 06			        push    WORD PTR wAdapterNumber
+ 0850  E8 011A			        call    FindSealevelPCI
+ 0853  83 C4 0A			        add     sp,10
+ 0856  0B C0			        or      ax,ax
+ 0858  74 20			        jz      found_adapter
+				ifdef OEM
+				 ifdef NotSealevelOnly
+				 endif
+ 085A  EB 19			        jmp     IncSlot
+				endif
+
+ 085C				test_Connectech:
+ 085C  FF 76 0E			        push    WORD PTR awPorts + 2
+ 085F  FF 76 0C			        push    WORD PTR awPorts
+ 0862  FF 76 0A			        push    WORD PTR pxIRQ + 2
+ 0865  FF 76 08			        push    WORD PTR pxIRQ
+ 0868  FF 76 06			        push    WORD PTR wAdapterNumber
+ 086B  E8 016A			        call    FindBlueHeat
+ 086E  83 C4 0A			        add     sp,10
+ 0871  0B C0			        or      ax,ax
+ 0873  74 05			        jz      found_adapter
+
+ 0875				IncSlot:
+				;        inc     _byNextPCIslot
+				;        mov     bl,_byNextPCIslot
+				;        loop    find_PCI_loop_x
+ 0875  B8 FFF0			        mov     ax,0fff0h
+ 0878  EB 00			        jmp     close_hook
+
+				;find_PCI_loop_x:
+				;        jmp     find_PCI_loop
+
+ 087A				found_adapter:
+				;        inc     _byNextPCIslot
+
+ 087A				close_hook:
+ 087A  50			        push    ax
+ 087B  FF 36 0000 E		        push    _OEMHLPhandle
+ 087F  9A ---- 0000 E		        call    FAR PTR DOSCLOSE
+ 0884  58			        pop     ax
+ 0885				exit:
+				        ret
+ 0885  0F A9		   *	    pop    gs
+ 0887  1F		   *	    pop    ds
+ 0888  07		   *	    pop    es
+ 0889  5F		   *	    pop    di
+ 088A  5E		   *	    pop    si
+ 088B  5A		   *	    pop    dx
+ 088C  59		   *	    pop    cx
+ 088D  5B		   *	    pop    bx
+ 088E  5D		   *	    pop    bp
+ 088F  CB		   *	    ret    00000h
+
+ 0890				FindOEMAdapter ENDP
+
+				IFDEF find_OEM_device
+				ENDIF
+
+ 0890				FindMoxaPCI PROC NEAR C USES BX DX ES DI, wAdapterNumber:WORD, pxIRQ:FAR PTR, awPorts:FAR PTR ; BX = PCI slot
+
+				        LOCAL wDeviceIndex:WORD
+				;  int 3
+ 0890  55		   *	    push   bp
+ 0891  8B EC		   *	    mov    bp, sp
+ 0893  83 C4 FE		   *	    add    sp, 0FFFEh
+ 0896  53		   *	    push   bx
+ 0897  52		   *	    push   dx
+ 0898  06		   *	    push   es
+ 0899  57		   *	    push   di
+ 089A  C7 46 FE 0000		        mov     wDeviceIndex, 0
+ 089F  8B 16 0000 E		        mov     dx,_MoxaPCIadapterTable
+				        
+ 08A3				adapter_loop:
+ 08A3  B8 1393			        mov     ax,PCI_VENDOR_MOXA
+ 08A6  E8 FEC9			        call    GetOEMadapter
+ 08A9  72 3A			        jc      no_OEM_device
+ 08AB  83 7E 04 FF		        cmp     wAdapterNumber, 0ffffh  ; looking for any qualified adapter (is OEM device present)
+ 08AF  75 04			        jne     do_adapter
+ 08B1  33 C0			        xor     ax,ax
+ 08B3  EB 45			        jmp     exit
+
+ 08B5				do_adapter:
+ 08B5  8B 46 04			        mov     ax,wAdapterNumber
+ 08B8  3B 06 0000 E		        cmp     ax,_wPCIadapterCount
+ 08BC  75 27			        jne     no_OEM_device
+
+ 08BE  65: C7 06 0000 E		        mov     GS:bSharedInterrupts,TRUE
+       0001
+ 08C5  65: C7 06 0000 E		        mov     GS:wPCIvendor,PCI_VENDOR_MOXA
+       1393
+ 08CC  65: 89 16 0000 E		        mov     GS:wPCIdevice,dx
+
+ 08D1  FF 76 0C			        push    WORD PTR awPorts + 2
+ 08D4  FF 76 0A			        push    WORD PTR awPorts
+ 08D7  FF 76 08			        push    WORD PTR pxIRQ + 2
+ 08DA  FF 76 06			        push    WORD PTR pxIRQ
+ 08DD  E8 FC36			        call    LoadMoxaPCI
+ 08E0  83 C4 08			        add     sp,8
+				IFDEF get_class_codes
+				ENDIF        
+ 08E3  EB 15			        jmp     exit
+				        
+				IFDEF this_junk        
+				ENDIF
+ 08E5				no_OEM_device:
+ 08E5  FF 46 FE			        inc     wDeviceIndex
+ 08E8  53			        push    bx
+ 08E9  8B 5E FE			        mov     bx, wDeviceIndex
+ 08EC  D1 E3			        shl     bx,1
+ 08EE  8B 97 0000 E		        mov     dx,[bx + _MoxaPCIadapterTable]
+ 08F2  5B			        pop     bx
+ 08F3  0B D2			        or      dx,dx
+ 08F5  75 AC			        jnz     adapter_loop
+				        
+ 08F7				no_adapter:
+ 08F7  B8 FFFF			        mov     ax,0ffffh
+
+ 08FA				exit:
+				        ret
+ 08FA  5F		   *	    pop    di
+ 08FB  07		   *	    pop    es
+ 08FC  5A		   *	    pop    dx
+ 08FD  5B		   *	    pop    bx
+ 08FE  8B E5		   *	    mov    sp, bp
+ 0900  5D		   *	    pop    bp
+ 0901  C3		   *	    ret    00000h
+
+ 0902				FindMoxaPCI ENDP
+
+ 0902				FindGlobetekPCI PROC NEAR C USES BX DX ES DI, wAdapterNumber:WORD, pxIRQ:FAR PTR, awPorts:FAR PTR ; BX = PCI slot
+
+				        LOCAL wAddrOffset:WORD
+				        LOCAL wDeviceIndex:WORD
+				;  int 3
+ 0902  55		   *	    push   bp
+ 0903  8B EC		   *	    mov    bp, sp
+ 0905  83 C4 FC		   *	    add    sp, 0FFFCh
+ 0908  53		   *	    push   bx
+ 0909  52		   *	    push   dx
+ 090A  06		   *	    push   es
+ 090B  57		   *	    push   di
+ 090C  C7 46 FC 0000		        mov     wDeviceIndex, 0
+ 0911  8B 16 0000 E		        mov     dx,_GlobetekPCIadapterTable
+
+ 0915				adapter_loop:
+ 0915  B8 151A			        mov     ax,PCI_VENDOR_GLOBETEK
+ 0918  E8 FE57			        call    GetOEMadapter
+ 091B  72 33			        jc      no_OEM_device
+ 091D  83 7E 04 FF		        cmp     wAdapterNumber, 0ffffh  ; looking for any qualified adapter
+ 0921  75 04			        jne     do_adapter
+ 0923  33 C0			        xor     ax,ax
+ 0925  EB 3E			        jmp     exit
+
+ 0927				do_adapter:
+ 0927  8B 46 04			        mov     ax,wAdapterNumber
+ 092A  3B 06 0000 E		        cmp     ax,_wPCIadapterCount
+ 092E  75 20			        jne     no_OEM_device
+
+				;        mov     GS:bSharedInterrupts,TRUE
+ 0930  65: C7 06 0000 E		        mov     GS:wPCIvendor,PCI_VENDOR_GLOBETEK
+       151A
+ 0937  65: 89 16 0000 E		        mov     GS:wPCIdevice,dx
+
+ 093C  FF 76 0C			        push    WORD PTR awPorts + 2
+ 093F  FF 76 0A			        push    WORD PTR awPorts
+ 0942  FF 76 08			        push    WORD PTR pxIRQ + 2
+ 0945  FF 76 06			        push    WORD PTR pxIRQ
+ 0948  E8 FCD3			        call    LoadGlobetekPCI
+ 094B  83 C4 08			        add     sp,8
+				IFDEF get_class_codes
+				ENDIF        
+ 094E  EB 15			        jmp     exit
+				        
+				IFDEF this_junk        
+				ENDIF
+ 0950				no_OEM_device:
+ 0950  FF 46 FC			        inc     wDeviceIndex
+ 0953  53			        push    bx
+ 0954  8B 5E FC			        mov     bx, wDeviceIndex
+ 0957  D1 E3			        shl     bx,1
+ 0959  8B 97 0000 E		        mov     dx,[BX + _GlobetekPCIadapterTable]
+ 095D  5B			        pop     bx
+ 095E  0B D2			        or      dx,dx
+ 0960  75 B3			        jnz     adapter_loop
+
+ 0962				no_adapter:
+ 0962  B8 FFFF			        mov     ax,0ffffh
+ 0965				exit:
+				        ret
+ 0965  5F		   *	    pop    di
+ 0966  07		   *	    pop    es
+ 0967  5A		   *	    pop    dx
+ 0968  5B		   *	    pop    bx
+ 0969  8B E5		   *	    mov    sp, bp
+ 096B  5D		   *	    pop    bp
+ 096C  C3		   *	    ret    00000h
+
+ 096D				FindGlobetekPCI ENDP
+
+ 096D				FindSealevelPCI PROC NEAR C USES BX DX ES DI, wAdapterNumber:WORD, pxIRQ:FAR PTR, awPorts:FAR PTR ; BX = PCI slot
+
+				        LOCAL wDeviceIndex:WORD
+				;  int 3
+ 096D  55		   *	    push   bp
+ 096E  8B EC		   *	    mov    bp, sp
+ 0970  83 C4 FE		   *	    add    sp, 0FFFEh
+ 0973  53		   *	    push   bx
+ 0974  52		   *	    push   dx
+ 0975  06		   *	    push   es
+ 0976  57		   *	    push   di
+ 0977  C7 46 FE 0000		        mov     wDeviceIndex, 0
+ 097C  8B 16 0000 E		        mov     dx,_SealevelPCIadapterTable
+
+ 0980				adapter_loop:
+ 0980  B8 135E			        mov     ax,PCI_VENDOR_SEALEVEL
+ 0983  E8 FDEC			        call    GetOEMadapter
+ 0986  72 33			        jc      no_OEM_device
+				ifndef NotSealevelOnly
+ 0988  83 7E 04 FF		        cmp     wAdapterNumber, 0ffffh  ; looking for any qualified adapter
+ 098C  75 04			        jne     do_adapter
+				endif        
+ 098E  33 C0			        xor     ax,ax
+ 0990  EB 3E			        jmp     exit
+
+ 0992				do_adapter:
+ 0992  8B 46 04			        mov     ax,wAdapterNumber
+ 0995  3B 06 0000 E		        cmp     ax,_wPCIadapterCount
+ 0999  75 20			        jne     no_OEM_device
+
+				;        mov     GS:bSharedInterrupts,TRUE
+ 099B  65: C7 06 0000 E		        mov     GS:wPCIvendor,PCI_VENDOR_SEALEVEL
+       135E
+ 09A2  65: 89 16 0000 E		        mov     GS:wPCIdevice,dx
+				        
+ 09A7  FF 76 0C			        push    WORD PTR awPorts + 2
+ 09AA  FF 76 0A			        push    WORD PTR awPorts
+ 09AD  FF 76 08			        push    WORD PTR pxIRQ + 2
+ 09B0  FF 76 06			        push    WORD PTR pxIRQ
+ 09B3  E8 FCDE			        call    LoadSealevelPCI
+ 09B6  83 C4 08			        add     sp,8
+				IFDEF get_class_codes
+				ENDIF        
+ 09B9  EB 15			        jmp     exit
+				        
+				IFDEF this_junk
+				ENDIF
+ 09BB				no_OEM_device:
+ 09BB  FF 46 FE			        inc     wDeviceIndex
+ 09BE  53			        push    bx
+ 09BF  8B 5E FE			        mov     bx, wDeviceIndex
+ 09C2  D1 E3			        shl     bx,1
+ 09C4  8B 97 0000 E		        mov     dx,[BX + _SealevelPCIadapterTable]
+ 09C8  5B			        pop     bx
+ 09C9  0B D2			        or      dx,dx
+ 09CB  75 B3			        jnz     adapter_loop
+
+ 09CD				no_adapter:
+ 09CD  B8 FFFF			        mov     ax,0ffffh
+ 09D0				exit:
+				        ret
+ 09D0  5F		   *	    pop    di
+ 09D1  07		   *	    pop    es
+ 09D2  5A		   *	    pop    dx
+ 09D3  5B		   *	    pop    bx
+ 09D4  8B E5		   *	    mov    sp, bp
+ 09D6  5D		   *	    pop    bp
+ 09D7  C3		   *	    ret    00000h
+
+ 09D8				FindSealevelPCI ENDP
+
+ 09D8				FindBlueHeat PROC NEAR C USES BX DX ES DI, wAdapterNumber:WORD, pxIRQ:FAR PTR, awPorts:FAR PTR
+
+				        LOCAL wDeviceIndex:WORD
+				;  int 3
+ 09D8  55		   *	    push   bp
+ 09D9  8B EC		   *	    mov    bp, sp
+ 09DB  83 C4 FE		   *	    add    sp, 0FFFEh
+ 09DE  53		   *	    push   bx
+ 09DF  52		   *	    push   dx
+ 09E0  06		   *	    push   es
+ 09E1  57		   *	    push   di
+ 09E2  C7 46 FE 0000		        mov     wDeviceIndex, 0
+ 09E7  8B 16 0000 E		        mov     dx,_ConnectechPCIadapterTable
+
+ 09EB				adapter_loop:
+ 09EB  B8 11B0			        mov     ax,PCI_VENDOR_CONNECTECH
+ 09EE  E8 FD81			        call    GetOEMadapter
+ 09F1  72 33			        jc      no_OEM_device
+ 09F3  83 7E 04 FF		        cmp     wAdapterNumber, 0ffffh  ; looking for any qualified adapter
+ 09F7  75 04			        jne     do_adapter
+ 09F9  33 C0			        xor     ax,ax
+ 09FB  EB 3E			        jmp     exit
+
+ 09FD				do_adapter:
+ 09FD  8B 46 04			        mov     ax,wAdapterNumber
+ 0A00  3B 06 0000 E		        cmp     ax,_wPCIadapterCount
+ 0A04  75 20			        jne     no_OEM_device
+
+				;        mov     GS:bSharedInterrupts,TRUE
+ 0A06  65: C7 06 0000 E		        mov     GS:wPCIvendor,PCI_VENDOR_CONNECTECH
+       11B0
+ 0A0D  65: 89 16 0000 E		        mov     GS:wPCIdevice,dx
+
+ 0A12  FF 76 0C			        push    WORD PTR awPorts + 2
+ 0A15  FF 76 0A			        push    WORD PTR awPorts
+ 0A18  FF 76 08			        push    WORD PTR pxIRQ + 2
+ 0A1B  FF 76 06			        push    WORD PTR pxIRQ
+ 0A1E  E8 FCF4			        call    LoadBlueHeatPCI
+ 0A21  83 C4 08			        add     sp,8
+				IFDEF get_class_codes
+				ENDIF        
+ 0A24  EB 15			        jmp     exit
+				        
+				IFDEF this_junk        
+				ENDIF
+ 0A26				no_OEM_device:
+ 0A26  FF 46 FE			        inc     wDeviceIndex
+ 0A29  53			        push    bx
+ 0A2A  8B 5E FE			        mov     bx, wDeviceIndex
+ 0A2D  D1 E3			        shl     bx,1
+ 0A2F  8B 97 0000 E		        mov     dx,[BX + _ConnectechPCIadapterTable]
+ 0A33  5B			        pop     BX
+ 0A34  0B D2			        or      dx,dx
+ 0A36  75 B3			        jnz     adapter_loop
+
+ 0A38  B8 FFFF			        mov     ax,0ffffh
+ 0A3B				exit:
+				        ret
+ 0A3B  5F		   *	    pop    di
+ 0A3C  07		   *	    pop    es
+ 0A3D  5A		   *	    pop    dx
+ 0A3E  5B		   *	    pop    bx
+ 0A3F  8B E5		   *	    mov    sp, bp
+ 0A41  5D		   *	    pop    bp
+ 0A42  C3		   *	    ret    00000h
+
+ 0A43				FindBlueHeat ENDP
+
+				IFDEF find_any_CC        
+				ENDIF
+
+ 0A43				PCIhdwQuickTest PROC USES AX BX DX; DX is address to test
+
+ 0A43  50		   *	    push   ax
+ 0A44  53		   *	    push   bx
+ 0A45  52		   *	    push   dx
+ 0A46  83 C2 03			        add     dx, LINE_CTL_REG_OFFSET
+ 0A49  EC			        in      al, dx
+ 0A4A  0C 80			        or      al, LINE_CTL_DLB_ACCESS
+ 0A4C  EE			        out     dx, al                   ; DLAB = 1
+				        InByteDel bx
+ 0A54  A8 80			        test    al, LINE_CTL_DLB_ACCESS  ; DLAB == 1 ?
+ 0A56  74 12			        jz      not_UART
+
+ 0A58  EC			        in      al, dx
+ 0A59  24 7F			        and     al, NOT LINE_CTL_DLB_ACCESS
+ 0A5B  EE			        out     dx, al                    ; DLAB = 0
+				        InByteDel bx
+ 0A63  A8 80			        test    al, LINE_CTL_DLB_ACCESS   ; DLAB == 0 ?
+ 0A65  75 03			        jnz     not_UART
+ 0A67  F8			        clc
+ 0A68  EB 01			        jmp     exit
+				      
+ 0A6A				not_UART:
+ 0A6A  F9			        stc
+				        
+ 0A6B				exit:
+				        ret
+ 0A6B  5A		   *	    pop    dx
+ 0A6C  5B		   *	    pop    bx
+ 0A6D  58		   *	    pop    ax
+ 0A6E  C3		   *	    ret    00000h
+				        
+ 0A6F				PCIhdwQuickTest ENDP
+
+ 0A6F				RES_CODE ENDS
+
+				END

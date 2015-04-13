@@ -1,0 +1,86 @@
+:TARGET.SUFFIXES
+:TARGET.SUFFIXES
+:DEPENDENCY..C .LIB .dll .obj 
+:TARGET.all
+:DEPENDENCY.
+.\\..\..\lib\\UTIL_DEB.LIB
+:RULE..C.asm
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /DDEBUG=1 /Sp1 /Ss /Q /Tx /Fi /Si /Ti /Op- /W1 /Gm /Gd /Ge- /G4 /Gn /Tm /Ms /Gf /Gi /Ft- /Gu /Fa /C %s
+:RULE.{p:\utility}.C.asm
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /DDEBUG=1 /Sp1 /Ss /Q /Tx /Fi /Si /Ti /Op- /W1 /Gm /Gd /Ge- /G4 /Gn /Tm /Ms /Gf /Gi /Ft- /Gu /Fa /C %s
+:RULE.{p:\utility\debug}.C.asm
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /DDEBUG=1 /Sp1 /Ss /Q /Tx /Fi /Si /Ti /Op- /W1 /Gm /Gd /Ge- /G4 /Gn /Tm /Ms /Gf /Gi /Ft- /Gu /Fa /C %s
+:RULE..C.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /DDEBUG=1 /Sp1 /Ss /Q /Tx /Fi /Si /Ti /Op- /W1 /Gm /Gd /Ge- /G4 /Gn /Tm /Ms /Gf /Gi /Ft- /Gu /Fa /C %s
+:RULE.{p:\utility}.C.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /DDEBUG=1 /Sp1 /Ss /Q /Tx /Fi /Si /Ti /Op- /W1 /Gm /Gd /Ge- /G4 /Gn /Tm /Ms /Gf /Gi /Ft- /Gu /Fa /C %s
+:RULE.{p:\utility\debug}.C.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /DDEBUG=1 /Sp1 /Ss /Q /Tx /Fi /Si /Ti /Op- /W1 /Gm /Gd /Ge- /G4 /Gn /Tm /Ms /Gf /Gi /Ft- /Gu /Fa /C %s
+:RULE..dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe /NOLOGO %|dpF\%|fF.LIB %s
+:RULE.{p:\utility}.dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe /NOLOGO %|dpF\%|fF.LIB %s
+:RULE.{p:\utility\debug}.dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe /NOLOGO %|dpF\%|fF.LIB %s
+:TARGET..\\..\..\lib\UTIL_DEB.dll
+:DEPENDENCY.
+.\utility.obj
+.\cfg_sys.obj
+.\list.obj
+.\OS2LSRTL.obj
+{$(LIB)}os2lsrtl.lib
+{$(LIB)}os2386.lib
+{$(LIB)}CPPOM30O.lib
+.\\..\UTIL_DEB.def
+:ACTION.Link::Linker
+:COMMAND.
+icc.exe @<<
+ /Q /B" /de /nobase /nop      /noe /m /nod"
+ /Fe".\\..\..\lib\UTIL_DEB.dll" 
+ os2lsrtl.lib 
+ os2386.lib 
+ CPPOM30O.lib 
+ .\\..\UTIL_DEB.def
+ .\utility.obj
+ .\cfg_sys.obj
+ .\list.obj
+ .\OS2LSRTL.obj
+<<
+:TARGET..\OS2LSRTL.asm .\OS2LSRTL.obj
+:DEPENDENCY.
+p:\utility\OS2LSRTL.C
+:TARGET..\list.asm .\list.obj
+:DEPENDENCY.
+p:\utility\list.c
+{p:\utility;$(INCLUDE);}COMMON.H
+{p:\utility;$(INCLUDE);}linklist.h
+:TARGET..\cfg_sys.asm .\cfg_sys.obj
+:DEPENDENCY.
+p:\utility\cfg_sys.c
+{p:\utility;$(INCLUDE);}utility.h
+:TARGET..\utility.asm .\utility.obj
+:DEPENDENCY.
+p:\utility\utility.c
+{p:\utility;$(INCLUDE);}COMMON.H
+{p:\utility;$(INCLUDE);}utility.h
+:TARGET..\\..\..\lib\\UTIL_DEB.LIB
+:DEPENDENCY.
+.\\..\..\lib\UTIL_DEB.dll

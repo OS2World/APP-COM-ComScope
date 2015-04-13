@@ -1,0 +1,220 @@
+ Reading input file....  Please wait
+
+-------------------------------- #:1 --------------------------------
+  Delta Time:  0.000   Packet Length: 58 bytes (3A hex)
+ DIX:   Dest: 00:00:C0:EF:BC:5E   Source: 00:00:C0:88:FB:B2
+ DIX:   Dest: 010.000.002.004.    Source: 010.000.002.002.
+----------------------- IP HEADER -----------------------
+ IP:  Version: 4 Correct    Header Length: 20 bytes
+ IP:  Type Of Service: 00
+ IP:     000. ....  Routine
+ IP:     ...0 ....  Normal Delay
+ IP:     .... 0...  Normal Throughput
+ IP:     .... .0..  Normal Reliability
+ IP:  Total Len: 44 (x2C) bytes          Id: 25B2
+ IP:  Flags: 0 
+ IP:     .0..       May Fragment
+ IP:     ..0.       Last Fragment
+ IP:  Fragment Offset: 000
+ IP:  Time To Live: 64 sec    Protocol: 06 (TCP)
+ IP:  Header Checksum: 3D15
+ IP:  No Options
+---------------------- TCP HEADER ----------------------
+ TCP:  Source Port: 1610        Dest Port: 49961 
+ TCP:  Sequence #: 120584705 
+ TCP:  Ack #: 0 
+ TCP:  Offset: 24 bytes
+ TCP:  Flags: 02
+ TCP:     ..0. ....  Urgent bit Off
+ TCP:     ...0 ....  Ack bit Off
+ TCP:     .... 0...  Push bit Off
+ TCP:     .... .0..  Reset bit Off
+ TCP:     .... ..1.  Synchronize bit On
+ TCP:     .... ...0  Finish bit Off
+ TCP:  Window: 28672      Checksum: 457C 
+ TCP:  Option Code: 02     Length: 4 bytes
+ TCP:    Max Segment Size 1460 (x5B4)
+ TCP:  No data in this packet.
+
+-------------------------------- #:2 --------------------------------
+  Delta Time:  0.000   Packet Length: 60 bytes (3C hex)
+ DIX:   Dest: 00:00:C0:88:FB:B2   Source: 00:00:C0:EF:BC:5E
+ DIX:   Dest: 010.000.002.002.    Source: 010.000.002.004.
+----------------------- IP HEADER -----------------------
+ IP:  Version: 4 Correct    Header Length: 20 bytes
+ IP:  Type Of Service: 00
+ IP:     000. ....  Routine
+ IP:     ...0 ....  Normal Delay
+ IP:     .... 0...  Normal Throughput
+ IP:     .... .0..  Normal Reliability
+ IP:  Total Len: 44 (x2C) bytes *ERROR*  Id: 243D
+ IP:  Flags: 0 
+ IP:     .0..       May Fragment
+ IP:     ..0.       Last Fragment
+ IP:  Fragment Offset: 000
+ IP:  Time To Live: 64 sec    Protocol: 06 (TCP)
+ IP:  Header Checksum: 3E8A
+ IP:  No Options
+---------------------- TCP HEADER ----------------------
+ TCP:  Source Port: 49961        Dest Port: 1610 
+ TCP:  Sequence #: 152520705 
+ TCP:  Ack #: 120584706 
+ TCP:  Offset: 24 bytes
+ TCP:  Flags: 12
+ TCP:     ..0. ....  Urgent bit Off
+ TCP:     ...1 ....  Ack bit On
+ TCP:     .... 0...  Push bit Off
+ TCP:     .... .0..  Reset bit Off
+ TCP:     .... ..1.  Synchronize bit On
+ TCP:     .... ...0  Finish bit Off
+ TCP:  Window: 28672      Checksum: F452 
+ TCP:  Option Code: 02     Length: 4 bytes
+ TCP:    Max Segment Size 1460 (x5B4)
+ TCP:  No data in this packet.
+
+-------------------------------- #:3 --------------------------------
+  Delta Time:  0.000   Packet Length: 54 bytes (36 hex)
+ DIX:   Dest: 00:00:C0:EF:BC:5E   Source: 00:00:C0:88:FB:B2
+ DIX:   Dest: 010.000.002.004.    Source: 010.000.002.002.
+----------------------- IP HEADER -----------------------
+ IP:  Version: 4 Correct    Header Length: 20 bytes
+ IP:  Type Of Service: 00
+ IP:     000. ....  Routine
+ IP:     ...0 ....  Normal Delay
+ IP:     .... 0...  Normal Throughput
+ IP:     .... .0..  Normal Reliability
+ IP:  Total Len: 40 (x28) bytes          Id: 25B3
+ IP:  Flags: 0 
+ IP:     .0..       May Fragment
+ IP:     ..0.       Last Fragment
+ IP:  Fragment Offset: 000
+ IP:  Time To Live: 64 sec    Protocol: 06 (TCP)
+ IP:  Header Checksum: 3D18
+ IP:  No Options
+---------------------- TCP HEADER ----------------------
+ TCP:  Source Port: 1610        Dest Port: 49961 
+ TCP:  Sequence #: 120584706 
+ TCP:  Ack #: 152520706 
+ TCP:  Offset: 20 bytes
+ TCP:  Flags: 10
+ TCP:     ..0. ....  Urgent bit Off
+ TCP:     ...1 ....  Ack bit On
+ TCP:     .... 0...  Push bit Off
+ TCP:     .... .0..  Reset bit Off
+ TCP:     .... ..0.  Synchronize bit Off
+ TCP:     .... ...0  Finish bit Off
+ TCP:  Window: 28672      Checksum: C10 
+ TCP:  No Options
+ TCP:  No data in this packet.
+
+-------------------------------- #:4 --------------------------------
+  Delta Time:  0.000   Packet Length: 106 bytes (6A hex)
+ DIX:   Dest: 00:00:C0:EF:BC:5E   Source: 00:00:C0:88:FB:B2
+ DIX:   Dest: 010.000.002.004.    Source: 010.000.002.002.
+----------------------- IP HEADER -----------------------
+ IP:  Version: 4 Correct    Header Length: 20 bytes
+ IP:  Type Of Service: 00
+ IP:     000. ....  Routine
+ IP:     ...0 ....  Normal Delay
+ IP:     .... 0...  Normal Throughput
+ IP:     .... .0..  Normal Reliability
+ IP:  Total Len: 92 (x5C) bytes          Id: 25B4
+ IP:  Flags: 0 
+ IP:     .0..       May Fragment
+ IP:     ..0.       Last Fragment
+ IP:  Fragment Offset: 000
+ IP:  Time To Live: 64 sec    Protocol: 06 (TCP)
+ IP:  Header Checksum: 3CE3
+ IP:  No Options
+---------------------- TCP HEADER ----------------------
+ TCP:  Source Port: 1610        Dest Port: 49961 
+ TCP:  Sequence #: 120584706 
+ TCP:  Ack #: 152520706 
+ TCP:  Offset: 20 bytes
+ TCP:  Flags: 18
+ TCP:     ..0. ....  Urgent bit Off
+ TCP:     ...1 ....  Ack bit On
+ TCP:     .... 1...  Push bit On
+ TCP:     .... .0..  Reset bit Off
+ TCP:     .... ..0.  Synchronize bit Off
+ TCP:     .... ...0  Finish bit Off
+ TCP:  Window: 28672      Checksum: 8F24 
+ TCP:  No Options
+--------------------------------- DATA -----------------------------------
+0000 34 00 B3 0D D4 19 15 00    A4 00 00 00 06 00 14 00   4...............
+0010 02 00 06 44 0A 00 02 02    C0 88 FB B2 08 00 00 00   ...D............
+0020 01 00 00 00 0A 00 01 00    00 00 31 32 33 34 35 36   ..........123456
+0030 37 38 39 30                                          7890
+
+
+-------------------------------- #:5 --------------------------------
+  Delta Time:  0.000   Packet Length: 54 bytes (36 hex)
+ DIX:   Dest: 00:00:C0:EF:BC:5E   Source: 00:00:C0:88:FB:B2
+ DIX:   Dest: 010.000.002.004.    Source: 010.000.002.002.
+----------------------- IP HEADER -----------------------
+ IP:  Version: 4 Correct    Header Length: 20 bytes
+ IP:  Type Of Service: 00
+ IP:     000. ....  Routine
+ IP:     ...0 ....  Normal Delay
+ IP:     .... 0...  Normal Throughput
+ IP:     .... .0..  Normal Reliability
+ IP:  Total Len: 40 (x28) bytes          Id: 25B5
+ IP:  Flags: 0 
+ IP:     .0..       May Fragment
+ IP:     ..0.       Last Fragment
+ IP:  Fragment Offset: 000
+ IP:  Time To Live: 64 sec    Protocol: 06 (TCP)
+ IP:  Header Checksum: 3D16
+ IP:  No Options
+---------------------- TCP HEADER ----------------------
+ TCP:  Source Port: 1610        Dest Port: 49961 
+ TCP:  Sequence #: 120584758 
+ TCP:  Ack #: 152520706 
+ TCP:  Offset: 20 bytes
+ TCP:  Flags: 11
+ TCP:     ..0. ....  Urgent bit Off
+ TCP:     ...1 ....  Ack bit On
+ TCP:     .... 0...  Push bit Off
+ TCP:     .... .0..  Reset bit Off
+ TCP:     .... ..0.  Synchronize bit Off
+ TCP:     .... ...1  Finish bit On
+ TCP:  Window: 28672      Checksum: BDB 
+ TCP:  No Options
+ TCP:  No data in this packet.
+
+-------------------------------- #:6 --------------------------------
+  Delta Time:  0.000   Packet Length: 60 bytes (3C hex)
+ DIX:   Dest: 00:00:C0:88:FB:B2   Source: 00:00:C0:EF:BC:5E
+ DIX:   Dest: 010.000.002.002.    Source: 010.000.002.004.
+----------------------- IP HEADER -----------------------
+ IP:  Version: 4 Correct    Header Length: 20 bytes
+ IP:  Type Of Service: 00
+ IP:     000. ....  Routine
+ IP:     ...0 ....  Normal Delay
+ IP:     .... 0...  Normal Throughput
+ IP:     .... .0..  Normal Reliability
+ IP:  Total Len: 40 (x28) bytes *ERROR*  Id: 243E
+ IP:  Flags: 0 
+ IP:     .0..       May Fragment
+ IP:     ..0.       Last Fragment
+ IP:  Fragment Offset: 000
+ IP:  Time To Live: 64 sec    Protocol: 06 (TCP)
+ IP:  Header Checksum: 3E8D
+ IP:  No Options
+---------------------- TCP HEADER ----------------------
+ TCP:  Source Port: 49961        Dest Port: 1610 
+ TCP:  Sequence #: 152520706 
+ TCP:  Ack #: 120584759 
+ TCP:  Offset: 20 bytes
+ TCP:  Flags: 10
+ TCP:     ..0. ....  Urgent bit Off
+ TCP:     ...1 ....  Ack bit On
+ TCP:     .... 0...  Push bit Off
+ TCP:     .... .0..  Reset bit Off
+ TCP:     .... ..0.  Synchronize bit Off
+ TCP:     .... ...0  Finish bit Off
+ TCP:  Window: 28620      Checksum: C0F 
+ TCP:  No Options
+--------------------------------- DATA -----------------------------------
+0000 20 20 20 20 20 20                                          
+

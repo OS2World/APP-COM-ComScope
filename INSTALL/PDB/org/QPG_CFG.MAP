@@ -1,0 +1,144 @@
+
+ Start         Length     Name                   Class
+ 0001:00000000 000004998H _TEXT                  CODE
+ 0002:00000000 000000E6CH _DATA                  DATA
+ 0002:00000E6C 000000006H _INIT_                 INITDATA
+ 0002:00000E72 000000000H _INITEND_              INITDATA
+ 0002:00000E72 000000000H _EXIT_                 EXITDATA
+ 0002:00000E72 000000000H _EXITEND_              EXITDATA
+ 0002:00000E74 000000000H CONST                  CONST
+ 0002:00000E74 0000120D0H _BSS                   BSS
+
+  Address         Publics by Name
+
+ 0001:0000459A  Idle set_terminate(void(*)())
+ 0001:0000467B  Idle set_unexpected(void(*)())
+ 0001:00004590  Idle terminate()
+ 0001:00004671  Idle unexpected()
+ 0001:0000471A  Idle __GetPolymorphicDTC(void*,unsigned int)
+ 0001:00004550       @__InitExceptBlock
+ 0001:00000729  Idle DlgCollPins
+ 0001:00001660  Idle DlgFileName
+ 0001:00000994       DlgGlobalSet
+ 0001:000017DC       DlgModemSet
+ 0001:00000058       DlgPinsList
+ 0001:00003B60       DlgServiceSet
+ 0001:0000174F  Idle InstallQuickPage
+ 0001:00000F50  Idle QPageInstall
+ 0001:00000EB2       _CenterWindow
+ 0001:0000204C       _CreateConfigFile
+ 0001:00004463       _DestroyHelpInstance
+ 0001:000044A4  Idle _DisplayHelpPanel
+ 0002:00000ED4  Idle _hab
+ 0001:00004388  Idle _HelpExtended
+ 0001:00004340  Idle _HelpHelpForHelp
+ 0001:0000441B  Idle _HelpIndex
+ 0001:000041A4       _HelpInit
+ 0001:000043D0  Idle _HelpKeys
+ 0002:00000EE4  Idle _hInstBitmap
+ 0002:00000EDC  Idle _hInstIcon
+ 0002:00000EE0  Idle _hInstModule
+ 0002:00000ED8  Idle _hmq
+ 0002:00002404       _hThisModule
+ 0002:00000ECC  Idle _hwndClient
+ 0002:00000ED0  Idle _hwndFrame
+ 0002:00012DB0       _hwndHelpInstance
+ 0001:00004513  Idle _pfnMessageBoxHelpHook
+ 0002:00000EB0  Idle _szClientClass
+ 0002:00002570  Idle _szConfigFileSpec
+ 0001:00000000  Idle __acrtused
+ 0002:0000002B  Idle __c0_heaps
+ 0002:0000002F  Idle __c0_nheaps
+ 0001:00004538       __chkstk
+ 0002:00000DFC  Idle __DebuggerHookData
+ 0002:00012EC0       __DestructorCountPtr
+ 0001:00000F38       __dllmain
+ 0001:00004756       __ExceptInit
+ 0002:00000DF8  Idle __ExceptVarsSize
+ 0001:00004746       __GetExceptDLLinfo
+ 0001:0000489A  Idle __GetExceptDLLinfoInternal
+ 0001:000048D0       __initstk
+ 0002:00000050  Idle __os2hmod
+ 0001:000045C0  Idle ___call_terminate
+ 0001:000046A1  Idle ___call_unexpected
+ 0002:00000D94  Idle ___CPPexceptionList
+ 0002:00000DA4  Idle ___debuggerHookDataP
+ 0002:00000D9C  Idle ___debuggerHookFN
+ 0002:00000DA0  Idle ___debuggerWatchingP
+ 0002:00000D98  Idle ___exceptFlags
+ 0002:00000DC0  Idle ___exceptMemAllocVars
+ 0002:00000DBC  Idle ___exceptStaticBuffP
+ 0002:00012EC4  Idle ___ExceptStaticXbuff
+ 0002:0000003B       ___isDLL
+ 0002:00000DA8  Idle ___terminatePTR
+ 0002:00000DB8  Idle ___throwExceptionName
+ 0002:00000DB0  Idle ___throwFileName
+ 0002:00000DB4  Idle ___throwLineNumber
+ 0002:00000DAC  Idle ___unexpectdPTR
+
+  Address         Publics by Value
+
+ 0001:00000000  Idle __acrtused
+ 0001:00000058       DlgPinsList
+ 0001:00000729  Idle DlgCollPins
+ 0001:00000994       DlgGlobalSet
+ 0001:00000EB2       _CenterWindow
+ 0001:00000F38       __dllmain
+ 0001:00000F50  Idle QPageInstall
+ 0001:00001660  Idle DlgFileName
+ 0001:0000174F  Idle InstallQuickPage
+ 0001:000017DC       DlgModemSet
+ 0001:0000204C       _CreateConfigFile
+ 0001:00003B60       DlgServiceSet
+ 0001:000041A4       _HelpInit
+ 0001:00004340  Idle _HelpHelpForHelp
+ 0001:00004388  Idle _HelpExtended
+ 0001:000043D0  Idle _HelpKeys
+ 0001:0000441B  Idle _HelpIndex
+ 0001:00004463       _DestroyHelpInstance
+ 0001:000044A4  Idle _DisplayHelpPanel
+ 0001:00004513  Idle _pfnMessageBoxHelpHook
+ 0001:00004538       __chkstk
+ 0001:00004550       @__InitExceptBlock
+ 0001:00004590  Idle terminate()
+ 0001:0000459A  Idle set_terminate(void(*)())
+ 0001:000045C0  Idle ___call_terminate
+ 0001:00004671  Idle unexpected()
+ 0001:0000467B  Idle set_unexpected(void(*)())
+ 0001:000046A1  Idle ___call_unexpected
+ 0001:0000471A  Idle __GetPolymorphicDTC(void*,unsigned int)
+ 0001:00004746       __GetExceptDLLinfo
+ 0001:00004756       __ExceptInit
+ 0001:0000489A  Idle __GetExceptDLLinfoInternal
+ 0001:000048D0       __initstk
+ 0002:0000002B  Idle __c0_heaps
+ 0002:0000002F  Idle __c0_nheaps
+ 0002:0000003B       ___isDLL
+ 0002:00000050  Idle __os2hmod
+ 0002:00000D94  Idle ___CPPexceptionList
+ 0002:00000D98  Idle ___exceptFlags
+ 0002:00000D9C  Idle ___debuggerHookFN
+ 0002:00000DA0  Idle ___debuggerWatchingP
+ 0002:00000DA4  Idle ___debuggerHookDataP
+ 0002:00000DA8  Idle ___terminatePTR
+ 0002:00000DAC  Idle ___unexpectdPTR
+ 0002:00000DB0  Idle ___throwFileName
+ 0002:00000DB4  Idle ___throwLineNumber
+ 0002:00000DB8  Idle ___throwExceptionName
+ 0002:00000DBC  Idle ___exceptStaticBuffP
+ 0002:00000DC0  Idle ___exceptMemAllocVars
+ 0002:00000DF8  Idle __ExceptVarsSize
+ 0002:00000DFC  Idle __DebuggerHookData
+ 0002:00000EB0  Idle _szClientClass
+ 0002:00000ECC  Idle _hwndClient
+ 0002:00000ED0  Idle _hwndFrame
+ 0002:00000ED4  Idle _hab
+ 0002:00000ED8  Idle _hmq
+ 0002:00000EDC  Idle _hInstIcon
+ 0002:00000EE0  Idle _hInstModule
+ 0002:00000EE4  Idle _hInstBitmap
+ 0002:00002404       _hThisModule
+ 0002:00002570  Idle _szConfigFileSpec
+ 0002:00012DB0       _hwndHelpInstance
+ 0002:00012EC0       __DestructorCountPtr
+ 0002:00012EC4  Idle ___ExceptStaticXbuff

@@ -1,0 +1,223 @@
+/*********** DIALOG C Sample Program Dialog Resource File (.DLG) *************/
+/*                                                                            */
+/*  This file contains one or more dialog box templates.                      */
+/*  The file is referenced in the .RC file by the RCINCLUDE statement and     */
+/*  is compiled into the DIALOG.RES file along with the other resources      */
+/*  used by the program module.  DIALOG.H resolving symbolic constants.      */
+/*                                                                            */
+/******************************************************************************/
+
+
+DLGINCLUDE 1 "DIALOG.H"
+
+DLGTEMPLATE DLG_AUTORADIOBUTTON LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG "Auto Radio Button Example", DLG_AUTORADIOBUTTON, 3, 45, 133, 122,
+            WS_VISIBLE | WS_CLIPSIBLINGS | WS_SAVEBITS,
+            FCF_DLGBORDER | FCF_NOBYTEALIGN | FCF_TITLEBAR | FCF_SYSMENU
+    BEGIN
+        CONTROL "Select one of the radio", ID_NULL, 12, 108, 101, 8,
+                WC_STATIC, SS_TEXT | DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "buttons, and the color", ID_NULL, 12, 100, 101, 8, WC_STATIC,
+                SS_TEXT | DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "sample window will be", ID_NULL, 12, 92, 102, 8, WC_STATIC,
+                SS_TEXT | DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "repainted in the color of", ID_NULL, 12, 84, 109, 8, WC_STATIC,
+                SS_TEXT | DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "your choice.", ID_NULL, 12, 76, 54, 8, WC_STATIC, SS_TEXT |
+                DT_CENTER | DT_TOP | WS_VISIBLE
+        WINDOW  "", RECTL_AUTORADIOBUTTON, 73, 37, 32, 30, "Preview",
+                WS_VISIBLE
+        CONTROL "Color Preview", ID_NULL, 58, 25, 63, 8, WC_STATIC,
+                SS_TEXT | DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "~Red", RB_RED, 6, 54, 38, 11, WC_BUTTON,
+                BS_AUTORADIOBUTTON | WS_TABSTOP | WS_GROUP | WS_VISIBLE
+        CONTROL "~Green", RB_GREEN, 6, 44, 41, 10, WC_BUTTON,
+                BS_AUTORADIOBUTTON | WS_VISIBLE
+        CONTROL "~Blue", RB_BLUE, 6, 34, 38, 10, WC_BUTTON,
+                BS_AUTORADIOBUTTON | WS_VISIBLE
+        CONTROL "OK", 1, 6, 4, 36, 12, WC_BUTTON, BS_PUSHBUTTON | BS_DEFAULT |
+                WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Cancel", 2, 45, 4, 36, 12, WC_BUTTON, BS_PUSHBUTTON |
+                WS_VISIBLE
+        CONTROL "Help", HELP_AUTORADIOBUTTON, 86, 4, 35, 12, WC_BUTTON,
+                BS_PUSHBUTTON | BS_HELP | WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE DLG_CHECKBOX LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG "Check Box Example", DLG_CHECKBOX, 3, 38, 138, 115,
+            WS_VISIBLE | WS_CLIPSIBLINGS | WS_SAVEBITS,
+            FCF_DLGBORDER | FCF_NOBYTEALIGN | FCF_TITLEBAR | FCF_SYSMENU
+    BEGIN
+        CONTROL "Select one or more check", ID_NULL, 6, 101, 122, 8,
+                WC_STATIC, SS_TEXT | DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "boxes, and the color sample", ID_NULL, 6, 93, 123, 8,
+                WC_STATIC, SS_TEXT | DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "window will be painted in the", ID_NULL, 6, 85, 128, 8,
+                WC_STATIC, SS_TEXT | DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "color(s) of your choice.", ID_NULL, 6, 77, 103, 8,
+                WC_STATIC, SS_TEXT | DT_LEFT | DT_TOP | WS_VISIBLE
+        WINDOW  "", RECTL_CHECKBOX, 70, 36, 38, 28, "Preview", WS_VISIBLE
+        CONTROL "Color Preview", ID_NULL, 58, 24, 63, 8, WC_STATIC, SS_TEXT |
+                DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "~Red", CB_RED, 6, 55, 42, 10, WC_BUTTON, BS_CHECKBOX |
+                WS_TABSTOP | WS_GROUP | WS_VISIBLE
+        CONTROL "~Green", CB_GREEN, 6, 45, 42, 10, WC_BUTTON, BS_CHECKBOX |
+                | WS_VISIBLE
+        CONTROL "~Blue", CB_BLUE, 6, 35, 42, 10, WC_BUTTON, BS_CHECKBOX |
+                | WS_VISIBLE
+        CONTROL "OK", 1, 6, 4, 38, 12, WC_BUTTON, BS_PUSHBUTTON | BS_DEFAULT |
+                WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Cancel", 2, 50, 4, 38, 12, WC_BUTTON, BS_PUSHBUTTON |
+                WS_VISIBLE
+        CONTROL "Help", HELP_CHECKBOX, 94, 4, 38, 12, WC_BUTTON, BS_PUSHBUTTON |
+                BS_HELP | WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE DLG_ENTRYFIELD LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG "Entry Field Example", DLG_ENTRYFIELD, 7, 40, 146, 112,
+            WS_VISIBLE | WS_CLIPSIBLINGS | WS_SAVEBITS,
+            FCF_DLGBORDER | FCF_NOBYTEALIGN | FCF_TITLEBAR | FCF_SYSMENU
+    BEGIN
+        CONTROL "Enter data into the two entry ", ID_NULL, 6, 100, 124, 8,
+                WC_STATIC, SS_TEXT | DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "fields below and press OK.", ID_NULL, 6, 92, 136, 8,
+                WC_STATIC, SS_TEXT | DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "The program will then verify ", ID_NULL, 6, 78, 118, 8,
+                WC_STATIC, SS_TEXT | DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "that fields contain integer", ID_NULL, 6, 70, 118, 8,
+                WC_STATIC, SS_TEXT | DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "values in the range 1-100.", ID_NULL, 6, 62, 118, 8,
+                WC_STATIC, SS_TEXT | DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "Entry Field 1:", ID_NULL, 20, 40, 70, 10, WC_STATIC,
+                SS_TEXT | DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "Entry Field 2:", ID_NULL, 20, 28, 70, 8, WC_STATIC,
+                SS_TEXT | DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "", EF_1, 92, 42, 32, 8, WC_ENTRYFIELD, ES_LEFT | ES_AUTOSCROLL |
+                ES_MARGIN | WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "", EF_2, 92, 28, 32, 8, WC_ENTRYFIELD, ES_LEFT | ES_AUTOSCROLL |
+                ES_MARGIN | WS_TABSTOP | WS_VISIBLE
+        CONTROL "OK", 1, 6, 4, 38, 12, WC_BUTTON,
+                BS_PUSHBUTTON | BS_DEFAULT | WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Cancel", 2, 54, 4, 38, 12, WC_BUTTON,
+                BS_PUSHBUTTON | WS_VISIBLE
+        CONTROL "Help", HELP_ENTRYFIELD, 102, 4, 38, 12, WC_BUTTON,
+                BS_PUSHBUTTON | BS_HELP | WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE DLG_LISTBOX LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG "List Box Example", DLG_LISTBOX, 5, 36, 146, 105,
+           WS_VISIBLE | WS_CLIPSIBLINGS | WS_SAVEBITS,
+           FCF_DLGBORDER | FCF_NOBYTEALIGN | FCF_TITLEBAR | FCF_SYSMENU
+    BEGIN
+        CONTROL "Select an item and press OK", ID_NULL, 6, 93, 139, 8,
+                WC_STATIC,
+                SS_TEXT | DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "", LISTBOX, 25, 26, 98, 58, WC_LISTBOX,
+                WS_TABSTOP | WS_GROUP | WS_VISIBLE
+        CONTROL "OK", 1, 6, 4, 38, 12, WC_BUTTON,
+                BS_PUSHBUTTON | BS_DEFAULT | WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Cancel", 2, 54, 4, 38, 12, WC_BUTTON, BS_PUSHBUTTON |
+                WS_VISIBLE
+        CONTROL "Help", HELP_LISTBOX, 102, 4, 38, 12, WC_BUTTON, BS_PUSHBUTTON |
+                BS_HELP | WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE DLG_COMBOBOX LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG "Combo Box Example", DLG_COMBOBOX, 5, 36, 146, 105,
+           WS_VISIBLE | WS_CLIPSIBLINGS | WS_SAVEBITS,
+           FCF_DLGBORDER | FCF_NOBYTEALIGN | FCF_TITLEBAR | FCF_SYSMENU
+    BEGIN
+        CONTROL "Set the edit field and press OK", ID_NULL, 6, 93, 139, 8,
+                WC_STATIC,
+                SS_TEXT | DT_LEFT | DT_TOP | WS_VISIBLE
+        CONTROL "", COMBOBOX, 33, 26, 82, 58, WC_COMBOBOX,
+                CBS_SIMPLE | WS_TABSTOP | WS_GROUP | WS_VISIBLE
+        CONTROL "OK", 1, 6, 4, 38, 12, WC_BUTTON,
+                BS_PUSHBUTTON | BS_DEFAULT | WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Cancel", 2, 54, 4, 38, 12, WC_BUTTON, BS_PUSHBUTTON |
+                WS_VISIBLE
+        CONTROL "Help", HELP_COMBOBOX, 102, 4, 38, 12, WC_BUTTON, BS_PUSHBUTTON |
+                BS_HELP | WS_VISIBLE
+    END
+END
+
+
+DLGTEMPLATE DLG_MODELESS LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG "Modeless Dialog Example", DLG_MODELESS, 5, 36, 194, 105,
+           WS_CLIPSIBLINGS | WS_SAVEBITS,
+           FCF_NOBYTEALIGN | FCF_TITLEBAR | FCF_SYSMENU
+    BEGIN
+        CONTROL "Select a new text color and press Apply", ID_NULL, 6, 93, 179, 8,
+                WC_STATIC,
+                WS_VISIBLE | SS_TEXT | DT_LEFT | DT_TOP
+        CONTROL "", LISTBOX, 48, 26, 98, 58, WC_LISTBOX,
+                WS_TABSTOP | WS_GROUP | WS_VISIBLE
+        CONTROL "Apply", 1, 6, 4, 38, 12, WC_BUTTON,
+                BS_PUSHBUTTON | BS_DEFAULT | WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL "Undo", UNDO, 54, 4, 38, 12, WC_BUTTON, BS_PUSHBUTTON |
+                WS_VISIBLE
+        CONTROL "Cancel", 2, 102, 4, 38, 12, WC_BUTTON, BS_PUSHBUTTON |
+                WS_VISIBLE
+        CONTROL "Help", HELP_MODELESS, 150, 4, 38, 12, WC_BUTTON, BS_PUSHBUTTON |
+                BS_HELP | WS_VISIBLE
+    END
+END
+
+DLGTEMPLATE 5000 LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Badger Download", 5000, 15, 5, 243, 180, WS_VISIBLE
+    BEGIN
+        LTEXT           "Download File Path and File Name", -1, 4, 34, 156, 
+                        8
+        ENTRYFIELD      "", 5001, 5, 23, 230, 8, ES_MARGIN
+        DEFPUSHBUTTON   "OK", DID_OK, 6, 4, 31, 14
+        ENTRYFIELD      "", 5002, 84, 133, 14, 8, ES_MARGIN
+        LTEXT           "Direct", -1, 51, 132, 30, 8
+        PUSHBUTTON      "Cancel", DID_CANCEL, 40, 4, 40, 14
+        PUSHBUTTON      "Refresh", 5, 83, 4, 43, 14
+        LTEXT           "Dialup", -1, 139, 132, 32, 8
+        ENTRYFIELD      "", 5003, 176, 133, 14, 8, ES_MARGIN
+        LTEXT           "Master", -1, 148, 93, 35, 8
+        LTEXT           "Modem", -1, 146, 81, 37, 8
+        LTEXT           "TBOS", -1, 153, 69, 29, 8
+        LTEXT           "Terminal", -1, 140, 57, 43, 8
+        CONTROL         "", 5004, 187, 92, 43, 12, WC_SPINBUTTON, 
+                        SPBS_ALLCHARACTERS | SPBS_SERVANT | SPBS_JUSTDEFAULT | 
+                        WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL         "", 5005, 187, 80, 43, 12, WC_SPINBUTTON, 
+                        SPBS_ALLCHARACTERS | SPBS_SERVANT | SPBS_JUSTDEFAULT | 
+                        WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL         "", 5006, 187, 68, 43, 12, WC_SPINBUTTON, 
+                        SPBS_ALLCHARACTERS | SPBS_SERVANT | SPBS_JUSTDEFAULT | 
+                        WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL         "", 5007, 187, 56, 43, 12, WC_SPINBUTTON, 
+                        SPBS_ALLCHARACTERS | SPBS_SERVANT | SPBS_JUSTDEFAULT | 
+                        WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        GROUPBOX        "Baud Rates", -1, 132, 51, 106, 63
+        GROUPBOX        "Station Address Mode", 5010, 3, 84, 122, 40
+        AUTORADIOBUTTON "Fixed Internal", 5008, 9, 105, 74, 10, WS_TABSTOP
+        AUTORADIOBUTTON "Variable External BCD", 5011, 9, 96, 110, 10, 
+                        WS_TABSTOP
+        AUTORADIOBUTTON "Variable External HEX", 5012, 9, 87, 112, 10, 
+                        WS_TABSTOP
+        ENTRYFIELD      "", 5013, 97, 62, 20, 8, ES_MARGIN
+        LTEXT           "Command Sync", -1, 19, 61, 69, 8
+        LTEXT           "Momentary Toggle", -1, 7, 49, 86, 8
+        ENTRYFIELD      "", 5014, 97, 50, 20, 8, ES_MARGIN
+        GROUPBOX        "Timeouts -> 1 = 0.02 sec", 5015, 4, 44, 122, 37
+        CTEXT           "Badger Micro Remote Download Setup", -1, 0, 165, 
+                        243, 8
+        GROUPBOX        "Station Addresses (internal only)", 5016, 37, 128, 
+                        168, 28
+    END
+END

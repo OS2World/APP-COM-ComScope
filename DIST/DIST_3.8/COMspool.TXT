@@ -1,0 +1,43 @@
+OS/tools Incorporated:
+       COMspool Serial Device PMSPOOL interface
+       Version 2.10
+
+       COMi Asynchronous Serial Device Driver (DEMO)
+       Version 3.71 E
+        
+COMspool Description:
+
+        COMspool takes advantage of the COMi device driver to allow more than 
+        the four serial printer connections provided with OS/2.  COMspool works 
+        seamlessly with PMSPOOL to provide the same user interface to
+        serial print spooler installation and configuration.
+
+Features:
+
+        Takes advanatage of all the features of the COMi device driver 
+        including:
+
+        1.  Up to sixteen serial devices on a single hardware interrupt on ISA
+            machines.
+        2.  Device driver buffer sizes are user definable.
+        3.  Serial devices from COM1 through COM99.
+        4.  Support for 16650 and 16750 UARTs.
+        5.  Baud rates of 460.8k BPS and above.
+
+NOTE:
+       The version of COMi supplied with this version of COMspool limits the 
+       number of write requests.  After 1000 write requests the device driver
+       will stop transmitting and begins returning a "bytes written" count of
+       zero.
+
+COMspool requires OS/2 2.0 or later.
+
+Ordering Infromation:
+
+       OS/tools Incorporated
+       1685 Branham Lane, Suite 0S/2
+       San Jose, CA  95118-5226
+       (408)269-9411, FAX:(408)269-9434,,BBS:(408)269-9435
+       Internet: products@os-tools.com, CompuServe ID: 70314,3235
+
+

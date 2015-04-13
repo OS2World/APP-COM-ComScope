@@ -1,0 +1,158 @@
+
+ COMI_CTL
+
+ Start         Length     Name                   Class
+ 0001:00000000 000002E48H CODE32                 CODE 32-bit
+	at offset 00000000 011B9H bytes from P:\COMcontrol\ga\comcontrol.obj (p:\COMcontrol\comcontrol.c)
+	at offset 000011c0 01C88H bytes from P:\COMcontrol\ga\prot_hlp.obj (p:\COMcontrol\prot_hlp.c)
+
+ 0002:00000000 000000108H CONST32_RO             CONST 32-bit
+	at offset 00000000 00108H bytes from P:\COMcontrol\ga\prot_hlp.obj (p:\COMcontrol\prot_hlp.c)
+
+ 0003:00000000 0000000B4H DATA32                 DATA 32-bit
+	at offset 00000000 0004CH bytes from P:\COMcontrol\ga\comcontrol.obj (p:\COMcontrol\comcontrol.c)
+	at offset 0000004c 00064H bytes from P:\COMcontrol\ga\prot_hlp.obj (p:\COMcontrol\prot_hlp.c)
+	at offset 000000b0 00004H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\dllstub.asm)
+
+ 0003:000000B4 000000000H CTOR_DTOR1             DATA 32-bit
+
+ 0003:000000B4 000000000H CTOR_DTOR2             DATA 32-bit
+
+ 0003:000000B4 000000000H CTOR_DTOR3             DATA 32-bit
+
+ 0003:000000B4 000000000H EDC1                   EDC_CLASS 32-bit
+
+ 0003:000000B4 000000000H EDC2                   EDC_CLASS 32-bit
+
+ 0003:000000B4 000000000H EDC3                   EDC_CLASS 32-bit
+
+ 0003:000000B4 000000070H BSS32                  BSS 32-bit
+	at offset 00000000 0006FH bytes from P:\COMcontrol\ga\comcontrol.obj (p:\COMcontrol\comcontrol.c)
+
+ 0003:00000124 000000004H c_common               BSS 32-bit
+
+
+ Origin   Group
+ 0000:0   FLAT
+ 0003:0   DGROUP
+
+ Address       Export                  Alias
+
+ 0001:00000016 HdwBaudRateDialog       HdwBaudRateDialog
+ 0001:000000D3 HdwFIFOsetupDialog      HdwFIFOsetupDialog
+ 0001:000000B0 HdwFilterDialog         HdwFilterDialog
+ 0001:00000086 HdwHandshakeDialog      HdwHandshakeDialog
+ 0001:00000040 HdwProtocolDialog       HdwProtocolDialog
+ 0001:00000063 HdwTimeoutDialog        HdwTimeoutDialog
+
+  Address         Publics by Name
+
+ 0000:00000000  Imp  ASCIItoBin           (OS2LS_UT.28)
+ 0000:00000000  Imp  atol                 (OS2LSRTL.111)
+ 0002:000000A4       aul12xBaudTable
+ 0002:00000048       aul4xBaudTable
+ 0002:00000000       aulStdBaudTable
+ 0000:00000000  Imp  CheckButton          (OS2LS_UT.3)
+ 0000:00000000  Imp  Checked              (OS2LS_UT.22)
+ 0000:00000000  Imp  ControlEnable        (OS2LS_UT.7)
+ 0001:000024D0       FillHandshakeDlg
+ 0001:00001882       FillHdwFIFOsetupDlg
+ 0001:00002D15       FillHdwFilterDlg
+ 0001:00001D26       FillHdwProtocolDlg
+ 0001:00002AF2       FillHdwTimeoutDlg
+ 0000:00000000  Imp  GetBaudRates         (OS2LS_IO.9)
+ 0000:00000000  Imp  GetDCB               (OS2LS_IO.15)
+ 0000:00000000  Imp  GetFIFOinfo          (OS2LS_IO.7)
+ 0000:00000000  Imp  GetLineCharacteristics (OS2LS_IO.3)
+ 0001:00000016       HdwBaudRateDialog
+ 0001:000000D3       HdwFIFOsetupDialog
+ 0001:000000B0       HdwFilterDialog
+ 0001:00000086       HdwHandshakeDialog
+ 0001:00000040       HdwProtocolDialog
+ 0001:00000063       HdwTimeoutDialog
+ 0003:00000124       hThisModule
+ 0000:00000000  Imp  MessageBox           (OS2LS_UT.29)
+ 0000:00000000  Imp  SendDCB              (OS2LS_IO.19)
+ 0000:00000000  Imp  SetBaudRate          (OS2LS_IO.6)
+ 0000:00000000  Imp  SetFIFO              (OS2LS_IO.23)
+ 0000:00000000  Imp  SetLineCharacteristics (OS2LS_IO.5)
+ 0001:00002125       TCHandshakeDlg
+ 0001:000011C0       TCHdwFIFOsetupDlg
+ 0001:00001AC6       TCHdwProtocolDlg
+ 0001:00002830       TCHdwTimeoutDlg
+ 0001:00001E58       UnloadHandshakeDlg
+ 0001:000016D1       UnloadHdwFIFOsetupDlg
+ 0001:00002C42       UnloadHdwFilterDlg
+ 0001:00001BA0       UnloadHdwProtocolDlg
+ 0001:00002A10       UnloadHdwTimeoutDlg
+ 0000:00000000  Imp  WinDefDlgProc        (PMWIN.910)
+ 0000:00000000  Imp  WinDismissDlg        (PMWIN.729)
+ 0000:00000000  Imp  WinDlgBox            (PMWIN.923)
+ 0000:00000000  Imp  WinPostMsg           (PMWIN.919)
+ 0000:00000000  Imp  WinQueryDlgItemText  (PMWIN.815)
+ 0000:00000000  Imp  WinSendDlgItemMsg    (PMWIN.903)
+ 0000:00000000  Imp  WinSendMsg           (PMWIN.920)
+ 0000:00000000  Imp  WinSetDlgItemText    (PMWIN.859)
+ 0000:00000000  Imp  WinSetWindowText     (PMWIN.877)
+ 0000:00000000  Imp  WinShowWindow        (PMWIN.883)
+ 0000:00000000  Imp  WinWindowFromID      (PMWIN.899)
+ 0001:00000000       _DLL_InitTerm
+ 0000:00000000  Imp  _ltoa                (OS2LSRTL.154)
+ 0000:00000000  Imp  _sprintfieee         (OS2LSRTL.32)
+
+  Address         Publics by Value
+
+ 0000:00000000  Imp  atol                 (OS2LSRTL.111)
+ 0000:00000000  Imp  _ltoa                (OS2LSRTL.154)
+ 0000:00000000  Imp  GetDCB               (OS2LS_IO.15)
+ 0000:00000000  Imp  WinWindowFromID      (PMWIN.899)
+ 0000:00000000  Imp  WinQueryDlgItemText  (PMWIN.815)
+ 0000:00000000  Imp  WinSetWindowText     (PMWIN.877)
+ 0000:00000000  Imp  WinSetDlgItemText    (PMWIN.859)
+ 0000:00000000  Imp  Checked              (OS2LS_UT.22)
+ 0000:00000000  Imp  WinSendDlgItemMsg    (PMWIN.903)
+ 0000:00000000  Imp  SendDCB              (OS2LS_IO.19)
+ 0000:00000000  Imp  SetFIFO              (OS2LS_IO.23)
+ 0000:00000000  Imp  WinDlgBox            (PMWIN.923)
+ 0000:00000000  Imp  WinSendMsg           (PMWIN.920)
+ 0000:00000000  Imp  ASCIItoBin           (OS2LS_UT.28)
+ 0000:00000000  Imp  MessageBox           (OS2LS_UT.29)
+ 0000:00000000  Imp  WinPostMsg           (PMWIN.919)
+ 0000:00000000  Imp  WinShowWindow        (PMWIN.883)
+ 0000:00000000  Imp  GetLineCharacteristics (OS2LS_IO.3)
+ 0000:00000000  Imp  WinDefDlgProc        (PMWIN.910)
+ 0000:00000000  Imp  ControlEnable        (OS2LS_UT.7)
+ 0000:00000000  Imp  _sprintfieee         (OS2LSRTL.32)
+ 0000:00000000  Imp  SetLineCharacteristics (OS2LS_IO.5)
+ 0000:00000000  Imp  GetBaudRates         (OS2LS_IO.9)
+ 0000:00000000  Imp  GetFIFOinfo          (OS2LS_IO.7)
+ 0000:00000000  Imp  CheckButton          (OS2LS_UT.3)
+ 0000:00000000  Imp  SetBaudRate          (OS2LS_IO.6)
+ 0000:00000000  Imp  WinDismissDlg        (PMWIN.729)
+ 0001:00000000       _DLL_InitTerm
+ 0001:00000016       HdwBaudRateDialog
+ 0001:00000040       HdwProtocolDialog
+ 0001:00000063       HdwTimeoutDialog
+ 0001:00000086       HdwHandshakeDialog
+ 0001:000000B0       HdwFilterDialog
+ 0001:000000D3       HdwFIFOsetupDialog
+ 0001:000011C0       TCHdwFIFOsetupDlg
+ 0001:000016D1       UnloadHdwFIFOsetupDlg
+ 0001:00001882       FillHdwFIFOsetupDlg
+ 0001:00001AC6       TCHdwProtocolDlg
+ 0001:00001BA0       UnloadHdwProtocolDlg
+ 0001:00001D26       FillHdwProtocolDlg
+ 0001:00001E58       UnloadHandshakeDlg
+ 0001:00002125       TCHandshakeDlg
+ 0001:000024D0       FillHandshakeDlg
+ 0001:00002830       TCHdwTimeoutDlg
+ 0001:00002A10       UnloadHdwTimeoutDlg
+ 0001:00002AF2       FillHdwTimeoutDlg
+ 0001:00002C42       UnloadHdwFilterDlg
+ 0001:00002D15       FillHdwFilterDlg
+ 0002:00000000       aulStdBaudTable
+ 0002:00000048       aul4xBaudTable
+ 0002:000000A4       aul12xBaudTable
+ 0003:00000124       hThisModule
+
+Program entry point at 0001:00000000

@@ -1,0 +1,6 @@
+LIBRARY  PDB_DEB
+
+DESCRIPTION 'Pager installation DLL'
+
+EXPORTS
+  InstallPager

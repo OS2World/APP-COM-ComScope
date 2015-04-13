@@ -1,0 +1,48 @@
+
+Operating System/2 Executable File Header Utility
+Version 2.10.000 Nov 18 1994
+Copyright (C) IBM Corporation 1988-1993.
+Copyright (C) Microsoft Corp. 1988-1992.
+All rights reserved.
+
+Library:                        COMI_CFG
+Module type:                    Dynamic link library
+                                Global initialization
+                                Global termination
+Number of memory pages:         0000001b (27)
+Initial CS:EIP:                 object 1 offset 00000000
+Initial SS:ESP:                 object 0 offset 00000000
+Automatic data object:          2
+
+ no. virtual  virtual  map      map      flags
+     address   size    index    size
+0001 00010000 0000a488 00000001 0000000b EXECUTABLE, READABLE, 32-bit
+0002 00020000 000013b8 0000000c 00000002 READABLE, WRITEABLE, SHARED, 32-bit
+0003 00000000 00000124 0000000e 00000001 READABLE, SHARED, PRELOAD, RESOURCE,
+                                         DISCARDABLE, 32-bit
+0004 00000000 0000c8fc 0000000f 0000000d READABLE, SHARED, RESOURCE,
+                                         DISCARDABLE, 32-bit
+
+
+Exports:
+ord obj  offset    name
+  1   1  000035d6  GetDriverVersion exported
+  2   1  00001976  InstallDevice exported
+  3   1  00002278  FillDeviceNameList exported
+  4   1  0000a022  HdwFilterDialog exported
+  5   1  0000a048  HdwFIFOsetupDialog exported
+  6   1  0000a06e  HdwHandshakeDialog exported
+  7   1  0000a094  HdwTimeoutDialog exported
+  8   1  0000a0e0  HdwBaudRateDialog exported
+  9   1  0000a0ba  HdwProtocolDialog exported
+ 10   1  000079a8  PortSelectDialog exported
+ 11   1  00000058  SPLPDENUMPORT exported
+ 12   1  000001c8  SPLPDINITPORT exported
+ 13   1  0000026f  SPLPDINSTALLPORT exported
+ 14   1  000003db  SPLPDGETPORTICON exported
+ 15   1  000003f4  SPLPDQUERYPORT exported
+ 16   1  000004ce  SPLPDSETPORT exported
+ 17   1  00000561  SPLPDREMOVEPORT exported
+ 18   1  0000063d  SPLPDTERMPORT exported
+ 19   2  00000b00  __DebuggerHookData exported
+ 20   1  0000a2fe  __GetExceptDLLinfo exported

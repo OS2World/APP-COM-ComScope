@@ -1,0 +1,97 @@
+:TARGET.SUFFIXES
+:TARGET.SUFFIXES
+:DEPENDENCY..C .LIB .dll .obj .sym 
+:TARGET.all
+:DEPENDENCY.
+.\OS2LS_ut.sym
+p:\lib\OS2LS_ut.LIB
+:RULE..C.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Fo$*.obj /Sp1 /Sd /Ss /Q /Wall /Fi /Si /O /W2 /Gm /Gd /Ge- /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+:RULE.{P:\utility}.C.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Fo$*.obj /Sp1 /Sd /Ss /Q /Wall /Fi /Si /O /W2 /Gm /Gd /Ge- /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+:RULE.{P:\utility\PP}.C.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Fo$*.obj /Sp1 /Sd /Ss /Q /Wall /Fi /Si /O /W2 /Gm /Gd /Ge- /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+:RULE..dll.sym
+:ACTION.MapSym::Map Symbols
+:COMMAND.
+mapsym.exe %s
+:RULE.{P:\utility}.dll.sym
+:ACTION.MapSym::Map Symbols
+:COMMAND.
+mapsym.exe %s
+:RULE.{P:\utility\PP}.dll.sym
+:ACTION.MapSym::Map Symbols
+:COMMAND.
+mapsym.exe %s
+:RULE..dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe %|dpfF.LIB %s
+:RULE.{P:\utility}.dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe %|dpfF.LIB %s
+:RULE.{P:\utility\PP}.dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe %|dpfF.LIB %s
+:TARGET.p:\lib\OS2LS_ut.dll
+:DEPENDENCY.
+.\OS2LSRTL.obj
+.\utility.obj
+.\cfg_sys.obj
+.\list.obj
+{$(LIB)}OS2LSRTL.lib
+{$(LIB)}CPPOM30O.lib
+{$(LIB)}OS2386.lib
+p:\Utility\os2ls_ut.def
+OS2LS_ut.mak
+:ACTION.Link::Linker
+:COMMAND.
+icc.exe @<<
+ /Q /B" /exepack:2 /nobase /packd /optfunc      /ig /noe /m /nod"
+ /Fe"p:\lib\OS2LS_ut.dll" 
+ OS2LSRTL.lib 
+ CPPOM30O.lib 
+ OS2386.lib 
+ p:\Utility\os2ls_ut.def
+ .\OS2LSRTL.obj
+ .\utility.obj
+ .\cfg_sys.obj
+ .\list.obj
+<<
+:TARGET..\OS2LSRTL.obj
+:DEPENDENCY.
+P:\utility\OS2LSRTL.C
+OS2LS_ut.mak
+:TARGET..\list.obj
+:DEPENDENCY.
+P:\utility\list.c
+{P:\utility;$(INCLUDE);}COMMON.H
+{P:\utility;$(INCLUDE);}linklist.h
+OS2LS_ut.mak
+:TARGET..\cfg_sys.obj
+:DEPENDENCY.
+P:\utility\cfg_sys.c
+{P:\utility;$(INCLUDE);}utility.h
+OS2LS_ut.mak
+:TARGET..\utility.obj
+:DEPENDENCY.
+P:\utility\utility.c
+{P:\utility;$(INCLUDE);}COMMON.H
+{P:\utility;$(INCLUDE);}utility.h
+OS2LS_ut.mak
+:TARGET..\OS2LS_ut.sym
+:DEPENDENCY.
+p:\lib\OS2LS_ut.dll
+OS2LS_ut.mak
+:TARGET.p:\lib\OS2LS_ut.LIB
+:DEPENDENCY.
+p:\lib\OS2LS_ut.dll
+OS2LS_ut.mak

@@ -1,0 +1,58 @@
+Creating Profile W:\dist\beta\_COMscope\OS_tools.ini
+from W:\dist\beta\_COMSCOPE\MAKE.PRF
+sz - COMi, Driver, COMDD.SYS
+ # - COMi, OEM_type, 0
+ # - COMi, Files, 1
+sz - COMi, File_1, COMi.INF
+sz - COMi, Version, COMi version 4.0
+ # - COMi, ProgramSize, 106884
+ # - Libraries, Files, 1
+sz - Libraries, File_1, CONFIG.HLP
+ # - Libraries, Base Files, 4
+sz - Libraries, Base_file_1, OS2LS_IO.DLL
+sz - Libraries, Base_file_2, OS2LS_UT.DLL
+sz - Libraries, Base_file_3, COMi_CFG.DLL
+sz - Libraries, Base_file_4, OS2LSRTL.DLL
+ # - Libraries, ProgramSize, 460788
+sz - COMscope, Version, COMscope version 4.0
+ # - COMscope, Files, 6
+sz - COMscope, File_1, COMscope.EXE
+sz - COMscope, File_2, COMscope.HLP
+sz - COMscope, File_3, COMscope.ICO
+sz - COMscope, File_4, HEXFONTS.FON
+sz - COMscope, File_5, OS2LS_PR.DLL
+sz - COMscope, File_6, COMi_CTL.DLL
+ # - COMscope, ProgramSize, 331159
+sz - Install, Apps Path, C:\COMM
+sz - Install, Libs Path, C:\COMM
+sz - Install, DD Config Help, CONFIG.HLP
+sz - Install, DD Config Library, COMi_CFG
+sz - Install, DD Config Function, InstallDevice
+sz - Install, DD Name, COMi
+sz - Install, Transfer Library, PDA_INST
+sz - Install, Transfer Function, InstallCOMi
+sz - Install, Version, OS/tools' Install version 2.30
+sz - Install, Check Caption One, COMi Device Driver
+sz - Install, Check Caption Two, COMscope
+sz - Install, Check Caption Three, Print Spooler Utilities
+sz - Install, Check Caption Four, Multi-session and other Utilities
+sz - Install, Check Caption Five, Install
+sz - Install, Title, COMscope and COMi Installation
+sz - Install, Banner One, for
+sz - Install, Banner Two, COMscope and the COMi Device Driver
+sz - Install, License File, license.txt
+sz - Install, License Caption, License Information:
+ # - Install, Files, 4
+sz - Install, File_1, INSTALL.EXE
+sz - Install, File_2, INSTALL.HLP
+sz - Install, File_3, INSTALL.ICO
+sz - Install, File_4, PDA_INST.DLL
+ # - Install, ProgramSize, 69992
+ # - Utilities, Files, 6
+sz - Utilities, File_1, SPLIT.EXE
+sz - Utilities, File_2, SPLIT.C
+sz - Utilities, File_3, IOCTL.C
+sz - Utilities, File_4, IOCTL.H
+sz - Utilities, File_5, CONTROL.EXE
+sz - Utilities, File_6, INIDUMP.EXE
+ # - Utilities, ProgramSize, 100389

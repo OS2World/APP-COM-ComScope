@@ -1,0 +1,61 @@
+:TARGET.SUFFIXES
+:TARGET.SUFFIXES
+:DEPENDENCY..LIB .c .dll .obj 
+:TARGET.all
+:DEPENDENCY.
+f:\work\lib\PDB_DEB.LIB
+f:\work\lib\PDB_INST.LIB
+:RULE..c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /DDEBUG=1 /Sp1 /Ss /Q /Wall /Fi /Si /Ti /W2 /Gm /Gd /Ge- /G4 /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+:RULE.{p:\Install\PDB}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /DDEBUG=1 /Sp1 /Ss /Q /Wall /Fi /Si /Ti /W2 /Gm /Gd /Ge- /G4 /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+:RULE.{p:\Install\PDB\debug}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /DDEBUG=1 /Sp1 /Ss /Q /Wall /Fi /Si /Ti /W2 /Gm /Gd /Ge- /G4 /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+:RULE..dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe /NOLOGO f:\work\lib\%|fF.LIB %s
+:RULE.{p:\Install\PDB}.dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe /NOLOGO f:\work\lib\%|fF.LIB %s
+:RULE.{p:\Install\PDB\debug}.dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe /NOLOGO f:\work\lib\%|fF.LIB %s
+:TARGET.f:\work\lib\PDB_DEB.dll
+:DEPENDENCY.
+.\page.obj
+{$(LIB)}OS2LSRTL.lib
+{$(LIB)}OS2386.lib
+{$(LIB)}CPPOM30O.lib
+{$(LIB)}UTIL_DEB.lib
+.\\..\PDB_DEB.def
+:ACTION.Link::Linker
+:COMMAND.
+icc.exe @<<
+ /Q /B" /de /nobase /nop      /noe /m /nod"
+ /Fe"f:\work\lib\PDB_DEB.dll" 
+ OS2LSRTL.lib 
+ OS2386.lib 
+ CPPOM30O.lib 
+ UTIL_DEB.lib 
+ .\\..\PDB_DEB.def
+ .\page.obj
+<<
+:TARGET..\page.obj
+:DEPENDENCY.
+p:\Install\PDB\page.c
+{p:\Install\PDB;$(INCLUDE);}install.h
+:TARGET.f:\work\lib\PDB_DEB.LIB
+:DEPENDENCY.
+f:\work\lib\PDB_DEB.dll
+:TARGET.f:\work\lib\PDB_INST.LIB
+:DEPENDENCY.
+p:\Install\PDB\PDB_INST.DLL

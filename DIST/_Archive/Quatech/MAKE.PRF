@@ -1,0 +1,24 @@
+This is a profile make file for the Quatech version of COMi
+[COMi]
+Driver=QCOMDD.SYS;
+Mod=Q;
+OEM_type=4;
+Files=4
+File_1=CONFIG.EXE;
+File_2=CONFIG.HLP;
+File_3=CONFIG.ICO;
+File_4=COMi.INF;
+Config=CONFIG.EXE;
+ProgramSize=201296
+Banner Two=for Quatech Serial Adapters;
+Banner One=Installing COMi, Serial Device Driver;
+Major=3
+Minor=20
+Date=941120
+[Install]
+APP_files=3
+APP_file_1=INSTALL.EXE;
+APP_file_2=INSTALL.HLP;
+APP_file_2=INSTALL.ICO;
+ProgramSize=67706
+

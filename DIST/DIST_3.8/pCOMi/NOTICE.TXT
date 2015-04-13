@@ -1,0 +1,10 @@
+The Personal version of the COMi device driver limits the number of additional serial devices supported to four and will not support baud rates above 115.2K BPS.  In addition, this version of COMi will not support COMscope, COMspool, SafePage, or QuickPage.  All other features of the Generally Available (GA) version of COMi are included in this version, including support for several serial adapters that support shared interrupts on ISA machines.
+
+For more information on the capabilities of COMi, see the "COMi Users Guide" in the "OS/tools Utilities" folder that was created by the installation program.  You did elect to create the programs objects, didn't you?
+
+Upon receipt of an optional $10.00 registration fee you will be entitled to support, and free updates of Personal COMi.  Once you have registered we will give you access privileges on our support BBS that will allow you to download various other programs and utilities, including their source code, to aid you in communications applications development and testing.
+
+Our support BBS number is (408)847-7484.  The BBS is available 24 hours a day, seven days a week.  BBS protocol is eight data bits, no parity, one stop bit and DCE baud rates up to 28.8k BPS.
+
+You can also contact us via the Internet.  Our e-mail address is products @os-tools.com, or you can send us mail for our web page:  http://www.os-tools.com.
+

@@ -1,0 +1,94 @@
+COMi Installation and Configuration
+
+  NOTE on ISA adapters:
+    You must enable the interrupt ID (status) register and disable the
+    interrupt mask register functions on your Hostess serial adapter.
+    See the documentation that came with your serial adapter on how to
+    set it up for shared interrupts.
+
+To install the Comtrol Hostess specific version of the COMi asynchronous
+serial device driver, do one of the following:
+
+Method One:
+
+1. Open an OS/2 command prompt session.
+
+2. Make the disk drive containing the distribution diskette the default drive.
+
+    Example:  [C:\]A: [ENTER)
+
+              (assuming the distribution diskette is in drive A:)
+
+3. Start INSTALL.EXE by typing INSTALL [ENTER]
+
+4. Once INSTALL is loaded, use the "Install Options" menu item to setup the
+   installation for your system requirements.
+
+    Select "Files" | "Install Options..."
+
+5. Transfer the files.
+
+    Select "Files" | "Transfer Files"
+
+6. Use the "Config COMi" menu to configure the COMi device driver.  Once in
+   the configuration program there will be on-line help to help with the
+   configuration process.
+
+Method Two:
+
+1. Open the OS/2 System folder
+
+2. Open the Drives folder
+
+3. Double click on the drive you inserted the distribution
+   diskette.
+
+4. Double click on the INSTALL.EXE icon.
+
+5. Follow the instructions from item four, above.
+
+You may use CONFIG.EXE at any time to change the configuration of the COMi
+device driver and any device controlled by COMi, though any changes you make
+will require a re-boot to take effect.
+
+Multiple copies of the device driver can be loaded, providing support for more
+than eight serial devices.
+
+Your distribution diskette may have a demonstration version of COMscope
+included.  If you wish to install these programs start INSTALL with the
+command line switch "/DEMO".
+
+  Example: [A:\]INSTALL /DEMO  (This switch is case sensitive.)
+
+Your distribution diskette may also contain three addintional files.
+SPLIT.EXE, SPLIT.C, and IOCTL.C.  SPLIT is a base OS/2 program that strips
+the COMscope tracking fields from COMscope captured data and splits the data
+into it's read and write components. Both the executable and "C" source
+code for SPLIT is supplied.  IOCTL.C contains "C" source code for each of the
+DosDevIOCtl functions defined for Category One Asynchronous Serial Devices as
+defined in the "Physical Device Driver Technical Reference".
+
+COMi, COMscope, CONFIG, and INSTALL are the property of OS/tools Incorporated
+and are copyrighted (c) 1989-94 by OS/tools Incorporated with all rights
+reserved.
+
+These programs are licensed to you on a per CPU basis.  One license is
+required for each CPU on which they are installed.
+
+We know nothing and are responsible for nothing, except for any increased
+productivity and/or pleasure brought about by the use of these programs.  This
+is the only disclaimer you have to read.
+
+For additional information about the COMi device driver and other OS/tools
+products please contact:
+
+OS/tools Incorporated
+1685 Branham Lane Suite 258
+San Jose, CA 95118-5226
+Phone (408)269-9411 FAX (408)269-9434
+
+OS/tools, COMscope, and COMi are trademarks of OS/tools Incorporated.
+
+OS/2 is a trademark of International Business Machines, Incorporated.
+
+

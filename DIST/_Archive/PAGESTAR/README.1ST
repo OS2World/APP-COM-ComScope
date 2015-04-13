@@ -1,0 +1,81 @@
+Quick Page Installation and Configuration
+
+To install Quick Page and the COMi asynchronous serial device driver, do
+one of the following:
+
+Method One:
+
+ 1. Open the OS/2 System folder
+
+ 2. Open the Drives folder
+
+ 3. Double click on the drive that contains the distribution diskette.
+
+ 4. Double click on the INSTALL.EXE icon.
+
+ 5. Once INSTALL is loaded, use the "Install Options" menu item to setup the
+    installation for your system requirements.
+
+    Select "Install | Install Options..."
+
+ 6. Transfer the files.
+
+    Select "Install | Transfer Files"
+
+ 7. Select the "Config COMi" menu item to configure the COMi device driver.
+
+ 8. Select the "Config Quick Page" menu item to configure Quick Page.
+
+ 9. Shutdown and re-boot your machine.
+
+Method Two:
+
+ 1. Open an OS/2 command prompt session.
+
+ 2. Make the disk drive containing the distribution diskette the default drive.
+
+    Example:  [C:\]A: [ENTER)
+
+              (assuming the distribution diskette is in drive A:)
+
+ 3. Start INSTALL.EXE by typing INSTALL [ENTER]
+
+ 4. Follow the instructions from item five, above.
+
+This version of the COMi device driver is limited to use with Quick Page only,
+and will allow connection to any standard serial device.  Only serial devices
+that are at one of the standard addresses and interrupt levels are supported.
+If you need to support for non-standard hardware, other versions of COMi are
+available that support shared interrupts on ISA machines and support COM1
+through COM99.
+
+Once installed, you may use INSTALL at any time to change the configuration
+of the COMi device driver and/or Quick Page.  Any changes you make to the COMi
+device driver will require a re-boot to take effect.
+
+Quick Page, COMi, and INSTALL are the property of OS/tools Incorporated and
+are copyrighted (c) 1989-95 by OS/tools Incorporated with all rights reserved.
+
+These programs are licensed to you on a per CPU basis.  One license is
+required for each CPU on which they are installed.
+
+We know nothing and are responsible for nothing, except for any increased
+productivity and/or pleasure brought about by the use of these programs.  This
+is the only disclaimer you have to read.
+
+For additional information about Quick Page, StarPage, SafePage, or other
+OS/tools products please contact:
+
+OS/tools Incorporated
+1685 Branham Lane Suite OS/2
+San Jose, CA 95118-5226
+(408)269-9411 FAX (408)269-9434
+ OR
+Send mail to Compuserve ID 70314,3235 or on the Internet to emmett@OS_tools.com
+
+OS/tools, QuickPage, StarPage, SafePage, and COMi are trademarks of OS/tools
+Incorporated.
+
+OS/2 is a trademark of International Business Machines, Incorporated.
+
+

@@ -1,0 +1,446 @@
+
+ COMI_CFG
+
+ Start         Length     Name                   Class
+ 0001:00000000 000010E90H CODE32                 CODE 32-bit
+	at offset 00000000 01870H bytes from P:\config\ga\dev_notebk.obj (p:\config\dev_notebk.c)
+	at offset 00001870 008FBH bytes from P:\config\ga\fifo_dlg.obj (p:\config\fifo_dlg.c)
+	at offset 00002170 01F3AH bytes from P:\config\ga\cfg_dev_dlg.obj (p:\config\cfg_dev_dlg.c)
+	at offset 000040b0 0503DH bytes from P:\config\ga\cfg_dlg.obj (p:\config\cfg_dlg.c)
+	at offset 000090f0 0030AH bytes from P:\config\ga\cfg_hlp.obj (p:\config\cfg_hlp.c)
+	at offset 00009400 01734H bytes from P:\config\ga\cfg_prot_dlg.obj (p:\config\cfg_prot_dlg.c)
+	at offset 0000ab40 01C49H bytes from P:\config\ga\cfg_prot_hlp.obj (p:\config\cfg_prot_hlp.c)
+	at offset 0000c790 0347EH bytes from P:\config\ga\comddini.obj (p:\config\comddini.c)
+	at offset 0000fc10 01280H bytes from P:\config\ga\ddbufdlg.obj (p:\config\ddbufdlg.c)
+
+ 0002:00000000 0000000E8H CONST32_RO             CONST 32-bit
+	at offset 00000000 0001AH bytes from P:\config\ga\dev_notebk.obj (p:\config\dev_notebk.c)
+	at offset 0000001c 0004EH bytes from P:\config\ga\cfg_dev_dlg.obj (p:\config\cfg_dev_dlg.c)
+	at offset 0000006c 00020H bytes from P:\config\ga\cfg_prot_dlg.obj (p:\config\cfg_prot_dlg.c)
+	at offset 0000008c 0005CH bytes from P:\config\ga\cfg_prot_hlp.obj (p:\config\cfg_prot_hlp.c)
+
+ 0003:00000000 000001DB4H DATA32                 DATA 32-bit
+	at offset 00000000 00310H bytes from P:\config\ga\dev_notebk.obj (p:\config\dev_notebk.c)
+	at offset 00000310 00034H bytes from P:\config\ga\fifo_dlg.obj (p:\config\fifo_dlg.c)
+	at offset 00000344 005BCH bytes from P:\config\ga\cfg_dev_dlg.obj (p:\config\cfg_dev_dlg.c)
+	at offset 00000900 008F0H bytes from P:\config\ga\cfg_dlg.obj (p:\config\cfg_dlg.c)
+	at offset 000011f0 00100H bytes from P:\config\ga\cfg_hlp.obj (p:\config\cfg_hlp.c)
+	at offset 000012f0 0010CH bytes from P:\config\ga\cfg_prot_dlg.obj (p:\config\cfg_prot_dlg.c)
+	at offset 000013fc 00024H bytes from P:\config\ga\cfg_prot_hlp.obj (p:\config\cfg_prot_hlp.c)
+	at offset 00001420 00894H bytes from P:\config\ga\comddini.obj (p:\config\comddini.c)
+	at offset 00001cb4 000FCH bytes from P:\config\ga\ddbufdlg.obj (p:\config\ddbufdlg.c)
+	at offset 00001db0 00004H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\dllstub.asm)
+
+ 0003:00001DB4 000000000H CTOR_DTOR1             DATA 32-bit
+
+ 0003:00001DB4 000000000H CTOR_DTOR2             DATA 32-bit
+
+ 0003:00001DB4 000000000H CTOR_DTOR3             DATA 32-bit
+
+ 0003:00001DB4 000000000H EDC1                   EDC_CLASS 32-bit
+
+ 0003:00001DB4 000000000H EDC2                   EDC_CLASS 32-bit
+
+ 0003:00001DB4 000000000H EDC3                   EDC_CLASS 32-bit
+
+ 0003:00001DB4 0000003FCH BSS32                  BSS 32-bit
+	at offset 00000000 00059H bytes from P:\config\ga\dev_notebk.obj (p:\config\dev_notebk.c)
+	at offset 0000005c 00010H bytes from P:\config\ga\fifo_dlg.obj (p:\config\fifo_dlg.c)
+	at offset 0000006c 00070H bytes from P:\config\ga\cfg_dev_dlg.obj (p:\config\cfg_dev_dlg.c)
+	at offset 000000dc 0022EH bytes from P:\config\ga\cfg_dlg.obj (p:\config\cfg_dlg.c)
+	at offset 0000030c 0000CH bytes from P:\config\ga\cfg_hlp.obj (p:\config\cfg_hlp.c)
+	at offset 00000318 00090H bytes from P:\config\ga\cfg_prot_dlg.obj (p:\config\cfg_prot_dlg.c)
+	at offset 000003a8 00028H bytes from P:\config\ga\comddini.obj (p:\config\comddini.c)
+	at offset 000003d0 0002CH bytes from P:\config\ga\ddbufdlg.obj (p:\config\ddbufdlg.c)
+
+ 0003:000021B0 000000B45H c_common               BSS 32-bit
+
+
+ Origin   Group
+ 0000:0   FLAT
+ 0003:0   DGROUP
+
+ Address       Export                  Alias
+
+ 0001:0000DE00 FillDeviceNameList      FillDeviceNameList
+ 0001:0000C790 GetDriverVersion        GetDriverVersion
+ 0001:0000D473 GetPortConfig           GetPortConfig
+ 0001:0000EBF0 InstallDevice           InstallDevice
+ 0001:00004115 PortSelectDialog        PortSelectDialog
+ 0001:00000000 SpoolerSetupDialog      SpoolerSetupDialog
+
+  Address         Publics by Name
+
+ 0001:0000E840       AddIniConfigHeader
+ 0000:00000000  Imp  AddListItem          (OS2LS_UT.2)
+ 0000:00000000  Imp  AdjustConfigSys      (OS2LS_UT.16)
+ 0000:00000000  Imp  AppendINI            (OS2LS_UT.24)
+ 0000:00000000  Imp  AppendTMP            (OS2LS_UT.26)
+ 0000:00000000  Imp  AppendTripleDS       (OS2LS_UT.14)
+ 0000:00000000  Imp  ASCIItoBin           (OS2LS_UT.28)
+ 0003:00001728       astConfigDeviceList
+ 0003:00002900       astPages
+ 0003:00002364       astPCIadapters
+ 0000:00000000  Imp  atoi                 (OS2LSRTL.109)
+ 0000:00000000  Imp  atol                 (OS2LSRTL.111)
+ 0002:0000008C       aulCfgExtBaudTable
+ 0003:00001E90       bInsertNewDevice
+ 0003:00002168       bLimitLoad
+ 0003:00001E98       bNonExAccessWarning
+ 0003:00002174       bPCImachine
+ 0003:00001E94       bShareAccessWarning
+ 0003:0000217C       bSpoolSetupInUse
+ 0003:00001CB0       bWarp4
+ 0003:00002214       byDDOEMtype
+ 0003:000011D6       byLastIntLevel
+ 0000:00000000  Imp  CenterDlgBox         (OS2LS_UT.4)
+ 0000:00000000  Imp  CheckButton          (OS2LS_UT.3)
+ 0000:00000000  Imp  Checked              (OS2LS_UT.22)
+ 0000:00000000  Imp  CleanConfigSys       (OS2LS_UT.10)
+ 0001:0000D7B3       ClearAllIntDCBheader
+ 0000:00000000  Imp  ControlEnable        (OS2LS_UT.7)
+ 0001:000090F0       DestroyHelpInstance
+ 0000:00000000  Imp  DestroyList          (OS2LS_UT.8)
+ 0001:00009390       DisplayHelpPanel
+ 0000:00000000  Imp  DosAllocMem          (DOSCALLS.299)
+ 0000:00000000  Imp  DosClose             (DOSCALLS.257)
+ 0000:00000000  Imp  DosCopy              (DOSCALLS.258)
+ 0000:00000000  Imp  DosDelete            (DOSCALLS.259)
+ 0000:00000000  Imp  DosDevIOCtl          (DOSCALLS.284)
+ 0000:00000000  Imp  DosFreeMem           (DOSCALLS.304)
+ 0000:00000000  Imp  DosFreeModule        (DOSCALLS.322)
+ 0000:00000000  Imp  DosLoadModule        (DOSCALLS.318)
+ 0000:00000000  Imp  DosOpen              (DOSCALLS.273)
+ 0000:00000000  Imp  DosQueryFileInfo     (DOSCALLS.279)
+ 0000:00000000  Imp  DosQueryProcAddr     (DOSCALLS.321)
+ 0000:00000000  Imp  DosQuerySysInfo      (DOSCALLS.348)
+ 0000:00000000  Imp  DosRead              (DOSCALLS.281)
+ 0000:00000000  Imp  DosSetFilePtr        (DOSCALLS.256)
+ 0000:00000000  Imp  DosSetFileSize       (DOSCALLS.272)
+ 0000:00000000  Imp  DosWrite             (DOSCALLS.282)
+ 0001:0000ADB0       FillASCIIhandshakingDlg
+ 0001:0000C640       FillCfgFilterDlg
+ 0001:0000BD11       FillCfgProtocolDlg
+ 0001:0000C251       FillCfgTimeoutDlg
+ 0001:0000C9D8       FillDeviceDialogNameListBox
+ 0001:0000E301       FillDeviceLists
+ 0001:0000DE00       FillDeviceNameList
+ 0001:0000B1C5       FillHDWhandshakDlg
+ 0000:00000000  Imp  FindListByteItem     (OS2LS_UT.19)
+ 0000:00000000  Imp  FindListWordItem     (OS2LS_UT.18)
+ 0003:00002230       fIsMCAmachine
+ 0001:00009906       fnwpCfgASCIIhandshakeDlg
+ 0001:00009E94       fnwpCfgBaudRateDlg
+ 0001:0000A8C2       fnwpCfgFilterDlg
+ 0001:00009BD0       fnwpCfgHDWhandshakeDlg
+ 0001:0000A310       fnwpCfgProtocolDlg
+ 0001:0000A5C4       fnwpCfgTimeoutDlg
+ 0001:0000FEA7       fnwpCOMscopeBuffDlgProc
+ 0001:00009400       fnwpDefThresholdDlg
+ 0001:00000416       fnwpDeviceSetupDlgProc
+ 0001:00001E71       fnwpHdwDefFIFOsetupDlg
+ 0001:00002C40       fnwpPortConfigDeviceDlgProc
+ 0001:00006C57       fnwpPortConfigDlgProc
+ 0001:00002170       fnwpPortExtensionsDlgProc
+ 0001:00004140       fnwpPortSimpleDlgProc
+ 0001:00010A77       fnwpReceiveBuffDlgProc
+ 0001:00010497       fnwpTransmitBuffDlgProc
+ 0000:00000000  Imp  free                 (OS2LSRTL.88)
+ 0001:0000C790       GetDriverVersion
+ 0000:00000000  Imp  GetFileName          (OS2LS_UT.1)
+ 0001:0000C8C6       GetNextAvailableAddress
+ 0001:0000C7D5       GetNextAvailableInterrupt
+ 0000:00000000  Imp  GetNextListItem      (OS2LS_UT.20)
+ 0001:0000D473       GetPortConfig
+ 0000:00000000  Imp  GpiLoadBitmap        (PMGPI.399)
+ 0001:00009150       HelpInit
+ 0003:0000221C       hThisModule
+ 0003:000023C4       hwndDeviceList
+ 0003:000027E8       hwndNoteBookDlg
+ 0001:0000E6E5       InitializeCFGheader
+ 0001:0000E651       InitializeDCBheader
+ 0000:00000000  Imp  InitializeList       (OS2LS_UT.12)
+ 0001:0000EBF0       InstallDevice
+ 0003:000028F8       lOrgXoffThreshold
+ 0003:000028FC       lOrgXonHysteresis
+ 0003:00002C5C       lXbutton
+ 0003:00002360       lXoffThreshold
+ 0003:000024D8       lXonHysteresis
+ 0003:000024DC       lXScr
+ 0003:00002C60       lYbutton
+ 0003:000024E0       lYScr
+ 0000:00000000  Imp  MakeDeviceName       (OS2LS_UT.11)
+ 0000:00000000  Imp  malloc               (OS2LSRTL.167)
+ 0000:00000000  Imp  MessageBox           (OS2LS_UT.29)
+ 0003:00001EA0       pAddressList
+ 0003:00001EA4       pInterruptList
+ 0001:0000DC90       PlaceIniCFGheader
+ 0001:0000D980       PlaceIniDCBheader
+ 0003:00001EA8       pLoadAddressList
+ 0003:00001EAC       pLoadInterruptList
+ 0001:00004115       PortSelectDialog
+ 0000:00000000  Imp  PrfQueryProfileString (PMSHAPI.115)
+ 0003:00001E9C       pSpoolList
+ 0001:0000E711       QueryIniCFGheader
+ 0001:0000D5C0       QueryIniDCBheader
+ 0001:0000D1E0       QueryIniDCBheaderName
+ 0001:0000CEA1       RemoveIniCFGheader
+ 0001:0000CC00       RemoveIniDCBheader
+ 0000:00000000  Imp  RemoveLeadingSpaces  (OS2LS_UT.27)
+ 0000:00000000  Imp  RemoveListItem       (OS2LS_UT.13)
+ 0000:00000000  Imp  RemoveSpaces         (OS2LS_UT.5)
+ 0001:00000000       SpoolerSetupDialog
+ 0003:00002CB4       stConfigDeviceCount
+ 0003:000027A4       stGlobalCFGheader
+ 0003:00002664       stGlobalDCBheader
+ 0003:00002220       stOSversion
+ 0003:00002520       stTempCFGheader
+ 0003:000024E4       stTempDCBheader
+ 0003:000024CC       szCurrentConfigDeviceName
+ 0003:00002CB8       szDeviceDescription
+ 0003:00002560       szDriverIniPath
+ 0003:000021B0       szDriverVersionString
+ 0003:000008E4       szInitDeviceDescription
+ 0003:000011DC       szLastName
+ 0003:00002234       szListString
+ 0003:00002C64       szOEMname
+ 0003:000027F0       szPDRlibrarySpec
+ 0003:000023C8       szTempFilePath
+ 0001:0000AC40       TCASCIIhandshakeDlg
+ 0001:0000C420       TCCfgFilterDlg
+ 0001:0000BB22       TCCfgProtocolDlg
+ 0001:0000BF98       TCCfgTimeoutDlg
+ 0003:000027E4       ulOrgReadBuffLen
+ 0003:0000222C       ulReadBuffLen
+ 0003:00002218       ulReadBufLen
+ 0001:0000AB40       UnloadASCIIhandshakeDlg
+ 0001:0000C560       UnloadCfgFilterDlg
+ 0001:0000BBF8       UnloadCfgProtocolDlg
+ 0001:0000C171       UnloadCfgTimeoutDlg
+ 0001:0000AFF0       UnloadHDWhandshakDlg
+ 0000:00000000  Imp  WinAssociateHelpInstance (HELPMGR.54)
+ 0000:00000000  Imp  WinCreateHelpInstance (HELPMGR.51)
+ 0000:00000000  Imp  WinCreateStdWindow   (PMWIN.908)
+ 0000:00000000  Imp  WinDefDlgProc        (PMWIN.910)
+ 0000:00000000  Imp  WinDestroyHelpInstance (HELPMGR.52)
+ 0000:00000000  Imp  WinDestroyWindow     (PMWIN.728)
+ 0000:00000000  Imp  WinDismissDlg        (PMWIN.729)
+ 0000:00000000  Imp  WinDlgBox            (PMWIN.923)
+ 0000:00000000  Imp  WinDrawBitmap        (PMWIN.730)
+ 0000:00000000  Imp  WinLoadDlg           (PMWIN.924)
+ 0000:00000000  Imp  WinLoadString        (PMWIN.781)
+ 0000:00000000  Imp  WinMessageBox        (PMWIN.789)
+ 0000:00000000  Imp  WinPostMsg           (PMWIN.919)
+ 0000:00000000  Imp  WinQueryActiveWindow (PMWIN.799)
+ 0000:00000000  Imp  WinQueryDlgItemText  (PMWIN.815)
+ 0000:00000000  Imp  WinQueryPointer      (PMWIN.821)
+ 0000:00000000  Imp  WinQuerySysPointer   (PMWIN.828)
+ 0000:00000000  Imp  WinQuerySysValue     (PMWIN.829)
+ 0000:00000000  Imp  WinQueryWindow       (PMWIN.834)
+ 0000:00000000  Imp  WinReleaseHook       (PMWIN.927)
+ 0000:00000000  Imp  WinSendDlgItemMsg    (PMWIN.903)
+ 0000:00000000  Imp  WinSendMsg           (PMWIN.920)
+ 0000:00000000  Imp  WinSetDlgItemText    (PMWIN.859)
+ 0000:00000000  Imp  WinSetFocus          (PMWIN.860)
+ 0000:00000000  Imp  WinSetHook           (PMWIN.928)
+ 0000:00000000  Imp  WinSetPointer        (PMWIN.866)
+ 0000:00000000  Imp  WinSetWindowPos      (PMWIN.875)
+ 0000:00000000  Imp  WinSetWindowText     (PMWIN.877)
+ 0000:00000000  Imp  WinShowWindow        (PMWIN.883)
+ 0000:00000000  Imp  WinWindowFromID      (PMWIN.899)
+ 0003:000011D8       wLastAddress
+ 0000:00000000  Imp  _CRT_init            (OS2LSRTL.467)
+ 0000:00000000  Imp  _ctype               (OS2LSRTL.220)
+ 0001:0000FA73       _DLL_InitTerm
+ 0000:00000000  Imp  _itoa                (OS2LSRTL.152)
+ 0000:00000000  Imp  _ltoa                (OS2LSRTL.154)
+ 0000:00000000  Imp  _sprintfieee         (OS2LSRTL.32)
+
+  Address         Publics by Value
+
+ 0000:00000000  Imp  CleanConfigSys       (OS2LS_UT.10)
+ 0000:00000000  Imp  MakeDeviceName       (OS2LS_UT.11)
+ 0000:00000000  Imp  WinReleaseHook       (PMWIN.927)
+ 0000:00000000  Imp  WinSendDlgItemMsg    (PMWIN.903)
+ 0000:00000000  Imp  DosQuerySysInfo      (DOSCALLS.348)
+ 0000:00000000  Imp  InitializeList       (OS2LS_UT.12)
+ 0000:00000000  Imp  FindListByteItem     (OS2LS_UT.19)
+ 0000:00000000  Imp  WinSetWindowPos      (PMWIN.875)
+ 0000:00000000  Imp  FindListWordItem     (OS2LS_UT.18)
+ 0000:00000000  Imp  GetNextListItem      (OS2LS_UT.20)
+ 0000:00000000  Imp  RemoveListItem       (OS2LS_UT.13)
+ 0000:00000000  Imp  WinCreateHelpInstance (HELPMGR.51)
+ 0000:00000000  Imp  DosSetFilePtr        (DOSCALLS.256)
+ 0000:00000000  Imp  WinMessageBox        (PMWIN.789)
+ 0000:00000000  Imp  DosFreeModule        (DOSCALLS.322)
+ 0000:00000000  Imp  WinDismissDlg        (PMWIN.729)
+ 0000:00000000  Imp  WinQuerySysValue     (PMWIN.829)
+ 0000:00000000  Imp  WinDestroyWindow     (PMWIN.728)
+ 0000:00000000  Imp  WinSetWindowText     (PMWIN.877)
+ 0000:00000000  Imp  DosLoadModule        (DOSCALLS.318)
+ 0000:00000000  Imp  WinSetDlgItemText    (PMWIN.859)
+ 0000:00000000  Imp  WinDrawBitmap        (PMWIN.730)
+ 0000:00000000  Imp  WinShowWindow        (PMWIN.883)
+ 0000:00000000  Imp  WinSetPointer        (PMWIN.866)
+ 0000:00000000  Imp  _itoa                (OS2LSRTL.152)
+ 0000:00000000  Imp  AdjustConfigSys      (OS2LS_UT.16)
+ 0000:00000000  Imp  _ltoa                (OS2LSRTL.154)
+ 0000:00000000  Imp  WinSetHook           (PMWIN.928)
+ 0000:00000000  Imp  WinQueryDlgItemText  (PMWIN.815)
+ 0000:00000000  Imp  DosFreeMem           (DOSCALLS.304)
+ 0000:00000000  Imp  WinWindowFromID      (PMWIN.899)
+ 0000:00000000  Imp  malloc               (OS2LSRTL.167)
+ 0000:00000000  Imp  _ctype               (OS2LSRTL.220)
+ 0000:00000000  Imp  ASCIItoBin           (OS2LS_UT.28)
+ 0000:00000000  Imp  MessageBox           (OS2LS_UT.29)
+ 0000:00000000  Imp  RemoveLeadingSpaces  (OS2LS_UT.27)
+ 0000:00000000  Imp  WinSendMsg           (PMWIN.920)
+ 0000:00000000  Imp  DosSetFileSize       (DOSCALLS.272)
+ 0000:00000000  Imp  WinQueryPointer      (PMWIN.821)
+ 0000:00000000  Imp  AppendTripleDS       (OS2LS_UT.14)
+ 0000:00000000  Imp  WinAssociateHelpInstance (HELPMGR.54)
+ 0000:00000000  Imp  free                 (OS2LSRTL.88)
+ 0000:00000000  Imp  WinPostMsg           (PMWIN.919)
+ 0000:00000000  Imp  WinQueryWindow       (PMWIN.834)
+ 0000:00000000  Imp  DosQueryProcAddr     (DOSCALLS.321)
+ 0000:00000000  Imp  DosQueryFileInfo     (DOSCALLS.279)
+ 0000:00000000  Imp  atoi                 (OS2LSRTL.109)
+ 0000:00000000  Imp  atol                 (OS2LSRTL.111)
+ 0000:00000000  Imp  DosWrite             (DOSCALLS.282)
+ 0000:00000000  Imp  WinQuerySysPointer   (PMWIN.828)
+ 0000:00000000  Imp  AddListItem          (OS2LS_UT.2)
+ 0000:00000000  Imp  DosOpen              (DOSCALLS.273)
+ 0000:00000000  Imp  WinSetFocus          (PMWIN.860)
+ 0000:00000000  Imp  WinCreateStdWindow   (PMWIN.908)
+ 0000:00000000  Imp  CheckButton          (OS2LS_UT.3)
+ 0000:00000000  Imp  CenterDlgBox         (OS2LS_UT.4)
+ 0000:00000000  Imp  DosRead              (DOSCALLS.281)
+ 0000:00000000  Imp  DosAllocMem          (DOSCALLS.299)
+ 0000:00000000  Imp  RemoveSpaces         (OS2LS_UT.5)
+ 0000:00000000  Imp  DosDevIOCtl          (DOSCALLS.284)
+ 0000:00000000  Imp  PrfQueryProfileString (PMSHAPI.115)
+ 0000:00000000  Imp  WinQueryActiveWindow (PMWIN.799)
+ 0000:00000000  Imp  AppendTMP            (OS2LS_UT.26)
+ 0000:00000000  Imp  DosDelete            (DOSCALLS.259)
+ 0000:00000000  Imp  AppendINI            (OS2LS_UT.24)
+ 0000:00000000  Imp  WinDlgBox            (PMWIN.923)
+ 0000:00000000  Imp  WinLoadDlg           (PMWIN.924)
+ 0000:00000000  Imp  DosClose             (DOSCALLS.257)
+ 0000:00000000  Imp  DosCopy              (DOSCALLS.258)
+ 0000:00000000  Imp  GetFileName          (OS2LS_UT.1)
+ 0000:00000000  Imp  WinDestroyHelpInstance (HELPMGR.52)
+ 0000:00000000  Imp  _CRT_init            (OS2LSRTL.467)
+ 0000:00000000  Imp  _sprintfieee         (OS2LSRTL.32)
+ 0000:00000000  Imp  Checked              (OS2LS_UT.22)
+ 0000:00000000  Imp  WinDefDlgProc        (PMWIN.910)
+ 0000:00000000  Imp  ControlEnable        (OS2LS_UT.7)
+ 0000:00000000  Imp  GpiLoadBitmap        (PMGPI.399)
+ 0000:00000000  Imp  DestroyList          (OS2LS_UT.8)
+ 0000:00000000  Imp  WinLoadString        (PMWIN.781)
+ 0001:00000000       SpoolerSetupDialog
+ 0001:00000416       fnwpDeviceSetupDlgProc
+ 0001:00001E71       fnwpHdwDefFIFOsetupDlg
+ 0001:00002170       fnwpPortExtensionsDlgProc
+ 0001:00002C40       fnwpPortConfigDeviceDlgProc
+ 0001:00004115       PortSelectDialog
+ 0001:00004140       fnwpPortSimpleDlgProc
+ 0001:00006C57       fnwpPortConfigDlgProc
+ 0001:000090F0       DestroyHelpInstance
+ 0001:00009150       HelpInit
+ 0001:00009390       DisplayHelpPanel
+ 0001:00009400       fnwpDefThresholdDlg
+ 0001:00009906       fnwpCfgASCIIhandshakeDlg
+ 0001:00009BD0       fnwpCfgHDWhandshakeDlg
+ 0001:00009E94       fnwpCfgBaudRateDlg
+ 0001:0000A310       fnwpCfgProtocolDlg
+ 0001:0000A5C4       fnwpCfgTimeoutDlg
+ 0001:0000A8C2       fnwpCfgFilterDlg
+ 0001:0000AB40       UnloadASCIIhandshakeDlg
+ 0001:0000AC40       TCASCIIhandshakeDlg
+ 0001:0000ADB0       FillASCIIhandshakingDlg
+ 0001:0000AFF0       UnloadHDWhandshakDlg
+ 0001:0000B1C5       FillHDWhandshakDlg
+ 0001:0000BB22       TCCfgProtocolDlg
+ 0001:0000BBF8       UnloadCfgProtocolDlg
+ 0001:0000BD11       FillCfgProtocolDlg
+ 0001:0000BF98       TCCfgTimeoutDlg
+ 0001:0000C171       UnloadCfgTimeoutDlg
+ 0001:0000C251       FillCfgTimeoutDlg
+ 0001:0000C420       TCCfgFilterDlg
+ 0001:0000C560       UnloadCfgFilterDlg
+ 0001:0000C640       FillCfgFilterDlg
+ 0001:0000C790       GetDriverVersion
+ 0001:0000C7D5       GetNextAvailableInterrupt
+ 0001:0000C8C6       GetNextAvailableAddress
+ 0001:0000C9D8       FillDeviceDialogNameListBox
+ 0001:0000CC00       RemoveIniDCBheader
+ 0001:0000CEA1       RemoveIniCFGheader
+ 0001:0000D1E0       QueryIniDCBheaderName
+ 0001:0000D473       GetPortConfig
+ 0001:0000D5C0       QueryIniDCBheader
+ 0001:0000D7B3       ClearAllIntDCBheader
+ 0001:0000D980       PlaceIniDCBheader
+ 0001:0000DC90       PlaceIniCFGheader
+ 0001:0000DE00       FillDeviceNameList
+ 0001:0000E301       FillDeviceLists
+ 0001:0000E651       InitializeDCBheader
+ 0001:0000E6E5       InitializeCFGheader
+ 0001:0000E711       QueryIniCFGheader
+ 0001:0000E840       AddIniConfigHeader
+ 0001:0000EBF0       InstallDevice
+ 0001:0000FA73       _DLL_InitTerm
+ 0001:0000FEA7       fnwpCOMscopeBuffDlgProc
+ 0001:00010497       fnwpTransmitBuffDlgProc
+ 0001:00010A77       fnwpReceiveBuffDlgProc
+ 0002:0000008C       aulCfgExtBaudTable
+ 0003:000008E4       szInitDeviceDescription
+ 0003:000011D6       byLastIntLevel
+ 0003:000011D8       wLastAddress
+ 0003:000011DC       szLastName
+ 0003:00001728       astConfigDeviceList
+ 0003:00001CB0       bWarp4
+ 0003:00001E90       bInsertNewDevice
+ 0003:00001E94       bShareAccessWarning
+ 0003:00001E98       bNonExAccessWarning
+ 0003:00001E9C       pSpoolList
+ 0003:00001EA0       pAddressList
+ 0003:00001EA4       pInterruptList
+ 0003:00001EA8       pLoadAddressList
+ 0003:00001EAC       pLoadInterruptList
+ 0003:00002168       bLimitLoad
+ 0003:00002174       bPCImachine
+ 0003:0000217C       bSpoolSetupInUse
+ 0003:000021B0       szDriverVersionString
+ 0003:00002214       byDDOEMtype
+ 0003:00002218       ulReadBufLen
+ 0003:0000221C       hThisModule
+ 0003:00002220       stOSversion
+ 0003:0000222C       ulReadBuffLen
+ 0003:00002230       fIsMCAmachine
+ 0003:00002234       szListString
+ 0003:00002360       lXoffThreshold
+ 0003:00002364       astPCIadapters
+ 0003:000023C4       hwndDeviceList
+ 0003:000023C8       szTempFilePath
+ 0003:000024CC       szCurrentConfigDeviceName
+ 0003:000024D8       lXonHysteresis
+ 0003:000024DC       lXScr
+ 0003:000024E0       lYScr
+ 0003:000024E4       stTempDCBheader
+ 0003:00002520       stTempCFGheader
+ 0003:00002560       szDriverIniPath
+ 0003:00002664       stGlobalDCBheader
+ 0003:000027A4       stGlobalCFGheader
+ 0003:000027E4       ulOrgReadBuffLen
+ 0003:000027E8       hwndNoteBookDlg
+ 0003:000027F0       szPDRlibrarySpec
+ 0003:000028F8       lOrgXoffThreshold
+ 0003:000028FC       lOrgXonHysteresis
+ 0003:00002900       astPages
+ 0003:00002C5C       lXbutton
+ 0003:00002C60       lYbutton
+ 0003:00002C64       szOEMname
+ 0003:00002CB4       stConfigDeviceCount
+ 0003:00002CB8       szDeviceDescription
+
+Program entry point at 0001:0000FA73

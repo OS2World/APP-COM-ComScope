@@ -1,0 +1,58 @@
+:TARGET.SUFFIXES
+:DEPENDENCY..LIB .c .dll .obj 
+:TARGET.all
+:DEPENDENCY.
+.\client.LIB
+:RULE..c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Tl10 /Sp1 /Ss /Q /Wall /Ti /N40 /W2 /Gm /Gd /Ge- /Gs /Fb /Ft- /Gu /C %s
+:RULE.{p:\results}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Tl10 /Sp1 /Ss /Q /Wall /Ti /N40 /W2 /Gm /Gd /Ge- /Gs /Fb /Ft- /Gu /C %s
+:RULE.{p:\connect\client}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Tl10 /Sp1 /Ss /Q /Wall /Ti /N40 /W2 /Gm /Gd /Ge- /Gs /Fb /Ft- /Gu /C %s
+:RULE..dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe %|dpfF.LIB %s
+:RULE.{p:\results}.dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe %|dpfF.LIB %s
+:RULE.{p:\connect\client}.dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe %|dpfF.LIB %s
+:TARGET..\client.dll
+:DEPENDENCY.
+.\client.obj
+{$(LIB)}OS2LS_UT.lib
+{$(LIB)}CPPOM30O.lib
+{$(LIB)}OS2386.lib
+{$(LIB)}CLIENT.def
+client.mak
+:ACTION.Link::Linker
+:COMMAND.
+icc.exe @<<
+ /B" /de /br /pmtype:pm /optfunc /nologo /noe /m /nod"
+ /Feclient.dll 
+ OS2LS_UT.lib 
+ CPPOM30O.lib 
+ OS2386.lib 
+ CLIENT.def
+ .\client.obj
+<<
+:TARGET..\client.obj
+:DEPENDENCY.
+p:\connect\client\client.c
+..\aerial.h
+..\comm.h
+client.mak
+:TARGET..\client.LIB
+:DEPENDENCY.
+.\client.dll
+client.mak

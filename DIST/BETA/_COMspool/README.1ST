@@ -1,0 +1,145 @@
+COMspool, and COMi Installation and Configuration
+
+  NOTE on interrupt sharing:
+    COMi supports shared interrupts on ISA serial adapter boards from several
+    manufactures.  Look in the on-line COMi User Guide under the heading 
+    "System and Adapter Support" for a list of tested adapters, and under
+    "Installing ISA Serial Adapters | Shared Interrupt Adapter Types" for a
+    description of the required features to support shared interrupts on an ISA
+    machine.
+
+    There are no interrupt restrictions on MCA machines, though we do not
+    recommend installing more that eight devices on a single interrupt, or
+    sharing interrupts across COMi loads.
+
+    Interrupt sharing is also supported on PCI adapters.  It is assumed that
+    all PCI adapters support interupt sharing.
+    
+To install the COMi asynchronous serial device driver and COMspool, do
+one of the following:
+
+Method One:
+
+1.  Open the OS/2 System folder
+
+2.  Open the Drives folder
+
+3.  Double click on the drive that contains the distribution diskette.
+
+4.  Double click on the INSTALL.EXE icon.
+
+5.  Once INSTALL is loaded, use the "Install..." menu item to setup the
+    installation for your system requirements and transfer the required
+    files to your system.
+
+      Select "Installation | Install..."
+
+6.  Use the "Configuration | COMi..." menu item to configure the COMi 
+    device driver. The configuration process has plenty of on-line help
+    to help with setting up COMi.
+
+7.  Shutdown and re-boot your system.
+
+8.  If you are installing COMspool support then continue with item nine.
+
+9.  Click mouse button two (usually the right button) on a local printer object.
+    If you have not created a local printer object yet then you will need to
+    drag a non-network printer object from the "Templates" folder onto your
+    desktop.  If you will be creating a printer object as part of this installation
+    then skip to item twelve, as the printer object setting notebook will have
+    been presented immediately after you dragged the object from the
+    "Templates" folder.  You will also have to select a printer driver and
+    possibly need to set other parameters in the printer notebook.
+
+10. Select the "Settings" menu item.
+
+11. Click on the "Output" tab.
+
+12. Click mouse two on any port icon in the container window.
+
+13. Select the "Install" menu item.
+
+14. In the "Directory" entry field enter the following (without the quotes):
+    "\OS2\DLL", then press the <ENTER> key or select the "Refresh"
+    button.
+
+15. The Spooler software will read each spooler support library in that
+    directory, including the COMi spooler support library, show an icon
+    in the container area for each device the spooler support libraries
+    support.
+ 
+    NOTE:
+          COMi spooler support is only available when the COMi device
+          driver is loaded and there are serial devices assigned to COMi.
+          Because of this you must be-boot your machine after the COMi
+          installation process, before you begin to configure COMi
+          spooler support.
+
+16. Select one, or more, of the COMi Spooler ports and select the "Install"
+    button.
+
+17. When the Spooler software is finished installing the ports you have
+    selected it will present a message box indicating that the ports you
+    selected have been installed.  Click on the "OK" button.
+
+18. When you are through installing Spooler Ports then click on the
+    "Cancel" button.
+
+19. You can set the port parameters to match the requirements of a
+    printer by clicking mouse button two on an icon in the container
+    area and selecting the "Setting" menu item.  Help for setting port
+    parameters will be available once you have entered the setup
+    dialog.
+
+    Once you have installed at least one COMi spooler port in this
+    manner you will be able to install and delete spooler ports from
+    the COMi Configuration program (either Install or COMscope).
+
+    Configuration of these ports for printer initialization will always
+    have to be done from the printer object's settings notebook.
+
+20. Shutdown and re-boot your machine.  PMSPOOL cannot initialize
+    any newly installed spooler ports until you have re-booted.
+
+Method Two:
+
+1. Open an OS/2 command prompt session.
+
+2. Make the disk drive containing the distribution diskette the default drive.
+
+    Example:  [C:\]A: [ENTER)
+              (assuming the distribution diskette is in drive A:)
+
+3. Start INSTALL.EXE by typing INSTALL [ENTER]
+
+4. Follow the instructions from item five, above.
+
+Once installed, you may use INSTALL at any time to change the configuration
+of the COMi device driver and any device controlled by COMi, though any
+changes you make will require a re-boot to take effect.  Print spooler port
+initialization can only be configured via a print objects setting notebook.
+
+COMi, COMspool, and INSTALL are the property of OS/tools Incorporated and are
+copyrighted (c) 1989-96 by OS/tools Incorporated with all rights reserved.
+
+These programs are licensed to you on a per CPU basis.  One license is
+required for each CPU on which they are installed.
+
+We know nothing and are responsible for nothing, except for any increased
+productivity and/or pleasure brought about by the use of these programs.  This
+is the only disclaimer you have to read.
+
+For additional information about COMscope, COMspool, the COMi device
+driver, or other OS/tools products please contact:
+
+OS/tools Incorporated
+7145 Yorktown Drive
+Gilroy, CA  95020
+Phone: (500)446-7257, FAX: (408)847-7480, BBS: (408)847-7484
+Internet: products@os-tools.com or URL: http://www.os-tools.com
+
+OS/tools, COMscope, COMspool, and COMi are trademarks of OS/tools Incorporated.
+
+OS/2 is a trademark of International Business Machines, Incorporated.
+
+

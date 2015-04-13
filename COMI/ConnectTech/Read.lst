@@ -1,0 +1,30 @@
+Microsoft (R) Macro Assembler Version 6.00     		    08/24/02 23:27:38
+OS/tools Multi-Port Device Driver			     Page 1 - 1
+
+
+				;************************************************************************
+				;
+				; $Revision:$
+				;
+				; $Log:$
+				;
+				;************************************************************************
+
+				TITLE OS/tools Multi-Port Device Driver
+				SUBTITLE Function called via DosRead
+				PAGE ,132
+				;*
+				;* FILE: Read.asm
+				;*
+				;* COPYRIGHT: (c) OS/tools Incorporated 1988-98.  All rights reserved.
+				;*
+				;*
+				;*******************************************************************************
+
+				  IFNDEF x16_BIT
+				.386P
+				  ELSE
+				  ENDIF
+				;.NOLISTMACRO                   ;suppress macro expansion in listing
+
+				.NOLIST                  ;suppress listing of INCLUDE files

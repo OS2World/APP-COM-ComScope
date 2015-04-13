@@ -1,0 +1,863 @@
+
+ COMSCOPE
+
+ Start         Length     Name                   Class
+ 0001:00000000 000018EF1H CODE32                 CODE 32-bit
+	at offset 00000000 02DE7H bytes from P:\comscope\ga\wincmd.obj (p:\COMscope\wincmd.c)
+	at offset 00002df0 00286H bytes from P:\comscope\ga\win_util.obj (p:\COMscope\win_util.c)
+	at offset 00003080 02189H bytes from P:\comscope\ga\column.obj (p:\COMscope\column.c)
+	at offset 00005210 04AC2H bytes from P:\comscope\ga\comscope.obj (p:\COMscope\comscope.c)
+	at offset 00009ce0 02E11H bytes from P:\comscope\ga\csutil.obj (p:\COMscope\csutil.c)
+	at offset 0000cb00 00445H bytes from P:\comscope\ga\cs_help.obj (p:\COMscope\cs_help.c)
+	at offset 0000cf50 03340H bytes from P:\comscope\ga\dialog.obj (p:\COMscope\dialog.c)
+	at offset 00010290 01253H bytes from P:\comscope\ga\init.obj (p:\COMscope\init.c)
+	at offset 000114f0 01454H bytes from P:\comscope\ga\scroll.obj (p:\COMscope\scroll.c)
+	at offset 00012950 017F2H bytes from P:\comscope\ga\search.obj (p:\COMscope\search.c)
+	at offset 00014150 0259FH bytes from P:\comscope\ga\stat_dlg.obj (p:\COMscope\stat_dlg.c)
+	at offset 000166f0 02529H bytes from P:\comscope\ga\thread.obj (p:\COMscope\thread.c)
+	at offset 00018c1c 000BEH bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\dde4strt.c)
+	at offset 00018cdc 00007H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\cppinit.asm)
+	at offset 00018ce4 001F8H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\setuparg.asm)
+	at offset 00018edc 0000DH bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\sctdt.c)
+	at offset 00018eec 00005H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\wctdt.c)
+
+ 0002:00000000 000000000H CONST32_RO             CONST 32-bit
+
+ 0002:00000000 000003310H DATA32                 DATA 32-bit
+	at offset 00000000 0073CH bytes from P:\comscope\ga\wincmd.obj (p:\COMscope\wincmd.c)
+	at offset 0000073c 00118H bytes from P:\comscope\ga\column.obj (p:\COMscope\column.c)
+	at offset 00000854 00B90H bytes from P:\comscope\ga\comscope.obj (p:\COMscope\comscope.c)
+	at offset 000013e4 01248H bytes from P:\comscope\ga\csutil.obj (p:\COMscope\csutil.c)
+	at offset 0000262c 0014CH bytes from P:\comscope\ga\cs_help.obj (p:\COMscope\cs_help.c)
+	at offset 00002778 00540H bytes from P:\comscope\ga\dialog.obj (p:\COMscope\dialog.c)
+	at offset 00002cb8 00238H bytes from P:\comscope\ga\init.obj (p:\COMscope\init.c)
+	at offset 00002ef0 00138H bytes from P:\comscope\ga\search.obj (p:\COMscope\search.c)
+	at offset 00003028 00094H bytes from P:\comscope\ga\stat_dlg.obj (p:\COMscope\stat_dlg.c)
+	at offset 000030bc 00240H bytes from P:\comscope\ga\thread.obj (p:\COMscope\thread.c)
+	at offset 000032fc 00004H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\exeentry.asm)
+	at offset 00003300 00010H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\setuparg.asm)
+
+ 0002:00003310 000000000H CTOR_DTOR1             DATA 32-bit
+
+ 0002:00003310 000000000H CTOR_DTOR2             DATA 32-bit
+
+ 0002:00003310 000000000H CTOR_DTOR3             DATA 32-bit
+
+ 0002:00003310 000000000H EDC1                   EDC_CLASS 32-bit
+
+ 0002:00003310 000000018H EDC2                   EDC_CLASS 32-bit
+	at offset 00000000 0000CH bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\cppinit.asm)
+	at offset 0000000c 0000CH bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\setuparg.asm)
+
+ 0002:00003328 000000000H EDC3                   EDC_CLASS 32-bit
+
+ 0002:00003328 000000864H BSS32                  BSS 32-bit
+	at offset 00000000 0005EH bytes from P:\comscope\ga\wincmd.obj (p:\COMscope\wincmd.c)
+	at offset 00000060 00014H bytes from P:\comscope\ga\win_util.obj (p:\COMscope\win_util.c)
+	at offset 00000074 000CCH bytes from P:\comscope\ga\column.obj (p:\COMscope\column.c)
+	at offset 00000140 004F8H bytes from P:\comscope\ga\comscope.obj (p:\COMscope\comscope.c)
+	at offset 00000638 00010H bytes from P:\comscope\ga\csutil.obj (p:\COMscope\csutil.c)
+	at offset 00000648 00004H bytes from P:\comscope\ga\cs_help.obj (p:\COMscope\cs_help.c)
+	at offset 0000064c 001B0H bytes from P:\comscope\ga\dialog.obj (p:\COMscope\dialog.c)
+	at offset 000007fc 00004H bytes from P:\comscope\ga\init.obj (p:\COMscope\init.c)
+	at offset 00000800 0000CH bytes from P:\comscope\ga\scroll.obj (p:\COMscope\scroll.c)
+	at offset 0000080c 00014H bytes from P:\comscope\ga\search.obj (p:\COMscope\search.c)
+	at offset 00000820 0002CH bytes from P:\comscope\ga\stat_dlg.obj (p:\COMscope\stat_dlg.c)
+	at offset 0000084c 00010H bytes from P:\comscope\ga\thread.obj (p:\COMscope\thread.c)
+	at offset 0000085c 00008H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\dde4strt.c)
+
+ 0002:00003B8C 000002DB9H c_common               BSS 32-bit
+
+ 0002:00006950 00000C000H STACK32                STACK 32-bit
+	at offset 00000000 08000H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\exeentry.asm)
+
+
+ Origin   Group
+ 0000:0   FLAT
+ 0002:0   DGROUP
+
+  Address         Publics by Name
+
+ 0001:0000CB50       AboutBoxDlgProc
+ 0001:00009D41       AccessCOMscope
+ 0001:00011C76       AdjustScrollBar
+ 0000:00000000  Imp  AppendTripleDS       (OS2LS_UT.14)
+ 0000:00000000  Imp  ASCIItoBin           (OS2LS_UT.28)
+ 0002:000050AC       astFontAttributes
+ 0002:000045B0       astFontMetrics
+ 0002:00003D48       astFontNames
+ 0000:00000000  Imp  atoi                 (OS2LSRTL.109)
+ 0000:00000000  Imp  atol                 (OS2LSRTL.111)
+ 0002:000051B4       bBreakOn
+ 0002:00003B80       bBufferWrapped
+ 0002:00003490       bCaptureFileWritten
+ 0002:00003488       bCommandLineDataFile
+ 0002:00004AFC       bCOMscopeEnabled
+ 0002:000034AC       bDataToView
+ 0002:00003388       bDDstatusActivated
+ 0002:00003468       bDebuggingCOMscope
+ 0002:00003B24       bDriverNotLoaded
+ 0002:00003494       bFrameActivated
+ 0002:000034CC       bIPCpipeOpen
+ 0002:0000346C       bIsTheFirst
+ 0002:000034D0       bLaunchShutdownServer
+ 0002:000034A0       bMaximized
+ 0002:000034A4       bMinimized
+ 0002:0000338C       bMIstatusActivated
+ 0002:00003390       bMOstatusActivated
+ 0002:000034B4       bNoPaint
+ 0002:00003960       bPortActive
+ 0002:00003394       bRBstatusActivated
+ 0000:00000000  Imp  BreakOff             (OS2LS_IO.21)
+ 0000:00000000  Imp  BreakOn              (OS2LS_IO.20)
+ 0002:00003478       bRemoteServer
+ 0002:00003B34       bSearchInit
+ 0002:0000349C       bSendNextKeystroke
+ 0002:000034D4       bShowServerProcess
+ 0002:00003480       bSkipInitPos
+ 0002:00005190       bStopDisplayThread
+ 0002:000034DC       bStopIPCserverThread
+ 0002:000051A8       bStopMonitorThread
+ 0002:000034C0       bStopRemotePipe
+ 0002:00003398       bTBstatusActivated
+ 0001:00009CE0       CalcThreadSleepCount
+ 0000:00000000  Imp  CenterDlgBox         (OS2LS_UT.4)
+ 0001:00003080       CharPrintable
+ 0000:00000000  Imp  CheckButton          (OS2LS_UT.3)
+ 0000:00000000  Imp  Checked              (OS2LS_UT.22)
+ 0002:000034C4       chPipeDebug
+ 0001:000120F0       ClearColScrollBar
+ 0001:000124F0       ClearRowScrollBar
+ 0001:00011F96       ColScroll
+ 0001:00017250       ColumnDisplayThread
+ 0001:0000CB30       COMscopeOpenFilterProc
+ 0000:00000000  Imp  ControlEnable        (OS2LS_UT.7)
+ 0001:000114F0       CountTraceElement
+ 0001:00003387       CreateColumnWindows
+ 0001:0000CC82       DestroyHelpInstance
+ 0001:00009E80       DisplayCharacterInfo
+ 0001:0000CCC0       DisplayHelpPanel
+ 0000:00000000  Imp  DosAllocMem          (DOSCALLS.299)
+ 0000:00000000  Imp  DosBeep              (DOSCALLS.286)
+ 0000:00000000  Imp  DosCallNPipe         (DOSCALLS.240)
+ 0000:00000000  Imp  DosClose             (DOSCALLS.257)
+ 0000:00000000  Imp  DosCloseEventSem     (DOSCALLS.326)
+ 0000:00000000  Imp  DosCloseMutexSem     (DOSCALLS.333)
+ 0000:00000000  Imp  DosConnectNPipe      (DOSCALLS.241)
+ 0000:00000000  Imp  DosCreateEventSem    (DOSCALLS.324)
+ 0000:00000000  Imp  DosCreateMutexSem    (DOSCALLS.331)
+ 0000:00000000  Imp  DosCreateNPipe       (DOSCALLS.243)
+ 0000:00000000  Imp  DosCreateThread      (DOSCALLS.311)
+ 0000:00000000  Imp  DosDelete            (DOSCALLS.259)
+ 0000:00000000  Imp  DosDevIOCtl          (DOSCALLS.284)
+ 0000:00000000  Imp  DosDisConnectNPipe   (DOSCALLS.242)
+ 0000:00000000  Imp  DosExit              (DOSCALLS.234)
+ 0000:00000000  Imp  DosExitList          (DOSCALLS.296)
+ 0000:00000000  Imp  DosFreeMem           (DOSCALLS.304)
+ 0000:00000000  Imp  DosFreeModule        (DOSCALLS.322)
+ 0000:00000000  Imp  DosLoadModule        (DOSCALLS.318)
+ 0000:00000000  Imp  DosOpen              (DOSCALLS.273)
+ 0000:00000000  Imp  DosPostEventSem      (DOSCALLS.328)
+ 0000:00000000  Imp  DosQueryFileInfo     (DOSCALLS.279)
+ 0000:00000000  Imp  DosQueryProcAddr     (DOSCALLS.321)
+ 0000:00000000  Imp  DosRead              (DOSCALLS.281)
+ 0000:00000000  Imp  DosReleaseMutexSem   (DOSCALLS.335)
+ 0000:00000000  Imp  DosRequestMutexSem   (DOSCALLS.334)
+ 0000:00000000  Imp  DosResetEventSem     (DOSCALLS.327)
+ 0000:00000000  Imp  DosResumeThread      (DOSCALLS.237)
+ 0000:00000000  Imp  DosSearchPath        (DOSCALLS.228)
+ 0000:00000000  Imp  DosSetExceptionHandler (DOSCALLS.354)
+ 0000:00000000  Imp  DosSetFilePtr        (DOSCALLS.256)
+ 0000:00000000  Imp  DosSetFileSize       (DOSCALLS.272)
+ 0000:00000000  Imp  DosSetNPipeSem       (DOSCALLS.251)
+ 0000:00000000  Imp  DosSetPriority       (DOSCALLS.236)
+ 0000:00000000  Imp  DosSleep             (DOSCALLS.229)
+ 0000:00000000  Imp  DosStartSession      (SESMGR.37)
+ 0000:00000000  Imp  DosTransactNPipe     (DOSCALLS.252)
+ 0000:00000000  Imp  DosUnsetExceptionHandler (DOSCALLS.355)
+ 0000:00000000  Imp  DosWaitEventSem      (DOSCALLS.329)
+ 0000:00000000  Imp  DosWrite             (DOSCALLS.282)
+ 0001:0000C601       EnableCOMscope
+ 0001:0000C5B0       ErrorNotify
+ 0000:00000000  Imp  exit                 (OS2LSRTL.106)
+ 0002:00003B30       fLastScroll
+ 0000:00000000  Imp  FlushComBuffer       (OS2LS_IO.14)
+ 0001:0000FC50       fnwpBufferSizeDlg
+ 0001:000156C0       fnwpCOMerrorStatesDlg
+ 0001:00015838       fnwpCOMeventStatesDlg
+ 0001:00015A30       fnwpCOMstatusStatesDlg
+ 0001:0000ED90       fnwpCountsSetupDlgProc
+ 0001:0000CF90       fnwpDCBpacketDlgProc
+ 0001:00016350       fnwpDeviceAllStatusDlg
+ 0001:00015140       fnwpDeviceStatusDlg
+ 0001:0000F150       fnwpDisplaySetupDlgProc
+ 0001:0000DB53       fnwpEventDispDlgProc
+ 0001:0000EA54       fnwpHdwModemControlDlg
+ 0001:00014404       fnwpModemInStatusDlg
+ 0001:00014150       fnwpModemOutStatusDlg
+ 0001:0000F813       fnwpMonitorSleepDlg
+ 0001:000147D0       fnwpRcvBufferStatusDlg
+ 0001:000046E4       fnwpReadColumnClient
+ 0001:00012B46       fnwpSearchConfigDlgProc
+ 0001:0000E742       fnwpSetColorDlg
+ 0001:0000D710       fnwpTraceEventDlgProc
+ 0001:00014F94       fnwpUpdateStatusDlg
+ 0001:000033F5       fnwpWriteColumnClient
+ 0001:00014CD4       fnwpXmitBufferStatusDlg
+ 0001:00015BA6       fnwpXmitStatusStatesDlg
+ 0000:00000000  Imp  ForceXoff            (OS2LS_IO.25)
+ 0000:00000000  Imp  ForceXon             (OS2LS_IO.24)
+ 0002:00003D40       FrameProcess
+ 0000:00000000  Imp  free                 (OS2LSRTL.88)
+ 0000:00000000  Imp  GetBaudRate          (OS2LS_IO.4)
+ 0001:00012130       GetColScrollRow
+ 0000:00000000  Imp  GetCOMerror          (OS2LS_IO.10)
+ 0000:00000000  Imp  GetCOMevent          (OS2LS_IO.8)
+ 0000:00000000  Imp  GetCOMstatus         (OS2LS_IO.12)
+ 0000:00000000  Imp  GetCountsSinceLast   (OS2LS_IO.22)
+ 0000:00000000  Imp  GetDCB               (OS2LS_IO.15)
+ 0001:000128C2       GetDisplayCount
+ 0000:00000000  Imp  GetFileName          (OS2LS_UT.1)
+ 0000:00000000  Imp  GetLongIntDlgItem    (OS2LS_UT.21)
+ 0000:00000000  Imp  GetModemInputSignals (OS2LS_IO.26)
+ 0000:00000000  Imp  GetModemOutputSignals (OS2LS_IO.2)
+ 0001:0000B4C7       GetNoClearComEvent_ComError
+ 0000:00000000  Imp  GetReceiveQueueCounts (OS2LS_IO.1)
+ 0000:00000000  Imp  GetReceiveQueueLen   (OS2LS_IO.18)
+ 0001:00012681       GetRowScrollRow
+ 0000:00000000  Imp  GetTransmitQueueLen  (OS2LS_IO.27)
+ 0000:00000000  Imp  GetXmitStatus        (OS2LS_IO.13)
+ 0000:00000000  Imp  GpiCharStringAt      (PMGPI.359)
+ 0000:00000000  Imp  GpiCreateLogFont     (PMGPI.368)
+ 0000:00000000  Imp  GpiDestroyPS         (PMGPI.379)
+ 0000:00000000  Imp  GpiLoadFonts         (PMGPI.400)
+ 0000:00000000  Imp  GpiQueryFontFileDescriptions (PMGPI.452)
+ 0000:00000000  Imp  GpiQueryFonts        (PMGPI.586)
+ 0000:00000000  Imp  GpiSetBackColor      (PMGPI.504)
+ 0000:00000000  Imp  GpiSetBackMix        (PMGPI.505)
+ 0000:00000000  Imp  GpiSetCharSet        (PMGPI.513)
+ 0000:00000000  Imp  GpiSetColor          (PMGPI.517)
+ 0002:00003E58       habAnchorBlock
+ 0002:00001294       hCom
+ 0002:00003E4C       hCOMscopePipe
+ 0002:0000497C       hdcPs
+ 0001:0000CDD0       HelpHelpForHelp
+ 0001:0000CD20       HelpIndex
+ 0001:0000CE08       HelpInit
+ 0002:000040E0       hevCOMscopeSem
+ 0002:00003C04       hevDisplayWaitDataSem
+ 0002:000040E4       hevKillDisplayThreadSem
+ 0002:000040D8       hevKillMonitorThreadSem
+ 0002:00005194       hevWaitCOMiDataSem
+ 0002:00003B90       hevWaitQueueStartSem
+ 0002:0000527C       hIPCpipe
+ 0002:00006810       hmtxColGioBlockedSem
+ 0002:00003B94       hmtxIPCpipeBlockedSem
+ 0002:00006830       hmtxRowGioBlockedSem
+ 0002:000066B8       hmtxSigGioBlockedSem
+ 0002:000034BC       hProfileInstance
+ 0002:00004A64       hpsPs
+ 0002:00006814       hwndClient
+ 0002:00005314       hwndFrame
+ 0002:00004C0C       hwndHelpInstance
+ 0002:00003C18       hwndStatAll
+ 0002:00003D38       hwndStatDev
+ 0002:00004AF8       hwndStatModemIn
+ 0002:00004D18       hwndStatModemOut
+ 0002:000040DC       hwndStatRcvBuf
+ 0002:00006818       hwndStatus
+ 0002:00004B00       hwndStatXmitBuf
+ 0001:0000C4A1       IncrementFileExt
+ 0001:00010290       InitializeData
+ 0001:000110F2       InitializeSystem
+ 0001:00016917       IPCserverThread
+ 0001:00016DB0       KillDisplayThread
+ 0001:00016E00       KillMonitorThread
+ 0002:000051AC       lcxBrdr
+ 0002:00004B94       lcxVSc
+ 0002:000051B0       lcyBrdr
+ 0002:00005280       lcyMenu
+ 0002:00003D3C       lcyTitleBar
+ 0002:00004AF0       lFontsAvailable
+ 0002:00003C0C       lLastHeight
+ 0002:000066AC       lLastWidth
+ 0002:000040D4       lMinimumHeight
+ 0002:00003E50       lMinimumWidth
+ 0002:000050A4       lMouseButtonCount
+ 0002:00003D44       lScrollCount
+ 0002:00003B38       lSearchStrLen
+ 0002:00003E54       lStatusHeight
+ 0002:00003B78       lWriteIndex
+ 0002:0000659C       lXfullScr
+ 0002:00004A68       lXScr
+ 0002:000065A0       lYfullScr
+ 0002:00004A6C       lYScr
+ 0001:000091B0       main
+ 0000:00000000  Imp  malloc               (OS2LSRTL.167)
+ 0000:00000000  Imp  MenuItemCheck        (OS2LS_UT.6)
+ 0000:00000000  Imp  MenuItemEnable       (OS2LS_UT.9)
+ 0000:00000000  Imp  MessageBox           (OS2LS_UT.29)
+ 0001:00016E50       MonitorThread
+ 0001:00002FC0       MousePosDlgBox
+ 0001:0000C767       OpenPort
+ 0002:00004B98       pfnCloseProfile
+ 0002:000052D4       pfnDialog
+ 0002:00003B8C       pfnFillDeviceNameList
+ 0002:00004E24       pfnGetProfileData
+ 0002:0000681C       pfnGetProfileString
+ 0002:0000683C       pfnInitializeProfile
+ 0002:00004C00       pfnInstallDevice
+ 0002:00004B8C       pfnManageProfile
+ 0002:000050A8       pfnSaveProfileData
+ 0002:00006820       pfnSaveProfileString
+ 0002:000067C0       pidSession
+ 0001:00003020       PopupMenuItemCheck
+ 0001:0000B520       ProcessKeystroke
+ 0002:00004C10       pwCaptureBuffer
+ 0002:00003B28       pwScrollBuffer
+ 0002:00003C10       rc
+ 0001:0000BC30       ReadCaptureFile
+ 0001:000166F0       RemoteServerThread
+ 0001:00009DB1       ResetHighWater
+ 0001:00017AF3       RowDisplayThread
+ 0001:000122F0       RowScroll
+ 0001:00002DF0       SaveWindowPositions
+ 0001:00013A10       SearchCaptureBuffer
+ 0000:00000000  Imp  SendByteImmediate    (OS2LS_IO.17)
+ 0001:0000C562       SendXonXoff
+ 0000:00000000  Imp  SetModemSignals      (OS2LS_IO.16)
+ 0001:00011A50       SetupColScrolling
+ 0001:00012420       SetupRowScrolling
+ 0001:00010651       StartSystem
+ 0002:00004AF4       stCell
+ 0002:00004980       stCFG
+ 0002:00003C1C       stCharCount
+ 0002:000067C4       stColTrack
+ 0002:00005238       stComCtl
+ 0002:00005284       stCOMiCFG
+ 0002:0000519C       stIOctl
+ 0002:00005328       stIPCpipe
+ 0002:0000531C       stPipeCmd
+ 0002:00005590       stPipeMsg
+ 0002:00005398       stProfile
+ 0002:00004B08       stRead
+ 0002:000052D8       stRemote
+ 0002:00004A70       stRow
+ 0000:00000000  Imp  strtol               (OS2LSRTL.249)
+ 0002:00004940       stSD
+ 0002:000051B8       stWrite
+ 0002:00004E50       swpLastPosition
+ 0002:000040E8       swSearchString
+ 0002:00004E78       szCaptureFileName
+ 0002:00004F9C       szCaptureFileSpec
+ 0002:000066BC       szCmdLineIniFileSpec
+ 0002:00004D1C       szCOMscopeIniPath
+ 0002:00003F68       szCOMscopePipe
+ 0002:00001150       szCOMscopeVersion
+ 0002:00004F84       szCurrentPortName
+ 0002:00003E60       szDataFileSpec
+ 0002:00003B9C       szDriverVersionString
+ 0002:00003C30       szEntryCaptureFileSpec
+ 0002:000065A4       szEntryDataFileSpec
+ 0002:000044E8       szErrorMessage
+ 0002:00003FCC       szFontFilePath
+ 0002:00005334       szIPCpipe
+ 0002:00001318       szIPCpipeName
+ 0002:00004E28       szPipeServerName
+ 0002:00004B9C       szServerCommand
+ 0002:00004C14       szServerProgram
+ 0002:00006840       szTempPath
+ 0002:00001370       szTitle
+ 0001:00009E11       TestOUT1
+ 0002:00004C08       tidDisplayThread
+ 0002:0000518C       tidIPCserverThread
+ 0002:00004B90       tidMonitorThread
+ 0002:00003B98       tidRemoteServerThread
+ 0002:00003C08       ulBytesRead
+ 0002:0000136C       ulCalcSleepCount
+ 0002:000066B0       ulCOMscopeBufferSize
+ 0002:00004F80       ulIPCpipeInstance
+ 0002:00001368       ulMonitorSleepCount
+ 0002:00003328       ulServerMessage
+ 0002:00003C2C       ulSessionID
+ 0002:00003C00       usLastClientPopupItem
+ 0002:00001314       wASCIIfont
+ 0002:00003484       wHEXfont
+ 0000:00000000  Imp  WinAssociateHelpInstance (HELPMGR.54)
+ 0000:00000000  Imp  WinBeginPaint        (PMWIN.703)
+ 0001:00000413       WinCommand
+ 0000:00000000  Imp  WinCopyRect          (PMWIN.710)
+ 0000:00000000  Imp  WinCreateHelpInstance (HELPMGR.51)
+ 0000:00000000  Imp  WinCreateMsgQueue    (PMWIN.716)
+ 0000:00000000  Imp  WinCreateStdWindow   (PMWIN.908)
+ 0000:00000000  Imp  WinCreateWindow      (PMWIN.909)
+ 0000:00000000  Imp  WinDefDlgProc        (PMWIN.910)
+ 0000:00000000  Imp  WinDefFileDlgProc    (PMCTLS.5)
+ 0000:00000000  Imp  WinDefWindowProc     (PMWIN.911)
+ 0000:00000000  Imp  WinDestroyHelpInstance (HELPMGR.52)
+ 0000:00000000  Imp  WinDestroyMsgQueue   (PMWIN.726)
+ 0000:00000000  Imp  WinDestroyPointer    (PMWIN.727)
+ 0000:00000000  Imp  WinDestroyWindow     (PMWIN.728)
+ 0000:00000000  Imp  WinDismissDlg        (PMWIN.729)
+ 0000:00000000  Imp  WinDispatchMsg       (PMWIN.912)
+ 0000:00000000  Imp  WinDlgBox            (PMWIN.923)
+ 0000:00000000  Imp  WinEndPaint          (PMWIN.738)
+ 0000:00000000  Imp  WinFillRect          (PMWIN.743)
+ 0000:00000000  Imp  WinGetLastError      (PMWIN.753)
+ 0000:00000000  Imp  WinGetMsg            (PMWIN.915)
+ 0000:00000000  Imp  WinGetPS             (PMWIN.757)
+ 0000:00000000  Imp  WinInitialize        (PMWIN.763)
+ 0000:00000000  Imp  WinInvalidateRect    (PMWIN.765)
+ 0000:00000000  Imp  WinIsWindowShowing   (PMWIN.774)
+ 0000:00000000  Imp  WinLoadDlg           (PMWIN.924)
+ 0000:00000000  Imp  WinLoadMenu          (PMWIN.778)
+ 0000:00000000  Imp  WinMessageBox        (PMWIN.789)
+ 0000:00000000  Imp  WinOpenWindowDC      (PMWIN.794)
+ 0000:00000000  Imp  WinPopupMenu         (PMWIN.937)
+ 0000:00000000  Imp  WinPostMsg           (PMWIN.919)
+ 0000:00000000  Imp  WinQueryDlgItemText  (PMWIN.815)
+ 0000:00000000  Imp  WinQueryHelpInstance (HELPMGR.53)
+ 0000:00000000  Imp  WinQueryPointerPos   (PMWIN.823)
+ 0000:00000000  Imp  WinQuerySysPointer   (PMWIN.828)
+ 0000:00000000  Imp  WinQuerySysValue     (PMWIN.829)
+ 0000:00000000  Imp  WinQueryWindow       (PMWIN.834)
+ 0000:00000000  Imp  WinQueryWindowPos    (PMWIN.837)
+ 0000:00000000  Imp  WinQueryWindowRect   (PMWIN.840)
+ 0000:00000000  Imp  WinRegisterClass     (PMWIN.926)
+ 0000:00000000  Imp  WinReleaseHook       (PMWIN.927)
+ 0000:00000000  Imp  WinReleasePS         (PMWIN.848)
+ 0000:00000000  Imp  WinSendDlgItemMsg    (PMWIN.903)
+ 0000:00000000  Imp  WinSendMsg           (PMWIN.920)
+ 0000:00000000  Imp  WinSetDlgItemText    (PMWIN.859)
+ 0000:00000000  Imp  WinSetFocus          (PMWIN.860)
+ 0000:00000000  Imp  WinSetHook           (PMWIN.928)
+ 0000:00000000  Imp  WinSetPointer        (PMWIN.866)
+ 0000:00000000  Imp  WinSetPresParam      (PMWIN.938)
+ 0000:00000000  Imp  WinSetWindowPos      (PMWIN.875)
+ 0000:00000000  Imp  WinSetWindowText     (PMWIN.877)
+ 0000:00000000  Imp  WinShowWindow        (PMWIN.883)
+ 0000:00000000  Imp  WinStartTimer        (PMWIN.884)
+ 0000:00000000  Imp  WinStopTimer         (PMWIN.885)
+ 0000:00000000  Imp  WinSubclassWindow    (PMWIN.929)
+ 0000:00000000  Imp  WinTerminate         (PMWIN.888)
+ 0000:00000000  Imp  WinTrackRect         (PMWIN.890)
+ 0000:00000000  Imp  WinWindowFromID      (PMWIN.899)
+ 0001:0000BF83       WriteCaptureFile
+ 0002:00003B84       _argc
+ 0002:00003B88       _argv
+ 0000:00000000  Imp  _callback_opt_sys    (OS2LSRTL.273)
+ 0001:00018CDC       _cppinit
+ 0000:00000000  Imp  _CRT_init            (OS2LSRTL.467)
+ 0000:00000000  Imp  _CRT_term            (OS2LSRTL.457)
+ 0000:00000000  Imp  _ctype               (OS2LSRTL.220)
+ 0000:00000000  Imp  _environ             (OS2LSRTL.396)
+ 0000:00000000  Imp  _exception_procinit  (OS2LSRTL.2)
+ 0001:00018C1C       _exestart
+ 0000:00000000  Imp  _EXE_Exception       (OS2LSRTL.114)
+ 0000:00000000  Imp  _fpninit             (OS2LSRTL.380)
+ 0000:00000000  Imp  _fpreset             (OS2LSRTL.374)
+ 0000:00000000  Imp  _itoa                (OS2LSRTL.152)
+ 0000:00000000  Imp  _ltoa                (OS2LSRTL.154)
+ 0000:00000000  Imp  _matherr             (OS2LSRTL.346)
+ 0000:00000000  Imp  _PrintErrMsg         (OS2LSRTL.41)
+ 0001:00018CE4       _setuparg
+ 0000:00000000  Imp  _sprintfieee         (OS2LSRTL.32)
+ 0000:00000000  Imp  _terminate           (OS2LSRTL.482)
+ 0001:00018EDC       __sctordtorInit
+ 0001:00018EE4       __sctordtorTerm
+ 0001:00018EEC       __wctordtorInit
+ 0001:00018EF0       __wctordtorTerm
+
+  Address         Publics by Value
+
+ 0000:00000000  Imp  GetDCB               (OS2LS_IO.15)
+ 0000:00000000  Imp  malloc               (OS2LSRTL.167)
+ 0000:00000000  Imp  WinOpenWindowDC      (PMWIN.794)
+ 0000:00000000  Imp  WinGetMsg            (PMWIN.915)
+ 0000:00000000  Imp  _EXE_Exception       (OS2LSRTL.114)
+ 0000:00000000  Imp  DosConnectNPipe      (DOSCALLS.241)
+ 0000:00000000  Imp  GpiSetBackColor      (PMGPI.504)
+ 0000:00000000  Imp  ForceXoff            (OS2LS_IO.25)
+ 0000:00000000  Imp  _CRT_term            (OS2LSRTL.457)
+ 0000:00000000  Imp  _CRT_init            (OS2LSRTL.467)
+ 0000:00000000  Imp  _ltoa                (OS2LSRTL.154)
+ 0000:00000000  Imp  _itoa                (OS2LSRTL.152)
+ 0000:00000000  Imp  WinLoadDlg           (PMWIN.924)
+ 0000:00000000  Imp  DosCreateThread      (DOSCALLS.311)
+ 0000:00000000  Imp  _environ             (OS2LSRTL.396)
+ 0000:00000000  Imp  _ctype               (OS2LSRTL.220)
+ 0000:00000000  Imp  ForceXon             (OS2LS_IO.24)
+ 0000:00000000  Imp  WinWindowFromID      (PMWIN.899)
+ 0000:00000000  Imp  DosWrite             (DOSCALLS.282)
+ 0000:00000000  Imp  WinDlgBox            (PMWIN.923)
+ 0000:00000000  Imp  DosClose             (DOSCALLS.257)
+ 0000:00000000  Imp  GpiCreateLogFont     (PMGPI.368)
+ 0000:00000000  Imp  DosResumeThread      (DOSCALLS.237)
+ 0000:00000000  Imp  WinCreateWindow      (PMWIN.909)
+ 0000:00000000  Imp  GpiCharStringAt      (PMGPI.359)
+ 0000:00000000  Imp  SetModemSignals      (OS2LS_IO.16)
+ 0000:00000000  Imp  DosDelete            (DOSCALLS.259)
+ 0000:00000000  Imp  WinAssociateHelpInstance (HELPMGR.54)
+ 0000:00000000  Imp  FlushComBuffer       (OS2LS_IO.14)
+ 0000:00000000  Imp  WinDispatchMsg       (PMWIN.912)
+ 0000:00000000  Imp  MessageBox           (OS2LS_UT.29)
+ 0000:00000000  Imp  DosUnsetExceptionHandler (DOSCALLS.355)
+ 0000:00000000  Imp  DosCreateNPipe       (DOSCALLS.243)
+ 0000:00000000  Imp  DosSetPriority       (DOSCALLS.236)
+ 0000:00000000  Imp  WinStartTimer        (PMWIN.884)
+ 0000:00000000  Imp  _terminate           (OS2LSRTL.482)
+ 0000:00000000  Imp  MenuItemEnable       (OS2LS_UT.9)
+ 0000:00000000  Imp  GetXmitStatus        (OS2LS_IO.13)
+ 0000:00000000  Imp  WinSetPointer        (PMWIN.866)
+ 0000:00000000  Imp  WinShowWindow        (PMWIN.883)
+ 0000:00000000  Imp  GpiQueryFonts        (PMGPI.586)
+ 0000:00000000  Imp  WinReleaseHook       (PMWIN.927)
+ 0000:00000000  Imp  atol                 (OS2LSRTL.111)
+ 0000:00000000  Imp  atoi                 (OS2LSRTL.109)
+ 0000:00000000  Imp  exit                 (OS2LSRTL.106)
+ 0000:00000000  Imp  WinQueryWindow       (PMWIN.834)
+ 0000:00000000  Imp  free                 (OS2LSRTL.88)
+ 0000:00000000  Imp  DosSetFilePtr        (DOSCALLS.256)
+ 0000:00000000  Imp  ASCIItoBin           (OS2LS_UT.28)
+ 0000:00000000  Imp  AppendTripleDS       (OS2LS_UT.14)
+ 0000:00000000  Imp  WinSendMsg           (PMWIN.920)
+ 0000:00000000  Imp  DosFreeMem           (DOSCALLS.304)
+ 0000:00000000  Imp  DosSetFileSize       (DOSCALLS.272)
+ 0000:00000000  Imp  DosSetNPipeSem       (DOSCALLS.251)
+ 0000:00000000  Imp  DosCreateMutexSem    (DOSCALLS.331)
+ 0000:00000000  Imp  WinQueryWindowPos    (PMWIN.837)
+ 0000:00000000  Imp  DosOpen              (DOSCALLS.273)
+ 0000:00000000  Imp  DosCreateEventSem    (DOSCALLS.324)
+ 0000:00000000  Imp  _callback_opt_sys    (OS2LSRTL.273)
+ 0000:00000000  Imp  WinQuerySysValue     (PMWIN.829)
+ 0000:00000000  Imp  WinDestroyWindow     (PMWIN.728)
+ 0000:00000000  Imp  DosCloseMutexSem     (DOSCALLS.333)
+ 0000:00000000  Imp  WinSetDlgItemText    (PMWIN.859)
+ 0000:00000000  Imp  WinSetWindowText     (PMWIN.877)
+ 0000:00000000  Imp  GetLongIntDlgItem    (OS2LS_UT.21)
+ 0000:00000000  Imp  SendByteImmediate    (OS2LS_IO.17)
+ 0000:00000000  Imp  WinSubclassWindow    (PMWIN.929)
+ 0000:00000000  Imp  WinQueryWindowRect   (PMWIN.840)
+ 0000:00000000  Imp  WinDestroyPointer    (PMWIN.727)
+ 0000:00000000  Imp  GetCountsSinceLast   (OS2LS_IO.22)
+ 0000:00000000  Imp  BreakOff             (OS2LS_IO.21)
+ 0000:00000000  Imp  DosBeep              (DOSCALLS.286)
+ 0000:00000000  Imp  WinCreateStdWindow   (PMWIN.908)
+ 0000:00000000  Imp  BreakOn              (OS2LS_IO.20)
+ 0000:00000000  Imp  DosRead              (DOSCALLS.281)
+ 0000:00000000  Imp  DosReleaseMutexSem   (DOSCALLS.335)
+ 0000:00000000  Imp  DosDisConnectNPipe   (DOSCALLS.242)
+ 0000:00000000  Imp  WinGetPS             (PMWIN.757)
+ 0000:00000000  Imp  DosSleep             (DOSCALLS.229)
+ 0000:00000000  Imp  GetReceiveQueueLen   (OS2LS_IO.18)
+ 0000:00000000  Imp  Checked              (OS2LS_UT.22)
+ 0000:00000000  Imp  _matherr             (OS2LSRTL.346)
+ 0000:00000000  Imp  WinQueryPointerPos   (PMWIN.823)
+ 0000:00000000  Imp  DosStartSession      (SESMGR.37)
+ 0000:00000000  Imp  DosPostEventSem      (DOSCALLS.328)
+ 0000:00000000  Imp  WinDestroyMsgQueue   (PMWIN.726)
+ 0000:00000000  Imp  WinCreateMsgQueue    (PMWIN.716)
+ 0000:00000000  Imp  DosRequestMutexSem   (DOSCALLS.334)
+ 0000:00000000  Imp  DosQueryFileInfo     (DOSCALLS.279)
+ 0000:00000000  Imp  WinInvalidateRect    (PMWIN.765)
+ 0000:00000000  Imp  WinRegisterClass     (PMWIN.926)
+ 0000:00000000  Imp  WinSetPresParam      (PMWIN.938)
+ 0000:00000000  Imp  WinGetLastError      (PMWIN.753)
+ 0000:00000000  Imp  DosWaitEventSem      (DOSCALLS.329)
+ 0000:00000000  Imp  DosResetEventSem     (DOSCALLS.327)
+ 0000:00000000  Imp  strtol               (OS2LSRTL.249)
+ 0000:00000000  Imp  DosQueryProcAddr     (DOSCALLS.321)
+ 0000:00000000  Imp  DosExit              (DOSCALLS.234)
+ 0000:00000000  Imp  _fpreset             (OS2LSRTL.374)
+ 0000:00000000  Imp  WinSendDlgItemMsg    (PMWIN.903)
+ 0000:00000000  Imp  WinDefWindowProc     (PMWIN.911)
+ 0000:00000000  Imp  WinSetWindowPos      (PMWIN.875)
+ 0000:00000000  Imp  WinIsWindowShowing   (PMWIN.774)
+ 0000:00000000  Imp  WinQuerySysPointer   (PMWIN.828)
+ 0000:00000000  Imp  WinDefFileDlgProc    (PMCTLS.5)
+ 0000:00000000  Imp  GpiQueryFontFileDescriptions (PMGPI.452)
+ 0000:00000000  Imp  DosTransactNPipe     (DOSCALLS.252)
+ 0000:00000000  Imp  _fpninit             (OS2LSRTL.380)
+ 0000:00000000  Imp  DosCloseEventSem     (DOSCALLS.326)
+ 0000:00000000  Imp  GpiSetBackMix        (PMGPI.505)
+ 0000:00000000  Imp  WinCopyRect          (PMWIN.710)
+ 0000:00000000  Imp  WinLoadMenu          (PMWIN.778)
+ 0000:00000000  Imp  GetCOMerror          (OS2LS_IO.10)
+ 0000:00000000  Imp  _sprintfieee         (OS2LSRTL.32)
+ 0000:00000000  Imp  _PrintErrMsg         (OS2LSRTL.41)
+ 0000:00000000  Imp  GetTransmitQueueLen  (OS2LS_IO.27)
+ 0000:00000000  Imp  CheckButton          (OS2LS_UT.3)
+ 0000:00000000  Imp  MenuItemCheck        (OS2LS_UT.6)
+ 0000:00000000  Imp  WinQueryDlgItemText  (PMWIN.815)
+ 0000:00000000  Imp  DosExitList          (DOSCALLS.296)
+ 0000:00000000  Imp  WinTrackRect         (PMWIN.890)
+ 0000:00000000  Imp  ControlEnable        (OS2LS_UT.7)
+ 0000:00000000  Imp  WinDestroyHelpInstance (HELPMGR.52)
+ 0000:00000000  Imp  WinPopupMenu         (PMWIN.937)
+ 0000:00000000  Imp  WinBeginPaint        (PMWIN.703)
+ 0000:00000000  Imp  GetBaudRate          (OS2LS_IO.4)
+ 0000:00000000  Imp  WinTerminate         (PMWIN.888)
+ 0000:00000000  Imp  GetModemInputSignals (OS2LS_IO.26)
+ 0000:00000000  Imp  DosDevIOCtl          (DOSCALLS.284)
+ 0000:00000000  Imp  GpiLoadFonts         (PMGPI.400)
+ 0000:00000000  Imp  WinEndPaint          (PMWIN.738)
+ 0000:00000000  Imp  WinSetFocus          (PMWIN.860)
+ 0000:00000000  Imp  WinReleasePS         (PMWIN.848)
+ 0000:00000000  Imp  _exception_procinit  (OS2LSRTL.2)
+ 0000:00000000  Imp  WinStopTimer         (PMWIN.885)
+ 0000:00000000  Imp  GetReceiveQueueCounts (OS2LS_IO.1)
+ 0000:00000000  Imp  GetCOMevent          (OS2LS_IO.8)
+ 0000:00000000  Imp  DosAllocMem          (DOSCALLS.299)
+ 0000:00000000  Imp  WinFillRect          (PMWIN.743)
+ 0000:00000000  Imp  DosCallNPipe         (DOSCALLS.240)
+ 0000:00000000  Imp  CenterDlgBox         (OS2LS_UT.4)
+ 0000:00000000  Imp  GpiSetColor          (PMGPI.517)
+ 0000:00000000  Imp  WinPostMsg           (PMWIN.919)
+ 0000:00000000  Imp  WinMessageBox        (PMWIN.789)
+ 0000:00000000  Imp  WinCreateHelpInstance (HELPMGR.51)
+ 0000:00000000  Imp  WinDismissDlg        (PMWIN.729)
+ 0000:00000000  Imp  DosFreeModule        (DOSCALLS.322)
+ 0000:00000000  Imp  DosSetExceptionHandler (DOSCALLS.354)
+ 0000:00000000  Imp  DosSearchPath        (DOSCALLS.228)
+ 0000:00000000  Imp  WinQueryHelpInstance (HELPMGR.53)
+ 0000:00000000  Imp  WinSetHook           (PMWIN.928)
+ 0000:00000000  Imp  GetFileName          (OS2LS_UT.1)
+ 0000:00000000  Imp  GetCOMstatus         (OS2LS_IO.12)
+ 0000:00000000  Imp  DosLoadModule        (DOSCALLS.318)
+ 0000:00000000  Imp  GetModemOutputSignals (OS2LS_IO.2)
+ 0000:00000000  Imp  GpiSetCharSet        (PMGPI.513)
+ 0000:00000000  Imp  WinDefDlgProc        (PMWIN.910)
+ 0000:00000000  Imp  GpiDestroyPS         (PMGPI.379)
+ 0000:00000000  Imp  WinInitialize        (PMWIN.763)
+ 0001:00000413       WinCommand
+ 0001:00002DF0       SaveWindowPositions
+ 0001:00002FC0       MousePosDlgBox
+ 0001:00003020       PopupMenuItemCheck
+ 0001:00003080       CharPrintable
+ 0001:00003387       CreateColumnWindows
+ 0001:000033F5       fnwpWriteColumnClient
+ 0001:000046E4       fnwpReadColumnClient
+ 0001:000091B0       main
+ 0001:00009CE0       CalcThreadSleepCount
+ 0001:00009D41       AccessCOMscope
+ 0001:00009DB1       ResetHighWater
+ 0001:00009E11       TestOUT1
+ 0001:00009E80       DisplayCharacterInfo
+ 0001:0000B4C7       GetNoClearComEvent_ComError
+ 0001:0000B520       ProcessKeystroke
+ 0001:0000BC30       ReadCaptureFile
+ 0001:0000BF83       WriteCaptureFile
+ 0001:0000C4A1       IncrementFileExt
+ 0001:0000C562       SendXonXoff
+ 0001:0000C5B0       ErrorNotify
+ 0001:0000C601       EnableCOMscope
+ 0001:0000C767       OpenPort
+ 0001:0000CB30       COMscopeOpenFilterProc
+ 0001:0000CB50       AboutBoxDlgProc
+ 0001:0000CC82       DestroyHelpInstance
+ 0001:0000CCC0       DisplayHelpPanel
+ 0001:0000CD20       HelpIndex
+ 0001:0000CDD0       HelpHelpForHelp
+ 0001:0000CE08       HelpInit
+ 0001:0000CF90       fnwpDCBpacketDlgProc
+ 0001:0000D710       fnwpTraceEventDlgProc
+ 0001:0000DB53       fnwpEventDispDlgProc
+ 0001:0000E742       fnwpSetColorDlg
+ 0001:0000EA54       fnwpHdwModemControlDlg
+ 0001:0000ED90       fnwpCountsSetupDlgProc
+ 0001:0000F150       fnwpDisplaySetupDlgProc
+ 0001:0000F813       fnwpMonitorSleepDlg
+ 0001:0000FC50       fnwpBufferSizeDlg
+ 0001:00010290       InitializeData
+ 0001:00010651       StartSystem
+ 0001:000110F2       InitializeSystem
+ 0001:000114F0       CountTraceElement
+ 0001:00011A50       SetupColScrolling
+ 0001:00011C76       AdjustScrollBar
+ 0001:00011F96       ColScroll
+ 0001:000120F0       ClearColScrollBar
+ 0001:00012130       GetColScrollRow
+ 0001:000122F0       RowScroll
+ 0001:00012420       SetupRowScrolling
+ 0001:000124F0       ClearRowScrollBar
+ 0001:00012681       GetRowScrollRow
+ 0001:000128C2       GetDisplayCount
+ 0001:00012B46       fnwpSearchConfigDlgProc
+ 0001:00013A10       SearchCaptureBuffer
+ 0001:00014150       fnwpModemOutStatusDlg
+ 0001:00014404       fnwpModemInStatusDlg
+ 0001:000147D0       fnwpRcvBufferStatusDlg
+ 0001:00014CD4       fnwpXmitBufferStatusDlg
+ 0001:00014F94       fnwpUpdateStatusDlg
+ 0001:00015140       fnwpDeviceStatusDlg
+ 0001:000156C0       fnwpCOMerrorStatesDlg
+ 0001:00015838       fnwpCOMeventStatesDlg
+ 0001:00015A30       fnwpCOMstatusStatesDlg
+ 0001:00015BA6       fnwpXmitStatusStatesDlg
+ 0001:00016350       fnwpDeviceAllStatusDlg
+ 0001:000166F0       RemoteServerThread
+ 0001:00016917       IPCserverThread
+ 0001:00016DB0       KillDisplayThread
+ 0001:00016E00       KillMonitorThread
+ 0001:00016E50       MonitorThread
+ 0001:00017250       ColumnDisplayThread
+ 0001:00017AF3       RowDisplayThread
+ 0001:00018C1C       _exestart
+ 0001:00018CDC       _cppinit
+ 0001:00018CE4       _setuparg
+ 0001:00018EDC       __sctordtorInit
+ 0001:00018EE4       __sctordtorTerm
+ 0001:00018EEC       __wctordtorInit
+ 0001:00018EF0       __wctordtorTerm
+ 0002:00001150       szCOMscopeVersion
+ 0002:00001294       hCom
+ 0002:00001314       wASCIIfont
+ 0002:00001318       szIPCpipeName
+ 0002:00001368       ulMonitorSleepCount
+ 0002:0000136C       ulCalcSleepCount
+ 0002:00001370       szTitle
+ 0002:00003328       ulServerMessage
+ 0002:00003388       bDDstatusActivated
+ 0002:0000338C       bMIstatusActivated
+ 0002:00003390       bMOstatusActivated
+ 0002:00003394       bRBstatusActivated
+ 0002:00003398       bTBstatusActivated
+ 0002:00003468       bDebuggingCOMscope
+ 0002:0000346C       bIsTheFirst
+ 0002:00003478       bRemoteServer
+ 0002:00003480       bSkipInitPos
+ 0002:00003484       wHEXfont
+ 0002:00003488       bCommandLineDataFile
+ 0002:00003490       bCaptureFileWritten
+ 0002:00003494       bFrameActivated
+ 0002:0000349C       bSendNextKeystroke
+ 0002:000034A0       bMaximized
+ 0002:000034A4       bMinimized
+ 0002:000034AC       bDataToView
+ 0002:000034B4       bNoPaint
+ 0002:000034BC       hProfileInstance
+ 0002:000034C0       bStopRemotePipe
+ 0002:000034C4       chPipeDebug
+ 0002:000034CC       bIPCpipeOpen
+ 0002:000034D0       bLaunchShutdownServer
+ 0002:000034D4       bShowServerProcess
+ 0002:000034DC       bStopIPCserverThread
+ 0002:00003960       bPortActive
+ 0002:00003B24       bDriverNotLoaded
+ 0002:00003B28       pwScrollBuffer
+ 0002:00003B30       fLastScroll
+ 0002:00003B34       bSearchInit
+ 0002:00003B38       lSearchStrLen
+ 0002:00003B78       lWriteIndex
+ 0002:00003B80       bBufferWrapped
+ 0002:00003B84       _argc
+ 0002:00003B88       _argv
+ 0002:00003B8C       pfnFillDeviceNameList
+ 0002:00003B90       hevWaitQueueStartSem
+ 0002:00003B94       hmtxIPCpipeBlockedSem
+ 0002:00003B98       tidRemoteServerThread
+ 0002:00003B9C       szDriverVersionString
+ 0002:00003C00       usLastClientPopupItem
+ 0002:00003C04       hevDisplayWaitDataSem
+ 0002:00003C08       ulBytesRead
+ 0002:00003C0C       lLastHeight
+ 0002:00003C10       rc
+ 0002:00003C18       hwndStatAll
+ 0002:00003C1C       stCharCount
+ 0002:00003C2C       ulSessionID
+ 0002:00003C30       szEntryCaptureFileSpec
+ 0002:00003D38       hwndStatDev
+ 0002:00003D3C       lcyTitleBar
+ 0002:00003D40       FrameProcess
+ 0002:00003D44       lScrollCount
+ 0002:00003D48       astFontNames
+ 0002:00003E4C       hCOMscopePipe
+ 0002:00003E50       lMinimumWidth
+ 0002:00003E54       lStatusHeight
+ 0002:00003E58       habAnchorBlock
+ 0002:00003E60       szDataFileSpec
+ 0002:00003F68       szCOMscopePipe
+ 0002:00003FCC       szFontFilePath
+ 0002:000040D4       lMinimumHeight
+ 0002:000040D8       hevKillMonitorThreadSem
+ 0002:000040DC       hwndStatRcvBuf
+ 0002:000040E0       hevCOMscopeSem
+ 0002:000040E4       hevKillDisplayThreadSem
+ 0002:000040E8       swSearchString
+ 0002:000044E8       szErrorMessage
+ 0002:000045B0       astFontMetrics
+ 0002:00004940       stSD
+ 0002:0000497C       hdcPs
+ 0002:00004980       stCFG
+ 0002:00004A64       hpsPs
+ 0002:00004A68       lXScr
+ 0002:00004A6C       lYScr
+ 0002:00004A70       stRow
+ 0002:00004AF0       lFontsAvailable
+ 0002:00004AF4       stCell
+ 0002:00004AF8       hwndStatModemIn
+ 0002:00004AFC       bCOMscopeEnabled
+ 0002:00004B00       hwndStatXmitBuf
+ 0002:00004B08       stRead
+ 0002:00004B8C       pfnManageProfile
+ 0002:00004B90       tidMonitorThread
+ 0002:00004B94       lcxVSc
+ 0002:00004B98       pfnCloseProfile
+ 0002:00004B9C       szServerCommand
+ 0002:00004C00       pfnInstallDevice
+ 0002:00004C08       tidDisplayThread
+ 0002:00004C0C       hwndHelpInstance
+ 0002:00004C10       pwCaptureBuffer
+ 0002:00004C14       szServerProgram
+ 0002:00004D18       hwndStatModemOut
+ 0002:00004D1C       szCOMscopeIniPath
+ 0002:00004E24       pfnGetProfileData
+ 0002:00004E28       szPipeServerName
+ 0002:00004E50       swpLastPosition
+ 0002:00004E78       szCaptureFileName
+ 0002:00004F80       ulIPCpipeInstance
+ 0002:00004F84       szCurrentPortName
+ 0002:00004F9C       szCaptureFileSpec
+ 0002:000050A4       lMouseButtonCount
+ 0002:000050A8       pfnSaveProfileData
+ 0002:000050AC       astFontAttributes
+ 0002:0000518C       tidIPCserverThread
+ 0002:00005190       bStopDisplayThread
+ 0002:00005194       hevWaitCOMiDataSem
+ 0002:0000519C       stIOctl
+ 0002:000051A8       bStopMonitorThread
+ 0002:000051AC       lcxBrdr
+ 0002:000051B0       lcyBrdr
+ 0002:000051B4       bBreakOn
+ 0002:000051B8       stWrite
+ 0002:00005238       stComCtl
+ 0002:0000527C       hIPCpipe
+ 0002:00005280       lcyMenu
+ 0002:00005284       stCOMiCFG
+ 0002:000052D4       pfnDialog
+ 0002:000052D8       stRemote
+ 0002:00005314       hwndFrame
+ 0002:0000531C       stPipeCmd
+ 0002:00005328       stIPCpipe
+ 0002:00005334       szIPCpipe
+ 0002:00005398       stProfile
+ 0002:00005590       stPipeMsg
+ 0002:0000659C       lXfullScr
+ 0002:000065A0       lYfullScr
+ 0002:000065A4       szEntryDataFileSpec
+ 0002:000066AC       lLastWidth
+ 0002:000066B0       ulCOMscopeBufferSize
+ 0002:000066B8       hmtxSigGioBlockedSem
+ 0002:000066BC       szCmdLineIniFileSpec
+ 0002:000067C0       pidSession
+ 0002:000067C4       stColTrack
+ 0002:00006810       hmtxColGioBlockedSem
+ 0002:00006814       hwndClient
+ 0002:00006818       hwndStatus
+ 0002:0000681C       pfnGetProfileString
+ 0002:00006820       pfnSaveProfileString
+ 0002:00006830       hmtxRowGioBlockedSem
+ 0002:0000683C       pfnInitializeProfile
+ 0002:00006840       szTempPath
+
+Program entry point at 0001:00018C1C

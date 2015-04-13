@@ -1,0 +1,70 @@
+# SPL_DEMO.SPL
+# Created by IBM WorkFrame/2 MakeMake at 23:53:17 on 25 Nov 1997
+#
+# The actions included in this make file are:
+#  Compile::C++ Compiler
+#  Link::Linker
+#  Lib::Import Lib
+
+.SUFFIXES:
+
+.SUFFIXES: .LIB .PDR .c .obj 
+
+.all: \
+    p:\lib\SPL_DEMO.LIB
+
+.c.obj:
+    @echo " Compile::C++ Compiler "
+    icc.exe /Fo$*.obj /DINCLUDE_COMDD /DDEMO /Sp1 /Sd /Ss /Q /Wall /Fi /Si /O /W2 /Gm /Gd /Ge- /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+
+{p:\include}.c.obj:
+    @echo " Compile::C++ Compiler "
+    icc.exe /Fo$*.obj /DINCLUDE_COMDD /DDEMO /Sp1 /Sd /Ss /Q /Wall /Fi /Si /O /W2 /Gm /Gd /Ge- /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+
+{P:\spooler}.c.obj:
+    @echo " Compile::C++ Compiler "
+    icc.exe /Fo$*.obj /DINCLUDE_COMDD /DDEMO /Sp1 /Sd /Ss /Q /Wall /Fi /Si /O /W2 /Gm /Gd /Ge- /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+
+{P:\spooler\Demo}.c.obj:
+    @echo " Compile::C++ Compiler "
+    icc.exe /Fo$*.obj /DINCLUDE_COMDD /DDEMO /Sp1 /Sd /Ss /Q /Wall /Fi /Si /O /W2 /Gm /Gd /Ge- /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+
+.PDR.LIB:
+    @echo " Lib::Import Lib "
+    implib.exe %|dpfF.LIB %s
+
+{p:\include}.PDR.LIB:
+    @echo " Lib::Import Lib "
+    implib.exe %|dpfF.LIB %s
+
+{P:\spooler}.PDR.LIB:
+    @echo " Lib::Import Lib "
+    implib.exe %|dpfF.LIB %s
+
+{P:\spooler\Demo}.PDR.LIB:
+    @echo " Lib::Import Lib "
+    implib.exe %|dpfF.LIB %s
+
+p:\lib\SPL_DEMO.PDR: \
+    .\spooler.obj \
+    {$(LIB)}OS2LSRTL.lib \
+    {$(LIB)}OS2LS_UT.lib \
+    {$(LIB)}OS2LS_IO.lib \
+    {$(LIB)}CPPOM30O.lib \
+    {$(LIB)}OS2386.lib \
+    p:\Spooler\SPL_DEMO.def \
+    SPL_DEMO.SPL
+    @echo " Link::Linker "
+    icc.exe @<<
+     /Q /B" /exepack:2 /nobase /packd /optfunc      /ig /noe /m /l /nod"
+     /Fe"p:\lib\SPL_DEMO.PDR" 
+     OS2LSRTL.lib 
+     OS2LS_UT.lib 
+     OS2LS_IO.lib 
+     CPPOM30O.lib 
+     OS2386.lib 
+     p:\Spooler\SPL_DEMO.def
+     .\spooler.obj
+<<
+
+!include "SPL_DEMO.DEP"

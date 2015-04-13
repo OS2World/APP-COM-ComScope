@@ -1,0 +1,54 @@
+This is a profile make file for COMi and COMspool
+[COMi]
+Driver=COMDD.SYS;
+OEM_type=0
+Files=1
+File_1=COMi.INF;
+Version=COMi version 3.81;
+ProgramSize=96798
+[PDR]
+Files=4
+File_1=OS2LS_IO.DLL;
+File_2=OS2LS_UT.DLL;
+File_3=COMi_CFG.DLL;
+File_4=OS2LSRTL.DLL;
+PDR Library=COMi_SPL.PDR;
+ProgramSize=10783
+Version=COMspool version 2.20;
+[Libraries]
+Files=1
+File_1=CONFIG.HLP;
+Base Files=5
+Base_file_1=OS2LS_IO.DLL;
+Base_file_2=OS2LS_UT.DLL;
+Base_file_3=COMi_CFG.DLL;
+Base_file_4=OS2LSRTL.DLL;
+ProgramSize=421034
+[Install]
+Apps Path=C:\COMM;
+Libs Path=C:\OS2\DLL;
+DD Config Help=CONFIG.HLP;
+DD Config Library=COMi_CFG;
+DD Config Function=InstallDevice;
+DD Name=COMi;
+Transfer Library=PDA_INST;
+Transfer Function=InstallCOMi;
+Version=OS/tools' Install version 2.20;
+Check Caption One=COMi Device Driver;
+Check Caption Two=COMscope;
+Check Caption Three=Print Spooler Utilities;
+Check Caption Four=Other Utilities;
+Check Caption Five=COMi Configuration and Installation;
+Title=COMspool and COMi Installation;
+Banner One=for;
+Banner Two=COMspool and the COMi Device Driver;
+License File=license.txt;
+License Caption=License Information:;
+Files=5
+File_1=INSTALL.EXE;
+File_2=INSTALL.HLP;
+File_3=INSTALL.ICO;
+File_4=PDA_INST.DLL;
+File_5=INIDUMP.EXE;
+ProgramSize=105185
+

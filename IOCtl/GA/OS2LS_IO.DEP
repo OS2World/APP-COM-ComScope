@@ -1,0 +1,9 @@
+
+.\ioctl.obj: \
+    p:\ioctl\ioctl.c \
+    {p:\ioctl;$(INCLUDE);}COMMON.H \
+    {p:\ioctl;$(INCLUDE);}COMDD.H \
+    {p:\ioctl;$(INCLUDE);}ioctl.h
+
+f:\work\lib\OS2ls_io.LIB: \
+    f:\work\lib\OS2ls_io.dll

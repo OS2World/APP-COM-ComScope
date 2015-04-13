@@ -1,0 +1,62 @@
+:TARGET.SUFFIXES
+:TARGET.SUFFIXES
+:DEPENDENCY..LIB .c .dll .obj 
+:TARGET.all
+:DEPENDENCY.
+p:\lib\PDA_inst.LIB
+:RULE..c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Sp1 /Sd /Ss /Q /Fi /Si /O /W1 /Gm /Gd /Ge- /G4 /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+:RULE.{p:\Install\PDA}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Sp1 /Sd /Ss /Q /Fi /Si /O /W1 /Gm /Gd /Ge- /G4 /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+:RULE.{p:\Install\PDA\GA}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Sp1 /Sd /Ss /Q /Fi /Si /O /W1 /Gm /Gd /Ge- /G4 /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C %s
+:RULE..dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe /NOLOGO p:\lib\%|fF.LIB %s
+:RULE.{p:\Install\PDA}.dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe /NOLOGO p:\lib\%|fF.LIB %s
+:RULE.{p:\Install\PDA\GA}.dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe /NOLOGO p:\lib\%|fF.LIB %s
+:TARGET.p:\lib\PDA_inst.dll
+:DEPENDENCY.
+.\comi.obj
+{$(LIB)}OS2LSRTL.lib
+{$(LIB)}OS2386.lib
+{$(LIB)}CPPOM30O.lib
+{$(LIB)}OS2LS_UT.lib
+.\\..\PDA_inst.def
+:ACTION.Link::Linker
+:COMMAND.
+icc.exe @<<
+ /Q /B" /exepack:2 /nobase /packd /optfunc      /noe /m /l /nod"
+ /Fe"p:\lib\PDA_inst.dll" 
+ OS2LSRTL.lib 
+ OS2386.lib 
+ CPPOM30O.lib 
+ OS2LS_UT.lib 
+ .\\..\PDA_inst.def
+ .\comi.obj
+<<
+:TARGET..\comi.obj
+:DEPENDENCY.
+p:\Install\PDA\comi.c
+{p:\Install\PDA;$(INCLUDE);}COMMON.H
+{p:\Install\PDA;$(INCLUDE);}utility.h
+{p:\Install\PDA;$(INCLUDE);}CONFIG.H
+{p:\Install\PDA;$(INCLUDE);}help.h
+p:\install\install.h
+p:\install\resource.h
+:TARGET.p:\lib\PDA_inst.LIB
+:DEPENDENCY.
+p:\lib\PDA_inst.dll

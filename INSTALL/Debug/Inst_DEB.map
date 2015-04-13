@@ -1,0 +1,544 @@
+
+ INST_DEB
+
+ Start         Length     Name                   Class
+ 0001:00000000 000004951H CODE32                 CODE 32-bit
+	at offset 00000000 01235H bytes from P:\install\debug\inst_dlg.obj (p:\Install\inst_dlg.c)
+	at offset 00001240 02738H bytes from P:\install\debug\winstall.obj (p:\Install\winstall.c)
+	at offset 00003980 00407H bytes from P:\install\debug\help.obj (p:\Install\help.c)
+	at offset 00003d90 008ECH bytes from P:\install\debug\instutil.obj (p:\Install\instutil.c)
+	at offset 0000467c 000BEH bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\dde4strt.c)
+	at offset 0000473c 00007H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\cppinit.asm)
+	at offset 00004744 001F8H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\setuparg.asm)
+	at offset 0000493c 0000DH bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\sctdt.c)
+	at offset 0000494c 00005H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\wctdt.c)
+
+ 0002:00000000 000000000H CONST32_RO             CONST 32-bit
+
+ 0002:00000000 000000EF0H DATA32                 DATA 32-bit
+	at offset 00000000 00148H bytes from P:\install\debug\inst_dlg.obj (p:\Install\inst_dlg.c)
+	at offset 00000148 00C38H bytes from P:\install\debug\winstall.obj (p:\Install\winstall.c)
+	at offset 00000d80 0010CH bytes from P:\install\debug\help.obj (p:\Install\help.c)
+	at offset 00000e8c 00050H bytes from P:\install\debug\instutil.obj (p:\Install\instutil.c)
+	at offset 00000edc 00004H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\exeentry.asm)
+	at offset 00000ee0 00010H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\setuparg.asm)
+
+ 0002:00000EF0 000000000H CTOR_DTOR1             DATA 32-bit
+
+ 0002:00000EF0 000000000H CTOR_DTOR2             DATA 32-bit
+
+ 0002:00000EF0 000000000H CTOR_DTOR3             DATA 32-bit
+
+ 0002:00000EF0 000000000H EDC1                   EDC_CLASS 32-bit
+
+ 0002:00000EF0 000000018H EDC2                   EDC_CLASS 32-bit
+	at offset 00000000 0000CH bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\cppinit.asm)
+	at offset 0000000c 0000CH bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\setuparg.asm)
+
+ 0002:00000F08 000000000H EDC3                   EDC_CLASS 32-bit
+
+ 0002:00000F08 00000003CH BSS32                  BSS 32-bit
+	at offset 00000000 00034H bytes from P:\install\debug\winstall.obj (p:\Install\winstall.c)
+	at offset 00000034 00008H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\dde4strt.c)
+
+ 0002:00000F44 000000D18H c_common               BSS 32-bit
+
+ 0002:00001C60 000008000H STACK32                STACK 32-bit
+	at offset 00000000 08000H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\exeentry.asm)
+
+
+ Origin   Group
+ 0000:0   FLAT
+ 0002:0   DGROUP
+
+  Address         Publics by Name
+
+ 0000:00000000  Imp  AppendINI            (UTIL_DEB.24)
+ 0002:00000F24       bCOMiInstalled
+ 0002:00000C7C       bCOMiToInstall
+ 0002:00000C78       bCOMscopeToInstall
+ 0002:00000F28       bConfigurationOnly
+ 0002:00000F30       bDebug
+ 0002:00000F0C       bFalseStart
+ 0002:00000F2C       bInstallDemo
+ 0002:00000C80       bInstallToInstall
+ 0002:00000F20       bItemFiveLocked
+ 0002:00000F1C       bItemFourLocked
+ 0002:00000C98       bItemOneLocked
+ 0002:00000F18       bItemThreeLocked
+ 0002:00000F14       bItemTwoLocked
+ 0002:00000C90       bLibrariesToInstall
+ 0002:00000C94       bObjectsToCreate
+ 0002:00000C88       bPagerToInstall
+ 0002:00000C8C       bPDRtoInstall
+ 0002:00000F34       bPreviousInstallation
+ 0002:00000F08       bShowingProgress
+ 0002:00000F10       bUninstall
+ 0002:00000C84       bUtilToInstall
+ 0001:00000A30       CalcSizeSetCaption
+ 0001:00004600       CenterWindow
+ 0000:00000000  Imp  CheckButton          (UTIL_DEB.3)
+ 0000:00000000  Imp  Checked              (UTIL_DEB.22)
+ 0001:00002B80       ClientPaint
+ 0001:000035D8       ConfigCOMi
+ 0001:00003250       ConfigQuickPage
+ 0000:00000000  Imp  ControlEnable        (UTIL_DEB.7)
+ 0001:00002D34       CreatePS
+ 0001:00003C38       DestroyHelpInstance
+ 0001:00003BF5       DisplayHelpPanel
+ 0000:00000000  Imp  DosAllocMem          (DOSCALLS.299)
+ 0000:00000000  Imp  DosBeep              (DOSCALLS.286)
+ 0000:00000000  Imp  DosClose             (DOSCALLS.257)
+ 0000:00000000  Imp  DosDevIOCtl          (DOSCALLS.284)
+ 0000:00000000  Imp  DosExit              (DOSCALLS.234)
+ 0000:00000000  Imp  DosExitList          (DOSCALLS.296)
+ 0000:00000000  Imp  DosFreeMem           (DOSCALLS.304)
+ 0000:00000000  Imp  DosFreeModule        (DOSCALLS.322)
+ 0000:00000000  Imp  DosLoadModule        (DOSCALLS.318)
+ 0000:00000000  Imp  DosOpen              (DOSCALLS.273)
+ 0000:00000000  Imp  DosQueryFileInfo     (DOSCALLS.279)
+ 0000:00000000  Imp  DosQueryPathInfo     (DOSCALLS.223)
+ 0000:00000000  Imp  DosQueryProcAddr     (DOSCALLS.321)
+ 0000:00000000  Imp  DosQuerySysInfo      (DOSCALLS.348)
+ 0000:00000000  Imp  DosRead              (DOSCALLS.281)
+ 0000:00000000  Imp  DosSetExceptionHandler (DOSCALLS.354)
+ 0000:00000000  Imp  DosUnsetExceptionHandler (DOSCALLS.355)
+ 0000:00000000  Imp  exit                 (OS2LSRTL.106)
+ 0002:000010DC       fattBigFont
+ 0002:00001164       fattMsgFont
+ 0001:00003C70       fnwpAboutBoxDlgProc
+ 0001:000023D0       fnwpClient
+ 0001:00000AE2       fnwpInfoDlgProc
+ 0001:00000000       fnwpTransferDlg
+ 0001:00000E86       fnwpUninstallDlgProc
+ 0000:00000000  Imp  free                 (OS2LSRTL.88)
+ 0001:000044B0       GetDriverPath
+ 0000:00000000  Imp  GpiCharStringAt      (PMGPI.359)
+ 0000:00000000  Imp  GpiCreateLogFont     (PMGPI.368)
+ 0000:00000000  Imp  GpiDestroyPS         (PMGPI.379)
+ 0000:00000000  Imp  GpiQueryFonts        (PMGPI.586)
+ 0000:00000000  Imp  GpiSetBackColor      (PMGPI.504)
+ 0000:00000000  Imp  GpiSetBackMix        (PMGPI.505)
+ 0000:00000000  Imp  GpiSetCharSet        (PMGPI.513)
+ 0000:00000000  Imp  GpiSetColor          (PMGPI.517)
+ 0002:00001608       hConfigProfile
+ 0002:00001784       hdcPs
+ 0001:00003BD0       HelpAbout
+ 0001:00003B13       HelpExtended
+ 0001:00003AD5       HelpHelpForHelp
+ 0001:00003B92       HelpIndex
+ 0001:00003980       HelpInit
+ 0001:00003B51       HelpKeys
+ 0002:0000192C       hInstalledProfile
+ 0002:00001788       hpsPs
+ 0002:000016FC       hSourceProfile
+ 0002:00001BC0       hwndClient
+ 0002:00001780       hwndInstallHelpInstance
+ 0001:00002750       InstallCommand
+ 0002:00001AA0       lcxBrdr
+ 0002:000017D0       lcxVSc
+ 0002:0000178C       lXScr
+ 0001:00001240       main
+ 0000:00000000  Imp  malloc               (OS2LSRTL.167)
+ 0001:00003DB2       MemAlloc
+ 0001:00003D90       MemFree
+ 0000:00000000  Imp  memset               (OS2LSRTL.194)
+ 0000:00000000  Imp  MenuItemEnable       (UTIL_DEB.9)
+ 0000:00000000  Imp  MessageBox           (UTIL_DEB.29)
+ 0001:000043D0       OpenFile
+ 0001:00003D61       pfnMessageBoxHelpHook
+ 0000:00000000  Imp  PrfCloseProfile      (PMSHAPI.103)
+ 0000:00000000  Imp  PrfOpenProfile       (PMSHAPI.102)
+ 0000:00000000  Imp  PrfQueryProfileData  (PMSHAPI.117)
+ 0000:00000000  Imp  PrfQueryProfileString (PMSHAPI.115)
+ 0001:00003E10       PrintBanners
+ 0001:00003F33       PrintDebug
+ 0001:00004200       PrintProgress
+ 0001:00004043       PrintUninstallProgress
+ 0002:00001AA8       pszCurrentAppsPath
+ 0002:000019AC       pszDriverIniPath
+ 0002:000017CC       pszHelpFileSpec
+ 0002:00001AA4       pszPath
+ 0002:00001604       pszSourceFile
+ 0002:00001228       pszTransferLibrarySpec
+ 0002:00001C54       pszUninstallIniPath
+ 0000:00000000  Imp  realloc              (OS2LSRTL.277)
+ 0001:00004443       SetEndOfPath
+ 0001:00004550       SetInitialPosition
+ 0002:00001AAC       stBigCell
+ 0002:00001AB0       stCOMiCFG
+ 0002:00001598       stFileStatus
+ 0002:000017D4       stInst
+ 0002:00001B1C       stMsgCell
+ 0002:00001B00       stPageCFG
+ 0000:00000000  Imp  strcpy               (OS2LSRTL.262)
+ 0000:00000000  Imp  strlen               (OS2LSRTL.238)
+ 0000:00000000  Imp  strncpy              (OS2LSRTL.402)
+ 0002:0000122C       stUninstall
+ 0002:0000124C       szAppIconFile
+ 0002:000011D8       szAppVersion
+ 0002:00001060       szBannerOne
+ 0002:00001114       szBannerTwo
+ 0002:00001A00       szCheckFiveCaption
+ 0002:00001A3C       szCheckFourCaption
+ 0002:000018D8       szCheckOneCaption
+ 0002:00001B28       szCheckThreeCaption
+ 0002:00001930       szCheckTwoCaption
+ 0002:000015B4       szCOMiVersion
+ 0002:000019B0       szCOMscopeVersion
+ 0002:000016C0       szConfigAppFunctionName
+ 0002:0000160C       szConfigAppHelpFileName
+ 0002:000010A0       szConfigAppLibraryName
+ 0002:00001790       szConfigAppName
+ 0002:00001020       szConfigDDfunctionName
+ 0002:00000FE4       szConfigDDhelpFileName
+ 0002:00001C18       szConfigDDlibraryName
+ 0002:00001648       szConfigDDname
+ 0002:00001A78       szDDname
+ 0002:0000165C       szDebugLineOne
+ 0002:0000171C       szDebugLineTwo
+ 0002:0000196C       szDefaultAppsPath
+ 0002:00001848       szDefaultDLLpath
+ 0002:00001BC4       szDemoPath
+ 0002:00000F80       szDriverVersionString
+ 0002:00001B68       szEXEtitle
+ 0002:00001278       szFalseStart1
+ 0002:00001408       szFalseStart2
+ 0002:00001154       szFileNumber
+ 0002:00000C5D       szHelpFileName
+ 0002:00001BA8       szHelpName
+ 0002:00000E71       szHelpWindowTitle
+ 0002:00000C69       szHiddenFile
+ 0002:00000D00       szInfoCaption
+ 0002:00001704       szInfoFileName
+ 0002:00000D71       szIniFileName
+ 0002:00001888       szInstallVersion
+ 0002:00000C9C       szLicenseCaption
+ 0002:00001914       szLicenseFileName
+ 0002:000017A4       szPagerFileName
+ 0002:0000119C       szTransferFunctionName
+ 0002:00000F44       szTransferLibraryName
+ 0002:00000D64       szUninstallIniFileName
+ 0002:0000105C       ulBootDrive
+ 0002:00001B64       ulCOMiSize
+ 0002:00001700       ulCOMscopeSize
+ 0002:000015B0       ulInstallSize
+ 0002:00001C14       ulLibsSize
+ 0002:00001B24       ulOEMtype
+ 0002:00001160       ulPagerSize
+ 0002:00001B20       ulPDRsize
+ 0002:00001C58       ulUtilSize
+ 0000:00000000  Imp  WinAssociateHelpInstance (HELPMGR.54)
+ 0000:00000000  Imp  WinBeginPaint        (PMWIN.703)
+ 0000:00000000  Imp  WinCreateHelpInstance (HELPMGR.51)
+ 0000:00000000  Imp  WinCreateMsgQueue    (PMWIN.716)
+ 0000:00000000  Imp  WinCreateStdWindow   (PMWIN.908)
+ 0000:00000000  Imp  WinDefDlgProc        (PMWIN.910)
+ 0000:00000000  Imp  WinDefWindowProc     (PMWIN.911)
+ 0000:00000000  Imp  WinDestroyHelpInstance (HELPMGR.52)
+ 0000:00000000  Imp  WinDestroyMsgQueue   (PMWIN.726)
+ 0000:00000000  Imp  WinDestroyWindow     (PMWIN.728)
+ 0000:00000000  Imp  WinDismissDlg        (PMWIN.729)
+ 0000:00000000  Imp  WinDispatchMsg       (PMWIN.912)
+ 0000:00000000  Imp  WinDlgBox            (PMWIN.923)
+ 0000:00000000  Imp  WinEndPaint          (PMWIN.738)
+ 0000:00000000  Imp  WinFillRect          (PMWIN.743)
+ 0000:00000000  Imp  WinGetMsg            (PMWIN.915)
+ 0000:00000000  Imp  WinGetPS             (PMWIN.757)
+ 0000:00000000  Imp  WinInitialize        (PMWIN.763)
+ 0000:00000000  Imp  WinInvalidateRect    (PMWIN.765)
+ 0000:00000000  Imp  WinMessageBox        (PMWIN.789)
+ 0000:00000000  Imp  WinOpenWindowDC      (PMWIN.794)
+ 0000:00000000  Imp  WinPostMsg           (PMWIN.919)
+ 0000:00000000  Imp  WinQueryDlgItemText  (PMWIN.815)
+ 0000:00000000  Imp  WinQueryHelpInstance (HELPMGR.53)
+ 0000:00000000  Imp  WinQuerySysValue     (PMWIN.829)
+ 0000:00000000  Imp  WinQueryWindowPos    (PMWIN.837)
+ 0000:00000000  Imp  WinQueryWindowRect   (PMWIN.840)
+ 0000:00000000  Imp  WinRegisterClass     (PMWIN.926)
+ 0000:00000000  Imp  WinReleaseHook       (PMWIN.927)
+ 0000:00000000  Imp  WinReleasePS         (PMWIN.848)
+ 0000:00000000  Imp  WinSendDlgItemMsg    (PMWIN.903)
+ 0000:00000000  Imp  WinSendMsg           (PMWIN.920)
+ 0000:00000000  Imp  WinSetDlgItemText    (PMWIN.859)
+ 0000:00000000  Imp  WinSetFocus          (PMWIN.860)
+ 0000:00000000  Imp  WinSetHook           (PMWIN.928)
+ 0000:00000000  Imp  WinSetWindowPos      (PMWIN.875)
+ 0000:00000000  Imp  WinSetWindowText     (PMWIN.877)
+ 0000:00000000  Imp  WinShowWindow        (PMWIN.883)
+ 0000:00000000  Imp  WinTerminate         (PMWIN.888)
+ 0000:00000000  Imp  WinWindowFromID      (PMWIN.899)
+ 0002:00000F3C       _argc
+ 0002:00000F40       _argv
+ 0000:00000000  Imp  _callback_opt_sys    (OS2LSRTL.273)
+ 0001:0000473C       _cppinit
+ 0000:00000000  Imp  _CRT_init            (OS2LSRTL.467)
+ 0000:00000000  Imp  _CRT_term            (OS2LSRTL.457)
+ 0000:00000000  Imp  _ctype               (OS2LSRTL.220)
+ 0002:00000F08       _edata
+ 0002:00001C60       _end
+ 0000:00000000  Imp  _environ             (OS2LSRTL.396)
+ 0000:00000000  Imp  _exception_procinit  (OS2LSRTL.2)
+ 0002:00000EDC       _exeentry
+ 0001:0000467C       _exestart
+ 0000:00000000  Imp  _EXE_Exception       (OS2LSRTL.114)
+ 0000:00000000  Imp  _fpninit             (OS2LSRTL.380)
+ 0000:00000000  Imp  _fpreset             (OS2LSRTL.374)
+ 0000:00000000  Imp  _matherr             (OS2LSRTL.346)
+ 0002:00001274       _matherr_ptr
+ 0000:00000000  Imp  _PrintErrMsg         (OS2LSRTL.41)
+ 0001:00004744       _setuparg
+ 0000:00000000  Imp  _sprintfieee         (OS2LSRTL.32)
+ 0000:00000000  Imp  _terminate           (OS2LSRTL.482)
+ 0001:0000470C       __RunExitList
+ 0001:0000493C       __sctordtorInit
+ 0001:00004944       __sctordtorTerm
+ 0001:0000494C       __wctordtorInit
+ 0001:00004950       __wctordtorTerm
+
+  Address         Publics by Value
+
+ 0000:00000000  Imp  _EXE_Exception       (OS2LSRTL.114)
+ 0000:00000000  Imp  WinCreateHelpInstance (HELPMGR.51)
+ 0000:00000000  Imp  GpiSetBackColor      (PMGPI.504)
+ 0000:00000000  Imp  WinOpenWindowDC      (PMWIN.794)
+ 0000:00000000  Imp  malloc               (OS2LSRTL.167)
+ 0000:00000000  Imp  strcpy               (OS2LSRTL.262)
+ 0000:00000000  Imp  _CRT_init            (OS2LSRTL.467)
+ 0000:00000000  Imp  memset               (OS2LSRTL.194)
+ 0000:00000000  Imp  WinWindowFromID      (PMWIN.899)
+ 0000:00000000  Imp  GpiCharStringAt      (PMGPI.359)
+ 0000:00000000  Imp  _CRT_term            (OS2LSRTL.457)
+ 0000:00000000  Imp  GpiCreateLogFont     (PMGPI.368)
+ 0000:00000000  Imp  PrfCloseProfile      (PMSHAPI.103)
+ 0000:00000000  Imp  _ctype               (OS2LSRTL.220)
+ 0000:00000000  Imp  WinGetMsg            (PMWIN.915)
+ 0000:00000000  Imp  strlen               (OS2LSRTL.238)
+ 0000:00000000  Imp  WinSendMsg           (PMWIN.920)
+ 0000:00000000  Imp  WinShowWindow        (PMWIN.883)
+ 0000:00000000  Imp  WinQueryHelpInstance (HELPMGR.53)
+ 0000:00000000  Imp  MenuItemEnable       (UTIL_DEB.9)
+ 0000:00000000  Imp  WinPostMsg           (PMWIN.919)
+ 0000:00000000  Imp  WinReleaseHook       (PMWIN.927)
+ 0000:00000000  Imp  WinSetHook           (PMWIN.928)
+ 0000:00000000  Imp  PrfOpenProfile       (PMSHAPI.102)
+ 0000:00000000  Imp  PrfQueryProfileData  (PMSHAPI.117)
+ 0000:00000000  Imp  _terminate           (OS2LSRTL.482)
+ 0000:00000000  Imp  MessageBox           (UTIL_DEB.29)
+ 0000:00000000  Imp  DosUnsetExceptionHandler (DOSCALLS.355)
+ 0000:00000000  Imp  WinDispatchMsg       (PMWIN.912)
+ 0000:00000000  Imp  DosFreeMem           (DOSCALLS.304)
+ 0000:00000000  Imp  WinAssociateHelpInstance (HELPMGR.54)
+ 0000:00000000  Imp  free                 (OS2LSRTL.88)
+ 0000:00000000  Imp  exit                 (OS2LSRTL.106)
+ 0000:00000000  Imp  WinDlgBox            (PMWIN.923)
+ 0000:00000000  Imp  WinDestroyWindow     (PMWIN.728)
+ 0000:00000000  Imp  WinGetPS             (PMWIN.757)
+ 0000:00000000  Imp  WinQuerySysValue     (PMWIN.829)
+ 0000:00000000  Imp  _callback_opt_sys    (OS2LSRTL.273)
+ 0000:00000000  Imp  DosExit              (DOSCALLS.234)
+ 0000:00000000  Imp  Checked              (UTIL_DEB.22)
+ 0000:00000000  Imp  realloc              (OS2LSRTL.277)
+ 0000:00000000  Imp  DosRead              (DOSCALLS.281)
+ 0000:00000000  Imp  WinQueryWindowPos    (PMWIN.837)
+ 0000:00000000  Imp  WinCreateStdWindow   (PMWIN.908)
+ 0000:00000000  Imp  WinDestroyMsgQueue   (PMWIN.726)
+ 0000:00000000  Imp  DosBeep              (DOSCALLS.286)
+ 0000:00000000  Imp  DosOpen              (DOSCALLS.273)
+ 0000:00000000  Imp  _fpninit             (OS2LSRTL.380)
+ 0000:00000000  Imp  _matherr             (OS2LSRTL.346)
+ 0000:00000000  Imp  AppendINI            (UTIL_DEB.24)
+ 0000:00000000  Imp  WinQueryWindowRect   (PMWIN.840)
+ 0000:00000000  Imp  WinRegisterClass     (PMWIN.926)
+ 0000:00000000  Imp  DosQueryFileInfo     (DOSCALLS.279)
+ 0000:00000000  Imp  WinInvalidateRect    (PMWIN.765)
+ 0000:00000000  Imp  DosQueryProcAddr     (DOSCALLS.321)
+ 0000:00000000  Imp  DosQueryPathInfo     (DOSCALLS.223)
+ 0000:00000000  Imp  _fpreset             (OS2LSRTL.374)
+ 0000:00000000  Imp  _environ             (OS2LSRTL.396)
+ 0000:00000000  Imp  WinDefWindowProc     (PMWIN.911)
+ 0000:00000000  Imp  WinSetWindowPos      (PMWIN.875)
+ 0000:00000000  Imp  DosQuerySysInfo      (DOSCALLS.348)
+ 0000:00000000  Imp  WinSendDlgItemMsg    (PMWIN.903)
+ 0000:00000000  Imp  DosClose             (DOSCALLS.257)
+ 0000:00000000  Imp  WinCreateMsgQueue    (PMWIN.716)
+ 0000:00000000  Imp  strncpy              (OS2LSRTL.402)
+ 0000:00000000  Imp  WinSetWindowText     (PMWIN.877)
+ 0000:00000000  Imp  WinSetDlgItemText    (PMWIN.859)
+ 0000:00000000  Imp  WinQueryDlgItemText  (PMWIN.815)
+ 0000:00000000  Imp  WinSetFocus          (PMWIN.860)
+ 0000:00000000  Imp  DosLoadModule        (DOSCALLS.318)
+ 0000:00000000  Imp  DosDevIOCtl          (DOSCALLS.284)
+ 0000:00000000  Imp  DosSetExceptionHandler (DOSCALLS.354)
+ 0000:00000000  Imp  ControlEnable        (UTIL_DEB.7)
+ 0000:00000000  Imp  WinDefDlgProc        (PMWIN.910)
+ 0000:00000000  Imp  WinFillRect          (PMWIN.743)
+ 0000:00000000  Imp  _PrintErrMsg         (OS2LSRTL.41)
+ 0000:00000000  Imp  GpiDestroyPS         (PMGPI.379)
+ 0000:00000000  Imp  DosAllocMem          (DOSCALLS.299)
+ 0000:00000000  Imp  GpiSetBackMix        (PMGPI.505)
+ 0000:00000000  Imp  WinBeginPaint        (PMWIN.703)
+ 0000:00000000  Imp  CheckButton          (UTIL_DEB.3)
+ 0000:00000000  Imp  GpiSetColor          (PMGPI.517)
+ 0000:00000000  Imp  WinTerminate         (PMWIN.888)
+ 0000:00000000  Imp  DosExitList          (DOSCALLS.296)
+ 0000:00000000  Imp  WinDestroyHelpInstance (HELPMGR.52)
+ 0000:00000000  Imp  GpiQueryFonts        (PMGPI.586)
+ 0000:00000000  Imp  PrfQueryProfileString (PMSHAPI.115)
+ 0000:00000000  Imp  _sprintfieee         (OS2LSRTL.32)
+ 0000:00000000  Imp  WinInitialize        (PMWIN.763)
+ 0000:00000000  Imp  WinReleasePS         (PMWIN.848)
+ 0000:00000000  Imp  _exception_procinit  (OS2LSRTL.2)
+ 0000:00000000  Imp  WinDismissDlg        (PMWIN.729)
+ 0000:00000000  Imp  WinEndPaint          (PMWIN.738)
+ 0000:00000000  Imp  WinMessageBox        (PMWIN.789)
+ 0000:00000000  Imp  DosFreeModule        (DOSCALLS.322)
+ 0000:00000000  Imp  GpiSetCharSet        (PMGPI.513)
+ 0001:00000000       fnwpTransferDlg
+ 0001:00000A30       CalcSizeSetCaption
+ 0001:00000AE2       fnwpInfoDlgProc
+ 0001:00000E86       fnwpUninstallDlgProc
+ 0001:00001240       main
+ 0001:000023D0       fnwpClient
+ 0001:00002750       InstallCommand
+ 0001:00002B80       ClientPaint
+ 0001:00002D34       CreatePS
+ 0001:00003250       ConfigQuickPage
+ 0001:000035D8       ConfigCOMi
+ 0001:00003980       HelpInit
+ 0001:00003AD5       HelpHelpForHelp
+ 0001:00003B13       HelpExtended
+ 0001:00003B51       HelpKeys
+ 0001:00003B92       HelpIndex
+ 0001:00003BD0       HelpAbout
+ 0001:00003BF5       DisplayHelpPanel
+ 0001:00003C38       DestroyHelpInstance
+ 0001:00003C70       fnwpAboutBoxDlgProc
+ 0001:00003D61       pfnMessageBoxHelpHook
+ 0001:00003D90       MemFree
+ 0001:00003DB2       MemAlloc
+ 0001:00003E10       PrintBanners
+ 0001:00003F33       PrintDebug
+ 0001:00004043       PrintUninstallProgress
+ 0001:00004200       PrintProgress
+ 0001:000043D0       OpenFile
+ 0001:00004443       SetEndOfPath
+ 0001:000044B0       GetDriverPath
+ 0001:00004550       SetInitialPosition
+ 0001:00004600       CenterWindow
+ 0001:0000467C       _exestart
+ 0001:0000470C       __RunExitList
+ 0001:0000473C       _cppinit
+ 0001:00004744       _setuparg
+ 0001:0000493C       __sctordtorInit
+ 0001:00004944       __sctordtorTerm
+ 0001:0000494C       __wctordtorInit
+ 0001:00004950       __wctordtorTerm
+ 0002:00000C5D       szHelpFileName
+ 0002:00000C69       szHiddenFile
+ 0002:00000C78       bCOMscopeToInstall
+ 0002:00000C7C       bCOMiToInstall
+ 0002:00000C80       bInstallToInstall
+ 0002:00000C84       bUtilToInstall
+ 0002:00000C88       bPagerToInstall
+ 0002:00000C8C       bPDRtoInstall
+ 0002:00000C90       bLibrariesToInstall
+ 0002:00000C94       bObjectsToCreate
+ 0002:00000C98       bItemOneLocked
+ 0002:00000C9C       szLicenseCaption
+ 0002:00000D00       szInfoCaption
+ 0002:00000D64       szUninstallIniFileName
+ 0002:00000D71       szIniFileName
+ 0002:00000E71       szHelpWindowTitle
+ 0002:00000EDC       _exeentry
+ 0002:00000F08       bShowingProgress
+ 0002:00000F08       _edata
+ 0002:00000F0C       bFalseStart
+ 0002:00000F10       bUninstall
+ 0002:00000F14       bItemTwoLocked
+ 0002:00000F18       bItemThreeLocked
+ 0002:00000F1C       bItemFourLocked
+ 0002:00000F20       bItemFiveLocked
+ 0002:00000F24       bCOMiInstalled
+ 0002:00000F28       bConfigurationOnly
+ 0002:00000F2C       bInstallDemo
+ 0002:00000F30       bDebug
+ 0002:00000F34       bPreviousInstallation
+ 0002:00000F3C       _argc
+ 0002:00000F40       _argv
+ 0002:00000F44       szTransferLibraryName
+ 0002:00000F80       szDriverVersionString
+ 0002:00000FE4       szConfigDDhelpFileName
+ 0002:00001020       szConfigDDfunctionName
+ 0002:0000105C       ulBootDrive
+ 0002:00001060       szBannerOne
+ 0002:000010A0       szConfigAppLibraryName
+ 0002:000010DC       fattBigFont
+ 0002:00001114       szBannerTwo
+ 0002:00001154       szFileNumber
+ 0002:00001160       ulPagerSize
+ 0002:00001164       fattMsgFont
+ 0002:0000119C       szTransferFunctionName
+ 0002:000011D8       szAppVersion
+ 0002:00001228       pszTransferLibrarySpec
+ 0002:0000122C       stUninstall
+ 0002:0000124C       szAppIconFile
+ 0002:00001274       _matherr_ptr
+ 0002:00001278       szFalseStart1
+ 0002:00001408       szFalseStart2
+ 0002:00001598       stFileStatus
+ 0002:000015B0       ulInstallSize
+ 0002:000015B4       szCOMiVersion
+ 0002:00001604       pszSourceFile
+ 0002:00001608       hConfigProfile
+ 0002:0000160C       szConfigAppHelpFileName
+ 0002:00001648       szConfigDDname
+ 0002:0000165C       szDebugLineOne
+ 0002:000016C0       szConfigAppFunctionName
+ 0002:000016FC       hSourceProfile
+ 0002:00001700       ulCOMscopeSize
+ 0002:00001704       szInfoFileName
+ 0002:0000171C       szDebugLineTwo
+ 0002:00001780       hwndInstallHelpInstance
+ 0002:00001784       hdcPs
+ 0002:00001788       hpsPs
+ 0002:0000178C       lXScr
+ 0002:00001790       szConfigAppName
+ 0002:000017A4       szPagerFileName
+ 0002:000017CC       pszHelpFileSpec
+ 0002:000017D0       lcxVSc
+ 0002:000017D4       stInst
+ 0002:00001848       szDefaultDLLpath
+ 0002:00001888       szInstallVersion
+ 0002:000018D8       szCheckOneCaption
+ 0002:00001914       szLicenseFileName
+ 0002:0000192C       hInstalledProfile
+ 0002:00001930       szCheckTwoCaption
+ 0002:0000196C       szDefaultAppsPath
+ 0002:000019AC       pszDriverIniPath
+ 0002:000019B0       szCOMscopeVersion
+ 0002:00001A00       szCheckFiveCaption
+ 0002:00001A3C       szCheckFourCaption
+ 0002:00001A78       szDDname
+ 0002:00001AA0       lcxBrdr
+ 0002:00001AA4       pszPath
+ 0002:00001AA8       pszCurrentAppsPath
+ 0002:00001AAC       stBigCell
+ 0002:00001AB0       stCOMiCFG
+ 0002:00001B00       stPageCFG
+ 0002:00001B1C       stMsgCell
+ 0002:00001B20       ulPDRsize
+ 0002:00001B24       ulOEMtype
+ 0002:00001B28       szCheckThreeCaption
+ 0002:00001B64       ulCOMiSize
+ 0002:00001B68       szEXEtitle
+ 0002:00001BA8       szHelpName
+ 0002:00001BC0       hwndClient
+ 0002:00001BC4       szDemoPath
+ 0002:00001C14       ulLibsSize
+ 0002:00001C18       szConfigDDlibraryName
+ 0002:00001C54       pszUninstallIniPath
+ 0002:00001C58       ulUtilSize
+ 0002:00001C60       _end
+
+Program entry point at 0001:0000467C

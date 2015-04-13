@@ -1,0 +1,41 @@
+This is a profile make file for the Sealevel retail version of COMi
+[COMi]
+Version=OS/COM version 3.83;
+Driver=COMDD.SYS;
+OEM_type=7
+Files=1
+File_1=OSCOM.INF;
+ProgramSize=81875
+[Install]
+Apps Path=C:\COMM;
+Libs Path=C:\COMM;
+DD Config Help=CONFIG.HLP;
+DD Config Library=COMi_CFG;
+DD Config Function=InstallDevice;
+DD Name=OS/COM;
+Transfer Library=PDA_INST;
+Transfer Function=InstallCOMi;
+Version=OS/tools' Install, version 2.20;
+Check Caption One=OS/COM Device Driver;
+Check Caption Two=COMscope;
+Check Caption Three=Print Spooler Utilities;
+Check Caption Four=Other Utilities;
+Check Caption Five=OS/COM Configuration and Installation;
+Title=OS/COM Device Driver Installation;
+Banner One=OS/COM Serial Device Driver;
+Banner Two=for All Sealevel Systems Serial Adapters;
+License File=license.txt;
+License Caption=License Information:;
+Files=9
+File_1=INSTALL.EXE;
+File_2=INSTALL.HLP;
+File_3=INSTALL.ICO;
+File_4=CONFIG.HLP;
+File_5=PDA_INST.DLL;
+File_6=OS2LS_UT.DLL;
+File_7=COMi_CFG.DLL;
+File_8=OS2LSRTL.DLL;
+File_9=INIDUMP.EXE;
+ProgramSize=556361
+
+

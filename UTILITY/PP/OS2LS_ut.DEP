@@ -1,0 +1,29 @@
+
+.\OS2LSRTL.obj: \
+    P:\utility\OS2LSRTL.C \
+    OS2LS_ut.mak
+
+.\list.obj: \
+    P:\utility\list.c \
+    {P:\utility;$(INCLUDE);}COMMON.H \
+    {P:\utility;$(INCLUDE);}linklist.h \
+    OS2LS_ut.mak
+
+.\cfg_sys.obj: \
+    P:\utility\cfg_sys.c \
+    {P:\utility;$(INCLUDE);}utility.h \
+    OS2LS_ut.mak
+
+.\utility.obj: \
+    P:\utility\utility.c \
+    {P:\utility;$(INCLUDE);}COMMON.H \
+    {P:\utility;$(INCLUDE);}utility.h \
+    OS2LS_ut.mak
+
+f:\work\lib\OS2LS_ut.sym: \
+    f:\work\lib\OS2LS_ut.dll \
+    OS2LS_ut.mak
+
+f:\work\lib\OS2LS_ut.LIB: \
+    f:\work\lib\OS2LS_ut.dll \
+    OS2LS_ut.mak

@@ -1,0 +1,14 @@
+LIBRARY TCPIPCOM
+
+DESCRIPTION 'OS/tools TPC/IP Communications library'
+
+EXPORTS
+  InitCOM
+  InitServer
+  SendRequest
+  SendResponse
+  StopCOM
+  StopServer
+  EnableDebug
+
+

@@ -1,0 +1,40 @@
+This is a profile make file for the Globetek version of COMi
+[COMi]
+Version=COMi version 4.0 GT;
+Driver=GCOMDD.SYS;
+OEM_type=8
+Files=1
+File_1=COMi.INF;
+ProgramSize=102924
+[Install]
+Apps Path=C:\\COMM;
+Libs Path=C:\\COMM;
+DD Config Help=CONFIG.HLP;
+DD Config Library=COMi_CFG;
+DD Config Function=InstallDevice;
+DD Name=COMi;
+Transfer Library=PDA_INST;
+Transfer Function=InstallCOMi;
+Version=OS/tools' Install version 2.20;
+Check Caption One=COMi Device Driver;
+Check Caption Two=COMscope;
+Check Caption Three=Print Spooler Utilities;
+Check Caption Four=Multi-session Utilities;
+Check Caption Five=COMi Configuration and Installation;
+Title=COMi Device Driver Installation;
+Banner One=COMi Serial Device Driver;
+Banner Two=for Globetek Serial Adapters;
+License File=license.txt;
+License Caption=License Information:;
+Files=9
+File_1=INSTALL.EXE;
+File_2=INSTALL.HLP;
+File_3=INSTALL.ICO;
+File_4=CONFIG.HLP;
+File_5=PDA_INST.DLL;
+File_6=OS2LS_UT.DLL;
+File_7=COMi_CFG.DLL;
+File_8=OS2LSRTL.DLL;
+File_9=INIDUMP.EXE;
+ProgramSize=590512
+

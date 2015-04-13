@@ -1,0 +1,1470 @@
+Microsoft (R) Macro Assembler Version 6.00     		    08/24/02 23:27:34
+InitUtil.asm						     Page 1 - 1
+
+
+				;************************************************************************
+				;
+				; $Revision:   1.3  $
+				;
+				; $Log:   P:/archive/comi/initutil.asv  $
+				;
+				;     Rev 1.3   28 Mar 1996 00:20:06   EMMETT
+				;  Added resource manager.  Began work on VDD support.
+				;
+				;     Rev 1.2   18 Feb 1996 14:21:18   EMMETT
+				;  Added many features.  Notably:
+				;  Tracing of DosDevIOCtl function calls and packets.
+				;  Added 16650 and 16750 support.
+				;  Streamlined interrupt routine.
+				;
+				;     Rev 1.1   25 Apr 1995 22:16:46   EMMETT
+				;  Added Support for DigiBoard PC/16.  Changed interrupt Routine for better adapter independence.
+				;  Changed interrupt routine to allow user to select interrupting device selection algorithim.  Fixed
+				;  ABIOS interaction for better "non.INI" initialization in MCA machines.  Fixed various initialization
+				;  message strings.  COMscope and receive buffer are now allocated from system memory, allowing
+				;  a 32k (word) COMscope buffer and a 64k (byte) receive buffer.
+				;
+				;     Rev 1.0   03 Dec 1994 15:08:40   EMMETT
+				;  Initial archive.
+				;  File contains utilities used only during initialization.
+				;
+				;************************************************************************
+
+				  IFNDEF x16_BIT
+				.386P
+				  ELSE
+				  ENDIF
+				.NOLISTMACRO
+
+				.XLIST
+				.LIST
+
+				    EXTRN VIOWRTTTY:FAR
+				    EXTRN KBDCHARIN:FAR
+
+ 0000				RES_DATA SEGMENT
+
+				    EXTRN wMiscControl          :WORD
+				    EXTRN stDeviceParms         :s_stDeviceParms
+				    EXTRN wClockRate            :WORD
+				    EXTRN wClockRate2           :WORD
+				    EXTRN wSystemDebug          :WORD
+				    EXTRN wLastEndOfData        :WORD
+				    EXTRN wEndOfData            :WORD
+				    EXTRN abyPath               :BYTE
+				    EXTRN wPCIvendor            :WORD
+				    EXTRN wPCIdevice            :WORD
+				  IFDEF DEMO
+				    EXTRN wWriteCountStart      :WORD
+				  ENDIF
+				    EXTRN device_hlp            :DWORD
+				  IFNDEF NO_4x_CLOCK_SUPPORT
+				    EXTRN dwTimerCounter        :DWORD
+				  ENDIF
+				    EXTRN wInitTimerCount       :WORD
+
+ 0000				RES_DATA ENDS
+
+ 0000				_DATA SEGMENT
+
+				.XLIST
+				.LIST
+
+				    EXTRN _szMessage            :BYTE
+
+				  IFNDEF x16_BIT
+				    EXTRN _awGDTselectors       :WORD
+				    EXTRN _stConfigParms        :s_stConfigParms
+				  ENDIF
+				  IFNDEF RTEST
+				   IFNDEF x16_BIT
+				    EXTRN _Ring0Vector          :DWORD
+				   ENDIF
+				    EXTRN _bWaitingKey          :WORD
+				    EXTRN _bDebugDelay          :WORD
+				    EXTRN _StackPointer         :WORD
+				    EXTRN _bVerbose             :WORD
+				    EXTRN _wSelectorCount       :WORD
+				    EXTRN _bTimerAvailable      :WORD
+				    EXTRN _abyCOMnumbers        :BYTE
+				    EXTRN _wCurrentDevice       :WORD
+				    EXTRN _bPrintLocation       :WORD
+				  ENDIF
+				    EXTRN _wInitDebugFlags      :WORD
+
+				    EXTRN _bDisableRM           :WORD
+
+				    EXTRN _abyNumber            :BYTE
+				    EXTRN _abyTemp              :BYTE
+				    EXTRN _abyString            :BYTE
+
+ 0000				_DATA ENDS
+
+ 0000				RES_CODE SEGMENT
+				    ASSUME CS:RCGROUP, ES:nothing, SS:nothing, DS:RDGROUP, GS:DGROUP
+
+				 IFNDEF x16_BIT
+				    EXTRN Ring0Access           :NEAR
+				 ELSE
+				 ENDIF
+
+				  IFNDEF x16_BIT
+
+ 0000				MemorySetup PROC NEAR C uses ax bx cx dx es di ds si, wSelCount:WORD
+
+				;  int 3
+ 0000  55		   *	    push   bp
+ 0001  8B EC		   *	    mov    bp, sp
+ 0003  50		   *	    push   ax
+ 0004  53		   *	    push   bx
+ 0005  51		   *	    push   cx
+ 0006  52		   *	    push   dx
+ 0007  06		   *	    push   es
+ 0008  57		   *	    push   di
+ 0009  1E		   *	    push   ds
+ 000A  56		   *	    push   si
+ 000B  8B 4E 04			        mov     cx,wSelCount
+ 000E  0B C9			        or      cx,cx
+ 0010  0F 84 0178		        jz      error_exit
+
+ 0014  B8 ---- R		        mov     ax,DGROUP
+ 0017  8E C0			        mov     es,ax
+ 0019  BF 0000 E		        mov     di,OFFSET _awGDTselectors
+ 001C  8B 4E 04			        mov     cx,wSelCount
+				  IFNDEF NO_COMscope
+ 001F  D1 E1			        shl     cx,1
+				  ENDIF
+ 0021  65: 89 0E 0000 E		        mov     GS:_wSelectorCount,cx
+ 0026  B2 2D			        mov     dl,DevHlp_AllocGDTSelector
+ 0028  FF 1E 0000 E		        call    device_hlp
+ 002C  0F 82 015C		        jc      error_exit
+
+ 0030  8B 4E 04			        mov     cx,wSelCount
+ 0033  BE 0000 E		        mov     si,OFFSET stDeviceParms
+ 0036  BF 0000 E		        mov     di,OFFSET _stConfigParms
+
+ 0039				alloc_loop:
+ 0039  66| BB 00001000		        mov     ebx,DEF_READ_BUFF_LEN
+ 003F  65: 83 7D 08 00		        cmp     GS:[di].s_stConfigParms.cwReadBufferLength,ZERO
+ 0044  74 23			        je      store_read_buff_size
+ 0046  66| 33 DB		        xor     ebx,ebx
+ 0049  65: 8B 5D 08		        mov     bx,GS:[di].s_stConfigParms.cwReadBufferLength
+ 004D  83 FB FF			        cmp     bx,0ffffh
+ 0050  75 08			        jne     @f
+ 0052  66| BB 00010000		        mov     ebx,MAX_READ_BUFF_LEN
+ 0058  EB 0F			        jmp     store_read_buff_size
+ 005A				@@:
+ 005A  66| 81 FB 00000400	        cmp     ebx,MIN_READ_BUFF_LEN
+ 0061  73 06			        jae     store_read_buff_size
+ 0063  66| BB 00000400		        mov     ebx,MIN_READ_BUFF_LEN
+
+ 0069				store_read_buff_size:
+ 0069  66| 89 5C 10		        mov     [si].s_stDeviceParms.dwReadBufferLength,ebx
+
+ 006D  66| 8B C3		        mov     eax,ebx
+ 0070  66| C1 E8 10		        shr     eax,16
+ 0074  BA 0018			        mov     dx,DevHlp_AllocPhys
+ 0077  FF 1E 0000 E		        call    device_hlp
+ 007B  73 0A			        jnc     set_read_selector
+ 007D  B6 01			        mov     dh,1
+ 007F  FF 1E 0000 E		        call    device_hlp
+ 0083  0F 82 0105		        jc      error_exit
+
+ 0087				set_read_selector:
+ 0087  56			        push    si
+ 0088  66| 51			        push    ecx
+ 008A  53			        push    bx
+ 008B  8B D9			        mov     bx,cx
+ 008D  4B			        dec     bx
+				  IFNDEF NO_COMscope
+ 008E  C1 E3 02			        shl     bx,2
+				  ELSE
+				  ENDIF
+ 0091  66| 8B 4C 10		        mov     ecx,[si].s_stDeviceParms.dwReadBufferLength
+ 0095  65: 8B B7 0000 E		        mov     si,GS:_awGDTselectors[bx]
+ 009A  5B			        pop     bx
+ 009B  B2 2E			        mov     dl,DevHlp_PhysToGDTSelector
+ 009D  FF 1E 0000 E		        call    device_hlp
+ 00A1  66| 59			        pop     ecx
+ 00A3  5E			        pop     si
+ 00A4  0F 82 00E4		        jc      error_exit
+ 00A8  8B D9			        mov     bx,cx
+ 00AA  4B			        dec     bx
+				  IFNDEF NO_COMscope
+ 00AB  C1 E3 02			        shl     bx,2
+				  ELSE
+				  ENDIF
+ 00AE  65: 8B 87 0000 E		        mov     ax,GS:_awGDTselectors[bx]
+ 00B3  89 44 5C			        mov     [si].s_stDeviceParms.wRdBuffSelector,ax
+ 00B6  66| 8B 44 10		        mov     eax,[si].s_stDeviceParms.dwReadBufferLength
+ 00BA  66| 48			        dec     eax
+ 00BC  66| 89 44 14		        mov     [si].s_stDeviceParms.dwReadBufferExtent,eax
+
+				  IFNDEF NO_COMscope
+ 00C0				COMscopeBufferSetup:
+ 00C0  65: F7 05 0040		        test    GS:[di].s_stConfigParms.cwDeviceFlags1,CFG_FLAG1_COMSCOPE
+ 00C5  75 1C			        jnz     @f
+ 00C7  65: FF 0E 0000 E		        dec     GS:_wSelectorCount
+ 00CC  8B D9			        mov     bx,cx
+ 00CE  4B			        dec     bx
+ 00CF  C1 E3 02			        shl     bx,2
+ 00D2  65: 8B 87 0002 E		        mov     ax,GS:_awGDTselectors[bx + 2]
+ 00D7  B2 53			        mov     dl,DevHlp_FreeGDTSelector
+ 00D9  FF 1E 0000 E		        call    device_hlp
+ 00DD  8C 5C 5A			        mov     [si].s_stDeviceParms.wCOMscopeSelector,ds
+ 00E0  E9 0092			        jmp     next
+
+ 00E3				@@:
+ 00E3  66| BB 00002000		        mov     ebx,DEF_COMscope_BUFF_LEN
+ 00E9  65: 83 7D 04 00		        cmp     GS:[di].s_stConfigParms.cwCOMscopeBuffLen,ZERO
+ 00EE  74 27			        je      store_COMscope_buff_size
+ 00F0  66| 33 DB		        xor     ebx,ebx
+ 00F3  65: 8B 5D 04		        mov     bx,GS:[di].s_stConfigParms.cwCOMscopeBuffLen
+ 00F7  66| 81 FB 00007FFC	        cmp     ebx,MAX_COMscope_BUFF_LEN
+ 00FE  76 08			        jbe     @f
+ 0100  66| BB 00007FFC		        mov     ebx,MAX_COMscope_BUFF_LEN
+ 0106  EB 0F			        jmp     store_COMscope_buff_size
+
+ 0108				@@:
+ 0108  66| 81 FB 00000400	        cmp     ebx,MIN_COMscope_BUFF_LEN
+ 010F  73 06			        jae     store_COMscope_buff_size
+ 0111  66| BB 00000400		        mov     ebx,MIN_COMscope_BUFF_LEN
+
+ 0117				store_COMscope_buff_size:
+ 0117  66| D1 E3		        shl     ebx,1
+ 011A  66| 89 5C 18		        mov     [si].s_stDeviceParms.dwCOMscopeBuffLen,ebx
+
+ 011E  66| 8B C3		        mov     eax,ebx
+ 0121  66| C1 E8 10		        shr     eax,16
+ 0125  66| 25 FFFF0000		        and     eax,0ffff0000h
+ 012B  BA 0018			        mov     dx,DevHlp_AllocPhys
+ 012E  FF 1E 0000 E		        call    device_hlp
+ 0132  73 08			        jnc     set_COMscope_selector
+ 0134  B6 01			        mov     dh,1
+ 0136  FF 1E 0000 E		        call    device_hlp
+ 013A  72 50			        jc      error_exit
+
+ 013C				set_COMscope_selector:
+ 013C  56			        push    si
+ 013D  66| 51			        push    ecx
+ 013F  53			        push    bx
+ 0140  8B D9			        mov     bx,cx
+ 0142  4B			        dec     bx
+ 0143  C1 E3 02			        shl     bx,2
+ 0146  66| 8B 4C 18		        mov     ecx,[si].s_stDeviceParms.dwCOMscopeBuffLen
+ 014A  65: 8B B7 0002 E		        mov     si,GS:_awGDTselectors[bx + 2]
+ 014F  5B			        pop     bx
+ 0150  B2 2E			        mov     dl,DevHlp_PhysToGDTSelector
+ 0152  FF 1E 0000 E		        call    device_hlp
+ 0156  66| 59			        pop     ecx
+ 0158  5E			        pop     si
+ 0159  72 31			        jc      error_exit
+ 015B  8B D9			        mov     bx,cx
+ 015D  4B			        dec     bx
+ 015E  C1 E3 02			        shl     bx,2
+ 0161  65: 8B 87 0002 E		        mov     ax,GS:_awGDTselectors[bx + 2]
+ 0166  89 44 5A			        mov     [si].s_stDeviceParms.wCOMscopeSelector,ax
+ 0169  66| 8B 44 18		        mov     eax,[si].s_stDeviceParms.dwCOMscopeBuffLen
+ 016D  66| 83 E8 02		        sub     eax,2
+ 0171  66| 89 44 1C		        mov     [si].s_stDeviceParms.dwCOMscopeBuffExtent,eax
+				  ENDIF ; NO_COMscope
+ 0175				next:
+ 0175  81 C6 00F0		        add     si,TYPE s_stDeviceParms
+ 0179  83 C7 2A			        add     di,TYPE s_stConfigParms
+ 017C  49			        dec     cx
+ 017D  0F 85 FEB8		        jnz     alloc_loop
+
+ 0181				exit:
+ 0181  F8			        clc
+				        ret
+ 0182  5E		   *	    pop    si
+ 0183  1F		   *	    pop    ds
+ 0184  5F		   *	    pop    di
+ 0185  07		   *	    pop    es
+ 0186  5A		   *	    pop    dx
+ 0187  59		   *	    pop    cx
+ 0188  5B		   *	    pop    bx
+ 0189  58		   *	    pop    ax
+ 018A  5D		   *	    pop    bp
+ 018B  C3		   *	    ret    00000h
+
+ 018C				error_exit:
+ 018C  F9			        stc
+				        ret
+ 018D  5E		   *	    pop    si
+ 018E  1F		   *	    pop    ds
+ 018F  5F		   *	    pop    di
+ 0190  07		   *	    pop    es
+ 0191  5A		   *	    pop    dx
+ 0192  59		   *	    pop    cx
+ 0193  5B		   *	    pop    bx
+ 0194  58		   *	    pop    ax
+ 0195  5D		   *	    pop    bp
+ 0196  C3		   *	    ret    00000h
+
+ 0197				MemorySetup ENDP
+				  ENDIF
+
+				 IFNDEF RTEST
+ 0197				PrintString PROC USES cx bx es; AX to contain offset to string to print
+
+ 0197  51		   *	    push   cx
+ 0198  53		   *	    push   bx
+ 0199  06		   *	    push   es
+ 019A  BB ---- R		        mov     bx,_DATA
+ 019D  8E C3			        mov     es,bx
+ 019F  B9 0258			        mov     cx,600    ; limit characters to write (just in case)
+ 01A2  8B D8			        mov     bx,ax
+ 01A4  50			        push    ax
+ 01A5  33 C0			        xor     ax,ax
+
+ 01A7				count_loop:
+ 01A7  26: 80 3F 00		        cmp     BYTE PTR ES:[bx],0
+ 01AB  74 04			        je      print_string
+ 01AD  43			        inc     bx
+ 01AE  40			        inc     ax
+ 01AF  E2 F6			        loop    count_loop
+
+ 01B1				print_string:
+ 01B1  5B			        pop     bx
+ 01B2  06			        push    es
+ 01B3  53			        push    bx
+ 01B4  50			        push    ax
+ 01B5  6A 00			        push    0
+ 01B7  9A ---- 0000 E		        call    FAR PTR VIOWRTTTY
+
+				        ret
+ 01BC  07		   *	    pop    es
+ 01BD  5B		   *	    pop    bx
+ 01BE  59		   *	    pop    cx
+ 01BF  C3		   *	    ret    00000h
+
+ 01C0				PrintString ENDP
+
+				;--------------------------- binac_10 -------------------------------------
+
+				; converts byte to base 10 ASCII characters
+
+ 01C0				binac_10 PROC USES cx    ;al = byte to convert
+				                         ;dl returns LSB, dh returns MSB
+ 01C0  51		   *	    push   cx
+ 01C1  3C 00			        cmp     al,0
+ 01C3  74 27			        je      zero_all
+ 01C5  32 E4			        xor     ah,ah
+ 01C7  B1 64			        mov     cl,100
+ 01C9  F6 F1			        div     cl            ;MOD 100 - TWO DIGITS MAX
+ 01CB  80 FC 00			        cmp     ah,0
+ 01CE  74 1C			        je      zero_all
+ 01D0  86 C4			        xchg    al,ah
+ 01D2  32 E4			        xor     ah,ah
+ 01D4  B1 0A			        mov     cl,10
+ 01D6  F6 F1			        div     cl
+ 01D8  8A D4			        mov     dl,ah
+ 01DA  80 C2 30			        add     dl,30h
+ 01DD  3C 00			        cmp     al,0
+ 01DF  74 0D			        je      zero_MSB
+ 01E1  32 E4			        xor     ah,ah
+ 01E3  F6 F1			        div     cl
+ 01E5  8A F4			        mov     dh,ah
+ 01E7  80 C6 30			        add     dh,30h
+ 01EA  EB 04			        jmp     base_10_end
+
+ 01EC				zero_all:
+ 01EC  B2 30			        mov     dl,'0'
+
+ 01EE				zero_MSB:
+ 01EE  B6 30			        mov     dh,'0'
+
+ 01F0				base_10_end:
+				        ret
+ 01F0  59		   *	    pop    cx
+ 01F1  C3		   *	    ret    00000h
+
+ 01F2				binac_10 ENDP
+
+				; converts byte to base 16 ASCII characters
+
+ 01F2				binac PROC NEAR USES ax bx cx ;al = byte to convert
+				                              ;dl returns LSB, dh returns MSB
+ 01F2  50		   *	    push   ax
+ 01F3  53		   *	    push   bx
+ 01F4  51		   *	    push   cx
+ 01F5  50			        push    ax              ;save byte
+ 01F6  24 0F			        and     al,0fh          ;mask bottom four
+ 01F8  3C 09			        cmp     al,9            ;<= 9 ?
+ 01FA  76 08			        jbe     numeral1        ;  then do number
+ 01FC  24 07			        and     al,7            ;  else mask insignificant bits
+ 01FE  FE C8			        dec     al
+ 0200  0C 40			        or      al,40h          ;append necessary bits
+ 0202  EB 02			        jmp     $+4
+ 0204				numeral1:
+ 0204  0C 30			        or      al,30h          ;append necessary bits
+ 0206  5B			        pop     bx              ;get byte
+ 0207  80 E3 F0			        and     bl,0f0h         ;mask   top four bits
+ 020A  C0 EB 04			        shr     bl,4           ;shift four
+ 020D  80 FB 09			        cmp     bl,9            ;<= 9 ?
+ 0210  76 0A			        jbe     numeral2
+ 0212  80 E3 07			        and     bl,7            ;mask insig bits
+ 0215  FE CB			        dec     bl
+ 0217  80 CB 40			        or      bl,40h          ;append necessary bits
+ 021A  EB 03			        jmp     $+5
+ 021C				numeral2:
+ 021C  80 CB 30			        or      bl,30h          ;append necessary bits
+ 021F  8A E3			        mov     ah,bl           ;store top byte
+ 0221  8B D0			        mov     dx,ax
+				        ret
+ 0223  59		   *	    pop    cx
+ 0224  5B		   *	    pop    bx
+ 0225  58		   *	    pop    ax
+ 0226  C3		   *	    ret    00000h
+
+ 0227				binac ENDP
+
+				; converts ASCII string to binary WORD
+
+ 0227				ASCIItoBinary PROC NEAR USES bx si es
+
+				    LOCAL iIndex        :WORD
+				    LOCAL bBase16       :WORD
+				    LOCAL iIncIndex     :WORD
+				    LOCAL wTemp         :WORD
+				    LOCAL byTemp        :BYTE
+				    LOCAL wPower        :WORD
+				    LOCAL wAccumulator  :WORD
+
+ 0227  55		   *	    push   bp
+ 0228  8B EC		   *	    mov    bp, sp
+ 022A  83 C4 F2		   *	    add    sp, 0FFF2h
+ 022D  53		   *	    push   bx
+ 022E  56		   *	    push   si
+ 022F  06		   *	    push   es
+ 0230  C7 46 FE 0000		        mov     iIndex,0
+ 0235  33 C0			        xor     ax,ax
+ 0237  B9 0003			        mov     cx,3
+ 023A  BF 0000 E		        lea     di,_abyTemp
+ 023D  1E			        push    ds
+ 023E  07			        pop     es
+ 023F  F3/ AB			        rep     stosw
+ 0241  83 46 FE 06		        add     iIndex,6
+ 0245  2B F6			        sub     si,si
+ 0247				$L20001:
+ 0247  8B DE			        mov     bx,si
+ 0249  46			        inc     si
+ 024A  65: 80 BF 0000 E		        cmp     GS:_abyNumber[bx],0
+       00
+ 0250  75 F5			        jne     $L20001
+ 0252  89 76 FE			        mov     iIndex,si
+ 0255  83 6E FE 02		        sub     iIndex,2
+ 0259  8B 5E FE			        mov     bx,iIndex
+ 025C  65: 8A 87 0000 E		        mov     al,GS:_abyNumber[bx]
+ 0261  24 DF			        and     al,223
+ 0263  3C 48			        cmp     al,72
+ 0265  75 0A			        jne     $I137
+ 0267  C7 46 FC 0001		        mov     bBase16,TRUE
+ 026C  FF 4E FE			        dec     iIndex
+ 026F  EB 05			        jmp     $I138
+ 0271				$I137:
+ 0271  C7 46 FC 0000		        mov     bBase16,FALSE
+ 0276				$I138:
+ 0276  C7 46 FA 0000		        mov     iIncIndex,0
+ 027B  83 7E FE 00		        cmp     iIndex,0
+ 027F  7C 1C			        jl      $FB141
+ 0281  8B 7E FA			        mov     di,iIncIndex
+ 0284  8B 76 FE			        mov     si,iIndex
+ 0287				$L20004:
+ 0287  65: 8A 84 0000 E		        mov     al,GS:_abyNumber[si]
+ 028C  65: 88 85 0000 E		        mov     GS:_abyTemp[di],al
+ 0291  4E			        dec     si
+ 0292  47			        inc     di
+ 0293  0B F6			        or      si,si
+ 0295  7D F0			        jge     $L20004
+ 0297  89 7E FA			        mov     iIncIndex,di
+ 029A  89 76 FE			        mov     iIndex,si
+ 029D				$FB141:
+ 029D  C7 46 FE 0000		        mov     iIndex,0
+ 02A2  E9 00A9			        jmp     $L20020
+ 02A5				$FC143:
+ 02A5  8B 5E FE			        mov     bx,iIndex
+ 02A8  65: 8A 87 0000 E		        mov     al,GS:_abyTemp[bx]
+ 02AD  88 46 F7			        mov     byTemp,al
+ 02B0  2A E4			        sub     ah,ah
+ 02B2  83 F8 30			        cmp     ax,48
+ 02B5  72 3E			        jb      $L20017
+ 02B7  83 F8 39			        cmp     ax,57
+ 02BA  76 16			        jbe     $SC149
+ 02BC  83 F8 41			        cmp     ax,65
+ 02BF  72 34			        jb      $L20017
+ 02C1  83 F8 46			        cmp     ax,70
+ 02C4  76 29			        jbe     $SC151
+ 02C6  83 F8 61			        cmp     ax,97
+ 02C9  72 2A			        jb      $L20017
+ 02CB  83 F8 66			        cmp     ax,102
+ 02CE  76 1B			        jbe     $SC150
+ 02D0  EB 23			        jmp     $L20017
+ 02D2				$SC149:
+ 02D2  8A 46 F7			        mov     al,byTemp
+ 02D5  2A E4			        sub     ah,ah
+ 02D7  83 E8 30			        sub     ax,48
+ 02DA				$L20018:
+ 02DA  89 46 F8			        mov     wTemp,ax
+ 02DD				$SB146:
+ 02DD  83 7E FE 00		        cmp     iIndex,0
+ 02E1  75 23			        jne     $I154
+ 02E3  8B 46 F8			        mov     ax,wTemp
+ 02E6  89 46 F2			        mov     wAccumulator,ax
+ 02E9  EB 60			        jmp     $I155
+ 02EB				$SC150:
+ 02EB  80 66 F7 DF		        and     byTemp,223
+ 02EF				$SC151:
+ 02EF  83 7E FC 00		        cmp     bBase16,FALSE
+ 02F3  75 07			        jne     $I152
+ 02F5				$L20017:
+ 02F5  C7 46 F8 0000		        mov     wTemp,0
+ 02FA  EB E1			        jmp     $SB146
+ 02FC				$I152:
+ 02FC  8A 46 F7			        mov     al,byTemp
+ 02FF  2A E4			        sub     ah,ah
+ 0301  83 E8 37			        sub     ax,55
+ 0304  EB D4			        jmp     $L20018
+ 0306				$I154:
+ 0306  C7 46 F4 0001		        mov     wPower,1
+ 030B  83 7E FC 00		        cmp     bBase16,FALSE
+ 030F  74 17			        je      $I156
+ 0311  8B 46 FE			        mov     ax,iIndex
+ 0314  89 46 FA			        mov     iIncIndex,ax
+ 0317  EB 03			        jmp     $F157
+ 0319				$FC158:
+ 0319  FF 4E FA			        dec     iIncIndex
+ 031C				$F157:
+ 031C  83 7E FA 00		        cmp     iIncIndex,0
+ 0320  7E 20			        jle     $I160
+ 0322  C1 66 F4 04		        shl     wPower,4
+ 0326  EB F1			        jmp     $FC158
+ 0328				$I156:
+ 0328  8B 46 FE			        mov     ax,iIndex
+ 032B  89 46 FA			        mov     iIncIndex,ax
+ 032E  EB 0C			        jmp     $F161
+ 0330				$FC162:
+ 0330  B8 000A			        mov     ax,10
+ 0333  F7 66 F4			        mul     wPower
+ 0336  89 46 F4			        mov     wPower,ax
+ 0339  FF 4E FA			        dec     iIncIndex
+ 033C				$F161:
+ 033C  83 7E FA 00		        cmp     iIncIndex,0
+ 0340  7F EE			        jg      $FC162
+ 0342				$I160:
+ 0342  8B 46 F8			        mov     ax,wTemp
+ 0345  F7 66 F4			        mul     wPower
+ 0348  01 46 F2			        add     wAccumulator,ax
+ 034B				$I155:
+ 034B  FF 46 FE			        inc     iIndex
+ 034E				$L20020:
+ 034E  8B 5E FE			        mov     bx,iIndex
+ 0351  65: 80 BF 0000 E		        cmp     GS:_abyTemp[bx],0
+       00
+ 0357  74 03			        je      $JCC331
+ 0359  E9 FF49			        jmp     $FC143
+ 035C				$JCC331:
+ 035C  8B 46 F2			        mov     ax,wAccumulator
+				        ret
+ 035F  07		   *	    pop    es
+ 0360  5E		   *	    pop    si
+ 0361  5B		   *	    pop    bx
+ 0362  8B E5		   *	    mov    sp, bp
+ 0364  5D		   *	    pop    bp
+ 0365  C3		   *	    ret    00000h
+
+ 0366				ASCIItoBinary  ENDP
+
+				;---------------------------- GetNumber --------------------------------
+
+				; extracts numeric value from command line
+
+ 0366				GetNumber      PROC NEAR
+
+ 0366  57			        push    di
+ 0367  51			        push    cx
+ 0368  BF 0000			        mov     di,0
+ 036B				byte_loop:
+ 036B  26: 8A 07		        mov     al,ES:[bx]
+ 036E  3C 00			        cmp     al,0
+ 0370  74 46			        je      got_num_arg
+ 0372  3C 20			        cmp     al,' '
+ 0374  75 02			        jne     @f
+ 0376  EB 40			        jmp     got_num_arg
+ 0378				@@:
+ 0378  3C 2C			        cmp     al,','
+ 037A  75 02			        jne     @f
+ 037C  EB 3A			        jmp     got_num_arg
+ 037E				@@:
+ 037E  3C 2D			        cmp     al,'-'
+ 0380  75 02			        jne     @f
+ 0382  EB 34			        jmp     got_num_arg
+ 0384				@@:
+ 0384  3C 2F			        cmp     al,'/'
+ 0386  75 02			        jne     @f
+ 0388  EB 2E			        jmp     got_num_arg
+ 038A				@@:
+ 038A  8A E0			        mov     ah,al
+ 038C  24 DF			        and     al,0dfh
+ 038E  3C 54			        cmp     al,'T'
+ 0390  74 26			        je      got_num_arg
+ 0392  3C 4D			        cmp     al,'M'
+ 0394  74 22			        je      got_num_arg
+ 0396  3C 51			        cmp     al,'Q'
+ 0398  74 1E			        je      got_num_arg
+ 039A  3C 50			        cmp     al,'P'
+ 039C  74 1A			        je      got_num_arg
+ 039E  3C 49			        cmp     al,'I'
+ 03A0  74 16			        je      got_num_arg
+ 03A2  3C 52			        cmp     al,'R'
+ 03A4  74 12			        je      got_num_arg
+ 03A6  3C 44			        cmp     al,'D'
+ 03A8  74 0E			        je      got_num_arg
+ 03AA  65: 88 A5 0000 E		        mov     GS:_abyNumber[di],ah
+ 03AF  43			        inc     bx
+ 03B0  47			        inc     di
+ 03B1  83 FF 04			        cmp     di,4
+ 03B4  77 02			        ja      got_num_arg
+ 03B6  EB B3			        jmp     byte_loop
+
+ 03B8				got_num_arg:
+ 03B8  65: C6 85 0000 E		        mov     GS:_abyNumber[di],ZERO
+       00
+ 03BE  83 FF 00			        cmp     di,0
+ 03C1  74 07			        je      @f
+ 03C3  E8 FE61			        call    ASCIItoBinary
+ 03C6  F8			        clc
+ 03C7  59			        pop     cx
+ 03C8  5F			        pop     di
+ 03C9  C3			        ret
+ 03CA				@@:
+ 03CA  F9			        stc
+ 03CB  59			        pop     cx
+ 03CC  5F			        pop     di
+ 03CD  33 C0			        xor     ax,ax
+ 03CF  C3			        ret
+
+ 03D0				GetNumber      ENDP ; AX=value - carry set and AX=0 if no number found
+
+				;--------------------------- ParseArguments -----------------------------
+
+				; parses device driver command line
+
+ 03D0				ParseArguments PROC NEAR     ; ES:BX = address of command line
+				   IFDEF x16_BIT
+				   ENDIF
+
+				;  int 3
+ 03D0				parse_loop:
+ 03D0  26: 8A 07		        mov     al,ES:[bx]
+ 03D3  0A C0			        or      al,al
+ 03D5  74 1B			        je      parse_exit
+ 03D7  43			        inc     bx
+
+ 03D8  3C 2F			        cmp     al,'/'
+ 03DA  74 0C			        je      got_arg
+ 03DC  3C 2D			        cmp     al,'-'
+ 03DE  74 08			        je      got_arg
+
+ 03E0  3C 40			        cmp     al,'@'
+ 03E2  0F 84 01E5		        je      do_response
+ 03E6  EB E8			        jmp     parse_loop
+
+ 03E8				got_arg:
+ 03E8  26: 8A 07		        mov     al,ES:[bx]
+ 03EB  0A C0			        or      al,al
+ 03ED  74 03			        je      parse_exit
+ 03EF  43			        inc     bx
+ 03F0  EB 01			        jmp     test_extension
+
+ 03F2				parse_exit:
+				   IFDEF x16_BIT
+				   ENDIF
+ 03F2  C3			        ret
+
+ 03F3				test_extension:
+ 03F3  3C 4C			        cmp     al,'L'                  ;print memory map
+ 03F5  75 03			        jne     @f
+ 03F7  E9 01B4			        jmp     print_local
+ 03FA				@@:
+ 03FA  3C 52			        cmp     al,'R'                  ;disable resoure manager
+ 03FC  75 03			        jne     @f
+ 03FE  E9 01B7			        jmp     disable_RM
+ 0401				@@:
+ 0401  3C 4D			        cmp     al,'M'                  ;misc control,M#
+ 0403  75 03			        jne     @f
+ 0405  E9 01BA			        jmp     set_misc_control
+ 0408				@@:
+ 0408  3C 45			        cmp     al,'E'                  ;EXT-
+ 040A  75 03			        jne     @f
+ 040C  E9 00AA			        jmp     set_extention
+ 040F				@@:
+ 040F  3C 41			        cmp     al,'A'                  ;AG-TESTS
+ 0411  75 02			        jne     @f
+ 0413  EB 25			        jmp     set_aggressive_tests
+ 0415				@@:
+				  IFDEF DEMO
+ 0415  3C 57			        cmp     al,'W'                  ;W#
+ 0417  75 02			        jne     @f
+ 0419  EB 0A			        jmp     set_write_count
+ 041B				@@:
+				  ENDIF
+ 041B  24 DF			        and     al,0dfh
+ 041D  3C 5A			        cmp     al,'Z'                  ;Z#
+ 041F  75 02			        jne     @f
+ 0421  EB 0A			        jmp     set_clock
+ 0423				@@:
+ 0423  EB AB			        jmp     parse_loop
+
+				  IFDEF DEMO
+ 0425				set_write_count:
+ 0425  E8 FF3E			        call    GetNumber
+ 0428  A3 0000 E		        mov     wWriteCountStart,ax
+ 042B  EB A3			        jmp     parse_loop
+				  ENDIF
+
+ 042D				set_clock:
+ 042D  E8 FF36			        call    GetNumber
+ 0430  A3 0000 E		        mov     wClockRate,ax
+ 0433  D1 E0			        shl     ax,1
+ 0435  A3 0000 E		        mov     wClockRate2,ax
+ 0438  EB 96			        jmp     parse_loop
+
+ 043A				set_aggressive_tests:
+ 043A  26: 8A 07		        mov     al,ES:[bx]
+ 043D  0A C0			        or      al,al
+ 043F  0F 84 013C		        je      parse_exitX
+ 0443  43			        inc     bx
+ 0444  3C 47			        cmp     al,'G'
+ 0446  74 02			        je      @f
+ 0448  EB 86			        jmp     parse_loop
+ 044A				@@:
+ 044A  26: 8A 07		        mov     al,ES:[bx]
+ 044D  0A C0			        or      al,al
+ 044F  0F 84 012C		        je      parse_exitX
+ 0453  43			        inc     bx
+ 0454  3C 2D			        cmp     al,'-'
+ 0456  74 03			        je      @f
+ 0458  E9 FF75			        jmp     parse_loop
+ 045B				@@:
+ 045B  26: 8A 07		        mov     al,ES:[bx]
+ 045E  0A C0			        or      al,al
+ 0460  0F 84 011B		        je      parse_exitX
+ 0464  43			        inc     bx
+ 0465  3C 54			        cmp     al,'T'
+ 0467  74 03			        je      @f
+ 0469  E9 FF64			        jmp     parse_loop
+ 046C				@@:
+ 046C  26: 8A 07		        mov     al,ES:[bx]
+ 046F  0A C0			        or      al,al
+ 0471  0F 84 010A		        je      parse_exitX
+ 0475  43			        inc     bx
+ 0476  3C 45			        cmp     al,'E'
+ 0478  74 03			        je      @f
+ 047A  E9 0103			        jmp     test_sys
+ 047D				@@:
+ 047D  26: 8A 07		        mov     al,ES:[bx]
+ 0480  0A C0			        or      al,al
+ 0482  0F 84 00F9		        je      parse_exitX
+ 0486  43			        inc     bx
+ 0487  3C 53			        cmp     al,'S'
+ 0489  74 03			        je      @f
+ 048B  E9 00F2			        jmp     test_sys
+ 048E				@@:
+ 048E  26: 8A 07		        mov     al,ES:[bx]
+ 0491  0A C0			        or      al,al
+ 0493  0F 84 00E8		        je      parse_exitX
+ 0497  43			        inc     bx
+ 0498  3C 54			        cmp     al,'T'
+ 049A  74 03			        je      @f
+ 049C  E9 FF31			        jmp     parse_loop
+ 049F				@@:
+ 049F  26: 8A 07		        mov     al,ES:[bx]
+ 04A2  0A C0			        or      al,al
+ 04A4  0F 84 00D7		        je      parse_exitX
+ 04A8  43			        inc     bx
+ 04A9  3C 53			        cmp     al,'S'
+ 04AB  74 03			        je      set_test_flag
+ 04AD  E9 FF20			        jmp     parse_loop
+
+ 04B0				set_test_flag:
+ 04B0  65: 83 0E 0000 E		        or      GS:_wInitDebugFlags,INIT_DEB_AGGRESSIVE_TESTS
+       10
+ 04B6  E9 FF17			        jmp     parse_loop
+
+ 04B9				set_extention:
+ 04B9  26: 8A 07		        mov     al,ES:[bx]
+ 04BC  0A C0			        or      al,al
+ 04BE  0F 84 00BD		        je      parse_exitX
+ 04C2  43			        inc     bx
+ 04C3  3C 58			        cmp     al,'X'
+ 04C5  74 03			        je      @f
+ 04C7  E9 FF06			        jmp     parse_loop
+ 04CA				@@:
+ 04CA  26: 8A 07		        mov     al,ES:[bx]
+ 04CD  0A C0			        or      al,al
+ 04CF  0F 84 00AC		        je      parse_exitX
+ 04D3  43			        inc     bx
+ 04D4  3C 54			        cmp     al,'T'
+ 04D6  74 03			        je      @f
+ 04D8  E9 FEF5			        jmp     parse_loop
+ 04DB				@@:
+ 04DB  26: 8A 07		        mov     al,ES:[bx]
+ 04DE  0A C0			        or      al,al
+ 04E0  0F 84 009B		        je      parse_exitX
+ 04E4  43			        inc     bx
+ 04E5  3C 2D			        cmp     al,'-'
+ 04E7  74 03			        je      @f
+ 04E9  E9 FEE4			        jmp     parse_loop
+ 04EC				@@:
+ 04EC  26: 8A 07		        mov     al,ES:[bx]
+ 04EF  0A C0			        or      al,al
+ 04F1  0F 84 008A		        je      parse_exitX
+ 04F5  43			        inc     bx
+ 04F6  3C 49			        cmp     al,'I'
+ 04F8  74 03			        je      @f
+ 04FA  E9 0083			        jmp     test_sys
+ 04FD				@@:
+ 04FD  26: 8A 07		        mov     al,ES:[bx]
+ 0500  0A C0			        or      al,al
+ 0502  74 7B			        je      parse_exitX
+ 0504  43			        inc     bx
+ 0505  3C 4E			        cmp     al,'N'
+ 0507  74 03			        je      @f
+ 0509  E9 FEC4			        jmp     parse_loop
+ 050C				@@:
+ 050C  26: 8A 07		        mov     al,ES:[bx]
+ 050F  0A C0			        or      al,al
+ 0511  74 6C			        je      parse_exitX
+ 0513  43			        inc     bx
+ 0514  3C 49			        cmp     al,'I'
+ 0516  74 03			        je      @f
+ 0518  E9 FEB5			        jmp     parse_loop
+ 051B				@@:
+ 051B  26: 8A 07		        mov     al,ES:[bx]
+ 051E  0A C0			        or      al,al
+ 0520  74 5D			        je      parse_exitX
+ 0522  43			        inc     bx
+ 0523  3C 54			        cmp     al,'T'
+ 0525  74 03			        je      @f
+ 0527  E9 FEA6			        jmp     parse_loop
+ 052A				@@:
+ 052A  26: 8A 07		        mov     al,ES:[bx]
+ 052D  0A C0			        or      al,al
+ 052F  74 4E			        je      parse_exitX
+ 0531  43			        inc     bx
+ 0532  3C 44			        cmp     al,'D'
+ 0534  74 03			        je      @f
+ 0536  E9 FE97			        jmp     parse_loop
+ 0539				@@:
+ 0539  26: 8A 07		        mov     al,ES:[bx]
+ 053C  0A C0			        or      al,al
+ 053E  74 3F			        je      parse_exitX
+ 0540  43			        inc     bx
+ 0541  3C 45			        cmp     al,'E'
+ 0543  74 03			        je      @f
+ 0545  E9 FE88			        jmp     parse_loop
+ 0548				@@:
+ 0548  26: 8A 07		        mov     al,ES:[bx]
+ 054B  0A C0			        or      al,al
+ 054D  74 30			        je      parse_exitX
+ 054F  43			        inc     bx
+ 0550  3C 4C			        cmp     al,'L'
+ 0552  74 03			        je      @f
+ 0554  E9 FE79			        jmp     parse_loop
+ 0557				@@:
+ 0557  26: 8A 07		        mov     al,ES:[bx]
+ 055A  0A C0			        or      al,al
+ 055C  74 21			        je      parse_exitX
+ 055E  43			        inc     bx
+ 055F  3C 41			        cmp     al,'A'
+ 0561  74 03			        je      @f
+ 0563  E9 FE6A			        jmp     parse_loop
+ 0566				@@:
+ 0566  26: 8A 07		        mov     al,ES:[bx]
+ 0569  0A C0			        or      al,al
+ 056B  74 12			        je      parse_exitX
+ 056D  43			        inc     bx
+ 056E  3C 59			        cmp     al,'Y'
+ 0570  74 03			        je      init_deb
+ 0572  E9 FE5B			        jmp     parse_loop
+
+ 0575				init_deb:
+ 0575  65: C7 06 0000 E		        mov     GS:_bDebugDelay,TRUE
+       0001
+ 057C  E9 FE51			        jmp     parse_loop
+
+ 057F				parse_exitX:
+ 057F  C3			        ret
+
+ 0580				test_sys:
+ 0580  3C 44			        cmp     al,'D'
+ 0582  74 03			        je      @f
+ 0584  E9 FE49			        jmp     parse_loop
+ 0587				@@:
+ 0587  26: 8A 07		        mov     al,ES:[bx]
+ 058A  3C 00			        cmp     al,0
+ 058C  74 F1			        je      parse_exitX
+ 058E  43			        inc     bx
+ 058F  3C 45			        cmp     al,'E'
+ 0591  74 03			        je      @f
+ 0593  E9 FE3A			        jmp     parse_loop
+ 0596				@@:
+ 0596  26: 8A 07		        mov     al,ES:[bx]
+ 0599  3C 00			        cmp     al,0
+ 059B  74 E2			        je      parse_exitX
+ 059D  43			        inc     bx
+ 059E  3C 42			        cmp     al,'B'
+ 05A0  74 03			        je      ext_deb
+ 05A2  E9 FE2B			        jmp     parse_loop
+
+ 05A5				ext_deb:
+ 05A5  E8 FDBE			        call    GetNumber
+ 05A8  A3 0000 E		        mov     wSystemDebug,ax
+ 05AB  E9 FE22			        jmp     parse_loop
+
+ 05AE				print_local:
+ 05AE  65: C7 06 0000 E		        mov     GS:_bPrintLocation,TRUE
+       0001
+ 05B5  E9 FE18			        jmp     parse_loop
+
+ 05B8				disable_RM:
+ 05B8  65: C7 06 0000 E		        mov     GS:_bDisableRM,TRUE
+       0001
+ 05BF  E9 FE0E			        jmp     parse_loop
+
+ 05C2				set_misc_control:
+ 05C2  E8 FDA1			        call    GetNumber
+ 05C5  A3 0000 E		        mov     wMiscControl,ax
+ 05C8  E9 FE05			        jmp     parse_loop
+
+ 05CB				do_response:
+				  IFDEF x16_BIT
+				  ELSE
+ 05CB  E8 0004			        call    ChangeINIname
+				  ENDIF
+ 05CE  43			        inc     bx
+ 05CF  E9 FDFE			        jmp     parse_loop
+
+ 05D2				ParseArguments ENDP
+
+				 IFNDEF x16_BIT
+ 05D2				ChangeINIname PROC NEAR USES AX BX CX DX ES DI
+
+ 05D2  50		   *	    push   ax
+ 05D3  53		   *	    push   bx
+ 05D4  51		   *	    push   cx
+ 05D5  52		   *	    push   dx
+ 05D6  06		   *	    push   es
+ 05D7  57		   *	    push   di
+ 05D8  BF 0000 E		        mov     di,OFFSET abyPath
+ 05DB  B9 0104			        mov     cx,CCHMAXPATH
+ 05DE  33 D2			        xor     dx,dx
+
+ 05E0				end_loop:
+ 05E0  80 3D 20			        cmp     BYTE PTR [di],' '
+ 05E3  74 12			        je      found_end
+ 05E5  80 3D 00			        cmp     BYTE PTR [di],0
+ 05E8  74 0D			        je      found_end
+ 05EA  42			        inc     dx
+ 05EB  80 3D 5C			        cmp     BYTE PTR [di],'\'
+ 05EE  75 02			        jne     @f
+ 05F0  33 D2			        xor     dx,dx
+ 05F2				@@:
+ 05F2  47			        inc     di
+ 05F3  E2 EB			        loop    end_loop
+ 05F5  EB 2D			        jmp     exit
+
+ 05F7				found_end:
+ 05F7  2B FA			        sub     di,dx
+ 05F9  B9 0028			        mov     cx,40    ; arbitrary length
+
+ 05FC				fill_loop:
+ 05FC  26: 8A 07		        mov     al,BYTE PTR ES:[bx]
+ 05FF  3C 20			        cmp     al,' '
+ 0601  74 0E			        je      @f
+ 0603  3C 00			        cmp     al,0
+ 0605  74 0A			        je      @f
+ 0607  3C 2E			        cmp     al,'.'
+ 0609  74 06			        je      @f
+ 060B  88 05			        mov     BYTE PTR [di],al
+ 060D  43			        inc     bx
+ 060E  47			        inc     di
+ 060F  E2 EB			        loop    fill_loop
+
+ 0611				@@:
+ 0611  C6 05 2E			        mov     BYTE PTR [di],'.'
+ 0614  47			        inc     di
+ 0615  C6 05 53			        mov     BYTE PTR [di],'S'
+ 0618  47			        inc     di
+ 0619  C6 05 59			        mov     BYTE PTR [di],'Y'
+ 061C  47			        inc     di
+ 061D  C6 05 53			        mov     BYTE PTR [di],'S'
+ 0620  47			        inc     di
+ 0621  C6 05 00			        mov     BYTE PTR [di],0
+ 0624				exit:
+				        ret
+ 0624  5F		   *	    pop    di
+ 0625  07		   *	    pop    es
+ 0626  5A		   *	    pop    dx
+ 0627  59		   *	    pop    cx
+ 0628  5B		   *	    pop    bx
+ 0629  58		   *	    pop    ax
+ 062A  C3		   *	    ret    00000h
+
+ 062B				ChangeINIname ENDP
+				 ENDIF
+
+ 062B				OutputProgress proc
+
+ 062B  E8 0284			        call    GetCOMnumber
+ 062E  65: 83 3E 0000 E		        cmp     GS:_bVerbose,TRUE
+       01
+ 0634  74 36			        je      verbose_output
+
+				        INVOKE  sprintf,ADDR _szMessage,0,ADDR _szCOMmessage_u,bx
+ 0636  53		   *	    push   bx
+ 0637  0F A8		   *	    push   gs
+ 0639  68 0000 E	   *	    push   OFFSET DGROUP: _szCOMmessage_u
+ 063C  6A 00		   *	    push   +00000h
+ 063E  0F A8		   *	    push   gs
+ 0640  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 0643  9A ---- 0000 E	   *	    call   sprintf
+ 0648  83 C4 0C		   *	    add    sp, 0000Ch
+				        INVOKE  PrintMessage,ADDR _szMessage,ax
+ 064B  50		   *	    push   ax
+ 064C  0F A8		   *	    push   gs
+ 064E  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 0651  9A ---- 0000 E	   *	    call   PrintMessage
+ 0656  83 C4 06		   *	    add    sp, 00006h
+ 0659  F7 44 04 2000		        test    [si].s_stDeviceParms.wDeviceFlag2,DEV_FLAG2_FIFO_AVAILABLE
+ 065E  75 03			        jnz     @f
+ 0660  E9 01A2			        jmp     newline_only
+ 0663				@@:
+ 0663  B8 0000 E		        mov     ax,OFFSET _szAnd
+ 0666  E8 FB2E			        call    PrintString
+ 0669  E9 0125			        jmp     send_FIFO_msg
+
+ 066C				verbose_output:
+				;        mov     cx,[si].s_stDeviceParms.wIObaseAddress
+ 066C  33 D2			        xor     dx,dx
+ 066E  8A 54 3E			        mov     dl,[si].s_stDeviceParms.byInterruptLevel
+				        INVOKE sprintf,ADDR _szMessage,0,ADDR _szVerboseMessage_uxu,bx,
+				                                      [si].s_stDeviceParms.wIObaseAddress,dx
+ 0671  52		   *	    push   dx
+ 0672  FF 74 3A		   *	    push   word  ptr [+si]+0003Ah
+ 0675  53		   *	    push   bx
+ 0676  0F A8		   *	    push   gs
+ 0678  68 0000 E	   *	    push   OFFSET DGROUP: _szVerboseMessage_uxu
+ 067B  6A 00		   *	    push   +00000h
+ 067D  0F A8		   *	    push   gs
+ 067F  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 0682  9A ---- 0000 E	   *	    call   sprintf
+ 0687  83 C4 10		   *	    add    sp, 00010h
+				        INVOKE PrintMessage,ADDR _szMessage,ax
+ 068A  50		   *	    push   ax
+ 068B  0F A8		   *	    push   gs
+ 068D  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 0690  9A ---- 0000 E	   *	    call   PrintMessage
+ 0695  83 C4 06		   *	    add    sp, 00006h
+
+				; output user specified buffer sizes
+
+ 0698  65: 83 7D 08 00		        cmp     GS:[di].s_stConfigParms.cwReadBufferLength,ZERO
+ 069D  74 28			        je      @f
+ 069F  66| 8B 5C 10		        mov     ebx,[si].s_stDeviceParms.dwReadBufferLength
+				;        or      ebx,ebx
+				;        jnz     not_max
+				;        mov     bx,0ffffh
+				;not_max:
+				        INVOKE sprintf,ADDR _szMessage,0,ADDR _szInputBuff_lu,ebx
+ 06A3  66| 53		   *	    push   ebx
+ 06A5  0F A8		   *	    push   gs
+ 06A7  68 0000 E	   *	    push   OFFSET DGROUP: _szInputBuff_lu
+ 06AA  6A 00		   *	    push   +00000h
+ 06AC  0F A8		   *	    push   gs
+ 06AE  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 06B1  9A ---- 0000 E	   *	    call   sprintf
+ 06B6  83 C4 0E		   *	    add    sp, 0000Eh
+				        INVOKE PrintMessage,ADDR _szMessage,ax
+ 06B9  50		   *	    push   ax
+ 06BA  0F A8		   *	    push   gs
+ 06BC  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 06BF  9A ---- 0000 E	   *	    call   PrintMessage
+ 06C4  83 C4 06		   *	    add    sp, 00006h
+ 06C7				@@:
+ 06C7  65: 83 7D 0A 00		        cmp     GS:[di].s_stConfigParms.cwWrtBufferLength,ZERO
+ 06CC  74 2A			        je      @f
+ 06CE  66| 33 DB		        xor     ebx,ebx
+ 06D1  8B 5C 0C			        mov     bx,[si].s_stDeviceParms.wWrtBufferLength
+				        INVOKE sprintf,ADDR _szMessage,0,ADDR _szOutputBuff_lu,ebx
+ 06D4  66| 53		   *	    push   ebx
+ 06D6  0F A8		   *	    push   gs
+ 06D8  68 0000 E	   *	    push   OFFSET DGROUP: _szOutputBuff_lu
+ 06DB  6A 00		   *	    push   +00000h
+ 06DD  0F A8		   *	    push   gs
+ 06DF  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 06E2  9A ---- 0000 E	   *	    call   sprintf
+ 06E7  83 C4 0E		   *	    add    sp, 0000Eh
+				        INVOKE PrintMessage,ADDR _szMessage,ax
+ 06EA  50		   *	    push   ax
+ 06EB  0F A8		   *	    push   gs
+ 06ED  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 06F0  9A ---- 0000 E	   *	    call   PrintMessage
+ 06F5  83 C4 06		   *	    add    sp, 00006h
+ 06F8				@@:
+ 06F8  65: 83 7D 08 00		        cmp     GS:[di].s_stConfigParms.cwReadBufferLength,ZERO
+ 06FD  75 09			        jne     @f
+ 06FF  65: 83 7D 0A 00		        cmp     GS:[di].s_stConfigParms.cwWrtBufferLength,ZERO
+ 0704  75 02			        jne     @f
+ 0706  EB 06			        jmp     test_queue_counts
+ 0708				@@:
+ 0708  B8 0000 E		        mov     ax,OFFSET _szCR
+ 070B  E8 FA89			        call    PrintString
+
+ 070E				test_queue_counts:
+
+				; output user specified queue counts
+
+ 070E  65: 80 7D 1F 00		        cmp     GS:[di].s_stConfigParms.cbyMaxReadPktCount,ZERO
+ 0713  74 28			        je      @f
+ 0715  33 DB			        xor     bx,bx
+ 0717  8A 5C 2B			        mov     bl,[si].s_stDeviceParms.byMaxReadPktCount
+				        INVOKE sprintf,ADDR _szMessage,0,ADDR _szInputQueue_u,bx
+ 071A  53		   *	    push   bx
+ 071B  0F A8		   *	    push   gs
+ 071D  68 0000 E	   *	    push   OFFSET DGROUP: _szInputQueue_u
+ 0720  6A 00		   *	    push   +00000h
+ 0722  0F A8		   *	    push   gs
+ 0724  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 0727  9A ---- 0000 E	   *	    call   sprintf
+ 072C  83 C4 0C		   *	    add    sp, 0000Ch
+				        INVOKE PrintMessage,ADDR _szMessage,ax
+ 072F  50		   *	    push   ax
+ 0730  0F A8		   *	    push   gs
+ 0732  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 0735  9A ---- 0000 E	   *	    call   PrintMessage
+ 073A  83 C4 06		   *	    add    sp, 00006h
+ 073D				@@:
+ 073D  65: 80 7D 1E 00		        cmp     GS:[di].s_stConfigParms.cbyMaxWritePktCount,ZERO
+ 0742  74 28			        je      @f
+ 0744  33 DB			        xor     bx,bx
+ 0746  8A 5C 2A			        mov     bl,[si].s_stDeviceParms.byMaxWritePktCount
+				        INVOKE sprintf,ADDR _szMessage,0,ADDR _szOutputQueue_u,bx
+ 0749  53		   *	    push   bx
+ 074A  0F A8		   *	    push   gs
+ 074C  68 0000 E	   *	    push   OFFSET DGROUP: _szOutputQueue_u
+ 074F  6A 00		   *	    push   +00000h
+ 0751  0F A8		   *	    push   gs
+ 0753  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 0756  9A ---- 0000 E	   *	    call   sprintf
+ 075B  83 C4 0C		   *	    add    sp, 0000Ch
+				        INVOKE PrintMessage,ADDR _szMessage,ax
+ 075E  50		   *	    push   ax
+ 075F  0F A8		   *	    push   gs
+ 0761  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 0764  9A ---- 0000 E	   *	    call   PrintMessage
+ 0769  83 C4 06		   *	    add    sp, 00006h
+ 076C				@@:
+ 076C  65: 80 7D 1F 00		        cmp     GS:[di].s_stConfigParms.cbyMaxReadPktCount,ZERO
+ 0771  75 09			        jne     @f
+ 0773  65: 80 7D 1E 00		        cmp     GS:[di].s_stConfigParms.cbyMaxWritePktCount,ZERO
+ 0778  75 02			        jne     @f
+ 077A  EB 06			        jmp     test_indent_next
+ 077C				@@:
+ 077C  B8 0000 E		        mov     ax,OFFSET _szCR
+ 077F  E8 FA15			        call    PrintString
+
+ 0782				test_indent_next:
+ 0782  F7 44 04 2000		        test    [si].s_stDeviceParms.wDeviceFlag2,DEV_FLAG2_FIFO_AVAILABLE
+ 0787  0F 84 0080		        jz      no_FIFO_to_report
+ 078B  B8 0000 E		        mov     ax,OFFSET _szBlankPad
+ 078E  E8 FA06			        call    PrintString
+
+ 0791				send_FIFO_msg:
+ 0791  B8 0000 E		        mov     ax,OFFSET _szUART_is
+ 0794  E8 FA00			        call    PrintString
+				        test_DeviceFlag2 DEV_FLAG2_16650_UART
+ 079C  74 05			        jz      test_16654
+ 079E  B8 0000 E		        mov     ax,OFFSET _szExtended16650
+ 07A1  EB 27			        jmp     print_UART_msg
+
+ 07A3				test_16654:
+				        test_DeviceFlag2 DEV_FLAG2_16654_UART
+ 07A8  74 05			        jz      test_TI16550C
+ 07AA  B8 0000 E		        mov     ax,OFFSET _szExtended16654
+ 07AD  EB 1B			        jmp     print_UART_msg
+
+ 07AF				test_TI16550C:
+				        test_DeviceFlag2 DEV_FLAG2_TI16550C_UART
+ 07B4  74 05			        jz      test_16750
+ 07B6  B8 0000 E		        mov     ax,OFFSET _szExtendedTI16550C
+ 07B9  EB 0F			        jmp     print_UART_msg
+
+ 07BB				test_16750:
+				        test_DeviceFlag2 DEV_FLAG2_16750_UART
+ 07C0  74 05			        jz      print_16550
+ 07C2  B8 0000 E		        mov     ax,OFFSET _szExtended16750
+ 07C5  EB 03			        jmp     print_UART_msg
+
+ 07C7				print_16550:
+ 07C7  B8 0000 E		        mov     ax,OFFSET _szExtended16550
+
+ 07CA				print_UART_msg:
+ 07CA  E8 F9CA			        call    PrintString
+
+				  IFNDEF NO_4x_CLOCK_SUPPORT
+				IFDEF this_junk
+				ELSE
+ 07CD  80 BC 009E 01		        cmp     [si].s_stDeviceParms.xBaudMultiplier,1
+ 07D2  76 2B			        jbe     set_period
+ 07D4  8A 84 009E		        mov     al,[si].s_stDeviceParms.xBaudMultiplier
+ 07D8  3C 04			        cmp     al, 4
+ 07DA  75 05			        jne     @f
+ 07DC  B8 0000 E		        mov     ax,OFFSET _szAnd4x
+ 07DF  EB 19			        jmp     baud_clock_msg
+ 07E1				@@:
+ 07E1  3C 08			        cmp     al, 8
+ 07E3  75 05			        jne     @f
+ 07E5  B8 0000 E		        mov     ax,OFFSET _szAnd8x
+ 07E8  EB 10			        jmp     baud_clock_msg
+ 07EA				@@:
+ 07EA  3C 0C			        cmp     al, 12
+ 07EC  75 05			        jne     @f
+ 07EE  B8 0000 E		        mov     ax,OFFSET _szAnd12x
+ 07F1  EB 07			        jmp     baud_clock_msg
+ 07F3				@@:
+ 07F3  3C 10			        cmp     al, 16
+ 07F5  75 08			        jne     set_period
+ 07F7  B8 0000 E		        mov     ax,OFFSET _szAnd16x
+				ENDIF
+ 07FA				baud_clock_msg:
+ 07FA  E8 F99A			        call    PrintString
+ 07FD  EB 06			        jmp     newline_only
+
+ 07FF				set_period:
+				  ENDIF
+ 07FF  B8 0000 E		        mov     ax,OFFSET _szPeriod
+ 0802  E8 F992			        call    PrintString
+
+ 0805				newline_only:
+ 0805  B8 0000 E		        mov     ax,OFFSET _szCR
+ 0808  E8 F98C			        call    PrintString
+
+ 080B				no_FIFO_to_report:
+ 080B  C3			        ret
+
+ 080C				OutputProgress ENDP
+
+ 080C				CalcDelay PROC NEAR USES cx dx ; AX to contain delay in .1 second increments
+
+ 080C  51		   *	    push   cx
+ 080D  52		   *	    push   dx
+ 080E  B9 0064			        mov     cx,100
+ 0811  F7 E1			        mul     cx
+ 0813  3B 06 0000 E		        cmp     ax,wClockRate2
+ 0817  73 05			        jnc     @f
+ 0819  B8 0002			        mov     ax,2
+ 081C  EB 18			        jmp     calc_end
+ 081E				@@:
+ 081E  8B 0E 0000 E		        mov     cx,wClockRate
+ 0822  0B C9			        or      cx,cx
+ 0824  75 05			        jnz     @f
+ 0826  B8 0002			        mov     ax,2   ;set arbitrary delay for unlikely case - zero clock spec
+ 0829  EB 0B			        jmp     calc_end
+ 082B				@@:
+ 082B  33 D2			        xor     dx,dx
+ 082D  F7 F1			        div     cx
+ 082F  D1 E9			        shr     cx,1
+ 0831  3B D1			        cmp     dx,cx
+ 0833  72 01			        jb      calc_end
+ 0835  40			        inc     ax                      ;round off
+
+ 0836				calc_end:
+				        ret
+ 0836  5A		   *	    pop    dx
+ 0837  59		   *	    pop    cx
+ 0838  C3		   *	    ret    00000h
+
+ 0839				CalcDelay ENDP  ; AX to contain adjusted delay count
+
+ 0839				InitTimer PROC FAR USES DS
+
+ 0839  1E		   *	    push   ds
+ 083A  9C			        pushf
+				     SetDS    RDGROUP
+ 083F  83 3E 0000 E 00		        cmp     wInitTimerCount,0
+ 0844  74 04			        je      @f
+ 0846  FF 0E 0000 E		        dec     wInitTimerCount
+ 084A				@@:
+				  IFNDEF NO_4x_CLOCK_SUPPORT
+ 084A  66| FF 06 0000 E		        inc     dwTimerCounter
+				  ENDIF
+ 084F  9D			        popf
+				        ret
+ 0850  1F		   *	    pop    ds
+ 0851  CB		   *	    ret    00000h
+
+ 0852				InitTimer ENDP
+
+ 0852				DelayFunction PROC NEAR USES ax dx
+				; if timer count equals -1 then wait forever
+
+				  IFDEF this_junk
+				  ELSE
+ 0852  50		   *	    push   ax
+ 0853  52		   *	    push   dx
+ 0854  65: 83 3E 0000 E		        cmp     GS:_bTimerAvailable,TRUE
+       01
+ 085A  74 0A			        je      wait_loop
+				  IFNDEF x16_BIT
+ 085C  66| B9 00013880		        mov     ecx,80000
+ 0862  E2 FE			        loop    $
+				  ELSE
+				  ENDIF
+ 0864  EB 49			        jmp     exit
+				  ENDIF
+ 0866				wait_loop:
+ 0866  83 3E 0000 E 00		        cmp     wInitTimerCount,0
+ 086B  74 42			        je      delay_exit
+				  IFNDEF _x16_BIT
+ 086D  65: 83 3E 0000 E		        cmp     GS:_bWaitingKey,TRUE
+       01
+ 0873  75 F1			        jne     wait_loop
+ 0875  65: C7 06 0000 E		        mov     WORD PTR GS:_abyString,0
+       0000
+ 087C  0F A8			        push    gs
+ 087E  68 0000 E		        push    OFFSET _abyString
+ 0881  6A 01			        push    1
+ 0883  6A 00			        push    0
+ 0885  9A ---- 0000 E		        call    FAR PTR KBDCHARIN
+ 088A  65: 80 3E 0000 E		        cmp     GS:_abyString,ENTER_KEY
+       0D
+ 0890  74 1D			        je      delay_exit
+ 0892  65: 80 3E 0000 E		        cmp     GS:_abyString,0
+       00
+ 0898  74 CC			        je      wait_loop
+ 089A  65: C7 06 0000 E		        mov     WORD PTR GS:_abyString,0
+       0000
+ 08A1  BB 03E8			        mov     bx,1000
+ 08A4  B9 00FA			        mov     cx,250
+ 08A7  B2 52			        mov     dl,DevHlp_Beep
+ 08A9  FF 1E 0000 E		        call    device_hlp
+				  ENDIF
+ 08AD  EB B7			        jmp     wait_loop
+
+ 08AF				delay_exit:
+				  IFDEF this_junk
+				  ENDIF
+ 08AF				exit:
+				        ret
+ 08AF  5A		   *	    pop    dx
+ 08B0  58		   *	    pop    ax
+ 08B1  C3		   *	    ret    00000h
+
+ 08B2				DelayFunction ENDP
+
+ 08B2				GetCOMnumber PROC
+
+ 08B2  65: 8B 1E 0000 E		        mov     bx,GS:_wCurrentDevice
+ 08B7  81 C3 0000 E		        add     bx,OFFSET _abyCOMnumbers
+ 08BB  33 C0			        xor     ax,ax
+ 08BD  65: 8A 07		        mov     al,GS:[bx]
+ 08C0  8B D8			        mov     bx,ax
+ 08C2  C3			        ret
+
+ 08C3				GetCOMnumber ENDP ; BX = COM number (i.e., 1 for COM1)
+
+ 08C3				StorePath PROC NEAR  USES ES DI; ES:BX is pointing to the parameter list
+
+ 08C3  06		   *	    push   es
+ 08C4  57		   *	    push   di
+ 08C5  B9 0104			        mov     cx,CCHMAXPATH
+ 08C8  8B FB			        mov     di,bx
+
+ 08CA				find_space_loop:
+ 08CA  26: 80 3F 20		        cmp     BYTE PTR ES:[bx],' '
+ 08CE  74 03			        je      @f
+ 08D0  43			        inc     bx
+ 08D1  E2 F7			        loop    find_space_loop
+ 08D3				@@:
+ 08D3  26: C6 07 00		        mov     BYTE PTR ES:[bx],0
+ 08D7  43			        inc     bx
+ 08D8  53			        push    bx
+
+ 08D9  B9 0000 E		        mov     CX,OFFSET _szVersion
+				        INVOKE sprintf,ADDR abyPath,0,ADDR _szPath_sss,
+				                                       di,ES,cx,GS,
+				                                       OFFSET _szVerMod,GS
+ 08DC  0F A8		   *	    push   gs
+ 08DE  68 0000 E	   *	    push   word  ptr OFFSET _szVerMod
+ 08E1  0F A8		   *	    push   gs
+ 08E3  51		   *	    push   cx
+ 08E4  06		   *	    push   es
+ 08E5  57		   *	    push   di
+ 08E6  0F A8		   *	    push   gs
+ 08E8  68 0000 E	   *	    push   OFFSET DGROUP: _szPath_sss
+ 08EB  6A 00		   *	    push   +00000h
+ 08ED  1E		   *	    push   ds
+ 08EE  68 0000 E	   *	    push   OFFSET RDGROUP: abyPath
+ 08F1  9A ---- 0000 E	   *	    call   sprintf
+ 08F6  83 C4 16		   *	    add    sp, 00016h
+ 08F9  5B			        pop     bx
+				        ret
+ 08FA  5F		   *	    pop    di
+ 08FB  07		   *	    pop    es
+ 08FC  C3		   *	    ret    00000h
+
+ 08FD				StorePath ENDP  ; BX will point to first parameyer
+				  ENDIF
+
+				  IFNDEF x16_BIT
+ 08FD				SetRing0Access PROC USES ax bx cx dx di gs
+
+				;    SetGS     DGROUP
+				;        stc
+				;        jmp     exit
+ 08FD  50		   *	    push   ax
+ 08FE  53		   *	    push   bx
+ 08FF  51		   *	    push   cx
+ 0900  52		   *	    push   dx
+ 0901  57		   *	    push   di
+ 0902  0F A8		   *	    push   gs
+ 0904  66| 65: 83 3E 0000 E	        cmp     GS:_Ring0Vector,0
+       00
+ 090B  75 21			        jne     exit
+ 090D  B8 ---- E		        mov     ax,SEG Ring0Access
+ 0910  BB 0000 E		        mov     bx,OFFSET Ring0Access
+ 0913  B9 0006			        mov     cx,6
+ 0916  B6 03			        mov     dh,3
+ 0918  B2 6C			        mov     dl,DevHlp_DynamicAPI
+ 091A  FF 1E 0000 E		        call    device_hlp
+ 091E  73 02			        jnc     @f
+ 0920  EB 0C			        jmp     exit
+ 0922				@@:
+ 0922  65: 89 3E 0002 E		        mov     WORD PTR GS:_Ring0Vector + 2,di
+ 0927  65: C7 06 0000 E		        mov     WORD PTR GS:_Ring0Vector,OFFSET Ring0Access
+       0000 E
+ 092E				exit:
+				        ret
+ 092E  0F A9		   *	    pop    gs
+ 0930  5F		   *	    pop    di
+ 0931  5A		   *	    pop    dx
+ 0932  59		   *	    pop    cx
+ 0933  5B		   *	    pop    bx
+ 0934  58		   *	    pop    ax
+ 0935  C3		   *	    ret    00000h
+
+ 0936				SetRing0Access ENDP
+				  ENDIF
+
+				  IFDEF x16_BIT
+				  ENDIF
+
+				  IFDEF this_junk
+				  ENDIF
+				;--------------------------- INIT --------------------------------------
+ 0936				RES_CODE ENDS
+
+				  END

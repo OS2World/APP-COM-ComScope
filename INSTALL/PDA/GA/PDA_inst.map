@@ -1,0 +1,174 @@
+
+ PDA_INST
+
+ Start         Length     Name                   Class
+ 0001:00000000 000003120H CODE32                 CODE 32-bit
+	at offset 00000000 02FCBH bytes from P:\install\PDA\GA\comi.obj (p:\Install\PDA\comi.c)
+	at offset 00002fcc 00040H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\dllinit.c)
+	at offset 0000300c 00111H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\ctordtor.c)
+
+ 0002:00000000 000000000H CONST32_RO             CONST 32-bit
+
+ 0002:00000000 000000C40H DATA32                 DATA 32-bit
+	at offset 00000000 00C38H bytes from P:\install\PDA\GA\comi.obj (p:\Install\PDA\comi.c)
+	at offset 00000c38 00004H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\dllstub.asm)
+	at offset 00000c3c 00004H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\ctordtor.c)
+
+ 0002:00000C40 000000000H CTOR_DTOR1             DATA 32-bit
+
+ 0002:00000C40 000000000H CTOR_DTOR2             DATA 32-bit
+
+ 0002:00000C40 000000000H CTOR_DTOR3             DATA 32-bit
+
+ 0002:00000C40 000000000H EDC1                   EDC_CLASS 32-bit
+
+ 0002:00000C40 000000000H EDC2                   EDC_CLASS 32-bit
+
+ 0002:00000C40 000000000H EDC3                   EDC_CLASS 32-bit
+
+ 0002:00000C40 00000000CH BSS32                  BSS 32-bit
+	at offset 00000000 0000CH bytes from P:\install\PDA\GA\comi.obj (p:\Install\PDA\comi.c)
+
+ 0002:00000C4C 0000007C0H c_common               BSS 32-bit
+
+
+ Origin   Group
+ 0000:0   FLAT
+ 0002:0   DGROUP
+
+ Address       Export                  Alias
+
+ 0001:00000FC8 InstallCOMi             InstallCOMi
+ 0001:00000000 Uninstall               Uninstall
+
+  Address         Publics by Name
+
+ 0000:00000000  Imp  AppendINI            (OS2LS_UT.24)
+ 0000:00000000  Imp  AppendTMP            (OS2LS_UT.26)
+ 0000:00000000  Imp  CleanConfigSys       (OS2LS_UT.10)
+ 0000:00000000  Imp  DosClose             (DOSCALLS.257)
+ 0000:00000000  Imp  DosCopy              (DOSCALLS.258)
+ 0000:00000000  Imp  DosCreateDir         (DOSCALLS.270)
+ 0000:00000000  Imp  DosDelete            (DOSCALLS.259)
+ 0000:00000000  Imp  DosDeleteDir         (DOSCALLS.226)
+ 0000:00000000  Imp  DosForceDelete       (DOSCALLS.110)
+ 0000:00000000  Imp  DosFreeModule        (DOSCALLS.322)
+ 0000:00000000  Imp  DosLoadModule        (DOSCALLS.318)
+ 0000:00000000  Imp  DosOpen              (DOSCALLS.273)
+ 0000:00000000  Imp  DosQueryPathInfo     (DOSCALLS.223)
+ 0000:00000000  Imp  DosQueryProcAddr     (DOSCALLS.321)
+ 0000:00000000  Imp  DosSetPathInfo       (DOSCALLS.219)
+ 0000:00000000  Imp  DosWrite             (DOSCALLS.282)
+ 0000:00000000  Imp  free                 (OS2LSRTL.88)
+ 0001:00000FC8       InstallCOMi
+ 0000:00000000  Imp  malloc               (OS2LSRTL.167)
+ 0000:00000000  Imp  MenuItemEnable       (OS2LS_UT.9)
+ 0000:00000000  Imp  PrfCloseProfile      (PMSHAPI.103)
+ 0000:00000000  Imp  PrfOpenProfile       (PMSHAPI.102)
+ 0000:00000000  Imp  PrfQueryProfileData  (PMSHAPI.117)
+ 0000:00000000  Imp  PrfQueryProfileSize  (PMSHAPI.101)
+ 0000:00000000  Imp  PrfQueryProfileString (PMSHAPI.115)
+ 0000:00000000  Imp  PrfWriteProfileData  (PMSHAPI.118)
+ 0000:00000000  Imp  PrfWriteProfileString (PMSHAPI.116)
+ 0002:00000DA8       stFileStatus
+ 0000:00000000  Imp  stricmp              (OS2LSRTL.355)
+ 0002:00001188       szCaption
+ 0002:00000D7C       szCOMiINFname
+ 0002:00000FCC       szCOMscopeEXEname
+ 0002:00001308       szDestSpec
+ 0002:00001124       szFileKey
+ 0002:000012B8       szFileName
+ 0002:00000C50       szFileNumber
+ 0002:00001020       szInstalledIniPath
+ 0002:00000FF4       szInstallEXEname
+ 0002:00001138       szMessage
+ 0002:00000EC8       szPath
+ 0002:000011B0       szPDRpath
+ 0002:00000DC0       szSetupString
+ 0002:00000C78       szSourceSpec
+ 0001:00000000       Uninstall
+ 0000:00000000  Imp  WinCreateObject      (PMWP.281)
+ 0000:00000000  Imp  WinDestroyObject     (PMWP.251)
+ 0000:00000000  Imp  WinMessageBox        (PMWIN.789)
+ 0000:00000000  Imp  WinQuerySysPointer   (PMWIN.828)
+ 0000:00000000  Imp  WinSetPointer        (PMWIN.866)
+ 0000:00000000  Imp  _CRT_init            (OS2LSRTL.467)
+ 0000:00000000  Imp  _CRT_term            (OS2LSRTL.457)
+ 0001:00002FCC       _DLL_InitTerm
+ 0000:00000000  Imp  _exception_dllinit   (OS2LSRTL.420)
+ 0000:00000000  Imp  _itoa                (OS2LSRTL.152)
+ 0000:00000000  Imp  _matherr             (OS2LSRTL.346)
+ 0000:00000000  Imp  _PGLOBAL_PTR         (OS2LSRTL.25)
+ 0000:00000000  Imp  _sprintfieee         (OS2LSRTL.32)
+ 0002:0000101C       __ctordtorCurrent
+ 0002:00000C40       __ctordtorEnd
+ 0001:00003044       __ctordtorInit
+ 0002:00000C40       __ctordtorStart
+ 0001:0000300C       __ctordtorTerm
+
+  Address         Publics by Value
+
+ 0000:00000000  Imp  _matherr             (OS2LSRTL.346)
+ 0000:00000000  Imp  DosOpen              (DOSCALLS.273)
+ 0000:00000000  Imp  DosQueryPathInfo     (DOSCALLS.223)
+ 0000:00000000  Imp  WinDestroyObject     (PMWP.251)
+ 0000:00000000  Imp  DosQueryProcAddr     (DOSCALLS.321)
+ 0000:00000000  Imp  PrfQueryProfileSize  (PMSHAPI.101)
+ 0000:00000000  Imp  WinCreateObject      (PMWP.281)
+ 0000:00000000  Imp  malloc               (OS2LSRTL.167)
+ 0000:00000000  Imp  PrfOpenProfile       (PMSHAPI.102)
+ 0000:00000000  Imp  _itoa                (OS2LSRTL.152)
+ 0000:00000000  Imp  free                 (OS2LSRTL.88)
+ 0000:00000000  Imp  DosSetPathInfo       (DOSCALLS.219)
+ 0000:00000000  Imp  DosForceDelete       (DOSCALLS.110)
+ 0000:00000000  Imp  PrfCloseProfile      (PMSHAPI.103)
+ 0000:00000000  Imp  PrfWriteProfileData  (PMSHAPI.118)
+ 0000:00000000  Imp  PrfQueryProfileData  (PMSHAPI.117)
+ 0000:00000000  Imp  _CRT_init            (OS2LSRTL.467)
+ 0000:00000000  Imp  _CRT_term            (OS2LSRTL.457)
+ 0000:00000000  Imp  AppendTMP            (OS2LS_UT.26)
+ 0000:00000000  Imp  DosDelete            (DOSCALLS.259)
+ 0000:00000000  Imp  WinQuerySysPointer   (PMWIN.828)
+ 0000:00000000  Imp  AppendINI            (OS2LS_UT.24)
+ 0000:00000000  Imp  _exception_dllinit   (OS2LSRTL.420)
+ 0000:00000000  Imp  DosWrite             (DOSCALLS.282)
+ 0000:00000000  Imp  DosClose             (DOSCALLS.257)
+ 0000:00000000  Imp  DosCopy              (DOSCALLS.258)
+ 0000:00000000  Imp  stricmp              (OS2LSRTL.355)
+ 0000:00000000  Imp  DosLoadModule        (DOSCALLS.318)
+ 0000:00000000  Imp  WinMessageBox        (PMWIN.789)
+ 0000:00000000  Imp  DosFreeModule        (DOSCALLS.322)
+ 0000:00000000  Imp  CleanConfigSys       (OS2LS_UT.10)
+ 0000:00000000  Imp  _sprintfieee         (OS2LSRTL.32)
+ 0000:00000000  Imp  _PGLOBAL_PTR         (OS2LSRTL.25)
+ 0000:00000000  Imp  PrfQueryProfileString (PMSHAPI.115)
+ 0000:00000000  Imp  WinSetPointer        (PMWIN.866)
+ 0000:00000000  Imp  PrfWriteProfileString (PMSHAPI.116)
+ 0000:00000000  Imp  DosDeleteDir         (DOSCALLS.226)
+ 0000:00000000  Imp  DosCreateDir         (DOSCALLS.270)
+ 0000:00000000  Imp  MenuItemEnable       (OS2LS_UT.9)
+ 0001:00000000       Uninstall
+ 0001:00000FC8       InstallCOMi
+ 0001:00002FCC       _DLL_InitTerm
+ 0001:0000300C       __ctordtorTerm
+ 0001:00003044       __ctordtorInit
+ 0002:00000C40       __ctordtorStart
+ 0002:00000C40       __ctordtorEnd
+ 0002:00000C50       szFileNumber
+ 0002:00000C78       szSourceSpec
+ 0002:00000D7C       szCOMiINFname
+ 0002:00000DA8       stFileStatus
+ 0002:00000DC0       szSetupString
+ 0002:00000EC8       szPath
+ 0002:00000FCC       szCOMscopeEXEname
+ 0002:00000FF4       szInstallEXEname
+ 0002:0000101C       __ctordtorCurrent
+ 0002:00001020       szInstalledIniPath
+ 0002:00001124       szFileKey
+ 0002:00001138       szMessage
+ 0002:00001188       szCaption
+ 0002:000011B0       szPDRpath
+ 0002:000012B8       szFileName
+ 0002:00001308       szDestSpec
+
+Program entry point at 0001:00002FCC

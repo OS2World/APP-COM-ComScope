@@ -1,0 +1,52 @@
+  COMi Asynchronous Serial Device Driver DEMO
+    version 3.81
+  COMscope Serial Communications Monitor and Control DEMO
+    version 3.80a DEMO
+  COMspool PMSPOOL Extension DEMO
+    version 2.20 DEMO
+
+  For OS/2.x and above.
+
+  If you have Personal COMi or COMi GA you will have to temporarily
+  uninstall it to evaluate COMscope and COMspool.
+
+  Includes OS/tools INSTALL, a complete install,
+  uninstall, and configuration application for these
+  programs.
+
+  See README.1st for more information on installing these
+  demonstration versions.
+
+File List:
+  
+  FILE_ID.DIZ
+  README.1st
+  VERSION.TXT
+  INSTALL.EXE
+  COMi.INF
+  COMDDE.SYS    (device driver)
+  CSDEMO.EXE
+  CONTROL.EXE
+  OS2LSRTL.DLL
+  OS2LS_UT.DLL
+  OS2LS_PR.DLL
+  OS2LS_IO.DLL
+  COMi_CFG.DLL
+  COMi_CTL.DLL
+  SPL_DEMO.PDR
+  HEXFONTS.FON
+  CONTROL.EXE
+  SPLIT.C       (source code)
+  SPLIT.EXE
+  IOCTL.C       (source code)
+  IOCTL.H       (source code)
+  PDA_INST.DLL
+  CSDEMO.HLP
+  CONFIG.HLP
+  INSTALL.HLP
+  NOTICE.TXT    (displayed by INSTALL)
+  LICENSE.TXT   (displayed by INSTALL)
+  INSTALL.ICO   (may be hidden)
+  COMscope.ICO  (may be hidden)
+  OS_tools.ini  (may be hidden)
+

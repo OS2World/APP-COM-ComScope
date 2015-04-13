@@ -1,0 +1,58 @@
+" Compile::C++ Compiler "
+
+Operating System/2 Program Maintenance Utility
+Version 3.00.013 Nov 17 1995
+Copyright (C) IBM Corporation 1988-1995
+Copyright (C) Microsoft Corp. 1988-1991
+All rights reserved.
+
+	icc.exe /Sp1 /Sd /Ss /Q /Fi /Si /O /W1 /Gm /Gd /G4 /Gs /Gn /Ms /Gf /Gi /Ft- /Gu /C p:\Install\inst_dlg.c
+p:\Install\inst_dlg.c(11:8) : error EDC0166: Definition of function COMICFG requires parentheses.
+p:\Install\inst_dlg.c(11:16) : error EDC0276: Syntax error: possible missing '{'?
+p:\Install\inst_dlg.c(72:11) : error EDC0045: Undeclared identifier msg.
+p:\Install\inst_dlg.c(75:20) : error EDC0045: Undeclared identifier hwndDlg.
+p:\Install\inst_dlg.c(76:11) : error EDC0045: Undeclared identifier szCheckOneCaption.
+p:\Install\inst_dlg.c(78:11) : error EDC0045: Undeclared identifier szCheckTwoCaption.
+p:\Install\inst_dlg.c(80:11) : error EDC0045: Undeclared identifier szCheckThreeCaption.
+p:\Install\inst_dlg.c(82:11) : error EDC0045: Undeclared identifier szCheckFourCaption.
+p:\Install\inst_dlg.c(84:11) : error EDC0045: Undeclared identifier szCheckFiveCaption.
+p:\Install\inst_dlg.c(86:11) : error EDC0045: Undeclared identifier bObjectsToCreate.
+p:\Install\inst_dlg.c(88:13) : error EDC0045: Undeclared identifier stInst.
+p:\Install\inst_dlg.c(95:11) : error EDC0045: Undeclared identifier bLibrariesToInstall.
+p:\Install\inst_dlg.c(105:31) : error EDC0045: Undeclared identifier bItemOneLocked.
+p:\Install\inst_dlg.c(107:33) : error EDC0045: Undeclared identifier ulCOMiSize.
+p:\Install\inst_dlg.c(109:12) : error EDC0045: Undeclared identifier bCOMscopeToInstall.
+p:\Install\inst_dlg.c(116:37) : error EDC0045: Undeclared identifier bItemTwoLocked.
+p:\Install\inst_dlg.c(118:35) : error EDC0045: Undeclared identifier ulCOMscopeSize.
+p:\Install\inst_dlg.c(121:12) : error EDC0045: Undeclared identifier bPagerToInstall.
+p:\Install\inst_dlg.c(123:14) : error EDC0045: Undeclared identifier bPDRtoInstall.
+p:\Install\inst_dlg.c(131:34) : error EDC0045: Undeclared identifier bItemThreeLocked.
+p:\Install\inst_dlg.c(133:35) : error EDC0045: Undeclared identifier ulPagerSize.
+p:\Install\inst_dlg.c(148:35) : error EDC0045: Undeclared identifier ulPDRsize.
+p:\Install\inst_dlg.c(151:29) : error EDC0045: Undeclared identifier bItemFourLocked.
+p:\Install\inst_dlg.c(151:11) : error EDC0045: Undeclared identifier bUtilToInstall.
+p:\Install\inst_dlg.c(155:35) : error EDC0045: Undeclared identifier ulUtilSize.
+p:\Install\inst_dlg.c(163:12) : error EDC0045: Undeclared identifier bInstallDemo.
+p:\Install\inst_dlg.c(165:36) : error EDC0045: Undeclared identifier bItemFiveLocked.
+p:\Install\inst_dlg.c(167:35) : error EDC0045: Undeclared identifier ulInstallSize.
+p:\Install\inst_dlg.c(179:14) : error EDC0045: Undeclared identifier mp1.
+p:\Install\inst_dlg.c(187:76) : error EDC0045: Undeclared identifier pszPath.
+p:\Install\inst_dlg.c(203:19) : error EDC0045: Undeclared identifier stCOMiCFG.
+p:\Install\inst_dlg.c(213:48) : error EDC0045: Undeclared identifier mp2.
+p:\Install\inst_dlg.c(296:7) : error EDC0343: Redeclaration of CalcSizeSetCaption differs from previous declaration on line 175 of "p:\Install\inst_dlg.c".
+p:\Install\inst_dlg.c(300:7) : error EDC0045: Undeclared identifier stInst.
+p:\Install\inst_dlg.c(301:15) : error EDC0045: Undeclared identifier ulCOMscopeSize.
+p:\Install\inst_dlg.c(303:15) : error EDC0045: Undeclared identifier ulInstallSize.
+p:\Install\inst_dlg.c(305:15) : error EDC0045: Undeclared identifier ulPDRsize.
+p:\Install\inst_dlg.c(307:15) : error EDC0045: Undeclared identifier ulPagerSize.
+p:\Install\inst_dlg.c(309:15) : error EDC0045: Undeclared identifier ulCOMiSize.
+p:\Install\inst_dlg.c(311:15) : error EDC0045: Undeclared identifier ulUtilSize.
+p:\Install\inst_dlg.c(313:15) : error EDC0045: Undeclared identifier ulLibsSize.
+p:\Install\inst_dlg.c(337:37) : error EDC0045: Undeclared identifier stInst.
+p:\Install\inst_dlg.c(415:11) : error EDC0045: Undeclared identifier stInst.
+p:\Install\inst_dlg.c(433:19) : error EDC0045: Undeclared identifier stUninstall.
+p:\Install\inst_dlg.c(457:45) : error EDC0045: Undeclared identifier szConfigDDname.
+p:\Install\inst_dlg.c(458:37) : error EDC0045: Undeclared identifier pszPath.
+p:\Install\inst_dlg.c(459:42) : error EDC0045: Undeclared identifier szBannerOne.
+p:\Install\inst_dlg.c(460:42) : error EDC0045: Undeclared identifier szBannerTwo.
+p:\Install\inst_dlg.c(461:49) : error EDC0045: Undeclared identifier pszUninstallIniPath.

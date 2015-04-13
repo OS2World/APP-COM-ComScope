@@ -1,0 +1,262 @@
+/*--------------------------------------------------------------------------*/
+/*    Module Name: INSTALL.RC                                               */
+/*                                                                          */
+/*    Description: QuickPage Install resource file.                         */
+/*                                                                          */
+/*           Date: Jul 15, 1995                                             */
+/*                                                                          */
+/*      Copyright: OS/tools Incorporated 1995.                              */
+/*                                                                          */
+/*       Comments: Contains the minumum resources for this application.     */
+/*                 The rest of resources can be place in a resource DLL     */
+/*                 for sharing purposes.                                    */
+/*                                                                          */
+/*--------------------------------------------------------------------------*/
+#include "QPG_CFG.H"
+
+ICON ID_INSTALL_RESOURCE                       qpage.ico
+
+MENU ID_INSTALL_RESOURCE
+BEGIN
+   SUBMENU "~File",                            IDM_FILE
+   BEGIN
+      MENUITEM "Install...",                   IDM_FILE_INSTALL
+      MENUITEM SEPARATOR
+      MENUITEM "~Product Information\tF10",    IDM_FILE_ABOUT
+      MENUITEM "~Exit\tF3",                    IDM_FILE_EXIT
+   END
+
+
+   SUBMENU "~Help",                            IDM_HELP
+   BEGIN
+      MENUITEM "Help ~Index",                  IDM_HELP_INDEX
+      MENUITEM "~General Help",                IDM_HELP_GENERAL
+      MENUITEM "~Using Help",                  IDM_HELP_USING
+      MENUITEM "~Keys Help",                   IDM_HELP_KEYS
+      MENUITEM SEPARATOR
+      MENUITEM "Product Information",          IDM_HELP_PRODUCT
+   END
+
+END
+
+ACCELTABLE ID_INSTALL_RESOURCE
+BEGIN
+   VK_F10,    IDM_FILE_ABOUT,      VIRTUALKEY
+   VK_F3 ,    IDM_FILE_EXIT,       VIRTUALKEY
+END
+
+
+STRINGTABLE LOADONCALL
+{
+   IDS_INSTALL_CLASS            "QuickPageInstallClass"
+}
+
+
+DLGTEMPLATE ID_DLG_ABOUT LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Product Information", ID_DLG_ABOUT, 85, 125, 276, 99, FS_NOBYTEALIGN | 
+            WS_VISIBLE, FCF_SYSMENU | FCF_TITLEBAR
+    BEGIN
+        ICON            ID_INSTALL_RESOURCE, DID_CANCEL, 124, 81, 21, 16, WS_GROUP
+        CTEXT           "QuickPage Installation", 103, 3, 60, 268, 19
+                        PRESPARAMS PP_FONTNAMESIZE, "24.Helv.Bold.Italic"
+        CTEXT           "Version 1.0", 102, 0, 53, 276, 8
+        CTEXT           "Copyright (c) OS/tools Incorporated 1995.", 256, 0, 
+                        34, 276, 8
+        DEFPUSHBUTTON   "~OK", DID_OK, 110, 11, 45, 15
+    END
+END
+
+
+DLGTEMPLATE ID_DLG_INSTALL LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "QuickPage Configuration", ID_DLG_INSTALL, 43, 5, 375, 220, FS_NOBYTEALIGN |
+            WS_VISIBLE, FCF_SYSMENU | FCF_TITLEBAR
+    BEGIN
+        CONTROL         "", IDBK_INSTALL_NOTEBOOK, 0, 35, 240, 185, WC_NOTEBOOK,
+                        BKS_BACKPAGESBR | BKS_MAJORTABRIGHT | BKS_SQUARETABS | 
+                        BKS_ROUNDEDTABS | BKS_SPIRALBIND | BKS_STATUSTEXTLEFT |
+                        BKS_STATUSTEXTRIGHT | BKS_TABTEXTLEFT | WS_GROUP | 
+                        WS_TABSTOP | WS_VISIBLE
+                        PRESPARAMS PP_FONTNAMESIZE, "10.Helv"
+        PUSHBUTTON      "~OK",        DID_OK,                  6, 4, 40, 14
+        PUSHBUTTON      "~File Name", IDBTN_INSTALL_FILENAME, 49, 4, 55, 14
+        PUSHBUTTON      "~Cancel",    DID_CANCEL,            107, 4, 40, 14
+        DEFPUSHBUTTON   "~Help",      IDBTN_HELP,            150, 4, 40, 14
+    END
+END
+
+
+
+DLGTEMPLATE ID_DLG_GLOBAL_SETTINGS LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Global Settings", ID_DLG_GLOBAL_SETTINGS, 89, 77, 274, 166, 
+            NOT FS_DLGBORDER | WS_VISIBLE
+    BEGIN
+        GROUPBOX        "Global ~Settings",     IDGRP_INST_SETTINGS, 6, 53, 260, 109,
+                        DT_MNEMONIC
+        RTEXT           "Communications ~Port", IDTXT_INST_COM_PORT, 12, 134, 68, 15,
+                        DT_WORDBREAK | DT_MNEMONIC
+        CONTROL         "",                     IDCTL_INST_COM_PORT, 89, 136, 29, 12, WC_SPINBUTTON,
+                        SPBS_ALLCHARACTERS | SPBS_MASTER   | SPBS_SERVANT |
+                        SPBS_JUSTDEFAULT   | SPBS_READONLY 
+                        WS_GROUP           | WS_TABSTOP    | WS_VISIBLE
+
+        RTEXT           "Sender ~ID",    IDTXT_INST_SENDER, 12, 119, 68, 8, DT_MNEMONIC
+        ENTRYFIELD      "",              IDFLD_INST_SENDER, 91, 119, 66, 8, ES_MARGIN
+        RTEXT           "~Group Name",   IDTXT_INST_GROUP, 12, 107, 68, 8, DT_MNEMONIC
+        ENTRYFIELD      "",              IDFLD_INST_GROUP, 91, 106, 106, 8, ES_MARGIN
+        RTEXT           "~Dial Prefix",  IDTXT_INST_PREFIX, 12, 93, 68, 8, DT_MNEMONIC
+        ENTRYFIELD      "",              IDFLD_INST_PREFIX, 91, 92, 66, 8, ES_MARGIN
+        RTEXT           "Page ~Retries", IDTXT_INST_RETRIES, 12, 77, 68, 8, DT_MNEMONIC
+        CONTROL         "",              IDCTL_INST_RETRIES, 89, 76, 29, 12, WC_SPINBUTTON,
+                        SPBS_ALLCHARACTERS | SPBS_MASTER   | SPBS_SERVANT |
+                        SPBS_JUSTDEFAULT   | SPBS_READONLY
+                        WS_GROUP           | WS_TABSTOP    | WS_VISIBLE
+        RTEXT           "~Log File Name", IDTXT_INST_LOG_FILE, 12, 63, 68, 8, DT_MNEMONIC
+        ENTRYFIELD      "",               IDFLD_INST_LOG_FILE, 91, 63, 92, 8, ES_MARGIN
+
+
+        GROUPBOX        "Message Format Options",   IDGRP_INST_MSG_FORMAT, 6, 4, 145, 48
+        AUTOCHECKBOX    "Allways Stamp Sender ~ID", IDBTN_INST_SENDER_ID, 15, 32, 124, 10
+        AUTOCHECKBOX    "Allways Stamp ~Time Sent", IDBTN_INST_TIMESTAMP, 15, 20, 124, 10
+        AUTOCHECKBOX    "Allways Stamp ~Group Name",IDBTN_INST_GROUPSTAMP, 15, 8, 127, 10
+
+        GROUPBOX        "Message Type",   IDGRP_INST_MSG_TYPE, 158, 4, 108, 48
+        AUTORADIOBUTTON "~Single",        IDBTN_INST_SINGLE,   169, 30, 78, 10, WS_TABSTOP
+        AUTORADIOBUTTON "~Group",         IDBTN_INST_GROUP,    169, 16, 86, 10, WS_TABSTOP
+    END
+END
+
+
+DLGTEMPLATE ID_DLG_MODEM_SETTINGS LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Modem Settings", ID_DLG_MODEM_SETTINGS, 89, 77, 274, 166, 
+            NOT FS_DLGBORDER | WS_VISIBLE
+    BEGIN
+        GROUPBOX        "",                 IDGRP_INST_MODEM, 2, 13, 270, 146, DT_MNEMONIC
+        LTEXT           "~Modem",           IDTXT_INST_MODEM, 9, 143, 194, 8, DT_MNEMONIC
+        CONTROL         "",                 IDBOX_INST_MODEM, 9, 17, 198, 125, WC_COMBOBOX,
+                        CBS_DROPDOWNLIST | LS_HORZSCROLL | WS_GROUP | 
+                        WS_TABSTOP | WS_VISIBLE
+        RTEXT           "~Setup",           IDTXT_INST_SETUP, 9, 117, 62, 8, DT_MNEMONIC
+        ENTRYFIELD      "",                 IDFLD_INST_SETUP, 79, 117, 125, 8, ES_MARGIN
+        RTEXT           "~Reset",           IDTXT_INST_RESET, 9, 104, 62, 8, DT_MNEMONIC
+        ENTRYFIELD      "",                 IDFLD_INST_RESET, 79, 103, 125, 8, ES_MARGIN
+        RTEXT           "~Escape",          IDTXT_INST_ESCAPE, 9, 90, 62, 8, DT_MNEMONIC
+        ENTRYFIELD      "",                 IDFLD_INST_ESCAPE, 79, 89, 125, 8, ES_MARGIN
+        RTEXT           "~Disconnect",      IDTXT_INST_DISCONNECT, 9, 76, 62, 8, DT_MNEMONIC
+        ENTRYFIELD      "",                 IDFLD_INST_DISCONNECT, 79, 75, 125, 8, ES_MARGIN
+        RTEXT           "Fail ~Busy",       IDTXT_INST_BUSY, 9, 61, 62, 8, DT_MNEMONIC
+        ENTRYFIELD      "",                 IDFLD_INST_BUSY, 79, 61, 125, 8, ES_MARGIN
+        RTEXT           "Fail Dial ~Tone",  IDTXT_INST_DIALTONE, 9, 47, 62, 8, DT_MNEMONIC
+        ENTRYFIELD      "",                 IDFLD_INST_DIALTONE, 79, 47, 125, 8, ES_MARGIN
+        RTEXT           "Fail ~Carrier",    IDTXT_INST_CARRIER, 9, 33, 62, 8, DT_MNEMONIC
+        ENTRYFIELD      "",                 IDFLD_INST_CARRIER, 79, 33, 125, 8, ES_MARGIN
+        RTEXT           "Fail ~Answer",     IDTXT_INST_ANSWER, 9, 20, 62, 8, DT_MNEMONIC
+        ENTRYFIELD      "",                 IDFLD_INST_ANSWER, 79, 20, 125, 8, ES_MARGIN
+        GROUPBOX        "Speaker",          IDGRP_INST_SPEAKER, 211, 104, 56, 42
+        AUTORADIOBUTTON "On",               IDBTN_INST_SPEAKER_ON, 219, 124, 39, 10, WS_TABSTOP
+        AUTORADIOBUTTON "Off",              IDBTN_INST_SPEAKER_OFF, 219, 113, 39, 10, WS_TABSTOP
+        GROUPBOX        "Volume",           IDGRP_INST_VOLUME, 211, 19, 55, 80
+        CONTROL         "",                 IDCTL_INST_VOLUME, 217, 26, 45, 62, WC_SLIDER, SLS_HORIZONTAL |
+                        SLS_VERTICAL | SLS_CENTER | SLS_LEFT | 
+                        SLS_SNAPTOINCREMENT | SLS_BUTTONSLEFT | SLS_HOMELEFT | 
+                        SLS_PRIMARYSCALE1 | WS_GROUP | WS_TABSTOP | 
+                        WS_VISIBLE
+                        CTLDATA 12, 0, 3, 0, 0, 0
+    END
+END
+
+
+DLGTEMPLATE ID_DLG_SERVICES LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Page Messaging Service", ID_DLG_SERVICES, 89, 77, 274, 166, 
+            NOT FS_DLGBORDER | WS_VISIBLE
+    BEGIN
+        GROUPBOX        "Paging Service Information", IDGRP_SVC_INFO, 6, 85, 259, 75
+        RTEXT           "Name",                       IDTXT_SVC_NAME, 10, 138, 80, 8
+        ENTRYFIELD      "",                           IDFLD_SVC_NAME, 99, 138, 146, 8, ES_MARGIN
+        RTEXT           "Primary Phone #",            IDTXT_SVC_PNUM, 10, 123, 82, 8
+        ENTRYFIELD      "",                           IDFLD_SVC_PNUM, 99, 123, 80, 8, ES_MARGIN
+        RTEXT           "Secondary Phone #",          IDTXT_SVC_SNUM, 9, 108, 84, 8
+        ENTRYFIELD      "",                           IDFLD_SVC_SNUM, 99, 108, 80, 8, ES_MARGIN
+        RTEXT           "Messages Per Call",          IDTXT_SVC_MESSAGES, 8, 92, 84, 8
+        CONTROL         "",                           IDCTL_SVC_MESSAGES, 98, 92, 32, 12, WC_SPINBUTTON,
+                        SPBS_ALLCHARACTERS | SPBS_READONLY    | SPBS_MASTER |
+                        SPBS_SERVANT       | SPBS_JUSTDEFAULT | WS_GROUP    |
+                        WS_TABSTOP         | WS_VISIBLE
+        RTEXT           "Characters Per Block",       IDTXT_SVC_CHARS, 133, 92, 90, 8
+        CONTROL         "",                           IDCTL_SVC_CHARS, 228, 92, 32, 12, WC_SPINBUTTON,
+                        SPBS_ALLCHARACTERS | SPBS_READONLY    | SPBS_MASTER |
+                        SPBS_SERVANT       | SPBS_JUSTDEFAULT | WS_GROUP    |
+                        WS_TABSTOP         | WS_VISIBLE
+        GROUPBOX        "Communication Parameters",   IDGRP_SVC_PARMS, 7, 7, 259, 75
+        GROUPBOX        "Word Length",                IDGRP_SVC_WLENGTH, 13, 11, 65, 59
+        AUTORADIOBUTTON "~5 Bits",                    IDBTN_SVC_5_BITS, 19, 48, 44, 10, WS_TABSTOP
+        AUTORADIOBUTTON "~6 Bits",                    IDBTN_SVC_6_BITS, 19, 37, 44, 10, WS_TABSTOP
+        AUTORADIOBUTTON "~7 Bits",                    IDBTN_SVC_7_BITS, 19, 26, 44, 10, WS_TABSTOP
+        AUTORADIOBUTTON "~8 Bits",                    IDBTN_SVC_8_BITS, 19, 15, 44, 10, WS_TABSTOP
+        GROUPBOX        "Parity",                     IDGRP_SVC_PARITY, 84, 11, 52, 59
+        AUTORADIOBUTTON "~Even",                      IDBTN_SVC_EVEN, 91, 49, 39, 10, WS_TABSTOP
+        AUTORADIOBUTTON "~Odd",                       IDBTN_SVC_ODD, 91, 34, 39, 10, WS_TABSTOP
+        AUTORADIOBUTTON "~None",                      IDBTN_SVC_NONE, 91, 19, 39, 10, WS_TABSTOP
+        GROUPBOX        "Stop Bits",                  IDGRP_SVC_STOP_BITS, 143, 11, 49, 59
+        AUTORADIOBUTTON "~1",                         IDBTN_SVC_1_SBITS, 148, 49, 39, 10, WS_TABSTOP
+        AUTORADIOBUTTON "1.~5",                       IDBTN_SVC_15_SBITS, 148, 35, 39, 10, WS_TABSTOP
+        AUTORADIOBUTTON "~2",                         IDBTN_SVC_2_SBITS, 148, 21, 39, 10, WS_TABSTOP
+        GROUPBOX        "Baud Rate",                  IDGRP_SVC_BAUD_RATE, 198, 11, 62, 59
+        CONTROL         "",                           IDCTL_SVC_BAUD_RATE, 204, 14, 37, 47, WC_SLIDER, SLS_HORIZONTAL |
+                        SLS_VERTICAL | SLS_CENTER | SLS_LEFT | 
+                        SLS_SNAPTOINCREMENT | SLS_BUTTONSLEFT | SLS_HOMELEFT | 
+                        SLS_PRIMARYSCALE1 | WS_GROUP | WS_TABSTOP | 
+                        WS_VISIBLE
+                        CTLDATA 12, 0, 4, 0, 0, 0
+    END
+END
+
+
+DLGTEMPLATE ID_DLG_CONFIG_FILE LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "QuickPage Configuration File", ID_DLG_CONFIG_FILE, 118, 152, 216, 71,
+            FS_NOBYTEALIGN | WS_VISIBLE, FCF_TITLEBAR | FCF_SYSMODAL
+    BEGIN
+        GROUPBOX        "Enter File Name", IDGRP_CONFIG_NAME, 6, 30, 202, 31
+        ENTRYFIELD      "",                IDFLD_CONFIG_NAME, 15, 38, 172, 8, ES_MARGIN
+        DEFPUSHBUTTON   "~OK",             DID_OK, 6, 4, 45, 15
+    END
+END
+
+
+
+DLGTEMPLATE ID_DLG_DEFINE_PIN LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "PIN Definitions", ID_DLG_DEFINE_PIN, 89, 77, 274, 166, NOT FS_DLGBORDER |
+            WS_VISIBLE
+    BEGIN
+        GROUPBOX        "~PIN Definitions", IDGRP_DEFINE_PIN, 2, 9, 270, 146, DT_MNEMONIC
+        CONTROL         "",                 IDBOX_DEFINE_PIN, 12, 17, 183, 125, WC_COMBOBOX,
+                                            CBS_DROPDOWNLIST | WS_GROUP | WS_TABSTOP |
+                                            WS_VISIBLE
+        DEFPUSHBUTTON   "~Add",             IDBTN_DEFINE_ADD,        209, 129, 57, 14
+        PUSHBUTTON      "~Edit",            IDBTN_DEFINE_EDIT,       209, 110, 57, 14
+        PUSHBUTTON      "Re~move",          IDBTN_DEFINE_REMOVE,     209,  91, 57, 14
+        PUSHBUTTON      "~Remove All",      IDBTN_DEFINE_REMOVE_ALL, 209,  72, 57, 14
+
+    END
+END
+
+
+DLGTEMPLATE ID_DLG_COLLECT_PIN LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Define New PIN", ID_DLG_COLLECT_PIN, 118, 152, 216, 71, FS_NOBYTEALIGN | 
+            WS_VISIBLE, FCF_TITLEBAR
+    BEGIN
+        GROUPBOX        "Enter PIN Number", IDGRP_COLLECT_PIN, 6, 30, 202, 31
+        ENTRYFIELD      "",                 IDFLD_COLLECT_PIN, 15, 38, 172, 8, ES_MARGIN
+        DEFPUSHBUTTON   "~OK",              DID_OK, 6, 4, 45, 15
+        PUSHBUTTON      "~Cancel",          DID_CANCEL, 54, 4, 40, 14
+    END
+END
+
+

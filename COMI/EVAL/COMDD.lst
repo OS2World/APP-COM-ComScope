@@ -1,0 +1,1900 @@
+Microsoft (R) Macro Assembler Version 6.00     		    08/24/02 23:27:23
+OS/tools Multi-Port Device Driver			     Page 1 - 1
+
+
+				;************************************************************************
+				;
+				; $Revision:   1.13  $
+				;
+				; $Log:   P:/archive/comi/comdd.asv  $
+				;
+				;     Rev 1.13   28 Mar 1996 00:19:44   EMMETT
+				;  Added resource manager.  Began work on VDD support.
+				;
+				;     Rev 1.12   18 Feb 1996 14:16:02   EMMETT
+				;  Added many features.  Notably:
+				;  Tracing application DosDevIOCtl function calls and packets.
+				;  Support for 16650 and 16750 UARTs.
+				;  Streamlined interrupt routine.
+				;
+				;     Rev 1.11   25 Apr 1995 22:16:08   EMMETT
+				;  Added Support for DigiBoard PC/16.  Changed interrupt Routine for better adapter independence.
+				;  Changed interrupt routine to allow user to select interrupting device selection algorithim.  Fixed
+				;  ABIOS interaction for better "non.INI" initialization in MCA machines.  Fixed various initialization
+				;  message strings.  COMscope and receive buffer are now allocated from system memory, allowing
+				;  a 32k (word) COMscope buffer and a 64k (byte) receive buffer.
+				;
+				;     Rev 1.10   03 Dec 1994 14:45:46   EMMETT
+				;  Changes segment names.  Simplified DEMO lockup to all 1000 write requests then quit.
+				;
+				;     Rev 1.9   29 Jun 1994 09:17:38   EMMETT
+				;  Changed so that COMscope would process open and close if no application has opened device.
+				;  This is co that COMscope would initialize and access the device even if no application had previously
+				;  opened device.
+				;
+				;     Rev 1.8   29 Jun 1994 07:38:20   EMMETT
+				;  Fixed transmit byte immediate to better handle null.
+				;
+				;     Rev 1.7   28 Jun 1994 09:04:50   EMMETT
+				;  Fixed data loss when large packet were transmitted.  Caused by write block timing out.
+				;  Changed do that semaphore would have infinite time-out whenever
+				;  Modem interrupts were not disabled by the user.
+				;
+				;     Rev 1.6   11 Jun 1994 10:37:32   EMMETT
+				;  Changed all references to "mirror" to "COMscope".
+				;
+				;     Rev 1.5   11 Jun 1994 09:26:16   EMMETT
+				;  Changed return form write block with more characters to transmit to test
+				;  line status before writing more data to transmit register.
+				;
+				;     Rev 1.4   09 Jun 1994 21:19:50   EMMETT
+				;  Changed to ALWAYS test modem signals before entering semaphore block.
+				;
+				;     Rev 1.3   07 Jun 1994 00:18:40   EMMETT
+				;  Added support for DigiBoard.
+				;  Added initialization support for OEM specific loads.
+				;  Fixed bug in StartWriteStream and ProcessModemSignals that caused handshaking problems.
+				;  Fixed hardware tests to set baud rate before testing interrupts.
+				;  Fixed hardware tests off switch to work only for retail version.
+				;
+				;     Rev 1.2   27 Apr 1994 22:55:36   EMMETT
+				;  FIxed ABIOS stuff to work better than before.
+				;
+				;     Rev 1.1   18 Apr 1994 23:17:22   EMMETT
+				;  Changed ABIOS processing and added ability to disallow a port to initialize.
+				;
+				;     Rev 1.0   16 Apr 1994 08:34:54   EMMETT
+				;  Initial version control archive.
+				;
+				;************************************************************************
+
+				TITLE OS/tools Multi-Port Device Driver
+				PAGE ,132
+				;*
+				;* FILE: COMDD.ASM
+				;*
+				;* COPYRIGHT: (c) OS/tools Incorporated 1988-94.  All rights reserved.
+				;*
+				;*
+				;*******************************************************************************
+
+				  IFNDEF x16_BIT
+				.386P
+				  ELSE
+				  ENDIF
+				;.NOLISTMACRO                   ;suppress macro expansion in listing
+
+				.NOLIST                  ;suppress listing of INCLUDE files
+				.LIST
+				  EVEN
+ 0000				strat_call_table LABEL WORD
+
+ 0000  0000 E			                 DW    _Init        ;Command code 0 initialize driver
+ 0002  01B4 R			                 DW    BadCommand
+ 0004  01B4 R			                 DW    BadCommand
+ 0006  01B4 R			                 DW    BadCommand
+ 0008  0000 E			                 DW    _Read        ;Command code 4 read from device
+ 000A  0A15 R			                 DW    Peek         ;Command code 5 non-destruct read - no wait
+ 000C  095C R			                 DW    InputStatus  ;Command code 6 input status
+ 000E  097E R			                 DW    InputFlush   ;Command code 7 flush input buffer
+ 0010  0000 E			                 DW    _Write       ;Command code 8 write to device
+ 0012  01B4 R			                 DW    BadCommand
+ 0014  096D R			                 DW    OutputStatus ;Command code A output status
+ 0016  09B3 R			                 DW    OutputFlushTrace  ;Command code B flush output buffer
+ 0018  01B4 R			                 DW    BadCommand
+ 001A  02CF R			                 DW    Open         ;Command code D open device
+ 001C  06E0 R			                 DW    Close        ;Command code E close device
+ 001E  01B4 R			                 DW    BadCommand
+ 0020  0000 E			                 DW    _GenIOctl    ;Command code 10 generic I/O control
+
+				  IF DD_level LE 1
+				  ELSE
+
+ 0022  01B4 R			                 DW    BadCommand   ;11
+ 0024  01B4 R			                 DW    BadCommand   ;12
+ 0026  01B4 R			                 DW    BadCommand   ;13
+ 0028  003A R			                 DW    DeInstall    ;Command code 14 deinstall device driver
+
+ = 0014				max_COM_strat    equ   14h
+
+ 002A  01B4 R			                 DW    BadCommand   ;15
+ 002C  01B4 R			                 DW    BadCommand   ;16
+ 002E  01B4 R			                 DW    BadCommand   ;17
+ 0030  01B4 R			                 DW    BadCommand   ;18
+ 0032  01B4 R			                 DW    BadCommand   ;19
+ 0034  01B4 R			                 DW    BadCommand   ;1A
+ 0036  01B4 R			                 DW    BadCommand   ;1B
+ 0038  0048 R			                 DW    ShutDown     ;Command code 1C shutdown, not supported
+				  ENDIF
+
+ = 001C				max_strat        equ   1ch
+
+				  IF DD_level GT 1
+ 003A				DeInstall PROC NEAR C oErrorCode:WORD
+
+				;        OR_DeviceFlag2 DEV_FLAG2_DEVICE_DEINSTALLED
+				        StoreError oErrorCode,ERROR_I24_BAD_COMMAND
+ 003A  55		   *	    push   bp
+ 003B  8B EC		   *	    mov    bp, sp
+ 003D  53		     1	        push    bx
+ 003E  8B 5E 04		     1	        mov     bx,oErrorCode
+ 0041  36: C6 07 03	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_BAD_COMMAND
+ 0045  5B		     1	        pop     bx
+				        ret
+ 0046  5D		   *	    pop    bp
+ 0047  C3		   *	    ret    00000h
+
+ 0048				DeInstall ENDP
+
+ 0048				ShutDown PROC NEAR
+
+ 0048  C3			        ret
+
+ 0049				ShutDown ENDP
+				  ENDIF
+
+				;------------------------- STRATEGY -------------------------------------
+ 0049				Strategy PROC FAR ; saved by OS - USES eax ebx ecx edx esi edi es ds gs fs
+
+				        LOCAL  byErrorFlag:BYTE
+
+				; Call appropriate subroutine based on the call table entry specified by
+				; PktCmd
+
+				;  int 3
+ 0049  55		   *	    push   bp
+ 004A  8B EC		   *	    mov    bp, sp
+ 004C  83 C4 FE		   *	    add    sp, 0FFFEh
+ 004F  8B FB			        mov     di,bx
+ 0051  33 DB			        xor     bx,bx
+ 0053  C6 46 FF 00		        mov     byErrorFlag,0
+ 0057  26: 8A 5D 02		        mov     bl,ES:[di].s_stPacket.PktCmd
+
+ 005B  89 1E 0000 E		        mov     wLastFunctionCall,bx
+ 005F  A3 0000 E		        mov     wCurrentTarget,ax
+
+ 0062  8B F0			        mov     si,ax
+ 0064  83 E6 0F			        and     si,000fh
+ 0067  D1 E6			        shl     si,1
+ 0069  8B B4 0000 E		        mov     si,wDeviceOffsetTable[si]
+
+				  IFDEF NO_COMscope
+				  ELSE
+ 006D  A9 B000			        test    ax,(TARGET_COMscope OR TARGET_OS_tools) ; is it "OS$tools" or "COMscope"?
+ 0070  0F 84 00E0		        jz      test_COM_command
+
+ 0074  A9 3000			        test    ax,TARGET_OS_tools      ; is it "OS$tools"?
+ 0077  0F 85 0091		        jnz     test_OS_tools_command
+
+				; it is a COMscope command
+ 007B  0B DB			        or      bx,bx                   ; is it an init command?
+ 007D  0F 84 00E7		        jz      set_command
+
+ 0081  83 FB 0D			        cmp     bx,13                   ; is it an open command?
+ 0084  75 32			        jne     test_CS_close
+
+				        test_DeviceFlag2 DEV_FLAG2_DEVICE_DEINSTALLED
+ 0086  F7 44 04 4000	     1	        test   [si].s_stDeviceParms.wDeviceFlag2,DEV_FLAG2_DEVICE_DEINSTALLED
+ 008B  74 07			        jz      test_CS_open
+ 008D  C6 46 FF 14		        mov     byErrorFlag,ERROR_BAD_UNIT
+ 0091  E9 0108			        jmp     is_error
+
+ 0094				test_CS_open::                                                               ; makes it global
+				        test_DeviceFlag1 DEV_FLAG1_COMSCOPE_OPEN
+ 0094  F7 44 02 0040	     1	        test   [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_COMSCOPE_OPEN
+ 0099  74 07			        jz      open_CS
+ 009B  C6 46 FF 63		        mov     byErrorFlag,ERROR_DEVICE_IN_USE
+ 009F  E9 00FA			        jmp     is_error
+
+ 00A2				open_CS::                                                               ; makes it global
+				;        test_DeviceFlag2 DEV_FLAG2_USE_DD_DATA_SEGMENT
+				;        jz      @f
+ 00A2  66| 8B 84 0094		        mov     eax,[si].s_stDeviceParms.oCOMscopeBuff
+ 00A7  66| 89 84 008C		        mov     [si].s_stDeviceParms.dwCOMscopeQWrtPtr,eax
+ 00AC  66| 89 84 0090		        mov     [si].s_stDeviceParms.dwCOMscopeQRdPtr,eax
+				;@@:
+				        OR_DeviceFlag1 DEV_FLAG1_COMSCOPE_OPEN
+ 00B1  83 4C 02 40	     1	        or     [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_COMSCOPE_OPEN
+ 00B5  E9 00F1			        jmp     done
+
+ 00B8				test_CS_close::                                                               ; makes it global
+ 00B8  83 FB 0E			        cmp     bx,14                   ; is it a close command?
+ 00BB  75 3D			        jne     test_CS_read
+
+ 00BD				cs_close::                                                               ; makes it global
+				        AND_DeviceFlag1 (NOT DEV_FLAG1_COMSCOPE_OPEN)
+ 00BD  83 64 02 BF	     1	        and    [si].s_stDeviceParms.wDeviceFlag1,(NOT DEV_FLAG1_COMSCOPE_OPEN)
+
+				   IFNDEF NO_ADV_UARTS
+				; IF this is a 1665x UART and device is not open THEN clear EFR
+
+ 00C1  F7 44 52 0400		        test    [si].s_stDeviceParms.wDeviceStatus1,DEV_ST1_DEVICE_OPEN
+ 00C6  0F 85 00DF		        jnz     done
+				        test_DeviceFlag2 (DEV_FLAG2_16650_UART OR DEV_FLAG2_16654_UART)
+ 00CA  F7 44 04 0005	     1	        test   [si].s_stDeviceParms.wDeviceFlag2,(DEV_FLAG2_16650_UART OR DEV_FLAG2_16654_UART)
+ 00CF  0F 84 00D6		        jz      done
+ 00D3  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 00D6  83 C2 03			        add     dx,LINE_CTL_REG_OFFSET
+				        InByteDel bx
+ 00D9  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 00DC			     2	??0000:
+ 00DC  4B		     2	        dec     bx
+ 00DD  75 FD		     2	        jnz     ??0000
+ 00DF  EC		     1	        in      al,dx
+ 00E0  8A E0			        mov     ah,al           ;save LCR
+ 00E2  B0 BF			        mov     al,0bfh         ;enable EFR
+				        OutByteDel bx
+ 00E4  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 00E7			     2	??0001:
+ 00E7  4B		     2	        dec     bx
+ 00E8  75 FD		     2	        jnz     ??0001
+ 00EA  EE		     1	        out     dx,al
+ 00EB  83 C2 FF			        add     dx,EFR_REG_OFFSET - LINE_CTL_REG_OFFSET
+ 00EE  32 C0			        xor     al,al
+				        OutByteImm              ;clear EFR
+ 00F0  EE		     1	        out     dx,al
+ 00F1  83 C2 01			        add     dx,LINE_CTL_REG_OFFSET - EFR_REG_OFFSET
+ 00F4  8A C4			        mov     al,ah
+				        OutByteImm              ;restore LCR
+ 00F6  EE		     1	        out     dx,al
+
+				   ENDIF ;NO_ADV_UARTS
+ 00F7  E9 00AF			        jmp     done
+
+ 00FA				test_CS_read::                                                               ; makes it global
+ 00FA  83 FB 04			        cmp     bx,4                    ; is it a read request?
+ 00FD  75 06			        jne     test_CS_write
+ 00FF  E8 0000 E		        call    ReadPath
+ 0102  E9 00A4			        jmp     done
+
+ 0105				test_CS_write::                                                               ; makes it global
+ 0105  83 FB 08			        cmp     bx,8                    ; is it a write command?
+ 0108  74 44			        je      error_out
+ 010A  EB 5C			        jmp     set_command
+
+ 010C				test_OS_tools_command::                                                               ; makes it glo
+				bal
+				 ENDIF ;NO_COMscope or x16_BIT
+ 010C  0B DB			        or      bx,bx                   ; is it an init command?
+ 010E  74 58			        jz      set_command
+				  IFDEF VDD_support
+				  ENDIF
+ 0110  83 FB 0D			        cmp     bx,13                   ; is it an open command?
+ 0113  0F 84 0092		        je      done
+ 0117  83 FB 0E			        cmp     bx,14                   ; is it a close command?
+ 011A  0F 84 008B		        je      done
+ 011E  83 FB 08			        cmp     bx,8                    ; is it a write request?
+ 0121  75 1A			        jne     test_read
+
+				  IFNDEF NO_COMscope
+ 0123  57			        push    di                      ; if write request then clear all COMscope opens
+ 0124  33 FF			        xor     di,di
+ 0126  B9 0010			        mov     cx,16
+
+ 0129				COMscope_clear_loop::                                                               ; makes it globa
+				l
+ 0129  8B B5 0000 E		        mov     si,wDeviceOffsetTable[di]
+ 012D  0B F6			        or      si,si
+ 012F  74 09			        jz      COMscope_clear_done
+				        AND_DeviceFlag1 (NOT DEV_FLAG1_COMSCOPE_OPEN)
+ 0131  83 64 02 BF	     1	        and    [si].s_stDeviceParms.wDeviceFlag1,(NOT DEV_FLAG1_COMSCOPE_OPEN)
+ 0135  83 C7 02			        add     di,2
+ 0138  E2 EF			        loop    COMscope_clear_loop
+
+ 013A				COMscope_clear_done::                                                               ; makes it globa
+				l
+ 013A  5F			        pop     di
+ 013B  EB 6C			        jmp     done
+				  ELSE
+				  ENDIF
+
+ 013D				test_read::                                                               ; makes it global
+ 013D  83 FB 04			        cmp     bx,4                    ; is it a read request?
+ 0140  75 05			        jne     @f
+ 0142  E8 0000 E		        call    ReadPath
+ 0145  EB 62			        jmp     done
+ 0147				@@:
+ 0147  33 F6			        xor     si,si
+ 0149  83 FB 10			        cmp     bx,16                   ; is it a DosDevIOCtrl command?
+ 014C  74 24			        je      do_command
+
+ 014E				error_out::                                                               ; makes it global
+ 014E  C6 46 FF 0C		        mov     byErrorFlag,ERROR_I24_GEN_FAILURE
+ 0152  EB 48			        jmp     is_error
+
+ 0154				test_COM_command::                                                               ; makes it global
+ 0154  0B DB			        or      bx,bx
+ 0156  75 06			        jnz     @f
+ 0158  0B F6			        or      si,si
+ 015A  74 0C			        jz      set_command
+ 015C  EB 04			        jmp     block_addr_error
+ 015E				@@:
+ 015E  0B F6			        or      si,si
+ 0160  75 06			        jnz     set_command
+
+ 0162				block_addr_error::                                                               ; makes it global
+ 0162  C6 46 FF 02		        mov     byErrorFlag,ERROR_I24_NOT_READY
+ 0166  EB 34			        jmp     is_error
+
+ 0168				set_command::                                                               ; makes it global
+ 0168  0B DB			        or      bx,bx               ;test if INIT command
+ 016A  74 06			        jz      do_command          ; if it is then segments are undefined
+				                                    ; and not needed
+				  IFNDEF x16_BIT
+				;        test_DeviceFlag2 DEV_FLAG2_USE_DD_DATA_SEGMENT
+				;        jnz     do_command
+				    IFNDEF NO_COMscope
+ 016C  8E 64 5A			        mov     fs,[si].s_stDeviceParms.wCOMscopeSelector
+				    ENDIF
+ 016F  8E 6C 5C			        mov     gs,[si].s_stDeviceParms.wRdBuffSelector
+				  ENDIF
+
+ 0172				do_command::                                                               ; makes it global
+ 0172  83 FB 14			        cmp     bx,max_COM_strat        ;is command larger than those supported
+ 0175  76 0C			        jna     @f
+ 0177  8D 5E FF			        lea     bx,byErrorFlag
+ 017A  53			        push    bx
+ 017B  E8 0036			        call    BadCommand
+ 017E  83 C4 02			        add     sp,2
+ 0181  EB 19			        jmp     is_error
+ 0183				@@:
+ 0183  D1 E3			        shl     bx,1                    ;convert to offset
+ 0185  57			        push    di
+ 0186  06			        push    es
+ 0187  8D 4E FF			        lea     cx,byErrorFlag
+ 018A  51			        push    cx
+ 018B  2E: FF 97 0000 R		        call    CS:strat_call_table[bx]   ;call appropriate routine
+ 0190  83 C4 02			        add     sp,2
+ 0193  07			        pop     es
+ 0194  5F			        pop     di
+ 0195  FA			        cli
+ 0196  80 7E FF 00		        cmp     byErrorFlag,0 ;check if error returned
+ 019A  74 0D			        jz      done
+
+ 019C				is_error::                                                               ; makes it global
+ 019C  8A 46 FF			        mov     al,byErrorFlag
+ 019F  FB			        sti
+ 01A0  32 E4			        xor     ah,ah
+ 01A2  0D 8000			        or      ax,ERROR_MASK
+ 01A5  26: 89 45 03		        mov     ES:[di].s_stPacket.PktStatus,ax
+
+ 01A9				done::                                                               ; makes it global
+ 01A9  FB			        sti
+ 01AA  26: 81 4D 03 0100	        or      ES:[di].s_stPacket.PktStatus,DEV_DONE
+				        ret
+ 01B0  8B E5		   *	    mov    sp, bp
+ 01B2  5D		   *	    pop    bp
+ 01B3  CB		   *	    ret    00000h
+
+ 01B4				Strategy ENDP
+Microsoft (R) Macro Assembler Version 6.00     		    08/24/02 23:27:23
+OS/tools Multi-Port Device Driver			     Page 2 - 1
+
+
+				page
+
+ 01B4				BadCommand PROC NEAR C oErrorCode:WORD
+
+				        StoreError oErrorCode,ERROR_I24_BAD_COMMAND
+ 01B4  55		   *	    push   bp
+ 01B5  8B EC		   *	    mov    bp, sp
+ 01B7  53		     1	        push    bx
+ 01B8  8B 5E 04		     1	        mov     bx,oErrorCode
+ 01BB  36: C6 07 03	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_BAD_COMMAND
+ 01BF  5B		     1	        pop     bx
+				        ret
+ 01C0  5D		   *	    pop    bp
+ 01C1  C3		   *	    ret    00000h
+
+ 01C2				BadCommand ENDP
+
+				;------------------------------ TIMER -----------------------------------
+
+ 01C2				Timer PROC FAR USES ax bx cx dx si
+
+ 01C2  50		   *	    push   ax
+ 01C3  53		   *	    push   bx
+ 01C4  51		   *	    push   cx
+ 01C5  52		   *	    push   dx
+ 01C6  56		   *	    push   si
+ 01C7  9C			        pushf
+ 01C8  BE 0000 E		        lea     si,stDeviceParms
+ 01CB  8B 0E 0000 E		        mov     cx,wDeviceCount
+
+ 01CF				timer_loop::                                                               ; makes it global
+ 01CF  83 BC 0098 00		        cmp     [si].s_stDeviceParms.wRdTimerCount,0
+ 01D4  74 16			        je      test_RTS
+ 01D6  FF 8C 0098		        dec     [si].s_stDeviceParms.wRdTimerCount
+ 01DA  75 10			        jnz     test_RTS
+ 01DC  81 4C 52 0200		        or      [si].s_stDeviceParms.wDeviceStatus1,DEV_ST1_RCV_TIMED_OUT
+ 01E1  8C D8			        mov     ax,ds
+ 01E3  8D 5C 68			        lea     bx,[si].s_stDeviceParms.dwRdSemaphore
+ 01E6  B2 07			        mov     dl,DevHlp_SemClear
+ 01E8  FF 1E 0000 E		        call    device_hlp
+
+ 01EC				test_RTS::                                                               ; makes it global
+ 01EC  83 7C 7C 00		        cmp     [si].s_stDeviceParms.wRTScount,0
+ 01F0  74 60			        je      test_Xmit
+ 01F2  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 01F5  83 C2 05			        add     dx,LINE_ST_REG_OFFSET
+				        InByteImm
+ 01F8  EC		     1	        in      al,dx
+ 01F9  A8 20			        test    al,LINE_ST_TX_HOLD_EMPTY
+ 01FB  75 08			        jnz     @f
+ 01FD  8B 44 38			        mov     ax,[si].s_stDeviceParms.wRTS_DTRoffDelay
+ 0200  89 44 7C			        mov     [si].s_stDeviceParms.wRTScount,ax
+ 0203  EB 4D			        jmp     test_Xmit
+ 0205				@@:
+ 0205  FF 4C 7C			        dec     [si].s_stDeviceParms.wRTScount
+ 0208  75 48			        jnz     test_Xmit
+ 020A  83 C2 FF			        add     dx,MDM_CTL_REG_OFFSET - LINE_ST_REG_OFFSET
+				        InByteImm
+ 020D  EC		     1	        in      al,dx
+ 020E  24 FD			        and     al,NOT MDM_CTL_RTS_ACTIVATE
+ 0210  F7 44 52 0002		        test    [si].s_stDeviceParms.wDeviceStatus1,DEV_ST1_DEACTIVATE_DTR
+ 0215  74 02			        jz      @f
+ 0217  24 FE			        and     al,NOT MDM_CTL_DTR_ACTIVATE
+ 0219				@@:
+				   IFNDEF NO_COMscope
+				;        test_DeviceFlag2 DEV_FLAG2_USE_DD_DATA_SEGMENT
+				;        jnz     @f
+ 0219  8E 64 5A			        mov     fs,[si].s_stDeviceParms.wCOMscopeSelector
+				;@@:
+				        COMscopeStream ebx, CSFUNC_TRACE_MODEM_OUT_SIGNALS, CS_MODEM_OUT
+ 021C  F7 44 4C 0020	     1	        test    [si].s_stDeviceParms.fCOMscopeFunction,CSFUNC_TRACE_MODEM_OUT_SIGNALS
+ 0221  74 23		     1	        jz      ??0003
+ 0223  B4 84		     1	        mov     ah,CS_MODEM_OUT
+ 0225  66| 8B 9C 008C	     1	        mov     ebx,[si].s_stDeviceParms.dwCOMscopeQWrtPtr
+ 022A  67& 64: 89 03	     1	        mov     FS:[ebx],ax
+ 022E			     1	??0005:
+ 022E  66| 3B 5C 1C	     1	        cmp     ebx,[si].s_stDeviceParms.dwCOMscopeBuffExtent
+ 0232  72 09		     1	        jb      ??0002
+ 0234  66| 8B 9C 0094	     1	        mov     ebx,[si].s_stDeviceParms.oCOMscopeBuff
+ 0239  66| 83 EB 02	     1	        sub     ebx,2
+ 023D			     1	??0002:
+ 023D  66| 83 C3 02	     1	        add     ebx,2
+ 0241  66| 89 9C 008C	     1	        mov     [si].s_stDeviceParms.dwCOMscopeQWrtPtr,ebx
+ 0246			     1	??0003:
+				   ENDIF
+				        OutByteDel bx
+ 0246  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 0249			     2	??0006:
+ 0249  4B		     2	        dec     bx
+ 024A  75 FD		     2	        jnz     ??0006
+ 024C  EE		     1	        out     dx,al
+				        AND_DeviceFlag1 (NOT DEV_FLAG1_RTS_TOG_ON)
+ 024D  81 64 02 FDFF	     1	        and    [si].s_stDeviceParms.wDeviceFlag1,(NOT DEV_FLAG1_RTS_TOG_ON)
+
+ 0252				test_Xmit::
+ 0252  83 7C 64 00		        cmp     [si].s_stDeviceParms.wWrtTimerCount,0
+ 0256  74 21			        jz      timer_loop_iteration_end
+				;        je      test_stream_to_start
+ 0258  FF 4C 64			        dec     [si].s_stDeviceParms.wWrtTimerCount
+ 025B  75 12			        jnz     test_stream_to_start
+ 025D  81 4C 52 0100		        or      [si].s_stDeviceParms.wDeviceStatus1,DEV_ST1_XMIT_TIMED_OUT
+ 0262  8C D8			        mov     ax,ds
+ 0264  8D 5C 6C			        lea     bx,[si].s_stDeviceParms.dwWrtSemaphore
+ 0267  B2 07			        mov     dl,DevHlp_SemClear
+ 0269  FF 1E 0000 E		        call    device_hlp
+ 026D  EB 0A			        jmp     timer_loop_iteration_end
+
+ 026F				test_stream_to_start::
+ 026F  F7 44 54 0001		        test    [si].s_stDeviceParms.wDeviceStatus2,DEV_ST2_RESTARTSTREAM
+ 0274  74 03			        jz      timer_loop_iteration_end
+
+ 0276				timer_start_stream::
+ 0276  E8 0000 E		        call    StartWriteStream
+				;        and     [si].s_stDeviceParms.wDeviceStatus2,(NOT DEV_ST2_RESTARTSTREAM)
+
+ 0279				timer_loop_iteration_end::                                                               ; makes it 
+				global
+ 0279  81 C6 00F0		        add     si,TYPE s_stDeviceParms
+				  IFNDEF x16_BIT
+ 027D  49			        dec     cx
+ 027E  0F 85 FF4D		        jnz     timer_loop
+				  ELSE
+				  ENDIF
+ 0282  83 3E 0000 E 02		        cmp     wBusType,BUSTYPE_MCA
+ 0287  75 3F			        jne     timer_exit
+ 0289  FF 06 0000 E		        inc     wMaskTimerCount
+ 028D  83 3E 0000 E 0A		        cmp     wMaskTimerCount,10
+ 0292  72 34			        jb      timer_exit
+ 0294  C7 06 0000 E 0000	        mov     wMaskTimerCount,0
+ 029A  8B 16 0000 E		        mov     dx,wIntRegistered
+				;        or      dl,dl
+				;        jz      test_8_15
+ 029E  E4 21			        in      al,21h
+ 02A0  84 C2			        test    al,dl
+ 02A2  74 0C			        jz      test_8_15
+ 02A4				TM1::                                                               ; makes it global
+ 02A4  F6 D2			        not     dl
+ 02A6  22 C2			        and     al,dl
+				        IOdelay bx
+ 02A8  BB 0000 E	     1	        mov     bx,DOSIODELAYCNT
+ 02AB			     1	??0007:
+ 02AB  4B		     1	        dec     bx
+ 02AC  75 FD		     1	        jnz     ??0007
+ 02AE  E6 21			        out     21h,al
+
+ 02B0				test_8_15::                                                               ; makes it global
+				;        or       dh,dh
+				;        jz      @f
+				        IOdelay bx
+ 02B0  BB 0000 E	     1	        mov     bx,DOSIODELAYCNT
+ 02B3			     1	??0008:
+ 02B3  4B		     1	        dec     bx
+ 02B4  75 FD		     1	        jnz     ??0008
+ 02B6  E4 A1			        in      al,0a1h
+ 02B8  84 C6			        test    al,dh
+ 02BA  74 0C			        jz      timer_exit
+ 02BC				TM2::                                                               ; makes it global
+ 02BC  F6 D6			        not     dh
+ 02BE  22 C6			        and     al,dh
+				        IOdelay bx
+ 02C0  BB 0000 E	     1	        mov     bx,DOSIODELAYCNT
+ 02C3			     1	??0009:
+ 02C3  4B		     1	        dec     bx
+ 02C4  75 FD		     1	        jnz     ??0009
+ 02C6  E6 A1			        out    0a1h,al
+
+ 02C8				timer_exit::                                                               ; makes it global
+ 02C8  9D			        popf
+				        ret
+ 02C9  5E		   *	    pop    si
+ 02CA  5A		   *	    pop    dx
+ 02CB  59		   *	    pop    cx
+ 02CC  5B		   *	    pop    bx
+ 02CD  58		   *	    pop    ax
+ 02CE  CB		   *	    ret    00000h
+
+ 02CF				Timer ENDP
+
+				IFDEF this_junk
+				ENDIF
+
+				;------------------------- OPEN -----------------------------------------
+
+ 02CF				Open PROC NEAR C, oErrorCode:WORD
+				;        LOCAL bPagerDevice:WORD
+
+ 02CF  55		   *	    push   bp
+ 02D0  8B EC		   *	    mov    bp, sp
+ 02D2  FA			        cli
+				  IFDEF PCMCIA
+				  ENDIF
+				  IFDEF PAGE_SUPPORT
+				; test trigger and clear if it is on
+
+ 02D3  B8 0005			        mov     ax,ADD_IS_TRIGGERED
+ 02D6  E8 0000 E		        call    LocalIDCaccess
+ 02D9  72 1F			        jc      test_pager_open
+
+				; if COMi is triggered (nc) then if this device is already opened by a pager then
+				; decrement pager count and post sharing error
+				; otherwise open pager
+
+				        test_DeviceFlag1 DEV_FLAG1_PAGER_OPEN
+ 02DB  F7 44 02 0001	     1	        test   [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_PAGER_OPEN
+ 02E0  74 12			        jz      open_pager
+ 02E2  B8 0004			        mov     ax,ADD_CLOSE_PAGER
+ 02E5  E8 0000 E		        call    LocalIDCaccess          ;just to decrement counter
+
+				; This device is already opened by a pager device and cannot be opened again.
+				; Since the calling process had to increment the pager count to set the
+				; trigger we need to decrement it again to be used again at another time.
+
+ 02E8				sharing_error::                                                               ; makes it global
+				        StoreError oErrorCode,ERROR_SHARING_VIOLATION
+ 02E8  53		     1	        push    bx
+ 02E9  8B 5E 04		     1	        mov     bx,oErrorCode
+ 02EC  36: C6 07 20	     1	        mov     BYTE PTR SS:[bx],ERROR_SHARING_VIOLATION
+ 02F0  5B		     1	        pop     bx
+ 02F1  E9 00B5			        jmp     open_exit
+
+ 02F4				open_pager::                                                               ; makes it global
+				        OR_DeviceFlag1 DEV_FLAG1_PAGER_OPEN
+ 02F4  83 4C 02 01	     1	        or     [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_PAGER_OPEN
+ 02F8  EB 07			        jmp     normal_open
+
+ 02FA				test_pager_open::                                                               ; makes it global
+				; if COMi is not triggered (cy) test if a pager is has device open
+				; post sharing error if pager has device open
+
+				        test_DeviceFlag1 DEV_FLAG1_PAGER_OPEN
+ 02FA  F7 44 02 0001	     1	        test   [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_PAGER_OPEN
+ 02FF  75 E7			        jnz     sharing_error
+
+ 0301				normal_open::                                                               ; makes it global
+				  ENDIF  ;PAGE_SUPPORT
+ 0301  81 7C 58 F000		        cmp     [si].s_stDeviceParms.wOpenCount,MAX_OPEN_COUNT
+ 0306  72 0C			        jc      @f
+
+ 0308				open_general_fail::                                                               ; makes it global
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 0308  53		     1	        push    bx
+ 0309  8B 5E 04		     1	        mov     bx,oErrorCode
+ 030C  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 0310  5B		     1	        pop     bx
+ 0311  E9 0095			        jmp     open_exit
+ 0314				@@:
+ 0314  FF 44 58			        inc     [si].s_stDeviceParms.wOpenCount
+ 0317  83 7C 58 01		        cmp     [si].s_stDeviceParms.wOpenCount,1
+ 031B  74 2D			        je      init_port
+ 031D  FB			        sti
+				        COMscopeStream ebx, CSFUNC_TRACE_OPEN, CS_OPEN_TWO
+ 031E  F7 44 4C 0100	     1	        test    [si].s_stDeviceParms.fCOMscopeFunction,CSFUNC_TRACE_OPEN
+ 0323  74 23		     1	        jz      ??000B
+ 0325  B4 87		     1	        mov     ah,CS_OPEN_TWO
+ 0327  66| 8B 9C 008C	     1	        mov     ebx,[si].s_stDeviceParms.dwCOMscopeQWrtPtr
+ 032C  67& 64: 89 03	     1	        mov     FS:[ebx],ax
+ 0330			     1	??000D:
+ 0330  66| 3B 5C 1C	     1	        cmp     ebx,[si].s_stDeviceParms.dwCOMscopeBuffExtent
+ 0334  72 09		     1	        jb      ??000A
+ 0336  66| 8B 9C 0094	     1	        mov     ebx,[si].s_stDeviceParms.oCOMscopeBuff
+ 033B  66| 83 EB 02	     1	        sub     ebx,2
+ 033F			     1	??000A:
+ 033F  66| 83 C3 02	     1	        add     ebx,2
+ 0343  66| 89 9C 008C	     1	        mov     [si].s_stDeviceParms.dwCOMscopeQWrtPtr,ebx
+ 0348			     1	??000B:
+ 0348  EB 5F			        jmp     open_exit
+
+ 034A				init_port::                                                               ; makes it global
+ 034A  FB			        sti
+				  IFDEF DEMO
+				        test_DeviceFlag1 DEV_FLAG1_PAGER_OPEN
+ 034B  F7 44 02 0001	     1	        test   [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_PAGER_OPEN
+ 0350  75 11			        jnz     @f
+ 0352  83 3E 0000 E 00		        cmp     wWriteCount,ZERO
+ 0357  75 0A			        jne     @f
+ 0359  D1 2E 0000 E		        shr     wWriteCountStart,1
+ 035D  A1 0000 E		        mov     ax,wWriteCountStart
+ 0360  A3 0000 E		        mov     wWriteCount,ax
+ 0363				@@:
+				  ENDIF
+				        COMscopeStream ebx, CSFUNC_TRACE_OPEN, CS_OPEN_ONE
+ 0363  F7 44 4C 0100	     1	        test    [si].s_stDeviceParms.fCOMscopeFunction,CSFUNC_TRACE_OPEN
+ 0368  74 23		     1	        jz      ??000F
+ 036A  B4 86		     1	        mov     ah,CS_OPEN_ONE
+ 036C  66| 8B 9C 008C	     1	        mov     ebx,[si].s_stDeviceParms.dwCOMscopeQWrtPtr
+ 0371  67& 64: 89 03	     1	        mov     FS:[ebx],ax
+ 0375			     1	??0011:
+ 0375  66| 3B 5C 1C	     1	        cmp     ebx,[si].s_stDeviceParms.dwCOMscopeBuffExtent
+ 0379  72 09		     1	        jb      ??000E
+ 037B  66| 8B 9C 0094	     1	        mov     ebx,[si].s_stDeviceParms.oCOMscopeBuff
+ 0380  66| 83 EB 02	     1	        sub     ebx,2
+ 0384			     1	??000E:
+ 0384  66| 83 C3 02	     1	        add     ebx,2
+ 0388  66| 89 9C 008C	     1	        mov     [si].s_stDeviceParms.dwCOMscopeQWrtPtr,ebx
+ 038D			     1	??000F:
+ 038D  81 4C 52 0400		        or      [si].s_stDeviceParms.wDeviceStatus1,DEV_ST1_DEVICE_OPEN
+				  IFDEF COMscope_activates_port
+				  ENDIF
+ 0392  E8 0016			        call    OpenProcess
+ 0395  72 02			        jc      @f
+ 0397  EB 10			        jmp     open_exit
+ 0399				@@:
+ 0399  FF 4C 58			        dec     [si].s_stDeviceParms.wOpenCount
+ 039C  81 64 52 FBFF		        and     [si].s_stDeviceParms.wDeviceStatus1,NOT DEV_ST1_DEVICE_OPEN
+
+				        StoreError oErrorCode,al
+ 03A1  53		     1	        push    bx
+ 03A2  8B 5E 04		     1	        mov     bx,oErrorCode
+ 03A5  36: 88 07	     1	        mov     BYTE PTR SS:[bx],al
+ 03A8  5B		     1	        pop     bx
+
+ 03A9				open_exit::                                                               ; makes it global
+				        ret
+ 03A9  5D		   *	    pop    bp
+ 03AA  C3		   *	    ret    00000h
+
+ 03AB				Open ENDP
+
+ 03AB				OpenProcess PROC NEAR C
+
+				;        LOCAL   byLineControl:BYTE
+
+ 03AB  E8 0000 E		        call    RequestInterrupt
+ 03AE  73 06			        jnc     @f
+ 03B0  B8 0020			        mov     ax,ERROR_SHARING_VIOLATION
+ 03B3  E9 0329			        jmp     exit
+ 03B6				@@:
+				; Make sure line control register is not corrupted.  Added because UART would sometimes NOT
+				; get initialized correctly, leaving the DLB bit on.
+ 03B6  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 03B9  83 C2 03			        add     dx,LINE_CTL_REG_OFFSET
+				        InByteDel bx
+ 03BC  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 03BF			     2	??0012:
+ 03BF  4B		     2	        dec     bx
+ 03C0  75 FD		     2	        jnz     ??0012
+ 03C2  EC		     1	        in      al,dx
+ 03C3  A8 80			        test    al,LINE_CTL_DLB_ACCESS
+ 03C5  74 0D			        jz      @f
+ 03C7  B0 03			        mov     al,03h   ;8, n, 1
+				        OutByteDel bx
+ 03C9  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 03CC			     2	??0013:
+ 03CC  4B		     2	        dec     bx
+ 03CD  75 FD		     2	        jnz     ??0013
+ 03CF  EE		     1	        out     dx,al
+ 03D0  C6 44 3F FF		        mov     [si].s_stDeviceParms.byDataLengthMask,DEFAULT_DATA_LEN_MASK
+ 03D4				@@:
+ 03D4  C7 44 7C 0000		        mov     [si].s_stDeviceParms.wRTScount,ZERO
+ 03D9  C7 44 38 0003		        mov     [si].s_stDeviceParms.wRTS_DTRoffDelay,DEFAULT_RTS_OFF_DELAY
+ 03DE  83 64 52 FD		        and     [si].s_stDeviceParms.wDeviceStatus1,NOT DEV_ST1_DEACTIVATE_DTR
+ 03E2  FB			        sti
+ 03E3  81 64 52 4FF3		        and     [si].s_stDeviceParms.wDeviceStatus1,NOT (DEV_ST1_OUTPUT_FLUSHED OR\
+				                                                      DEV_ST1_INPUT_FLUSHED OR \
+				                                                      DEV_ST1_RCV_BLOCKED OR \
+				                                                      DEV_ST1_TX_IN_PROGRESS OR \
+				                                                      DEV_ST1_RX_IN_PROGRESS)
+ 03E8  C7 44 4E 0000		        mov     [si].s_stDeviceParms.wCOMevent,0
+ 03ED  C7 44 50 0000		        mov     [si].s_stDeviceParms.wCOMerror,0
+ 03F2  8A 44 44			        mov     al,[si].s_stDeviceParms.byDefXonChar
+ 03F5  88 44 31			        mov     [si].s_stDeviceParms.byXonChar,al
+ 03F8  8A 44 45			        mov     al,[si].s_stDeviceParms.byDefXoffChar
+ 03FB  88 44 32			        mov     [si].s_stDeviceParms.byXoffChar,al
+ 03FE  8A 84 00A3		        mov     al,[si].s_stDeviceParms.byFlag2Mask
+ 0402  20 44 2D			        and     [si].s_stDeviceParms.byFlag2,al
+ 0405  8A 84 00A4		        mov     al,[si].s_stDeviceParms.byDefFlag3
+ 0409  0A C0			        or      al,al
+ 040B  74 0B			        jz      normal_flag3_init
+ 040D  24 07			        and     al,(F3_READ_TIMEOUT_MASK OR F3_INFINITE_WRT_TIMEOUT)
+ 040F  80 64 2E F8		        and     [si].s_stDeviceParms.byFlag3,NOT (F3_READ_TIMEOUT_MASK OR F3_INFINITE_WRT_TIMEOUT)
+ 0413  08 44 2E			        or      [si].s_stDeviceParms.byFlag3,al
+ 0416  EB 08			        jmp     @f
+
+ 0418				normal_flag3_init::                                                               ; makes it global
+ 0418  80 64 2E F9		        and     [si].s_stDeviceParms.byFlag3,NOT F3_READ_TIMEOUT_MASK
+ 041C  80 4C 2E 02		        or      [si].s_stDeviceParms.byFlag3,F3_WAIT_NORM
+ 0420				@@:
+ 0420  8A 44 46			        mov     al,[si].s_stDeviceParms.byDefErrorChar
+ 0423  88 44 2F			        mov     [si].s_stDeviceParms.byErrorChar,al
+ 0426  8A 44 47			        mov     al,[si].s_stDeviceParms.byDefBreakChar
+ 0429  88 44 30			        mov     [si].s_stDeviceParms.byBreakChar,al
+				        AND_DeviceFlag1 (NOT DEV_FLAG1_IMM_BYTE_WAITING)
+ 042C  83 64 02 FD	     1	        and    [si].s_stDeviceParms.wDeviceFlag1,(NOT DEV_FLAG1_IMM_BYTE_WAITING)
+
+ 0430  8B 44 40			        mov     ax,[si].s_stDeviceParms.wDefWrtTimeout
+ 0433  89 44 20			        mov     [si].s_stDeviceParms.wWrtTimeout,ax
+ 0436  8B 44 42			        mov     ax,[si].s_stDeviceParms.wDefRdTimeout
+ 0439  89 44 22			        mov     [si].s_stDeviceParms.wRdTimeout,ax
+
+				  IFNDEF x16_BIT
+ 043C  66| 8B 44 26		        mov     eax,[si].s_stDeviceParms.dwBaudRate
+				  ELSE
+				  ENDIF
+ 0440  8B C8			        mov     cx,ax
+ 0442  81 E1 7FFF		        and     cx,07fffh       ;limit minimum baud rate
+ 0446  F7 44 08 0080		        test    [si].s_stDeviceParms.wConfigFlags1,CFG_FLAG1_EXPLICIT_BAUD_DIVISOR
+ 044B  75 2B			        jnz     got_baud
+
+ 044D  E8 0000 E		        call    CalcBaudRate
+ 0450  73 26			        jnc     got_baud
+
+				IFDEF this_junk
+				ENDIF ; this_junk
+				  IFNDEF x16_BIT
+ 0452  66| B8 0001C200		        mov     eax,MAX_LONG_BAUD_RATE
+				IFNDEF this_junk
+ 0458  80 BC 009E 01		        cmp     [si].s_stDeviceParms.xBaudMultiplier,1
+ 045D  76 16			        jbe     normalize_baud
+ 045F  66| 33 DB		        xor     ebx,ebx
+ 0462  8A 9C 009E		        mov     bl,[si].s_stDeviceParms.xBaudMultiplier
+ 0466  66| F7 E3		        mul     ebx
+ 0469  66| 83 FA 00		        cmp     edx,0    ; test for overflow
+ 046D  74 06			        je      normalize_baud
+ 046F  66| B8 0001C200		        mov     eax,MAX_LONG_BAUD_RATE   ; messed up don't multiply (safety net)
+				ENDIF
+
+ 0475				normalize_baud::                                                               ; makes it global
+ 0475  66| F7 F9		        idiv    ecx            ; CalcBaudRate always clears ECX at start
+
+ 0478				got_baud::                                                               ; makes it global
+ 0478  66| 89 44 26		        mov     [si].s_stDeviceParms.dwBaudRate,eax
+				  ELSE
+				  ENDIF
+ 047C  89 4C 24			        mov     [si].s_stDeviceParms.wBaudRateDivisor,cx
+ 047F  E8 0000 E		        call    ProcessBaud
+
+				  IFDEF this_junk
+				  ENDIF
+ 0482  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+
+ 0485  B9 0042			        mov     cx,66  ; number greater than max FIFO depth (16654 and 16750)
+				        IOdelay bx
+ 0488  BB 0000 E	     1	        mov     bx,DOSIODELAYCNT
+ 048B			     1	??0014:
+ 048B  4B		     1	        dec     bx
+ 048C  75 FD		     1	        jnz     ??0014
+
+ 048E				clear_RX_buffer_loop::                                                               ; makes it glob
+				al
+ 048E  83 C2 05			        add     dx,LINE_ST_REG_OFFSET
+				;        InByteDel bx
+				        InByteImm
+ 0491  EC		     1	        in      al,dx
+ 0492  83 EA 05			        sub     dx,LINE_ST_REG_OFFSET
+ 0495  A8 01			        test    al,LINE_ST_RCV_DATA_READY
+ 0497  74 0A			        jz      test_for_FIFO_availability
+				;        InByteDel bx
+				        InByteImm
+ 0499  EC		     1	        in      al,dx
+ 049A  E2 F2			        loop     clear_RX_buffer_loop
+
+ 049C  F9			        stc
+ 049D  B8 000C			        mov     ax,ERROR_I24_GEN_FAILURE
+ 04A0  E9 023C			        jmp     exit
+
+ 04A3				test_for_FIFO_availability:       ;16550 and up
+
+ 04A3  F7 44 04 2000		        test    [si].s_stDeviceParms.wDeviceFlag2,DEV_FLAG2_FIFO_AVAILABLE
+ 04A8  75 27			        jnz     setup_thresholds         ; TestValidHDW determined
+
+				; Just in case UART is part of chipset and was not enabled during initialization
+				; of COMi, then test if UART can be placed into "16550" mode.
+
+ 04AA  83 C2 02			        add     dx,FIFO_CTL_REG_OFFSET ; same as INT_ID REG_OFFSET
+				        InByteDel bx
+ 04AD  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 04B0			     2	??0015:
+ 04B0  4B		     2	        dec     bx
+ 04B1  75 FD		     2	        jnz     ??0015
+ 04B3  EC		     1	        in      al,dx
+ 04B4  B0 01			        mov     al,01h
+				        OutByteDel bx
+ 04B6  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 04B9			     2	??0016:
+ 04B9  4B		     2	        dec     bx
+ 04BA  75 FD		     2	        jnz     ??0016
+ 04BC  EE		     1	        out     dx,al
+ 04BD  32 C0			        xor     al,al ;cannot be 16650 or 16654 if FIFOs not available during initialization (SMC fi
+				x)
+				        InByteDel bx
+ 04BF  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 04C2			     2	??0017:
+ 04C2  4B		     2	        dec     bx
+ 04C3  75 FD		     2	        jnz     ??0017
+ 04C5  EC		     1	        in      al,dx
+ 04C6  24 C0			        and     al,INT_ID_FIFOS_AVAIL_MASK
+ 04C8  3C C0			        cmp     al,INT_ID_FIFOS_AVAIL_MASK
+ 04CA  75 45			        jne     no_FIFO
+ 04CC  81 4C 04 2000		        or      [si].s_stDeviceParms.wDeviceFlag2,DEV_FLAG2_FIFO_AVAILABLE
+
+ 04D1				setup_thresholds::                                                               ; makes it global
+ 04D1  8B 44 4A			        mov     ax,[si].s_stDeviceParms.wDefXonThreshold
+ 04D4  0B C0			        or      ax,ax
+ 04D6  74 03			        jz      @f
+ 04D8  89 44 34			        mov     [si].s_stDeviceParms.wXonThreshold,ax
+ 04DB				@@:
+ 04DB  8B 44 48			        mov     ax,[si].s_stDeviceParms.wDefXoffThreshold
+ 04DE  0B C0			        or      ax,ax
+ 04E0  75 27			        jnz     store_threshold
+
+				        test_DeviceFlag2 DEV_FLAG2_16650_UART
+ 04E2  F7 44 04 0001	     1	        test   [si].s_stDeviceParms.wDeviceFlag2,DEV_FLAG2_16650_UART
+ 04E7  74 05			        jz      test_16750_threshold
+ 04E9  B8 0100			        mov     ax,DEF_16650_Xoff_THRESHOLD
+ 04EC  EB 1B			        jmp     store_threshold
+
+ 04EE				test_16750_threshold::                                                               ; makes it glob
+				al
+				        test_DeviceFlag2 DEV_FLAG2_16750_UART
+ 04EE  F7 44 04 0002	     1	        test   [si].s_stDeviceParms.wDeviceFlag2,DEV_FLAG2_16750_UART
+ 04F3  74 05			        jz      test_16654_threshold
+ 04F5  B8 0200			        mov     ax,DEF_16750_Xoff_THRESHOLD
+ 04F8  EB 0F			        jmp     store_threshold
+
+ 04FA				test_16654_threshold::                                                               ; makes it glob
+				al
+				        test_DeviceFlag2 DEV_FLAG2_16654_UART
+ 04FA  F7 44 04 0004	     1	        test   [si].s_stDeviceParms.wDeviceFlag2,DEV_FLAG2_16654_UART
+ 04FF  74 05			        jz      set_16550_threshold
+ 0501  B8 0200			        mov     ax,DEF_16654_Xoff_THRESHOLD
+ 0504  EB 03			        jmp     store_threshold
+
+ 0506				set_16550_threshold::                                                               ; makes it globa
+				l
+ 0506  B8 0080			        mov     ax,DEF_16550_Xoff_THRESHOLD
+
+ 0509				store_threshold::                                                               ; makes it global
+ 0509  89 44 48			        mov     [si].s_stDeviceParms.wDefXoffThreshold,ax
+ 050C  89 44 36			        mov     [si].s_stDeviceParms.wXoffThreshold,ax
+ 050F  EB 09			        jmp     clear_FIFO_control
+
+ 0511				no_FIFO::                                                               ; makes it global
+ 0511  80 64 2E E7		        and     [si].s_stDeviceParms.byFlag3,NOT F3_HDW_BUFFER_MASK
+ 0515  81 64 04 DFFF		        and     [si].s_stDeviceParms.wDeviceFlag2,NOT DEV_FLAG2_FIFO_AVAILABLE
+
+ 051A				clear_FIFO_control::                                                               ; makes it global
+ 051A  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 051D  83 C2 02			        add     dx,FIFO_CTL_REG_OFFSET
+ 0520  B8 0007			        mov     ax,FIFO_CTL_RESET_FIFOS
+ 0523  89 84 009C		        mov     [si].s_stDeviceParms.wFIFOcontrolImage,ax
+				        OutByteDel bx
+ 0527  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 052A			     2	??0018:
+ 052A  4B		     2	        dec     bx
+ 052B  75 FD		     2	        jnz     ??0018
+ 052D  EE		     1	        out     dx,al
+				;        xor     al,al
+				;        OutByteDel bx
+
+				; process flags control
+				  IFDEF this_junk
+				  ENDIF
+ 052E  8A 64 2C			        mov     ah,[si].s_stDeviceParms.byFlag1
+ 0531  E8 0000 E		        call    ProcessFlag1
+
+ 0534  8A 64 2D			        mov     ah,[si].s_stDeviceParms.byFlag2
+ 0537  E8 0000 E		        call    ProcessFlag2
+
+ 053A  8A 64 2E			        mov     ah,[si].s_stDeviceParms.byFlag3
+ 053D  68 0001			        push    WORD PTR TRUE                  ; force FIFO init
+ 0540  E8 0000 E		        call    PROCESSFLAG3
+
+				; enable OUT2
+
+ 0543  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 0546  83 C2 04			        add     dx,MDM_CTL_REG_OFFSET
+				        InByteDel bx
+ 0549  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 054C			     2	??0019:
+ 054C  4B		     2	        dec     bx
+ 054D  75 FD		     2	        jnz     ??0019
+ 054F  EC		     1	        in      al,dx
+ 0550  83 3E 0000 E 01		        cmp     bNoOUT2change,TRUE
+ 0555  74 02			        je      open_explicit
+ 0557  0C 08			        or      al,MDM_CTL_OUT2_ACTIVATE
+
+				; process modem signals
+				; Normal flags processing will not write to the register if there is no change
+				; of state requested.  DTR and RTS are explicitly deactivated during
+				; close processing, without regard for the states of the flags, but they must
+				; be set according to those same flags during open processing.  The flags do
+				; change between close and open processing , but the register may not reflect
+				; the state the flags required during open processing, therefore we must
+				; explicitly set these signals after normal flags processing.  Got it?
+ 0559				open_explicit::                                                               ; makes it global
+
+				; IF DTR input handshaking or DTR enable THEN turn on DTR
+
+ 0559  8A 64 2C			        mov     ah,[si].s_stDeviceParms.byFlag1
+ 055C  80 E4 03			        and     ah,F1_DTR_HS_MASK
+ 055F  80 FC 00			        cmp     ah,F1_DISABLE_DTR
+ 0562  74 02			        je      test_explicit_RTS
+ 0564  0C 01			        or      al,MDM_CTL_DTR_ACTIVATE
+
+ 0566				test_explicit_RTS::                                                               ; makes it global
+				  IFNDEF NO_ADV_UARTS
+				; If this is UART with hardware handshaking capabilities and CTS hardware
+				; handshaking is requested then activate RTS and do NOT mess with CTS
+
+				        test_DeviceFlag2 (DEV_FLAG2_16750_UART OR \
+				                          DEV_FLAG2_TI16550C_UART OR \
+				                          DEV_FLAG2_16650_UART OR \
+				                          DEV_FLAG2_16654_UART)
+ 0566  F7 44 04 000F	     1	        test   [si].s_stDeviceParms.wDeviceFlag2,(DEV_FLAG2_16750_UART OR DEV_FLAG2_TI16550C_UART OR
+			     1	 DEV_FLAG2_16650_UART OR DEV_FLAG2_16654_UART)
+ 056B  74 0B			        jz      @f
+				IFNDEF SHARE        
+ 056D  F7 44 0A 0400		        test    [si].s_stDeviceParms.wConfigFlags2,CFG_FLAG2_HDW_CTS_HS
+ 0572  74 04			        jz      @f
+				ENDIF        
+ 0574  0C 02			        or      al,MDM_CTL_RTS_ACTIVATE
+ 0576  EB 32			        jmp     reset_CTS_output_HS_flag
+ 0578				@@:
+				  ENDIF
+				; IF RTS input handshaking or RTS enable THEN turn on RTS
+
+ 0578  8A 64 2D			        mov     ah,[si].s_stDeviceParms.byFlag2
+ 057B  80 E4 C0			        and     ah,F2_RTS_HS_MASK
+ 057E  80 FC 00			        cmp     ah,F2_DISABLE_RTS
+ 0581  74 07			        je      test_open_CTS
+ 0583  80 FC C0			        cmp     ah,F2_ENABLE_RTS_TOG_ON_XMIT
+ 0586  74 02			        je      test_open_CTS
+ 0588  0C 02			        or      al,MDM_CTL_RTS_ACTIVATE
+
+ 058A				test_open_CTS::                                                               ; makes it global
+ 058A  8A 64 2C			        mov     ah,[si].s_stDeviceParms.byFlag1
+ 058D  F6 C4 08			        test    ah,F1_ENABLE_CTS_OUTPUT_HS
+ 0590  74 18			        jz      reset_CTS_output_HS_flag
+ 0592  8A D8			        mov     bl,al
+ 0594  83 C2 02			        add     dx,MDM_ST_REG_OFFSET - MDM_CTL_REG_OFFSET
+ 0597  FA			        cli
+				        InByteImm
+ 0598  EC		     1	        in      al,dx
+ 0599  86 C3			        xchg    al,bl
+ 059B  83 C2 FE			        add     dx,MDM_CTL_REG_OFFSET - MDM_ST_REG_OFFSET
+ 059E  F6 C3 10			        test    bl,MDM_ST_CTS
+ 05A1  75 07			        jnz     reset_CTS_output_HS_flag
+ 05A3  80 8C 00A5 01		        or      [si].s_stDeviceParms.byHSstatus,TX_WAITING_FOR_CTS_ON
+ 05A8  EB 05			        jmp     set_MDM_CTL_register
+
+ 05AA				reset_CTS_output_HS_flag::                                                               ; makes it 
+				global
+ 05AA  80 A4 00A5 FE		        and     [si].s_stDeviceParms.byHSstatus,NOT TX_WAITING_FOR_CTS_ON
+
+ 05AF				set_MDM_CTL_register:
+				        COMscopeStream ebx, CSFUNC_TRACE_MODEM_OUT_SIGNALS, CS_MODEM_OUT
+ 05AF  F7 44 4C 0020	     1	        test    [si].s_stDeviceParms.fCOMscopeFunction,CSFUNC_TRACE_MODEM_OUT_SIGNALS
+ 05B4  74 23		     1	        jz      ??001B
+ 05B6  B4 84		     1	        mov     ah,CS_MODEM_OUT
+ 05B8  66| 8B 9C 008C	     1	        mov     ebx,[si].s_stDeviceParms.dwCOMscopeQWrtPtr
+ 05BD  67& 64: 89 03	     1	        mov     FS:[ebx],ax
+ 05C1			     1	??001D:
+ 05C1  66| 3B 5C 1C	     1	        cmp     ebx,[si].s_stDeviceParms.dwCOMscopeBuffExtent
+ 05C5  72 09		     1	        jb      ??001A
+ 05C7  66| 8B 9C 0094	     1	        mov     ebx,[si].s_stDeviceParms.oCOMscopeBuff
+ 05CC  66| 83 EB 02	     1	        sub     ebx,2
+ 05D0			     1	??001A:
+ 05D0  66| 83 C3 02	     1	        add     ebx,2
+ 05D4  66| 89 9C 008C	     1	        mov     [si].s_stDeviceParms.dwCOMscopeQWrtPtr,ebx
+ 05D9			     1	??001B:
+				        OutByteDel bx
+ 05D9  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 05DC			     2	??001E:
+ 05DC  4B		     2	        dec     bx
+ 05DD  75 FD		     2	        jnz     ??001E
+ 05DF  EE		     1	        out     dx,al
+
+ 05E0				test_DSR_input_HS::                                                               ; makes it global
+				; IF we are to enable DSR input handshaking AND DSR is not activated THEN
+				; set receive waiting for DSR
+
+ 05E0  83 C2 02			        add     dx,MDM_ST_REG_OFFSET - MDM_CTL_REG_OFFSET
+ 05E3  FA			        cli
+				        InByteDel bx
+ 05E4  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 05E7			     2	??001F:
+ 05E7  4B		     2	        dec     bx
+ 05E8  75 FD		     2	        jnz     ??001F
+ 05EA  EC		     1	        in      al,dx
+ 05EB  8A 64 2C			        mov     ah,[si].s_stDeviceParms.byFlag1
+ 05EE  F6 C4 40			        test    ah,F1_ENABLE_DSR_INPUT_HS
+ 05F1  74 0B			        jz      reset_DSR_input_HS_flag
+ 05F3  A8 20			        test    al,MDM_ST_DSR
+ 05F5  75 07			        jnz     reset_DSR_input_HS_flag
+ 05F7  80 8C 00A5 80		        or      [si].s_stDeviceParms.byHSstatus,RX_WAITING_FOR_DSR_ON
+ 05FC  EB 05			        jmp     test_DSR_out
+
+ 05FE				reset_DSR_input_HS_flag::                                                               ; makes it g
+				lobal
+ 05FE  80 A4 00A5 7F		        and     [si].s_stDeviceParms.byHSstatus,NOT RX_WAITING_FOR_DSR_ON
+
+ 0603				test_DSR_out::                                                               ; makes it global
+ 0603  F6 C4 10			        test    ah,F1_ENABLE_DSR_OUTPUT_HS
+ 0606  74 0B			        jz      reset_DSR_output_HS_flag
+ 0608  A8 20			        test    al,MDM_ST_DSR
+ 060A  75 07			        jnz     reset_DSR_output_HS_flag
+ 060C  80 8C 00A5 02		        or      [si].s_stDeviceParms.byHSstatus,TX_WAITING_FOR_DSR_ON
+ 0611  EB 05			        jmp     test_DCD
+
+ 0613				reset_DSR_output_HS_flag::                                                               ; makes it 
+				global
+ 0613  80 A4 00A5 FD		        and     [si].s_stDeviceParms.byHSstatus,NOT TX_WAITING_FOR_DSR_ON
+
+ 0618				test_DCD::                                                               ; makes it global
+ 0618  F6 C4 20			        test    ah,F1_ENABLE_DCD_OUTPUT_HS
+ 061B  74 0B			        jz      reset_DCD_output_HS_flag
+ 061D  A8 80			        test    al,MDM_ST_DCD
+ 061F  75 07			        jnz     reset_DCD_output_HS_flag
+ 0621  80 8C 00A5 04		        or      [si].s_stDeviceParms.byHSstatus,TX_WAITING_FOR_DCD_ON
+ 0626  EB 05			        jmp     enable_interrupts
+
+ 0628				reset_DCD_output_HS_flag::                                                               ; makes it 
+				global
+ 0628  80 A4 00A5 FB		        and     [si].s_stDeviceParms.byHSstatus,NOT TX_WAITING_FOR_DCD_ON
+				 IFDEF this_junk
+				 ENDIF
+ 062D				enable_interrupts::                                                               ; makes it global
+ 062D  33 C9			        xor     cx,cx
+ 062F  8A 4C 3E			        mov     cl,[si].s_stDeviceParms.byInterruptLevel
+				  IFDEF force_poll
+				  ENDIF
+ 0632  89 4C 56			        mov     [si].s_stDeviceParms.wInterruptStatus,cx
+ 0635  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+				;        InByteImm
+ 0638  83 C2 02			        add     dx,INT_ID_REG_OFFSET
+				        InByteImm
+ 063B  EC		     1	        in      al,dx
+ 063C  83 C2 03			        add     dx,LINE_ST_REG_OFFSET - INT_ID_REG_OFFSET
+				        InByteImm
+ 063F  EC		     1	        in      al,dx
+ 0640  83 C2 01			        add     dx,MDM_ST_REG_OFFSET - LINE_ST_REG_OFFSET
+				        InByteImm
+ 0643  EC		     1	        in      al,dx
+
+				; Get current contents of MSR
+				; We are setting them here even though we may not have to
+ 0644  88 84 009F		        mov     [si].s_stDeviceParms.byMSRimage,al
+ 0648  80 A4 009F F0		        and     [si].s_stDeviceParms.byMSRimage,0f0h
+
+ 064D  83 C2 FB			        add     dx,INT_EN_REG_OFFSET - MDM_ST_REG_OFFSET
+
+ 0650  B0 01			        mov     al,INT_EN_RCV_DATA_AVAIL
+ 0652  0C 04			        or      al,INT_EN_RX_LINE_STAT
+
+				        AND_DeviceFlag1 (NOT DEV_FLAG1_MDM_INT_ENABLED)
+ 0654  83 64 02 F7	     1	        and    [si].s_stDeviceParms.wDeviceFlag1,(NOT DEV_FLAG1_MDM_INT_ENABLED)
+				        AND_DeviceFlag2 (NOT (DEV_FLAG2_MONITOR_CTS OR DEV_FLAG2_SAVE_MSR))
+ 0658  81 64 04 FCFF	     1	        and    [si].s_stDeviceParms.wDeviceFlag2,(NOT (DEV_FLAG2_MONITOR_CTS OR DEV_FLAG2_SAVE_MSR))
+			     1	
+
+				; If the user requires that modem interrupts NOT be enabled then we have to make provisions
+				; for the case that a hardware handshaking capable UART had hardware handshaking is enabled AND
+				; CTS output handshaking is enabled by the application.
+				; In this case we have to test MSR for changes of state each time it is read and if CTS output hands
+				haking
+				; is enabled we have to monitor CTS by polling during write processing.
+
+				; Test if the user requested modem interrupts be disabled.
+ 065D  F7 44 08 0800		        test    [si].s_stDeviceParms.wConfigFlags1,CFG_FLAG1_NO_MODEM_INT
+ 0662  74 2B			        jz      allow_modem_interrupts
+
+				; Test if DCD or DSR output handshaking is enabled and enable MSR change of state monitoring if eith
+				er is enabled
+ 0664  F6 44 2C 30		        test    [si].s_stDeviceParms.byFlag1,(F1_ENABLE_DSR_OUTPUT_HS OR \
+				                                              F1_ENABLE_DCD_OUTPUT_HS)
+ 0668  74 05			        jz      test_CTS_polling
+				        OR_DeviceFlag2 DEV_FLAG2_SAVE_MSR
+ 066A  81 4C 04 0100	     1	        or     [si].s_stDeviceParms.wDeviceFlag2,DEV_FLAG2_SAVE_MSR
+
+ 066F				test_CTS_polling:
+				; Test if CTS output handshaking is enabled and enable MSR change of state monitoring if it is enabl
+				ed
+ 066F  F6 44 2C 08		        test    [si].s_stDeviceParms.byFlag1,F1_ENABLE_CTS_OUTPUT_HS
+ 0673  74 4E			        jz      out_int_enable_reg
+				        OR_DeviceFlag2 DEV_FLAG2_SAVE_MSR
+ 0675  81 4C 04 0100	     1	        or     [si].s_stDeviceParms.wDeviceFlag2,DEV_FLAG2_SAVE_MSR
+
+				; Test if UART is hardware handshaking capable and if not then finish
+				        test_DeviceFlag2 (DEV_FLAG2_16750_UART OR DEV_FLAG2_TI16550C_UART OR \
+				                          DEV_FLAG2_16650_UART OR DEV_FLAG2_16654_UART)
+ 067A  F7 44 04 000F	     1	        test   [si].s_stDeviceParms.wDeviceFlag2,(DEV_FLAG2_16750_UART OR DEV_FLAG2_TI16550C_UART OR
+			     1	 DEV_FLAG2_16650_UART OR DEV_FLAG2_16654_UART)
+ 067F  74 42			        jz      out_int_enable_reg
+
+				IFNDEF SHARE        
+				; Test if user requested hardware handshaking and enable CTS polling if it is requested
+ 0681  F7 44 0A 0400		        test    [si].s_stDeviceParms.wConfigFlags2,CFG_FLAG2_HDW_CTS_HS
+ 0686  74 3B			        jz      out_int_enable_reg
+				ENDIF
+				; Enable CTS polling during write processing
+				        OR_DeviceFlag2 DEV_FLAG2_MONITOR_CTS
+ 0688  81 4C 04 0200	     1	        or     [si].s_stDeviceParms.wDeviceFlag2,DEV_FLAG2_MONITOR_CTS
+ 068D  EB 34			        jmp     out_int_enable_reg
+
+ 068F				allow_modem_interrupts:
+				; If UART is hardware handshaking capable then test CTS handshaking modes
+				        test_DeviceFlag2 (DEV_FLAG2_16750_UART OR DEV_FLAG2_TI16550C_UART OR \
+				                          DEV_FLAG2_16650_UART OR DEV_FLAG2_16654_UART)
+ 068F  F7 44 04 000F	     1	        test   [si].s_stDeviceParms.wDeviceFlag2,(DEV_FLAG2_16750_UART OR DEV_FLAG2_TI16550C_UART OR
+			     1	 DEV_FLAG2_16650_UART OR DEV_FLAG2_16654_UART)
+ 0694  74 1A			        jz      test_all_output_handshaking
+ 0696  F6 44 2C 08		        test    [si].s_stDeviceParms.byFlag1,F1_ENABLE_CTS_OUTPUT_HS
+ 069A  74 0C			        jz      test_output_handshaking
+				IFNDEF SHARE        
+ 069C  F7 44 0A 0400		        test    [si].s_stDeviceParms.wConfigFlags2,CFG_FLAG2_HDW_CTS_HS
+ 06A1  74 05			        jz      test_output_handshaking
+				ENDIF        
+				; CTS output handshaking is enabled, UART is hardware handshaking capable and the user
+				; requested CTS hardware handshaking, so cause MSR change of state and CTS state polling
+				        OR_DeviceFlag2 (DEV_FLAG2_MONITOR_CTS OR DEV_FLAG2_SAVE_MSR)
+ 06A3  81 4C 04 0300	     1	        or     [si].s_stDeviceParms.wDeviceFlag2,(DEV_FLAG2_MONITOR_CTS OR DEV_FLAG2_SAVE_MSR)
+
+ 06A8				test_output_handshaking:
+				; If other modem signal output handshaking is enabled then enable modem interrupts anyway
+ 06A8  F6 44 2C 30		        test    [si].s_stDeviceParms.byFlag1,(F1_ENABLE_DSR_OUTPUT_HS OR \
+				                                              F1_ENABLE_DCD_OUTPUT_HS)
+				  IFDEF NO_COMscope
+				  ELSE
+ 06AC  74 08			        jz      test_COMscope
+				  ENDIF
+ 06AE  EB 0D			        jmp     enable_mdm_int
+
+ 06B0				test_all_output_handshaking:
+				; If any modem signal output handshaking is enabled then enable modem interrupts
+ 06B0  F6 44 2C 38		        test    [si].s_stDeviceParms.byFlag1,(F1_ENABLE_DSR_OUTPUT_HS OR \
+				                                              F1_ENABLE_DCD_OUTPUT_HS OR \
+				                                              F1_ENABLE_CTS_OUTPUT_HS)
+ 06B4  75 07			        jnz     enable_mdm_int
+				  IFNDEF NO_COMscope
+ 06B6				test_COMscope:
+				; If COMscope is supposed to be monitoring input modem signals then enable them without
+				; regard for handshaking mode
+
+ 06B6  F7 44 4C 0010		        test    [si].s_stDeviceParms.fCOMscopeFunction,CSFUNC_TRACE_MODEM_IN_SIGNALS
+ 06BB  74 06			        jz      out_int_enable_reg
+				  ENDIF
+
+ 06BD				enable_mdm_int::                                                               ; makes it global
+				        OR_DeviceFlag1 DEV_FLAG1_MDM_INT_ENABLED
+ 06BD  83 4C 02 08	     1	        or     [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_MDM_INT_ENABLED
+ 06C1  0C 08			        or      al,INT_EN_MODEM_STAT    ;enable modem interrupts
+
+ 06C3				out_int_enable_reg::                                                               ; makes it global
+				  IFNDEF NO_ADV_UARTS
+				    IFNDEF NO_16650_Xon_HS_support
+				    ENDIF
+				  ENDIF
+				        OutByteDel bx
+ 06C3  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 06C6			     2	??0020:
+ 06C6  4B		     2	        dec     bx
+ 06C7  75 FD		     2	        jnz     ??0020
+ 06C9  EE		     1	        out     dx,al
+
+ 06CA  FF 06 0000 E		        inc     wTimerAllocCount
+ 06CE  83 3E 0000 E 01		        cmp     wTimerAllocCount,1
+ 06D3  75 09			        jne     @f
+ 06D5  B8 01C2 R		        mov     ax,OFFSET Timer
+ 06D8  B2 1D			        mov     dl,DevHlp_SetTimer
+ 06DA  FF 1E 0000 E		        call    device_hlp
+ 06DE				@@:
+ 06DE  F8			        clc
+ 06DF				exit::                                                               ; makes it global
+ 06DF  C3			        ret
+
+ 06E0				OpenProcess ENDP
+
+				;-------------------------- CLOSE -------------------------------------
+
+ 06E0				Close PROC NEAR C oErrorCode:WORD
+
+ 06E0  55		   *	    push   bp
+ 06E1  8B EC		   *	    mov    bp, sp
+ 06E3  FA			        cli
+				  IFDEF PAGE_SUPPORT
+				; if this device was opened by a pager then decrement counter
+				; and close pager
+
+				        test_DeviceFlag1 DEV_FLAG1_PAGER_OPEN
+ 06E4  F7 44 02 0001	     1	        test   [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_PAGER_OPEN
+ 06E9  74 0A			        jz      @f
+ 06EB  B8 0004			        mov     ax,ADD_CLOSE_PAGER
+ 06EE  E8 0000 E		        call    LocalIDCaccess
+				        AND_DeviceFlag1 (NOT DEV_FLAG1_PAGER_OPEN)
+ 06F1  83 64 02 FE	     1	        and    [si].s_stDeviceParms.wDeviceFlag1,(NOT DEV_FLAG1_PAGER_OPEN)
+ 06F5				@@:
+				  ENDIF ; PAGE_SUPPORT
+
+ 06F5  F7 44 52 0400		        test    [si].s_stDeviceParms.wDeviceStatus1,DEV_ST1_DEVICE_OPEN
+ 06FA  75 0B			        jnz     @f
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 06FC  53		     1	        push    bx
+ 06FD  8B 5E 04		     1	        mov     bx,oErrorCode
+ 0700  36: C6 07 0C	     1	        mov     BYTE PTR SS:[bx],ERROR_I24_GEN_FAILURE
+ 0704  5B		     1	        pop     bx
+ 0705  EB 3A			        jmp     close_done
+ 0707				@@:
+ 0707  FF 4C 58			        dec     [si].s_stDeviceParms.wOpenCount
+ 070A  74 2D			        jz      @f
+ 070C  FB			        sti
+				        COMscopeStream ebx, CSFUNC_TRACE_OPEN, CS_CLOSE_TWO
+ 070D  F7 44 4C 0100	     1	        test    [si].s_stDeviceParms.fCOMscopeFunction,CSFUNC_TRACE_OPEN
+ 0712  74 23		     1	        jz      ??0022
+ 0714  B4 89		     1	        mov     ah,CS_CLOSE_TWO
+ 0716  66| 8B 9C 008C	     1	        mov     ebx,[si].s_stDeviceParms.dwCOMscopeQWrtPtr
+ 071B  67& 64: 89 03	     1	        mov     FS:[ebx],ax
+ 071F			     1	??0024:
+ 071F  66| 3B 5C 1C	     1	        cmp     ebx,[si].s_stDeviceParms.dwCOMscopeBuffExtent
+ 0723  72 09		     1	        jb      ??0021
+ 0725  66| 8B 9C 0094	     1	        mov     ebx,[si].s_stDeviceParms.oCOMscopeBuff
+ 072A  66| 83 EB 02	     1	        sub     ebx,2
+ 072E			     1	??0021:
+ 072E  66| 83 C3 02	     1	        add     ebx,2
+ 0732  66| 89 9C 008C	     1	        mov     [si].s_stDeviceParms.dwCOMscopeQWrtPtr,ebx
+ 0737			     1	??0022:
+ 0737  EB 08			        jmp     close_done
+ 0739				@@:
+ 0739  81 64 52 FBFF		        and     [si].s_stDeviceParms.wDeviceStatus1,NOT DEV_ST1_DEVICE_OPEN
+ 073E  E8 0003			        call    CloseProcess
+
+ 0741				close_done:
+ 0741  FB			        sti
+				        ret
+ 0742  5D		   *	    pop    bp
+ 0743  C3		   *	    ret    00000h
+
+ 0744				Close ENDP
+
+ 0744				CloseProcess PROC NEAR
+
+ 0744  C7 44 7C 0000		        mov     [si].s_stDeviceParms.wRTScount,0
+				        AND_DeviceFlag1 (NOT DEV_FLAG1_RTS_TOG_ON)
+ 0749  81 64 02 FDFF	     1	        and    [si].s_stDeviceParms.wDeviceFlag1,(NOT DEV_FLAG1_RTS_TOG_ON)
+ 074E  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 0751  83 C2 01			        add     dx,INT_EN_REG_OFFSET
+ 0754  B0 00			        mov     al,ZERO           ;disable all interrupts
+				        OutByteDel bx
+ 0756  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 0759			     2	??0025:
+ 0759  4B		     2	        dec     bx
+ 075A  75 FD		     2	        jnz     ??0025
+ 075C  EE		     1	        out     dx,al
+ 075D  C7 44 56 0000		        mov     [si].s_stDeviceParms.wInterruptStatus,ZERO
+ 0762  83 C2 03			        add     dx,MDM_CTL_REG_OFFSET - INT_EN_REG_OFFSET
+ 0765  83 3E 0000 E 01		        cmp     bNoOUT2change,TRUE
+ 076A  74 10			        je      @f
+				        InByteDel bx
+ 076C  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 076F			     2	??0026:
+ 076F  4B		     2	        dec     bx
+ 0770  75 FD		     2	        jnz     ??0026
+ 0772  EC		     1	        in      al,dx
+ 0773  24 F7			        and     al,NOT MDM_CTL_OUT2_ACTIVATE
+				        OutByteDel bx
+ 0775  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 0778			     2	??0027:
+ 0778  4B		     2	        dec     bx
+ 0779  75 FD		     2	        jnz     ??0027
+ 077B  EE		     1	        out     dx,al
+ 077C				@@:
+ 077C  FB			        sti
+
+				  IFNDEF NO_ADV_UARTS
+				; IF this is a 1665x UART THEN clear EFR
+				        test_DeviceFlag2 (DEV_FLAG2_16650_UART OR DEV_FLAG2_16654_UART)
+ 077D  F7 44 04 0005	     1	        test   [si].s_stDeviceParms.wDeviceFlag2,(DEV_FLAG2_16650_UART OR DEV_FLAG2_16654_UART)
+ 0782  74 21			        jz      flush_buffers
+				;        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 0784  83 C2 FF			        add     dx,LINE_CTL_REG_OFFSET - MDM_CTL_REG_OFFSET
+				        InByteDel bx
+ 0787  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 078A			     2	??0028:
+ 078A  4B		     2	        dec     bx
+ 078B  75 FD		     2	        jnz     ??0028
+ 078D  EC		     1	        in      al,dx
+ 078E  8A E0			        mov     ah,al           ;save LCR
+ 0790  B0 BF			        mov     al,0bfh         ;enable EFR
+				        OutByteDel bx
+ 0792  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 0795			     2	??0029:
+ 0795  4B		     2	        dec     bx
+ 0796  75 FD		     2	        jnz     ??0029
+ 0798  EE		     1	        out     dx,al
+ 0799  83 C2 FF			        add     dx,EFR_REG_OFFSET - LINE_CTL_REG_OFFSET
+ 079C  32 C0			        xor     al,al
+				        OutByteImm              ;clear EFR
+ 079E  EE		     1	        out     dx,al
+ 079F  83 C2 01			        add     dx,LINE_CTL_REG_OFFSET - EFR_REG_OFFSET
+ 07A2  8A C4			        mov     al,ah
+				        OutByteImm              ;restore LCR
+ 07A4  EE		     1	        out     dx,al
+
+ 07A5				flush_buffers::                                                               ; makes it global
+				  ENDIF
+ 07A5  E8 0000 E		        call    FlushInputBuffers
+ 07A8  E8 0234			        call    OutputFlush
+ 07AB  33 C0			        xor     ax,ax
+				;        mov     [si].s_stDeviceParms.byReadPktQHead,al
+				;        mov     [si].s_stDeviceParms.byReadPktQTail,al
+				;        mov     [si].s_stDeviceParms.byWritePktQHead,al
+				;        mov     [si].s_stDeviceParms.byWritePktQTail,al
+ 07AD  88 84 00A5		        mov     [si].s_stDeviceParms.byHSstatus,al
+ 07B1  89 44 64			        mov     [si].s_stDeviceParms.wWrtTimerCount,ax
+ 07B4  89 84 0098		        mov     [si].s_stDeviceParms.wRdTimerCount,ax
+
+				; IF Hardware (RTS or DTR) handshaking is enabled THEN
+				; carefully deactivate RTS and DTR
+
+				;   wait until all characters have been transmitted plus 10 more character times
+				;   or one second - whichever is less to disable DTR and RTS
+
+ 07B8  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 07BB  83 C2 04			        add     dx,MDM_CTL_REG_OFFSET
+				        InByteDel bx
+ 07BE  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 07C1			     2	??002A:
+ 07C1  4B		     2	        dec     bx
+ 07C2  75 FD		     2	        jnz     ??002A
+ 07C4  EC		     1	        in      al,dx
+				;        cli
+ 07C5  A8 03			        test    al,MDM_CTL_RTS_ACTIVATE OR MDM_CTL_DTR_ACTIVATE
+ 07C7  74 2D			        jz      clear_break
+
+				;        sti
+ 07C9  A8 01			        test    al,MDM_CTL_DTR_ACTIVATE
+ 07CB  74 04			        jz      set_clear_modem_signals
+ 07CD  83 4C 52 02		        or      [si].s_stDeviceParms.wDeviceStatus1,DEV_ST1_DEACTIVATE_DTR
+
+ 07D1				set_clear_modem_signals::                                                               ; makes it g
+				lobal
+ 07D1  B8 0010			        mov     ax,10h
+ 07D4  F7 44 08 0080		        test    [si].s_stDeviceParms.wConfigFlags1,CFG_FLAG1_EXPLICIT_BAUD_DIVISOR
+ 07D9  75 15			        jnz     set_delay
+
+				; should possibly change this to process extended baud rates
+ 07DB  8B 44 24			        mov     ax,[si].s_stDeviceParms.wBaudRateDivisor
+ 07DE  25 7FFF			        and     ax,07fffh
+ 07E1  33 D2			        xor     dx,dx
+ 07E3  B9 0056			        mov     cx,86    ;one character time is about 86% of the divisor / 100
+ 07E6  F7 F1			        div     cx
+ 07E8  B9 000A			        mov     cx,10   ; times ten character times
+ 07EB  F7 E1			        mul     cx
+ 07ED  E8 0000 E		        call    CalcTimeout
+
+ 07F0				set_delay::                                                               ; makes it global
+ 07F0  89 44 7C			        mov     [si].s_stDeviceParms.wRTScount,ax
+ 07F3  89 44 38			        mov     [si].s_stDeviceParms.wRTS_DTRoffDelay,ax
+
+ 07F6				clear_break::                                                               ; makes it global
+				;        sti
+ 07F6  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 07F9  83 C2 03			        add     dx,LINE_CTL_REG_OFFSET
+				        InByteDel bx
+ 07FC  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 07FF			     2	??002B:
+ 07FF  4B		     2	        dec     bx
+ 0800  75 FD		     2	        jnz     ??002B
+ 0802  EC		     1	        in      al,dx
+ 0803  24 BF			        and     al,NOT LINE_CTL_SEND_BREAK
+				        OutByteDel bx
+ 0805  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 0808			     2	??002C:
+ 0808  4B		     2	        dec     bx
+ 0809  75 FD		     2	        jnz     ??002C
+ 080B  EE		     1	        out     dx,al
+ 080C  80 A4 00A5 DF		        and     [si].s_stDeviceParms.byHSstatus,NOT TX_WAITING_BECAUSE_BREAK_RX
+
+				        test_DeviceFlag1 DEV_FLAG1_INPUT_HS_IN_PROGRESS
+ 0811  F7 44 02 0400	     1	        test   [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_INPUT_HS_IN_PROGRESS
+ 0816  0F 84 00AC		        jz      close_end
+				        AND_DeviceFlag1 (NOT DEV_FLAG1_INPUT_HS_IN_PROGRESS)
+ 081A  81 64 02 FBFF	     1	        and    [si].s_stDeviceParms.wDeviceFlag1,(NOT DEV_FLAG1_INPUT_HS_IN_PROGRESS)
+ 081F  F6 44 2E 02		        test    [si].s_stDeviceParms.byFlag3,F2_ENABLE_RCV_XON_XOFF_FLOW
+ 0823  0F 84 009F		        jz      close_end
+
+				        test_DeviceFlag1 DEV_FLAG1_RTS_TOG_ENABLED
+ 0827  F7 44 02 0100	     1	        test   [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_RTS_TOG_ENABLED
+ 082C  0F 85 0096		        jnz     close_end
+ 0830  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 0833  83 C2 05			        add     dx,LINE_ST_REG_OFFSET
+
+				        IOdelay bx
+ 0836  BB 0000 E	     1	        mov     bx,DOSIODELAYCNT
+ 0839			     1	??002D:
+ 0839  4B		     1	        dec     bx
+ 083A  75 FD		     1	        jnz     ??002D
+ 083C  B9 000A			        mov     cx,10
+
+ 083F				test_TX_hold_loop::                                                               ; makes it global
+				        InByteImm
+ 083F  EC		     1	        in      al,dx
+ 0840  A8 20			        test    al,LINE_ST_TX_HOLD_EMPTY
+ 0842  75 1D			        jnz     send_final_Xon
+				        BlockYield ss, si
+ 0844  52		     1	        push    dx
+ 0845  53		     1	        push    bx
+ 0846  50		     1	        push    ax
+ 0847  57		     1	        push    di
+ 0848  51		     1	        push    cx
+ 0849  8C D3		     1	        mov     bx,ss
+ 084B  8B C6		     1	        mov     ax,si
+ 084D  33 FF		     1	        xor     di,di
+ 084F  B9 0064		     1	        mov     cx,100
+ 0852  32 F6		     1	        xor     dh,dh
+ 0854  B2 04		     1	        mov     dl,DevHlp_Block
+ 0856  FF 1E 0000 E	     1	        call    device_hlp
+ 085A  59		     1	        pop     cx
+ 085B  5F		     1	        pop     di
+ 085C  58		     1	        pop     ax
+ 085D  5B		     1	        pop     bx
+ 085E  5A		     1	        pop     dx
+ 085F  E2 DE			        loop    test_TX_hold_loop
+
+ 0861				send_final_Xon::                                                               ; makes it global
+ 0861  83 EA 05			        sub     dx,LINE_ST_REG_OFFSET
+ 0864  8A 44 31			        mov     al,[si].s_stDeviceParms.byXonChar
+				        RTStoggleOn ebx
+ 0867  F7 44 02 0100	     1	        test    [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_RTS_TOG_ENABLED
+ 086C  74 51		     1	        jz      ??002E
+ 086E  F7 44 02 0200	     1	        test    [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_RTS_TOG_ON
+ 0873  75 4A		     1	        jnz     ??002E
+ 0875  C7 44 7C 0003	     1	        mov     [si].s_stDeviceParms.wRTScount,DEFAULT_RTS_OFF_DELAY
+ 087A  81 4C 02 0200	     1	        or      [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_RTS_TOG_ON
+ 087F  83 C2 04		     1	        add     dx,MDM_CTL_REG_OFFSET
+ 0882  50		     1	        push    ax
+ 0883  EC		     2	        in      al,dx
+ 0884  0C 02		     1	        or      al,MDM_CTL_RTS_ACTIVATE
+ 0886  F7 44 4C 0020	     2	        test    [si].s_stDeviceParms.fCOMscopeFunction,CSFUNC_TRACE_MODEM_OUT_SIGNALS
+ 088B  74 23		     2	        jz      ??0030
+ 088D  B4 84		     2	        mov     ah,CS_MODEM_OUT
+ 088F  66| 8B 9C 008C	     2	        mov     ebx,[si].s_stDeviceParms.dwCOMscopeQWrtPtr
+ 0894  67& 64: 89 03	     2	        mov     FS:[ebx],ax
+ 0898			     2	??0032:
+ 0898  66| 3B 5C 1C	     2	        cmp     ebx,[si].s_stDeviceParms.dwCOMscopeBuffExtent
+ 089C  72 09		     2	        jb      ??002F
+ 089E  66| 8B 9C 0094	     2	        mov     ebx,[si].s_stDeviceParms.oCOMscopeBuff
+ 08A3  66| 83 EB 02	     2	        sub     ebx,2
+ 08A7			     2	??002F:
+ 08A7  66| 83 C3 02	     2	        add     ebx,2
+ 08AB  66| 89 9C 008C	     2	        mov     [si].s_stDeviceParms.dwCOMscopeQWrtPtr,ebx
+ 08B0			     2	??0030:
+ 08B0  66| BB 0000 0000 E    3	        mov     ebx,DOSIODELAYCNT
+ 08B6			     3	??0033:
+ 08B6  66| 4B		     3	        dec     ebx
+ 08B8  75 FC		     3	        jnz     ??0033
+ 08BA  EE		     2	        out     dx,al
+ 08BB  58		     1	        pop     ax
+ 08BC  83 EA 04		     1	        sub     dx,MDM_CTL_REG_OFFSET
+ 08BF			     1	??002E:
+				        OutByteDel bx
+ 08BF  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 08C2			     2	??0034:
+ 08C2  4B		     2	        dec     bx
+ 08C3  75 FD		     2	        jnz     ??0034
+ 08C5  EE		     1	        out     dx,al
+
+ 08C6				close_end:
+ 08C6  FF 0E 0000 E		        dec     wTimerAllocCount
+ 08CA  75 09			        jnz     close_exit
+ 08CC  B8 01C2 R		        mov     ax,OFFSET Timer
+ 08CF  B2 1E			        mov     dl,DevHlp_ResetTimer
+ 08D1  FF 1E 0000 E		        call    device_hlp
+
+ 08D5				close_exit:
+ 08D5  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 08D8  83 C2 02			        add     dx,FIFO_CTL_REG_OFFSET
+ 08DB  B8 00C7			        mov     ax,0c7h
+				        OutByteDel bx           ; reset FIFOs
+ 08DE  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 08E1			     2	??0035:
+ 08E1  4B		     2	        dec     bx
+ 08E2  75 FD		     2	        jnz     ??0035
+ 08E4  EE		     1	        out     dx,al
+ 08E5  32 C0			        xor     al,al
+				        OutByteDel bx           ; disable FIFOs
+ 08E7  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 08EA			     2	??0036:
+ 08EA  4B		     2	        dec     bx
+ 08EB  75 FD		     2	        jnz     ??0036
+ 08ED  EE		     1	        out     dx,al
+
+ 08EE  83 C2 02			        add     dx,MDM_CTL_REG_OFFSET - FIFO_CTL_REG_OFFSET
+				        InByteDel bx
+ 08F1  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 08F4			     2	??0037:
+ 08F4  4B		     2	        dec     bx
+ 08F5  75 FD		     2	        jnz     ??0037
+ 08F7  EC		     1	        in      al,dx
+ 08F8  24 FC			        and     al,NOT (MDM_CTL_RTS_ACTIVATE OR MDM_CTL_DTR_ACTIVATE)
+
+				        COMscopeStream ebx, CSFUNC_TRACE_MODEM_OUT_SIGNALS, CS_MODEM_OUT
+ 08FA  F7 44 4C 0020	     1	        test    [si].s_stDeviceParms.fCOMscopeFunction,CSFUNC_TRACE_MODEM_OUT_SIGNALS
+ 08FF  74 23		     1	        jz      ??0039
+ 0901  B4 84		     1	        mov     ah,CS_MODEM_OUT
+ 0903  66| 8B 9C 008C	     1	        mov     ebx,[si].s_stDeviceParms.dwCOMscopeQWrtPtr
+ 0908  67& 64: 89 03	     1	        mov     FS:[ebx],ax
+ 090C			     1	??003B:
+ 090C  66| 3B 5C 1C	     1	        cmp     ebx,[si].s_stDeviceParms.dwCOMscopeBuffExtent
+ 0910  72 09		     1	        jb      ??0038
+ 0912  66| 8B 9C 0094	     1	        mov     ebx,[si].s_stDeviceParms.oCOMscopeBuff
+ 0917  66| 83 EB 02	     1	        sub     ebx,2
+ 091B			     1	??0038:
+ 091B  66| 83 C3 02	     1	        add     ebx,2
+ 091F  66| 89 9C 008C	     1	        mov     [si].s_stDeviceParms.dwCOMscopeQWrtPtr,ebx
+ 0924			     1	??0039:
+				        OutByteDel bx
+ 0924  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 0927			     2	??003C:
+ 0927  4B		     2	        dec     bx
+ 0928  75 FD		     2	        jnz     ??003C
+ 092A  EE		     1	        out     dx,al
+ 092B  8A 5C 3E			        mov     bl,[si].s_stDeviceParms.byInterruptLevel
+ 092E  E8 0000 E		        call    ReleaseInterrupt
+
+				        COMscopeStream ebx, CSFUNC_TRACE_OPEN, CS_CLOSE_ONE
+ 0931  F7 44 4C 0100	     1	        test    [si].s_stDeviceParms.fCOMscopeFunction,CSFUNC_TRACE_OPEN
+ 0936  74 23		     1	        jz      ??003E
+ 0938  B4 88		     1	        mov     ah,CS_CLOSE_ONE
+ 093A  66| 8B 9C 008C	     1	        mov     ebx,[si].s_stDeviceParms.dwCOMscopeQWrtPtr
+ 093F  67& 64: 89 03	     1	        mov     FS:[ebx],ax
+ 0943			     1	??0040:
+ 0943  66| 3B 5C 1C	     1	        cmp     ebx,[si].s_stDeviceParms.dwCOMscopeBuffExtent
+ 0947  72 09		     1	        jb      ??003D
+ 0949  66| 8B 9C 0094	     1	        mov     ebx,[si].s_stDeviceParms.oCOMscopeBuff
+ 094E  66| 83 EB 02	     1	        sub     ebx,2
+ 0952			     1	??003D:
+ 0952  66| 83 C3 02	     1	        add     ebx,2
+ 0956  66| 89 9C 008C	     1	        mov     [si].s_stDeviceParms.dwCOMscopeQWrtPtr,ebx
+ 095B			     1	??003E:
+ 095B  C3			        ret
+
+ 095C				CloseProcess ENDP
+
+ 095C				InputStatus PROC NEAR
+
+ 095C  33 C0			        xor     ax,ax
+ 095E  F7 44 52 0040		        test    [si].s_stDeviceParms.wDeviceStatus1,DEV_ST1_RCV_QUEUE_EMPTY
+ 0963  75 03			        jnz     @f
+ 0965  B8 0100			        mov     ax,0100h
+ 0968				@@:
+ 0968  26: 89 45 03		        mov     ES:[di].s_stPacket.PktStatus,ax
+ 096C  C3			        ret
+
+ 096D				InputStatus ENDP
+
+ 096D				OutputStatus PROC NEAR
+
+ 096D  33 C0			        xor     ax,ax
+ 096F  F7 44 52 0004		        test    [si].s_stDeviceParms.wDeviceStatus1,DEV_ST1_TX_IN_PROGRESS
+ 0974  74 03			        jz      @f
+ 0976  B8 0100			        mov     ax,0100h
+ 0979				@@:
+ 0979  26: 89 45 03		        mov     ES:[di].s_stPacket.PktStatus,ax
+ 097D  C3			        ret
+
+ 097E				OutputStatus ENDP
+
+ 097E				InputFlush PROC NEAR
+
+ 097E  B0 F1			        mov     al,0f1h
+				        COMscopeStream ebx, CSFUNC_TRACE_DEVIOCTL, CS_DEVIOCTL
+ 0980  F7 44 4C 0040	     1	        test    [si].s_stDeviceParms.fCOMscopeFunction,CSFUNC_TRACE_DEVIOCTL
+ 0985  74 23		     1	        jz      ??0042
+ 0987  B4 85		     1	        mov     ah,CS_DEVIOCTL
+ 0989  66| 8B 9C 008C	     1	        mov     ebx,[si].s_stDeviceParms.dwCOMscopeQWrtPtr
+ 098E  67& 64: 89 03	     1	        mov     FS:[ebx],ax
+ 0992			     1	??0044:
+ 0992  66| 3B 5C 1C	     1	        cmp     ebx,[si].s_stDeviceParms.dwCOMscopeBuffExtent
+ 0996  72 09		     1	        jb      ??0041
+ 0998  66| 8B 9C 0094	     1	        mov     ebx,[si].s_stDeviceParms.oCOMscopeBuff
+ 099D  66| 83 EB 02	     1	        sub     ebx,2
+ 09A1			     1	??0041:
+ 09A1  66| 83 C3 02	     1	        add     ebx,2
+ 09A5  66| 89 9C 008C	     1	        mov     [si].s_stDeviceParms.dwCOMscopeQWrtPtr,ebx
+ 09AA			     1	??0042:
+ 09AA  FA			        cli
+ 09AB  E8 0000 E		        call    FlushInputBuffers
+ 09AE  E8 0000 E		        call    ClearInputHandshake
+ 09B1  FB			        sti
+ 09B2  C3			        ret
+
+ 09B3				InputFlush ENDP
+
+ 09B3				OutputFlushTrace::                                                               ; makes it global
+
+ 09B3  B0 F0			        mov     al,0f0h
+				        COMscopeStream ebx, CSFUNC_TRACE_DEVIOCTL, CS_DEVIOCTL
+ 09B5  F7 44 4C 0040	     1	        test    [si].s_stDeviceParms.fCOMscopeFunction,CSFUNC_TRACE_DEVIOCTL
+ 09BA  74 23		     1	        jz      ??0046
+ 09BC  B4 85		     1	        mov     ah,CS_DEVIOCTL
+ 09BE  66| 8B 9C 008C	     1	        mov     ebx,[si].s_stDeviceParms.dwCOMscopeQWrtPtr
+ 09C3  67& 64: 89 03	     1	        mov     FS:[ebx],ax
+ 09C7			     1	??0048:
+ 09C7  66| 3B 5C 1C	     1	        cmp     ebx,[si].s_stDeviceParms.dwCOMscopeBuffExtent
+ 09CB  72 09		     1	        jb      ??0045
+ 09CD  66| 8B 9C 0094	     1	        mov     ebx,[si].s_stDeviceParms.oCOMscopeBuff
+ 09D2  66| 83 EB 02	     1	        sub     ebx,2
+ 09D6			     1	??0045:
+ 09D6  66| 83 C3 02	     1	        add     ebx,2
+ 09DA  66| 89 9C 008C	     1	        mov     [si].s_stDeviceParms.dwCOMscopeQWrtPtr,ebx
+ 09DF			     1	??0046:
+
+ 09DF				OutputFlush PROC NEAR
+
+ 09DF  FA			        cli
+ 09E0  F7 44 52 0004		        test    [si].s_stDeviceParms.wDeviceStatus1,DEV_ST1_TX_IN_PROGRESS
+ 09E5  74 2C			        jz      flush_exit
+ 09E7  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 09EA  83 C2 01			        add     dx,INT_EN_REG_OFFSET
+				        InByteImm
+ 09ED  EC		     1	        in      al,dx
+ 09EE  24 FD			        and     al,NOT INT_EN_TX_HOLD_EMPTY
+				        OutByteDel bx
+ 09F0  BB 0000 E	     2	        mov     bx,DOSIODELAYCNT
+ 09F3			     2	??0049:
+ 09F3  4B		     2	        dec     bx
+ 09F4  75 FD		     2	        jnz     ??0049
+ 09F6  EE		     1	        out     dx,al
+ 09F7  81 4C 52 1000		        or      [si].s_stDeviceParms.wDeviceStatus1,DEV_ST1_OUTPUT_FLUSHED
+ 09FC  C7 44 64 0000		        mov     [si].s_stDeviceParms.wWrtTimerCount,0
+				        test_DeviceFlag1 DEV_FLAG1_WRT_BLOCKED
+ 0A01  F7 44 02 0080	     1	        test   [si].s_stDeviceParms.wDeviceFlag1,DEV_FLAG1_WRT_BLOCKED
+ 0A06  74 0B			        jz      flush_exit
+ 0A08  8C D8			        mov     ax,ds
+ 0A0A  8D 5C 6C			        lea     bx,[si].s_stDeviceParms.dwWrtSemaphore
+ 0A0D  B2 07			        mov     dl,DevHlp_SemClear
+ 0A0F  FF 1E 0000 E		        call    device_hlp
+
+ 0A13				flush_exit::                                                               ; makes it global
+ 0A13  FB			        sti
+ 0A14  C3			        ret
+
+ 0A15				OutputFlush ENDP
+
+ 0A15				Peek PROC NEAR
+
+ 0A15  B9 0100			        mov     cx,0100h
+ 0A18  F7 44 52 0040		        test    [si].s_stDeviceParms.wDeviceStatus1,DEV_ST1_RCV_QUEUE_EMPTY
+ 0A1D  75 0F			        jnz     no_byte_in_queue
+ 0A1F  66| 8B 9C 0084		        mov     ebx,[si].s_stDeviceParms.dwReceiveQueueReadPointer
+				  IFNDEF x16_BIT
+				;        test_DeviceFlag2 DEV_FLAG2_USE_DD_DATA_SEGMENT
+				;        jnz     @f
+ 0A24  67& 65: 8A 03		        mov     al,GS:[ebx]
+				;        jmp     store_peek
+				;@@:
+				  ELSE
+				  ENDIF
+				;        mov     al,[ebx]
+
+ 0A28				store_peek::                                                               ; makes it global
+ 0A28  26: 88 45 0D		        mov     ES:[di].s_stPacket.PktData,al
+ 0A2C  33 C9			        xor     cx,cx
+
+ 0A2E				no_byte_in_queue::                                                               ; makes it global
+ 0A2E  26: 89 4D 03		        mov     ES:[di].s_stPacket.PktStatus,cx
+ 0A32  C3			        ret
+
+ 0A33				Peek ENDP
+
+				;------------Strategy Jump Table------------------------------------
+				; this is here to cause all elements to b a uniform six bytes long
+				;    (three byte jump instruction)
+
+				  EVEN
+ 0A34				AuxStrategy::                                                               ; makes it global
+ 0A34  B8 FFFF			        mov     ax,SPECIAL_STRATEGY
+ 0A37  E9 F60F			        jmp     Strategy
+
+ 0A3A				xAuxStrategy::                                                               ; makes it global
+ 0A3A  B8 FFFE			        mov     ax,DUMMY_STRATEGY
+ 0A3D  E9 F609			        jmp     Strategy
+
+ 0A40				__pDeviceStrategy LABEL WORD
+ 0A40				Strategy1::                                                               ; makes it global
+ 0A40  B8 0000			        mov     ax,0
+ 0A43  E9 F603			        jmp     Strategy
+
+ 0A46				Strategy2::                                                               ; makes it global
+ 0A46  B8 0001			        mov     ax,1
+ 0A49  E9 F5FD			        jmp     Strategy
+
+ 0A4C				Strategy3::                                                               ; makes it global
+ 0A4C  B8 0002			        mov     ax,2
+ 0A4F  E9 F5F7			        jmp     Strategy
+
+ 0A52				Strategy4::                                                               ; makes it global
+ 0A52  B8 0003			        mov     ax,3
+ 0A55  E9 F5F1			        jmp     Strategy
+
+ 0A58				Strategy5::                                                               ; makes it global
+ 0A58  B8 0004			        mov     ax,4
+ 0A5B  E9 F5EB			        jmp     Strategy
+
+ 0A5E				Strategy6::                                                               ; makes it global
+ 0A5E  B8 0005			        mov     ax,5
+ 0A61  E9 F5E5			        jmp     Strategy
+
+ 0A64				Strategy7::                                                               ; makes it global
+ 0A64  B8 0006			        mov     ax,6
+ 0A67  E9 F5DF			        jmp     Strategy
+
+ 0A6A				Strategy8::                                                               ; makes it global
+ 0A6A  B8 0007			        mov     ax,7
+ 0A6D  E9 F5D9			        jmp     Strategy
+
+ 0A70				Strategy9::                                                               ; makes it global
+ 0A70  B8 0008			        mov     ax,8
+ 0A73  E9 F5D3			        jmp     Strategy
+
+ 0A76				Strategy10::                                                               ; makes it global
+ 0A76  B8 0009			        mov     ax,9
+ 0A79  E9 F5CD			        jmp     Strategy
+
+ 0A7C				Strategy11::                                                               ; makes it global
+ 0A7C  B8 000A			        mov     ax,10
+ 0A7F  E9 F5C7			        jmp     Strategy
+
+ 0A82				Strategy12::                                                               ; makes it global
+ 0A82  B8 000B			        mov     ax,11
+ 0A85  E9 F5C1			        jmp     Strategy
+
+ 0A88				Strategy13::                                                               ; makes it global
+ 0A88  B8 000C			        mov     ax,12
+ 0A8B  E9 F5BB			        jmp     Strategy
+
+ 0A8E				Strategy14::                                                               ; makes it global
+ 0A8E  B8 000D			        mov     ax,13
+ 0A91  E9 F5B5			        jmp     Strategy
+
+ 0A94				Strategy15::                                                               ; makes it global
+ 0A94  B8 000E			        mov     ax,14
+ 0A97  E9 F5AF			        jmp     Strategy
+
+ 0A9A				Strategy16::                                                               ; makes it global
+ 0A9A  B8 000F			        mov     ax,15
+ 0A9D  E9 F5A9			        jmp     Strategy
+
+ 0AA0				__pCOMscopeStrategy LABEL WORD
+ 0AA0				Strategy1m::                                                               ; makes it global
+ 0AA0  B8 8000			        mov     ax,08000h
+ 0AA3  E9 F5A3			        jmp     Strategy
+
+ 0AA6				Strategy2m::                                                               ; makes it global
+ 0AA6  B8 8001			        mov     ax,08001h
+ 0AA9  E9 F59D			        jmp     Strategy
+
+ 0AAC				Strategy3m::                                                               ; makes it global
+ 0AAC  B8 8002			        mov     ax,08002h
+ 0AAF  E9 F597			        jmp     Strategy
+
+ 0AB2				Strategy4m::                                                               ; makes it global
+ 0AB2  B8 8003			        mov     ax,08003h
+ 0AB5  E9 F591			        jmp     Strategy
+
+ 0AB8				Strategy5m::                                                               ; makes it global
+ 0AB8  B8 8004			        mov     ax,08004h
+ 0ABB  E9 F58B			        jmp     Strategy
+
+ 0ABE				Strategy6m::                                                               ; makes it global
+ 0ABE  B8 8005			        mov     ax,08005h
+ 0AC1  E9 F585			        jmp     Strategy
+
+ 0AC4				Strategy7m::                                                               ; makes it global
+ 0AC4  B8 8006			        mov     ax,08006h
+ 0AC7  E9 F57F			        jmp     Strategy
+
+ 0ACA				Strategy8m::                                                               ; makes it global
+ 0ACA  B8 8007			        mov     ax,08007h
+ 0ACD  E9 F579			        jmp     Strategy
+
+ 0AD0				Strategy9m::                                                               ; makes it global
+ 0AD0  B8 8008			        mov     ax,08008h
+ 0AD3  E9 F573			        jmp     Strategy
+
+ 0AD6				Strategy10m::                                                               ; makes it global
+ 0AD6  B8 8009			        mov     ax,08009h
+ 0AD9  E9 F56D			        jmp     Strategy
+
+ 0ADC				Strategy11m::                                                               ; makes it global
+ 0ADC  B8 800A			        mov     ax,0800ah
+ 0ADF  E9 F567			        jmp     Strategy
+
+ 0AE2				Strategy12m::                                                               ; makes it global
+ 0AE2  B8 800B			        mov     ax,0800bh
+ 0AE5  E9 F561			        jmp     Strategy
+
+ 0AE8				Strategy13m::                                                               ; makes it global
+ 0AE8  B8 800C			        mov     ax,0800ch
+ 0AEB  E9 F55B			        jmp     Strategy
+
+ 0AEE				Strategy14m::                                                               ; makes it global
+ 0AEE  B8 800D			        mov     ax,0800dh
+ 0AF1  E9 F555			        jmp     Strategy
+
+ 0AF4				Strategy15m::                                                               ; makes it global
+ 0AF4  B8 800E			        mov     ax,0800eh
+ 0AF7  E9 F54F			        jmp     Strategy
+
+ 0AFA				Strategy16m::                                                               ; makes it global
+ 0AFA  B8 800F			        mov     ax,0800fh
+ 0AFD  E9 F549			        jmp     Strategy
+
+ 0B00				RES_CODE ENDS
+
+				    END
+

@@ -1,0 +1,305 @@
+#include <COMMON.H>
+#include <types.h>
+#include <netinet\in.h>
+#include <sys\socket.h>
+#include <netdb.h>
+#include "aerial.h"
+#include "comm.h"
+
+#include <OS$tools.h>
+
+#ifndef one_executable
+USHORT usServerPort = AERIAL_SERVER_PORT;
+USHORT usClientPort = AERIAL_CLIENT_PORT;
+BOOL bDebug;
+ULONG ulMaxMessageBufferSize;
+int h_errno;
+#else
+extern BOOL bDebug;
+extern ULONG ulMaxMessageBufferSize;
+extern USHORT usServerPort;
+extern USHORT usClientPort;
+extern int h_errno;
+#endif
+static COMADDR stAddr;
+
+void ResponseThread(void);
+
+int iLastCOMerror;
+
+static SOCKADDRIN stNotifyServer;
+
+static ULONG ulServerAddress;
+static BOOL bStopResponseThread;
+static HEV hevSocketThreadSem;
+static TID tidResponse;
+static int iResponseSocket;
+static ULONG ulIteration = 0;
+static HWND hwndCommand;
+static BOOL bCOMinitialized = FALSE;
+
+#ifndef one_executable
+//BOOL bModInUse;
+
+//ULONG _dllmain(ULONG ulTermCode,HMODULE hMod)
+//  {
+
+//  if (bModInUse)
+//    return(FALSE);
+//  bModInUse = TRUE;
+//  }
+void EXPENTRY EnableDebug(BOOL bEnableDebug)
+  {
+  bDebug = bEnableDebug;
+  }
+#endif
+APIRET EXPENTRY InitCOM(HWND hwndCmd,HEV hevSem,ULONG cbMaxBuf,COMADDR *pAddr,LOGON *pstLogon)
+  {
+  int iSocket;
+  MSG *pMessage;
+  ULONG cbBuffSize;
+  SOCKADDRIN stServer;
+  int bOptOn;
+
+  if (bCOMinitialized)
+    return(NO_ERROR);
+  hwndCommand = hwndCmd;
+  ulMaxMessageBufferSize = cbMaxBuf;
+  hevSocketThreadSem = hevSem;
+  /*
+  **  setup response server
+  */
+  if ((iResponseSocket = socket(AF_INET,SOCK_STREAM,0)) < 0)
+    {
+    iLastCOMerror = sock_errno();
+    return(ERROR_SOCKET_ERROR | iLastCOMerror | 0x1000000);
+    }
+  bOptOn = 1;
+  if (setsockopt(iResponseSocket,SOL_SOCKET,SO_REUSEADDR,(char *)&bOptOn,sizeof(int)) < 0)
+    {
+    iLastCOMerror = sock_errno();
+    return(ERROR_SOCKET_ERROR | iLastCOMerror | 0x2000000);
+    }
+
+  memset(&stServer,0,sizeof(SOCKADDRIN));
+  stServer.sin_family = AF_INET;
+  stServer.sin_port = htons(usClientPort);
+  stServer.sin_addr.s_addr = INADDR_ANY;
+
+  if (bind(iResponseSocket,(SOCKADDR *)&stServer,sizeof(stServer)) == -1)
+    {
+    iLastCOMerror = sock_errno();
+    return(ERROR_SOCKET_ERROR | iLastCOMerror | 0x3000000);
+    }
+
+  if (listen(iResponseSocket,1) != 0)
+    {
+    iLastCOMerror = sock_errno();
+    return(ERROR_SOCKET_ERROR | iLastCOMerror  | 0x4000000);
+    }
+  /*
+  **  begin waiting for responses from server
+  */
+  DosCreateThread(&tidResponse,(PFNTHREAD)ResponseThread,iResponseSocket,2,8192);
+  /*
+  **  initialize server address variables
+  */
+  memcpy(&stAddr,pAddr,sizeof(COMADDR));
+
+  memset(&stNotifyServer,0,sizeof(SOCKADDRIN));
+  stNotifyServer.sin_family = AF_INET;
+  stNotifyServer.sin_port = htons(usServerPort);
+
+  if (pAddr->fAddrType == BY_HOST)
+    {
+    struct hostent *pstHost;
+    if ((pstHost = gethostbyname(pAddr->szAddressee)) == 0)
+      {
+      iLastCOMerror = h_errno;
+      soclose(iSocket);
+      return(ERROR_SOCKET_ERROR | iLastCOMerror  | 0x6000000);
+      }
+    stNotifyServer.sin_addr.s_addr = *((ULONG *)pstHost->h_addr);
+    }
+  else
+    stNotifyServer.sin_addr.s_addr = inet_addr(pAddr->szAddressee);
+
+  ulServerAddress = stNotifyServer.sin_addr.s_addr;
+  /*
+  **  if logon structure is not null then attempt to logon to server
+  */
+  if (pstLogon != NULL)
+    {
+    if ((iSocket = socket(AF_INET,SOCK_STREAM,0)) < 0)
+      {
+      iLastCOMerror = h_errno;
+      return(ERROR_SOCKET_ERROR | iLastCOMerror | 0x5000000);
+      }
+    /*
+    **  assemble logon message
+    */
+    cbBuffSize = (sizeof(MSG) + sizeof(LOGON) - 1);
+    if ((pMessage = (MSG *)malloc(cbBuffSize)) == 0)
+      {
+      soclose(iSocket);
+      return(ERROR_NOT_ENOUGH_MEMORY | 0x7000000);
+      }
+    pMessage->cbSize = cbBuffSize;
+    pMessage->cbMaxDataSize = ulMaxMessageBufferSize;
+    pMessage->ulMessageNumber = 0;
+    pMessage->fMessageType = REQ_LOGON;
+
+    memcpy(&pMessage->byData,pstLogon,sizeof(LOGON));
+
+    memcpy(&stServer,&stNotifyServer,sizeof(SOCKADDR));
+    if (connect(iSocket,(SOCKADDR *)&stServer,sizeof(SOCKADDR)) < 0)
+      {
+      iLastCOMerror = sock_errno();
+      free(pMessage);
+      soclose(iSocket);
+      return(ERROR_SOCKET_ERROR | iLastCOMerror | 0x8000000);
+      }
+    if (send(iSocket,(PVOID)pMessage,cbBuffSize,0) < 0)
+      {
+      iLastCOMerror = sock_errno();
+      soclose(iSocket);
+      free(pMessage);
+      return(ERROR_SOCKET_ERROR | iLastCOMerror | 0x9000000);
+      }
+    free(pMessage);
+    soclose(iSocket);
+    }
+//  DosSleep(500);  // wait reasonable amount of time for response thread to begin
+  return(NO_ERROR);
+  }
+
+void ResponseThread(void)
+  {
+  SOCKADDRIN stServer;
+  int iServerLen;
+  int iAcceptSocket;
+  MSG *pResponse;
+  int iBuffSize;
+  int iResponseSize;
+  ULONG ulPostCount;
+  APIRET rc;
+
+  DosSetPriority(PRTYS_THREAD,PRTYC_TIMECRITICAL,-10L,0);
+  DosResetEventSem(hevSocketThreadSem,&ulPostCount);
+  bStopResponseThread = FALSE;
+  iServerLen = sizeof(SOCKADDR);
+  iBuffSize = (ulMaxMessageBufferSize + sizeof(MSG));
+  bCOMinitialized = TRUE;
+  while (!bStopResponseThread)
+    {
+    ulIteration++;
+    memset(&stServer,0,iServerLen);
+    if ((iAcceptSocket = accept(iResponseSocket,(SOCKADDR *)&stServer,&iServerLen)) != -1)
+      {
+      if (bDebug)
+        WinPostMsg(hwndCommand,UM_COM_THREAD,(MPARAM)CON_ACCEPTED,(MPARAM)ulIteration);
+      if (stServer.sin_addr.s_addr != ulServerAddress)
+        {
+        soclose(iAcceptSocket);
+        continue;
+        }
+      if ((rc = DosAllocMem((PPVOID)&pResponse,iBuffSize,(PAG_COMMIT | PAG_READ | PAG_WRITE))) == NO_ERROR)
+        {
+        if (bDebug)
+          WinPostMsg(hwndCommand,UM_COM_THREAD,(MPARAM)BUFF_ALLOCATED,(MPARAM)ulIteration);
+        if ((iResponseSize = recv(iAcceptSocket,(PVOID)pResponse,iBuffSize,0)) != -1)
+          {
+          if (bDebug)
+            WinPostMsg(hwndCommand,UM_COM_THREAD,(MPARAM)BUFF_RECEIVED,(MPARAM)ulIteration);
+          soclose(iAcceptSocket);
+          if (iResponseSize == 0)
+            WinPostMsg(hwndCommand,UM_RESPONSE,(MPARAM)MSG_ERROR,(MPARAM)(MSG_ERROR_CONNECTION_CLOSED | 0xA000000));
+          else
+            {
+            ulPostCount = 0;
+            while (!WinPostMsg(hwndCommand,UM_RESPONSE,(MPARAM)MESSAGE,(MPARAM)pResponse))
+              {
+              DosSleep(200);
+              if (++ulPostCount > MAX_POST_RETRIES)
+                {
+                DosSleep(10000);
+                WinPostMsg(hwndCommand,UM_RESPONSE,(MPARAM)MSG_ERROR,(MPARAM)(MSG_ERROR_POST_FAILED | 0xB000000));
+                DosFreeMem(pResponse);
+                bStopResponseThread = TRUE;
+                }
+              }
+            }
+          }
+        else
+          {
+          iLastCOMerror = sock_errno();
+          DosFreeMem(pResponse);
+          WinPostMsg(hwndCommand,UM_RESPONSE,(MPARAM)SOCKET_ERROR,(MPARAM)(iLastCOMerror | 0xC000000));
+          bStopResponseThread = TRUE;
+          }
+        }
+      else
+        {
+        soclose(iAcceptSocket);
+        WinPostMsg(hwndCommand,UM_RESPONSE,(MPARAM)API_ERROR,(MPARAM)(rc | 0xD000000));
+        bStopResponseThread = TRUE;
+        }
+      }
+    else
+      {
+      iLastCOMerror = sock_errno();
+      WinPostMsg(hwndCommand,UM_RESPONSE,(MPARAM)SOCKET_ERROR,(MPARAM)(iLastCOMerror | 0xE000000));
+      bStopResponseThread = TRUE;
+      }
+    }
+  shutdown(iResponseSocket,2);
+  soclose(iResponseSocket);
+  WinPostMsg(hwndCommand,UM_COM_THREAD,(MPARAM)COM_THREAD_END,(MPARAM)0);
+  DosPostEventSem(hevSocketThreadSem);
+  bCOMinitialized = FALSE;
+  }
+
+APIRET EXPENTRY SendRequest(MSG *pReq)
+  {
+  int iSocket;
+  SOCKADDRIN stServer;
+
+  if (!bCOMinitialized)
+    return(ERROR_LIB_NOT_INIT);
+  if ((iSocket = socket(AF_INET,SOCK_STREAM,0)) < 0)
+    {
+    iLastCOMerror = h_errno;
+    return(ERROR_SOCKET_ERROR | iLastCOMerror | 0x10000000);
+    }
+
+  memcpy(&stServer,&stNotifyServer,sizeof(SOCKADDR));
+
+  if (connect(iSocket,(SOCKADDR *)&stServer,sizeof(SOCKADDR)) < 0)
+    {
+    iLastCOMerror = sock_errno();
+    return(ERROR_SOCKET_ERROR | iLastCOMerror | 0x12000000);
+    }
+
+  pReq->cbMaxDataSize = ulMaxMessageBufferSize;
+  if (send(iSocket,(PVOID)pReq,pReq->cbSize,0) < 0)
+    {
+    iLastCOMerror = sock_errno();
+    return(ERROR_SOCKET_ERROR | iLastCOMerror | 0x13000000);
+    }
+
+  soclose(iSocket);
+  return(NO_ERROR);
+  }
+
+BOOL EXPENTRY StopCOM(void)
+  {
+  if (bStopResponseThread)
+    return(FALSE);
+  DosKillThread(tidResponse);
+  soclose(iResponseSocket);
+  DosPostEventSem(hevSocketThreadSem);
+  bCOMinitialized = FALSE;
+  return(TRUE);
+  }
+
+

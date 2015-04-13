@@ -1,0 +1,3 @@
+
+.\control.obj: \
+    p:\Control\control.c

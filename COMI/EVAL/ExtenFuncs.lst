@@ -1,0 +1,563 @@
+Microsoft (R) Macro Assembler Version 6.00     		    08/24/02 23:27:23
+ExtenFuncs.asm						     Page 1 - 1
+
+
+				;************************************************************************
+				;
+				; $Revision:   1.1  $
+				;
+				; $Log:   P:/archive/comi/ExtenFuncs.asv  $
+				;
+				;     Rev 1.1   28 Mar 1996 00:19:16   EMMETT
+				;  Added resource manager.  Began work on VDD support.
+				;
+				;     Rev 1.0   18 Feb 1996 14:16:00   EMMETT
+				;  Added many features.  Notably:
+				;  Tracing application DosDevIOCtl function calls and packets.
+				;  Support for 16650 and 16750 UARTs.
+				;  Streamlined interrupt routine.
+				;
+				;************************************************************************
+
+				.386P
+				.NOLISTMACRO                   ;suppress macro expansion in listing
+
+				.XLIST                       ;Suppress listing of files
+				.LIST
+
+
+				; label for this load's addressability
+
+ 0000				nDDAttachFunction LABEL NEAR
+
+				; DS = this load's data segment
+				; ES = calling load's data segment
+				; param 1 = function
+				; param 2 = modifier
+				; param 3 = offset to calling load's IDC data area
+
+				; return data is in AX if negative response
+
+				; positive response data is in IDCdata of calling load
+
+				; NOTE:
+				;       This function can be called locally by the first load, or from another
+				;       device driver load.  All returns and parameters are treated as if it
+				;       were called from another load.
+
+				; Only LocalIDCaccess should be used to call this function
+
+ 0000				DDAttachFunction PROC FAR C, wFunction:WORD, wModifier:WORD, oDataArea:WORD
+
+ 0000  55		   *	    push   bp
+ 0001  8B EC		   *	    mov    bp, sp
+ 0003  8B 5E 06			        mov     bx,wFunction
+ 0006  83 FB 05			        cmp     bx,LAST_ATTACHDD_FUNCTION
+ 0009  7E 05			        jle     @f
+ 000B  B8 0001			        mov     ax,ADD_ERROR_BAD_FUNCTION
+ 000E  EB 54			        jmp     negative
+ 0010				@@:
+ 0010  D1 E3			        shl     bx,1
+ 0012  2E: FF A7 0070 R		        jmp     CS:AttachDDjumpTable[bx]
+
+				; this function is called at INIT time via the DynamicAPI function.
+				; A positive response is returned only if this is an OEM version AND an OEM
+				; adapter has been initialized by this (the first) load.
+
+ 0017				IsOEMpresent:
+ 0017  B8 2641			        mov     ax,SIGNATURE  ;always return this load's signature
+				 IFDEF OEM
+				 ENDIF
+ 001A  EB 48			        jmp     negative
+
+				; This function keeps a bit map of interrupts used by all loads of the
+				; device driver.  This is used to prevent the call RegisterStackUsage from
+				; being called more than once for each interrupt requested.
+
+				; Positive means that RegisterStackUsage should be called
+ 001C				MarkInterruptUsed:
+ 001C  8B 4E 08			        mov     cx,wModifier
+ 001F  B8 0001			        mov     ax,1
+ 0022  D3 E0			        shl     ax,cl
+ 0024  85 06 0000 E		        test    wInterruptsUsed,ax
+ 0028  75 3A			        jnz     negative
+ 002A  09 06 0000 E		        or      wInterruptsUsed,ax
+ 002E  EB 37			        jmp     positive
+
+				  IFNDEF NO_COMscope
+ 0030				GetSignature:
+ 0030  B8 2641			        mov     ax,SIGNATURE
+ 0033  EB 32			        jmp     positive
+
+				   IFNDEF SHARE
+ 0035				IsTriggered:
+				; test if pager is triggerd, if not, return negative response (cy)
+				; if pager is triggered then mark it untriggered and return positive (nc)
+
+ 0035  80 3E 0000 E 01		        cmp     bOpenTrigger,TRUE
+ 003A  75 28			        jne     negative
+ 003C  C6 06 0000 E 00		        mov     bOpenTrigger,FALSE
+ 0041  EB 24			        jmp     positive
+
+ 0043				OpenPager:
+				; compare current pager count with maximum allowed
+				; if not too many then increment counter and return positive (nc)
+				; otherwise return negative (cy)
+				; the maximum pager count is always returned in AX
+
+ 0043  A1 0000 E		        mov     ax,wMaxPagerCount  ;always returns MAX pager count
+ 0046  39 06 0000 E		        cmp     wPagerOpenCount,ax
+ 004A  73 18			        jae     negative
+ 004C  FF 06 0000 E		        inc     wPagerOpenCount
+ 0050  C6 06 0000 E 01		        mov     bOpenTrigger,TRUE
+ 0055  EB 10			        jmp     positive
+
+ 0057				ClosePager:
+				; If current pager count is zero then return negative (cy).
+				; Otherwise decrement pager count and return positive (nc).
+				; The pager count that was in effect when the function was entered.
+				; is always returned in AX.
+
+ 0057  A1 0000 E		        mov     ax,wPagerOpenCount  ;always return current pager count
+ 005A  0B C0			        or      ax,ax
+ 005C  74 06			        jz      negative
+ 005E  48			        dec     ax
+ 005F  A3 0000 E		        mov     wPagerOpenCount,ax
+ 0062  EB 03			        jmp     positive
+
+				; AX is retained by call gate when the carry flag is set upon return.
+				; AX gets cleared to zero by call gate when the carry flag is cleared
+				; upon return.
+				; AX is retained for all other AttachDD function call returns.
+
+				; A call gate is used by the DynamicAPI function to call a function at
+				; Ring 0.  The DynamicAPI function is used only at INIT time to call the
+				; AttachDD function for the OS$tools device and only to determine
+				; if an OEM device has already been initialized.
+
+				   ENDIF ; NOT SHARE
+				  ENDIF ; NOT NO_COMscope
+ 0064				negative:
+ 0064  F9			        stc
+ 0065  EB 07			        jmp     exit
+
+ 0067				positive:
+ 0067  F8			        clc
+ 0068  8B 5E 0A			        mov     bx,oDataArea
+ 006B  26: 89 07		        mov     WORD PTR ES:[BX],ax
+
+ 006E				exit:
+				        ret
+ 006E  5D		   *	    pop    bp
+ 006F  CB		   *	    ret    00000h
+
+ 0070				AttachDDjumpTable LABEL WORD
+ 0070  0017 R			        WORD    IsOEMpresent
+ 0072  001C R			        WORD    MarkInterruptUsed
+				  IFNDEF NO_COMscope
+ 0074  0030 R			        WORD    GetSignature
+				   IFNDEF SHARE
+ 0076  0043 R			        WORD    OpenPager
+ 0078  0057 R			        WORD    ClosePager
+ 007A  0035 R			        WORD    IsTriggered
+				   ENDIF
+				  ENDIF
+
+ 007C				DDAttachFunction ENDP
+
+ 007C				LocalIDCaccess PROC NEAR USES DS ES CX; AX = function, CX = modifier
+
+ 007C  1E		   *	    push   ds
+ 007D  06		   *	    push   es
+ 007E  51		   *	    push   cx
+ 007F  68 0000 E		        push    OFFSET IDCdata
+ 0082  51			        push    cx
+ 0083  50			        push    ax
+ 0084  1E			        push    ds
+ 0085  07			        pop     es  ; IDC function expects this load's data segment in ES
+ 0086  8E 1E 0000 E		        mov     ds,IDCaccessPDS
+ 008A  26: FF 1E 0000 E		        call    ES:IDCaccessPM
+ 008F  59			        pop     cx
+ 0090  59			        pop     cx
+ 0091  59			        pop     cx  ; popped instead of SUB SP,6 to preserve carry flag
+				        ret
+ 0092  59		   *	    pop    cx
+ 0093  07		   *	    pop    es
+ 0094  1F		   *	    pop    ds
+ 0095  C3		   *	    ret    00000h
+
+ 0096				LocalIDCaccess ENDP ;carry set if error, AX = error code if carry set
+
+ 0096				ExtensionFunction PROC NEAR C USES SI BX CX, oErrorCode:WORD
+				              ;AX still contains who was called - COM, OS$tools, or COMscope
+
+				        LOCAL   pDataAddress:DWORD
+				        LOCAL   pParamAddress:DWORD
+				        LOCAL   wSignature:WORD
+				        LOCAL   wTarget:WORD
+				        LOCAL   wDataLength:WORD
+
+ 0096  55		   *	    push   bp
+ 0097  8B EC		   *	    mov    bp, sp
+ 0099  83 C4 F2		   *	    add    sp, 0FFF2h
+ 009C  56		   *	    push   si
+ 009D  53		   *	    push   bx
+ 009E  51		   *	    push   cx
+ 009F  06			        push    es
+ 00A0  57			        push    di
+ 00A1  89 46 F4			        mov     wTarget,ax       ; save called target
+
+ 00A4  33 C9			        xor     cx,cx            ; use GIOpacketLength
+				        VerifyPacketData
+
+ 00D7  83 E9 04			        sub     cx,TYPE s_stExtensionDataHeader   ;adjust for header
+ 00DA  0F 88 0298		        js      bad_length
+
+ 00DE  89 4E F2			        mov     wDataLength,cx                   ; save count
+
+ 00E1  B9 0008			        mov     cx,TYPE s_stExtensionParams
+				        VerifyPacketParams
+
+ 0115  83 F9 08			        cmp     cx,TYPE s_stExtensionParams
+ 0118  0F 85 025A		        jne     bad_length
+
+ 011C  C4 7E F8			        les     di,pParamAddress
+ 011F  26: 8B 05		        mov     ax,ES:[di].s_stExtensionParams.wSignature
+ 0122  89 46 F6			        mov     wSignature,ax
+ 0125  26: 8B 45 02		        mov     ax,ES:[di].s_stExtensionParams.wCommand
+ 0129  26: 8B 55 04		        mov     dx,ES:[di].s_stExtensionParams.wModifier
+ 012D  26: 8B 4D 06		        mov     cx,ES:[di].s_stExtensionParams.wDataCount
+
+ 0131  3B 4E F2			        cmp     cx,wDataLength
+ 0134  76 03			        jbe     @f
+ 0136  8B 4E F2			        mov     cx,wDataLength
+ 0139				@@:
+ 0139  83 F8 10			        cmp     ax,MAX_EXT_CMD
+ 013C  0F 87 023D		        ja      bad_command
+ 0140  8B D8			        mov     bx,ax
+ 0142  D1 E3			        shl     bx,1
+ 0144  2E: FF A7 03B3 R		        jmp     CS:ExtensionJumpTable[BX]
+
+ 0149				GetPath:                                                ; function 2
+ 0149  0B C9			        or      cx,cx
+ 014B  0F 84 0227		        jz      bad_length
+ 014F  81 F9 0104		        cmp     cx,CCHMAXPATH
+ 0153  76 03			        jna     @f
+ 0155  B9 0104			        mov     cx,CCHMAXPATH
+ 0158				@@:
+ 0158  33 D2			        xor     dx,dx
+ 015A  BE 0000 E		        lea     si,abyPath
+
+ 015D				find_path_end_loop:
+ 015D  80 3C 00			        cmp     BYTE PTR [si],0
+ 0160  74 04			        je      @f
+ 0162  46			        inc     si
+ 0163  42			        inc     dx
+ 0164  E2 F7			        loop    find_path_end_loop
+ 0166				@@:
+ 0166  0B C9			        or      cx,cx
+ 0168  75 0D			        jnz     @f
+ 016A  80 3C 00			        cmp     BYTE PTR [si],0
+ 016D  74 08			        je      @f
+ 016F  B8 0FFC			        mov     ax,EXT_ERROR_BAD_PATH
+ 0172  8B CA			        mov     cx,dx
+ 0174  E9 020B			        jmp     extension_exit
+ 0177				@@:
+ 0177  BE 0000 E		        lea     si,abyPath
+ 017A  8B CA			        mov     cx,dx
+
+ 017C				move_memory:
+ 017C  0B C9			        or      cx,cx
+ 017E  74 0A			        jz      @f
+ 0180  C4 7E FC			        les     di,pDataAddress
+ 0183  83 C7 04			        add     di,TYPE s_stExtensionDataHeader
+ 0186  51			        push    cx
+ 0187  F3/ A4			    rep movsb
+ 0189  59			        pop     cx
+ 018A				@@:
+ 018A  B8 0F00			        mov     ax,EXT_RSP_SUCCESS
+ 018D  E9 01F2			        jmp     extension_exit
+
+ 0190				GetSignature:                                           ; function 7
+ 0190  83 F9 02			        cmp     cx,TYPE WORD
+ 0193  0F 82 01DF		        jb      bad_length
+ 0197  C4 7E FC			        les     di,pDataAddress
+ 019A  B8 2641			        mov     ax,SIGNATURE
+ 019D  83 C7 04			        add     di,TYPE s_stExtensionDataHeader
+ 01A0  26: 89 05		        mov     ES:[di],ax
+ 01A3  B8 0F00			        mov     ax,EXT_RSP_SUCCESS
+ 01A6  E9 01E3			        jmp     accept_sig_exit
+
+				  IFNDEF NO_COMscope
+ 01A9				GetConfigFlags:                                         ; function 6
+ 01A9  83 F9 02			        cmp     cx,TYPE WORD
+ 01AC  0F 82 01C6		        jb      bad_length
+ 01B0  C4 7E FC			        les     di,pDataAddress
+ 01B3  8B 44 08			        mov     ax,[si].s_stDeviceParms.wConfigFlags1
+ 01B6  0B D2			        or      dx,dx                     ;test modifier
+ 01B8  74 03			        jz      @f
+ 01BA  8B 44 0A			        mov     ax,[si].s_stDeviceParms.wConfigFlags2
+ 01BD				@@:
+ 01BD  83 C7 04			        add     di,TYPE s_stExtensionDataHeader
+ 01C0  26: 89 05		        mov     ES:[di],ax
+ 01C3  B8 0F00			        mov     ax,EXT_RSP_SUCCESS
+ 01C6  E9 01B9			        jmp     extension_exit
+
+ 01C9				GetMemory:                                              ; function 0
+				; setup memory object address
+
+ 01C9  0B C9			        or      cx,cx
+ 01CB  0F 84 01A7		        jz      bad_length
+ 01CF  3B 16 0000 E		        cmp     dx,wLastEndOfData
+ 01D3  76 08			        jna     @f
+ 01D5  B8 0FFF			        mov     ax,EXT_ERROR_BAD_MEMORY_TARGET
+ 01D8  33 C9			        xor     cx,cx
+ 01DA  E9 01A5			        jmp     extension_exit
+ 01DD				@@:
+ 01DD  8B F2			        mov     si,dx
+ 01DF  03 D1			        add     dx,cx
+ 01E1  3B 16 0000 E		        cmp     dx,wLastEndOfData
+ 01E5  76 06			        jbe     @f
+ 01E7  8B 0E 0000 E		        mov     cx,wLastEndOfData
+ 01EB  2B CE			        sub     cx,si
+ 01ED				@@:
+ 01ED  EB 8D			        jmp     move_memory
+
+ 01EF				GetDCB:                                                 ; function 1
+ 01EF  81 F9 00F0		        cmp     cx,TYPE s_stDeviceParms
+ 01F3  0F 87 017F		        ja      bad_length
+
+ 01F7  3B 16 0000 E		        cmp     dx,wDeviceCount
+ 01FB  72 08			        jb      @f
+ 01FD  B8 0FFE			        mov     ax,EXT_ERROR_BAD_MODIFIER
+ 0200  33 C9			        xor     cx,cx
+ 0202  E9 017D			        jmp     extension_exit
+ 0205				@@:
+ 0205  B8 00F0			        mov     ax,TYPE s_stDeviceParms
+ 0208  F7 E2			        mul     dx
+ 020A  8B F0			        mov     si,ax
+ 020C  81 C6 0000 E		        add     si,OFFSET stDeviceParms
+ 0210  E9 FF69			        jmp     move_memory
+
+ 0213				GetMemorySize:
+ 0213  83 F9 02			        cmp     cx,TYPE WORD
+ 0216  0F 82 015C		        jb      bad_length
+ 021A  C4 7E FC			        les     di,pDataAddress
+ 021D  A1 0000 E		        mov     ax,wLastEndOfData
+ 0220  83 C7 04			        add     di,TYPE s_stExtensionDataHeader
+ 0223  26: 89 05		        mov     ES:[di],ax
+ 0226  B8 0F00			        mov     ax,EXT_RSP_SUCCESS
+ 0229  E9 0156			        jmp     extension_exit
+
+ 022C				GetVariablesSize:                                       ; function 4
+ 022C  83 F9 02			        cmp     cx,TYPE WORD
+ 022F  0F 82 0143		        jb      bad_length
+ 0233  C4 7E FC			        les     di,pDataAddress
+ 0236  A1 0000 E		        mov     ax,wEndOfData
+ 0239  83 C7 04			        add     di,TYPE s_stExtensionDataHeader
+ 023C  26: 89 05		        mov     ES:[di],ax
+ 023F  B8 0F00			        mov     ax,EXT_RSP_SUCCESS
+ 0242  E9 013D			        jmp     extension_exit
+
+ 0245				GetLoadNumber:
+ 0245  83 F9 02			        cmp     cx,TYPE WORD                            ; function 5
+ 0248  0F 82 012A		        jb      bad_length
+ 024C  C4 7E FC			        les     di,pDataAddress
+ 024F  A1 0000 E		        mov     ax,wCOMiLoadNumber
+ 0252  83 C7 04			        add     di,TYPE s_stExtensionDataHeader
+ 0255  26: 89 05		        mov     ES:[di],ax
+ 0258  B8 0F00			        mov     ax,EXT_RSP_SUCCESS
+ 025B  E9 0124			        jmp     extension_exit
+
+ 025E				GetOEMtype:                                             ; function 8
+ 025E  83 F9 02			        cmp     cx,TYPE WORD
+ 0261  0F 82 0111		        jb      bad_length
+ 0265  C4 7E FC			        les     di,pDataAddress
+ 0268  33 C0			        xor     ax,ax
+ 026A  A0 0000 E		        mov     al,byOEMtype
+ 026D  83 C7 04			        add     di,TYPE s_stExtensionDataHeader
+ 0270  26: 89 05		        mov     ES:[di],ax
+ 0273  B8 0F00			        mov     ax,EXT_RSP_SUCCESS
+ 0276  E9 0113			        jmp     accept_sig_exit
+
+				  IFDEF PAGE_SUPPORT
+ 0279				SetOpenTrigger:                                         ; function 9
+ 0279  F7 46 F4 3000		        test    wTarget,TARGET_OS_tools
+ 027E  75 06			        jnz     @f
+ 0280  B8 0FFA			        mov     ax,EXT_ERROR_BAD_TARGET
+ 0283  E9 00FC			        jmp     extension_exit
+ 0286				@@:
+ 0286  81 7E F6 2641		        cmp     wSignature,SIGNATURE
+ 028B  74 06			        je      @f
+ 028D  B8 F000			        mov     ax,EXT_BAD_SIGNATURE
+ 0290  E9 00F9			        jmp     accept_sig_exit
+ 0293				@@:
+ 0293  B8 0003			        mov     ax,ADD_OPEN_PAGER
+ 0296  E8 FDE3			        call    LocalIDCaccess
+ 0299  9C			        pushf                   ; save flags
+ 029A  83 F9 02			        cmp     cx,TYPE WORD    ; if expecting WORD data return MAX count
+ 029D  72 09			        jb      @f
+ 029F  C4 7E FC			        les     di,pDataAddress
+ 02A2  83 C7 04			        add     di,TYPE s_stExtensionDataHeader
+ 02A5  26: 89 05		        mov     ES:[di],ax
+ 02A8				@@:
+ 02A8  9D			        popf                    ; restore flags
+ 02A9  73 06			        jnc     @f
+ 02AB  B8 0FFA			        mov     ax,EXT_ERROR_BAD_TARGET
+ 02AE  E9 00DB			        jmp     accept_sig_exit
+ 02B1				@@:
+ 02B1  B8 0F00			        mov     ax,EXT_RSP_SUCCESS
+ 02B4  E9 00D5			        jmp     accept_sig_exit
+
+ 02B7				GetMaxDeviceCount:                                      ; function 10
+ 02B7  83 F9 02			        cmp     cx,TYPE WORD
+ 02BA  0F 82 00B8		        jb      bad_length
+ 02BE  C4 7E FC			        les     di,pDataAddress
+ 02C1  A1 0000 E		        mov     ax,wMaxDeviceCount
+ 02C4  83 C7 04			        add     di,TYPE s_stExtensionDataHeader
+ 02C7  26: 89 05		        mov     ES:[di],ax
+ 02CA  B8 0F00			        mov     ax,EXT_RSP_SUCCESS
+ 02CD  E9 00BC			        jmp     accept_sig_exit
+
+ 02D0				SetReadTrigger:                                         ; function 11
+ 02D0  81 7E F6 2641		        cmp     wSignature,SIGNATURE
+ 02D5  74 06			        je      @f
+ 02D7  B8 F000			        mov     ax,EXT_BAD_SIGNATURE
+ 02DA  E9 00AF			        jmp     accept_sig_exit
+ 02DD				@@:
+ 02DD  C6 06 0000 E 01		        mov     bReadTrigger,TRUE
+ 02E2  B8 0F00			        mov     ax,EXT_RSP_SUCCESS
+ 02E5  E9 00A4			        jmp     accept_sig_exit
+
+ 02E8				SetWriteTrigger:                                        ; function 12
+ 02E8  81 7E F6 2641		        cmp     wSignature,SIGNATURE
+ 02ED  74 06			        je      @f
+ 02EF  B8 F000			        mov     ax,EXT_BAD_SIGNATURE
+ 02F2  E9 0097			        jmp     accept_sig_exit
+ 02F5				@@:
+ 02F5  C6 06 0000 E 01		        mov     bWriteTrigger,TRUE
+ 02FA  B8 0F00			        mov     ax,EXT_RSP_SUCCESS
+ 02FD  E9 008C			        jmp     accept_sig_exit
+
+				;  This function can only be called from OS$tools
+				;  therefore it is not necessary to use AttachDD (ADD) function
+
+ 0300				RollSinceBootCounter:                                   ; function 13
+ 0300  F7 46 F4 3000		        test    wTarget,TARGET_OS_tools
+ 0305  75 05			        jnz     @f
+ 0307  B8 0FFA			        mov     ax,EXT_ERROR_BAD_TARGET
+ 030A  EB 76			        jmp     extension_exit
+ 030C				@@:
+ 030C  83 F9 04			        cmp     cx,TYPE DWORD
+ 030F  72 65			        jb      bad_length
+ 0311  C4 7E FC			        les     di,pDataAddress
+ 0314  66| 33 C0		        xor     eax,eax
+ 0317  8B C2			        mov     ax,dx
+ 0319  66| 01 06 0000 E		        add     ulTriggersSinceReboot,eax
+ 031E  66| A1 0000 E		        mov     eax,ulTriggersSinceReboot
+ 0322  83 C7 04			        add     di,TYPE s_stExtensionDataHeader
+ 0325  66| 26: 89 05		        mov     ES:[di],eax
+ 0329  B8 0F00			        mov     ax,EXT_RSP_SUCCESS
+ 032C  EB 54			        jmp     extension_exit
+
+ 032E				GetPagerCounts:                                         ; function 14
+ 032E  83 F9 04			        cmp     cx,TYPE DWORD
+ 0331  72 43			        jb      bad_length
+ 0333  C4 7E FC			        les     di,pDataAddress
+ 0336  A1 0000 E		        mov     ax,wPagerOpenCount
+ 0339  83 C7 04			        add     di,TYPE s_stExtensionDataHeader
+ 033C  26: 89 05		        mov     ES:[di],ax
+ 033F  A1 0000 E		        mov     ax,wMaxPagerCount
+ 0342  83 C7 02			        add     di,2
+ 0345  26: 89 05		        mov     ES:[di],ax
+ 0348  B8 0F00			        mov     ax,EXT_RSP_SUCCESS
+ 034B  EB 3F			        jmp     accept_sig_exit
+				   ENDIF ;PAGE_SUPPORT
+ 034D				ResetRcvBuffHigh:                                       ; function 16
+ 034D  FA			        cli
+ 034E  E8 0000 E		        call    GetReceiveQueueLen
+ 0351  66| 89 8C 00B8		        mov     [si].s_stDeviceParms.dwReadBufferLevel,ecx
+ 0356  66| 89 8C 00B2		        mov     [si].s_stDeviceParms.dwReadBufferHigh,ecx
+ 035B  FB			        sti
+ 035C  EB 24			        jmp     extension_exit
+				  ENDIF ;NO_COMscope
+
+ 035E				GetAdapterType:                                             ; function 17
+ 035E  83 F9 02			        cmp     cx,TYPE WORD
+ 0361  72 13			        jb      bad_length
+ 0363  C4 7E FC			        les     di,pDataAddress
+ 0366  33 C0			        xor     ax,ax
+ 0368  A0 0000 E		        mov     al,byAdapterType
+ 036B  83 C7 04			        add     di,TYPE s_stExtensionDataHeader
+ 036E  26: 89 05		        mov     ES:[di],ax
+ 0371  B8 0F00			        mov     ax,EXT_RSP_SUCCESS
+ 0374  EB 16			        jmp     accept_sig_exit
+
+ 0376				bad_length:
+ 0376  B8 0FFB			        mov     ax,EXT_ERROR_BAD_LENGTH
+ 0379  33 C9			        xor     cx,cx
+ 037B  EB 05			        jmp     extension_exit
+
+ 037D				bad_command:
+ 037D  B8 0FFD			        mov     ax,EXT_ERROR_BAD_COMMAND
+ 0380  33 C9			        xor     cx,cx
+
+ 0382				extension_exit:
+ 0382  81 7E F6 2641		        cmp     wSignature,SIGNATURE
+ 0387  74 03			        je      accept_sig_exit
+ 0389  0D F000			        or      ax,EXT_BAD_SIGNATURE
+
+ 038C				accept_sig_exit:
+ 038C  C4 7E FC			        les     di,pDataAddress
+ 038F  26: 89 05		        mov     ES:[di].s_stExtensionDataHeader.wReturnCode,ax
+ 0392  26: 89 4D 02		        mov     ES:[di].s_stExtensionDataHeader.wByteCount,cx
+ 0396  83 C1 04			        add     cx,TYPE s_stExtensionDataHeader
+ 0399  EB 0B			        jmp     exit
+
+ 039B				error:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 03A4  33 C9			        xor     cx,cx
+
+ 03A6				exit:
+ 03A6  5F			        pop     di
+ 03A7  07			        pop     es
+ 03A8  26: 89 4D 1B		        mov     ES:[di].s_stPacket.GIOpacket.GIOdataLength,cx ;Length of the data into count
+				        ret
+ 03AC  59		   *	    pop    cx
+ 03AD  5B		   *	    pop    bx
+ 03AE  5E		   *	    pop    si
+ 03AF  8B E5		   *	    mov    sp, bp
+ 03B1  5D		   *	    pop    bp
+ 03B2  C3		   *	    ret    00000h
+
+ 03B3				ExtensionJumpTable LABEL WORD
+				  IFNDEF NO_COMscope
+ 03B3  01C9 R			        WORD    GetMemory
+ 03B5  01EF R			        WORD    GetDCB
+ 03B7  0149 R			        WORD    GetPath
+ 03B9  0213 R			        WORD    GetMemorySize
+ 03BB  022C R			        WORD    GetVariablesSize
+ 03BD  0245 R			        WORD    GetLoadNumber
+ 03BF  01A9 R			        WORD    GetConfigFlags
+ 03C1  0190 R			        WORD    GetSignature
+ 03C3  025E R			        WORD    GetOEMtype
+				   IFDEF PAGE_SUPPORT
+ 03C5  0279 R			        WORD    SetOpenTrigger
+ 03C7  02B7 R			        WORD    GetMaxDeviceCount
+ 03C9  02D0 R			        WORD    SetReadTrigger
+ 03CB  02E8 R			        WORD    SetWriteTrigger
+ 03CD  0300 R			        WORD    RollSinceBootCounter
+ 03CF  032E R			        WORD    GetPagerCounts
+				   ELSE
+				   ENDIF
+ 03D1  034D R			        WORD    ResetRcvBuffHigh
+ 03D3  035E R			        WORD    GetAdapterType
+ 03D5  037D R			        WORD    bad_command             ; 18
+				  ELSE
+				  ENDIF
+
+ 03D7				ExtensionFunction ENDP
+
+ 03D7				RES_CODE ENDS
+
+				    END

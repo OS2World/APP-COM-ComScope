@@ -1,0 +1,56 @@
+:TARGET.SUFFIXES
+:DEPENDENCY..c .obj .rc .res 
+:TARGET.all
+:DEPENDENCY.
+.\spooltest.exe
+:RULE..c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Tl1 /DINCLUDE_COMDD /DDEBUGGER=1 /Sp1 /Sd /Ss /Q /Wall /Tx /Ti /W2 /Gm /Gd /Tm /Ms /Gf /Ft- /Gu /C %s
+:RULE.{P:\spooler\extra}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Tl1 /DINCLUDE_COMDD /DDEBUGGER=1 /Sp1 /Sd /Ss /Q /Wall /Tx /Ti /W2 /Gm /Gd /Tm /Ms /Gf /Ft- /Gu /C %s
+:RULE..rc.res
+:ACTION.Compile::Resource Compiler
+:COMMAND.
+rc.exe -r %s %|dpfF.RES
+:RULE.{P:\spooler\extra}.rc.res
+:ACTION.Compile::Resource Compiler
+:COMMAND.
+rc.exe -r %s %|dpfF.RES
+:TARGET..\spooltest.exe
+:DEPENDENCY.
+.\serialt.obj
+.\serialt.res
+{$(LIB)}UTIL_DEB.lib
+{$(LIB)}IOCTLDEB.lib
+{$(LIB)}spooltest.def
+spooltest.mak
+:ACTION.Link::Linker
+:COMMAND.
+icc.exe @<<
+ /B" /de /dbgpack /m"
+ /Fespooltest.exe 
+ UTIL_DEB.lib 
+ IOCTLDEB.lib 
+ spooltest.def
+ .\serialt.obj
+<<
+:ACTION.Bind::Resource Bind
+:COMMAND.
+rc.exe .\serialt.res spooltest.exe
+:ACTION.Bind::Resource Bind
+:COMMAND.
+rc.exe .\serialt.res spooltest.exe
+:TARGET..\serialt.obj
+:DEPENDENCY.
+P:\spooler\extra\serialt.c
+{P:\spooler\extra;$(INCLUDE);}menu.h
+spooltest.mak
+:TARGET..\serialt.res
+:DEPENDENCY.
+P:\spooler\extra\serialt.rc
+{P:\spooler\extra;$(INCLUDE)}COMspool.ICO
+{P:\spooler\extra;$(INCLUDE)}menu.h
+spooltest.mak

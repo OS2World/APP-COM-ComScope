@@ -1,0 +1,31 @@
+:TARGET.SUFFIXES
+:TARGET.SUFFIXES
+:DEPENDENCY..c .obj 
+:TARGET.all
+:DEPENDENCY.
+.\MakeProf.exe
+:RULE..c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Fo$*.obj /Sp1 /Sd /Ss /Q /Wall /Tx /Fi /Si /Ti /W2 /Gm /Tm /Ms /Gf /Gi /Ft- /Gu /C %s
+:RULE.{P:\install\makeprofile}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Fo$*.obj /Sp1 /Sd /Ss /Q /Wall /Tx /Fi /Si /Ti /W2 /Gm /Tm /Ms /Gf /Gi /Ft- /Gu /C %s
+:TARGET..\MakeProf.exe
+:DEPENDENCY.
+.\makeprof.obj
+p:\install\makeprofile\makeprof.def
+MakeProf.mak
+:ACTION.Link::Linker
+:COMMAND.
+icc.exe @<<
+ /Q /B" /de /dbgpack /nobase /nop      /m /l"
+ /FeMakeProf.exe 
+ p:\install\makeprofile\makeprof.def
+ .\makeprof.obj
+<<
+:TARGET..\makeprof.obj
+:DEPENDENCY.
+P:\install\makeprofile\makeprof.c
+MakeProf.mak

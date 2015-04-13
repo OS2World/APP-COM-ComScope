@@ -1,0 +1,119 @@
+:TARGET.SUFFIXES
+:TARGET.SUFFIXES
+:DEPENDENCY..asm .c .obj 
+:TARGET.all
+:DEPENDENCY.
+.\va_large.sys
+:RULE..c.obj
+:ACTION.Compile::C Compiler (cl)
+:COMMAND.
+cl.exe cl.exe /c  /Fo$*.obj /Gs /Od /Asfw /G2 /Zp /BATCH /nologo /NT_TEXT /Fc %s
+:RULE.{p:\comi}.c.obj
+:ACTION.Compile::C Compiler (cl)
+:COMMAND.
+cl.exe cl.exe /c  /Fo$*.obj /Gs /Od /Asfw /G2 /Zp /BATCH /nologo /NT_TEXT /Fc %s
+:RULE.{p:\comi\debug}.c.obj
+:ACTION.Compile::C Compiler (cl)
+:COMMAND.
+cl.exe cl.exe /c  /Fo$*.obj /Gs /Od /Asfw /G2 /Zp /BATCH /nologo /NT_TEXT /Fc %s
+:RULE..asm.obj
+:ACTION.Compile::Assembler (ml)
+:COMMAND.
+ml.exe /c /Cp /W2 /Sn /Fl /Zf /Zp1 /nologo /Fo$*.obj %s
+:RULE.{p:\comi}.asm.obj
+:ACTION.Compile::Assembler (ml)
+:COMMAND.
+ml.exe /c /Cp /W2 /Sn /Fl /Zf /Zp1 /nologo /Fo$*.obj %s
+:RULE.{p:\comi\debug}.asm.obj
+:ACTION.Compile::Assembler (ml)
+:COMMAND.
+ml.exe /c /Cp /W2 /Sn /Fl /Zf /Zp1 /nologo /Fo$*.obj %s
+:TARGET..\va_large.sys
+:DEPENDENCY.
+.\va_large.obj
+.\Utility.obj
+.\IniAccess.obj
+.\Message.obj
+.\RMhelp.obj
+.\sprintf_large.obj
+.\Write.obj
+.\COMDD.obj
+.\C_Init.obj
+.\DataSegment.obj
+.\ExtenFuncs.obj
+.\HdwTest.obj
+.\Init.obj
+.\InitUtil.obj
+.\Interrupt.obj
+.\IOCTL.obj
+.\MCA.obj
+.\PCI.obj
+.\ProcessFlags.obj
+.\Read.obj
+.\Util.obj
+:ACTION.Link::Linker (16 bit)
+:COMMAND.
+f:\ibmcpp\dtools\link.exe /NOI /NOE /NOD /STACK:0  /BATCH /nologo /NOP /M /NOF .\va_large.obj .\Utility.obj .\IniAccess.obj .\Message.obj .\RMhelp.obj .\sprintf_large.obj .\Write.obj .\COMDD.obj .\C_Init.obj .\DataSegment.obj .\ExtenFuncs.obj .\HdwTest.obj .\Init.obj .\InitUtil.obj .\Interrupt.obj .\IOCTL.obj .\MCA.obj .\PCI.obj .\ProcessFlags.obj .\Read.obj .\Util.obj, Debug_.sys,,,
+:TARGET..\sprintf_large.obj
+:DEPENDENCY.
+p:\comi\sprintf_large.c
+:TARGET..\RMhelp.obj
+:DEPENDENCY.
+p:\comi\RMhelp.c
+:TARGET..\Message.obj
+:DEPENDENCY.
+p:\comi\Message.c
+:TARGET..\IniAccess.obj
+:DEPENDENCY.
+p:\comi\IniAccess.c
+:TARGET..\Utility.obj
+:DEPENDENCY.
+p:\comi\Utility.c
+:TARGET..\va_large.obj
+:DEPENDENCY.
+p:\comi\va_large.asm
+:TARGET..\Util.obj
+:DEPENDENCY.
+p:\comi\Util.asm
+:TARGET..\Read.obj
+:DEPENDENCY.
+p:\comi\Read.asm
+:TARGET..\ProcessFlags.obj
+:DEPENDENCY.
+p:\comi\ProcessFlags.asm
+:TARGET..\PCI.obj
+:DEPENDENCY.
+p:\comi\PCI.asm
+:TARGET..\MCA.obj
+:DEPENDENCY.
+p:\comi\MCA.asm
+:TARGET..\IOCTL.obj
+:DEPENDENCY.
+p:\comi\IOCTL.ASM
+:TARGET..\Interrupt.obj
+:DEPENDENCY.
+p:\comi\Interrupt.asm
+:TARGET..\InitUtil.obj
+:DEPENDENCY.
+p:\comi\InitUtil.asm
+:TARGET..\Init.obj
+:DEPENDENCY.
+p:\comi\Init.asm
+:TARGET..\HdwTest.obj
+:DEPENDENCY.
+p:\comi\HdwTest.asm
+:TARGET..\ExtenFuncs.obj
+:DEPENDENCY.
+p:\comi\ExtenFuncs.asm
+:TARGET..\DataSegment.obj
+:DEPENDENCY.
+p:\comi\DataSegment.asm
+:TARGET..\C_Init.obj
+:DEPENDENCY.
+p:\comi\C_Init.asm
+:TARGET..\COMDD.obj
+:DEPENDENCY.
+p:\comi\COMDD.ASM
+:TARGET..\Write.obj
+:DEPENDENCY.
+p:\comi\Write.asm

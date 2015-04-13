@@ -1,0 +1,11 @@
+By installing and using these OS/tools' programs (the Software), you agree to the following (Agreement):
+
+These demonstration versions of COMi, COMscope, COMspool, Control, and Install are the property of OS/tools Incorporated and are licensed for use by you for demonstration purposes only.
+
+You may not use, modify the Software, or any copy, in whole or in part, except as expressly provided for in this Agreement.  You may not decompile, disassemble, or reverse engineer the Software.  Any attempt to transfer any of the rights, duties, or obligations hereunder except as expressly provided for in this Agreement is void.  You are free to distribute, or electronically transmit these demonstration versions of the Software as long as you distribute all of the files included here.  You agree to comply with U.S. export regulations, when applicable.
+
+OS/tools does not warrant that the Software will meet your requirements, that operation of the Software will be uninterrupted or error-free, or that all errors will be corrected.
+
+Well, at least the lawyers are happy, now.  We hope you will be too.
+
+

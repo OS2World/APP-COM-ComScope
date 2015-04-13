@@ -1,0 +1,51 @@
+# PDA_DEB.mak
+# Created by IBM WorkFrame/2 MakeMake at 12:38:30 on 21 Jan 1998
+#
+# The actions included in this make file are:
+#  Compile::C++ Compiler
+#  Link::Linker
+
+.SUFFIXES:
+
+.SUFFIXES: .c .obj 
+
+.all: \
+    p:\lib\PDA_DEB.DLL
+
+.c.obj:
+    @echo " Compile::C++ Compiler "
+    icc.exe /Fo$*.obj /Tl1 /DDEBUG=2 /Sp1 /Sd /Ss /Q /Wall /Tx /Fi /Si /Ti /W2 /Gm /Gd /Ge- /Gn /Tm /Ms /Gf /Gi /Ft- /Gu /C %s
+
+{p:\include}.c.obj:
+    @echo " Compile::C++ Compiler "
+    icc.exe /Fo$*.obj /Tl1 /DDEBUG=2 /Sp1 /Sd /Ss /Q /Wall /Tx /Fi /Si /Ti /W2 /Gm /Gd /Ge- /Gn /Tm /Ms /Gf /Gi /Ft- /Gu /C %s
+
+{P:\Install\pda\Debug}.c.obj:
+    @echo " Compile::C++ Compiler "
+    icc.exe /Fo$*.obj /Tl1 /DDEBUG=2 /Sp1 /Sd /Ss /Q /Wall /Tx /Fi /Si /Ti /W2 /Gm /Gd /Ge- /Gn /Tm /Ms /Gf /Gi /Ft- /Gu /C %s
+
+{P:\Install\pda}.c.obj:
+    @echo " Compile::C++ Compiler "
+    icc.exe /Fo$*.obj /Tl1 /DDEBUG=2 /Sp1 /Sd /Ss /Q /Wall /Tx /Fi /Si /Ti /W2 /Gm /Gd /Ge- /Gn /Tm /Ms /Gf /Gi /Ft- /Gu /C %s
+
+p:\lib\PDA_DEB.DLL: \
+    .\comi.obj \
+    {$(LIB)}OS2LSRTL.lib \
+    {$(LIB)}CPPOM30O.lib \
+    {$(LIB)}OS2386.lib \
+    {$(LIB)}UTIL_DEB.lib \
+    p:\install\pda\pda_inst.def \
+    PDA_DEB.mak
+    @echo " Link::Linker "
+    icc.exe @<<
+     /Q /B" /de /dbgpack      /noe /m /l /nod"
+     /Fe"p:\lib\PDA_DEB.DLL" 
+     OS2LSRTL.lib 
+     CPPOM30O.lib 
+     OS2386.lib 
+     UTIL_DEB.lib 
+     p:\install\pda\pda_inst.def
+     .\comi.obj
+<<
+
+!include "PDA_DEB.DEP"

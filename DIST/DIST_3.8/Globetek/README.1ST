@@ -1,0 +1,71 @@
+COMi Installation and Configuration
+
+To install the Globetek COMi asynchronous serial device driver, do one of the
+following:
+
+Method One:
+
+1. Open the OS/2 System folder
+
+2. Open the Drives folder
+
+3. Double click on the drive you inserted the distribution diskette.
+
+4. Double click on the INSTALL.EXE icon.
+
+5. Once INSTALL is loaded, use the "Install..." menu item to setup the
+   installation for your system requirements and transfer the required
+   files to your system.
+
+    Select "Installation | Install..."
+
+6. Use the "Configuration | COMi..." menu item to configure the COMi 
+   device driver. The configuration process has plenty of on-line help
+   to help with setting up COMi.
+
+7. Shutdown and re-boot your system.
+
+Method Two:
+
+1. Open an OS/2 command prompt session.
+
+2. Make the disk drive containing the distribution diskette the default drive.
+
+    Example:  [C:\]A: <ENTER>
+              (assuming the distribution diskette is in drive A:)
+
+3. Start INSTALL.EXE by typing INSTALL <ENTER>
+
+4. Follow the instructions from item five, above.
+
+COMi and INSTALL are the property of OS/tools Incorporated and are
+copyrighted (c) 1989-95 by OS/tools Incorporated, with all rights reserved.
+
+These programs are licensed to you on a per machine basis.  One license is 
+required for each computer on which they are installed.  
+
+We know nothing and are responsible for nothing, except for any increased 
+productivity and/or pleasure brought about by the use of these programs.  This
+is the only disclaimer you have to read.
+
+For additional information about the COMi device driver and other OS/tools
+products please contact:  
+
+OS/tools Incorporated
+P.O.Box 246
+Gilroy, CA  94021
+Phone: (500)446-7257, FAX: (408)84707480, BBS: (408)847-7484
+Internet: products@os-tools.com or URL: http://www.os-tools.com
+
+For more information on products from Globetek please contact:  
+
+Globetek Incorporated
+3505 East Royalton Road, Suite 160
+Broadview Heights, OH  44147-2998
+Phone (800)229-4640 FAX (216)526-8817 
+
+OS/tools, COMscope, COMspool, and COMi are trademarks of OS/tools Incorporated.
+
+OS/2 is a trademark of International Business Machines, Incorporated.
+
+

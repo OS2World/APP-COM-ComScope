@@ -1,0 +1,12 @@
+
+.\comi.obj: \
+    p:\Install\PDA\comi.c \
+    {p:\Install\PDA;$(INCLUDE);}COMMON.H \
+    {p:\Install\PDA;$(INCLUDE);}utility.h \
+    {p:\Install\PDA;$(INCLUDE);}CONFIG.H \
+    {p:\Install\PDA;$(INCLUDE);}help.h \
+    p:\install\install.h \
+    p:\install\resource.h
+
+f:\work\\lib\PDA_inst.LIB: \
+   f:\work\lib\PDA_inst.dll

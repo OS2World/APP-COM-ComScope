@@ -1,0 +1,41 @@
+This is a profile make file for Quick Install
+
+Install DD  - Causes 'Load Count' DEVICE=DestPath\string lines to be added 
+Remove DD   - Causes lines with this string to be REMed out
+Original DD - Causes DEVICE=string to be added if is does not already exist
+              without a REM in front.  The drive letter is modified to equal
+              the boot drive.
+
+to not 'Install DD' make 'Load Count' = 0
+to not 'Remove DD' do not include 'Remove DD' key
+to not add 'Original DD' do not include 'Original DD key
+
+[COMi]
+Install DD=COMDD.SYS;
+Load Count=1
+Remove DD=SIO.SYS;
+Original DD=C:\OS2\BOOT\COM.SYS;
+DD Name=COMi;
+Config=INSTALL.EXE;
+Config Help=CONFIG.HLP;
+INF=COMi.INF;
+Version=COMi version 3.60 R;
+Files=11
+File_1=COMDD.INI;
+File_2=COMDD.SYS;
+File_3=COMi.INF;
+File_4=INSTALL.EXE;
+File_5=INSTALL.HLP;
+File_6=INSTALL.ICO;
+File_7=C215MT.DLL;
+File_8=OS2LS_UT.DLL;
+File_9=COMi_CFG.DLL;
+File_10=CONFIG.HLP;
+File_11=OS_tools.ini;
+[Install]
+bConfigurationOnly=1
+False Start 1=This is not the installation program!  Run QINST.EXE to install the COMi device driver.;
+False Start 2=The COMi device driver is not loaded!  Run QINST.EXE to install the COMi device driver, or shutdown and re-boot your machine if you have already run QINST.;
+
+
+

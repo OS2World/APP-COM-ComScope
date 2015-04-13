@@ -1,0 +1,74 @@
+:TARGET.SUFFIXES
+:TARGET.SUFFIXES
+:DEPENDENCY..LIB .c .dll .obj 
+:TARGET.all
+:DEPENDENCY.
+p:\lib\PDA_DEB.LIB
+:RULE..c.asm
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Sp1 /Ss /Q /Tx /Fi /Si /Ti /Op- /W1 /Gm /Gd /Ge- /G4 /Gn /Tm /Ms /Gf /Gi /Ft- /Gu /Fa /C %s
+:RULE.{p:\Install\PDA}.c.asm
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Sp1 /Ss /Q /Tx /Fi /Si /Ti /Op- /W1 /Gm /Gd /Ge- /G4 /Gn /Tm /Ms /Gf /Gi /Ft- /Gu /Fa /C %s
+:RULE.{p:\Install\PDA\debug}.c.asm
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Sp1 /Ss /Q /Tx /Fi /Si /Ti /Op- /W1 /Gm /Gd /Ge- /G4 /Gn /Tm /Ms /Gf /Gi /Ft- /Gu /Fa /C %s
+:RULE..c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Sp1 /Ss /Q /Tx /Fi /Si /Ti /Op- /W1 /Gm /Gd /Ge- /G4 /Gn /Tm /Ms /Gf /Gi /Ft- /Gu /Fa /C %s
+:RULE.{p:\Install\PDA}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Sp1 /Ss /Q /Tx /Fi /Si /Ti /Op- /W1 /Gm /Gd /Ge- /G4 /Gn /Tm /Ms /Gf /Gi /Ft- /Gu /Fa /C %s
+:RULE.{p:\Install\PDA\debug}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Sp1 /Ss /Q /Tx /Fi /Si /Ti /Op- /W1 /Gm /Gd /Ge- /G4 /Gn /Tm /Ms /Gf /Gi /Ft- /Gu /Fa /C %s
+:RULE..dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe /NOLOGO p:\lib\%|fF.LIB %s
+:RULE.{p:\Install\PDA}.dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe /NOLOGO p:\lib\%|fF.LIB %s
+:RULE.{p:\Install\PDA\debug}.dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe /NOLOGO p:\lib\%|fF.LIB %s
+:TARGET.p:\lib\PDA_DEB.dll
+:DEPENDENCY.
+.\comi.obj
+{$(LIB)}OS2LSRTL.lib
+{$(LIB)}OS2386.lib
+{$(LIB)}CPPOM30O.lib
+{$(LIB)}UTIL_DEB.lib
+.\\..\PDA_DEB.def
+:ACTION.Link::Linker
+:COMMAND.
+icc.exe @<<
+ /Q /B" /de /nobase /nop      /noe /m /l /nod"
+ /Fe"p:\lib\PDA_DEB.dll" 
+ OS2LSRTL.lib 
+ OS2386.lib 
+ CPPOM30O.lib 
+ UTIL_DEB.lib 
+ .\\..\PDA_DEB.def
+ .\comi.obj
+<<
+:TARGET..\comi.asm .\comi.obj
+:DEPENDENCY.
+p:\Install\PDA\comi.c
+{p:\Install\PDA;$(INCLUDE);}COMMON.H
+{p:\Install\PDA;$(INCLUDE);}utility.h
+{p:\Install\PDA;$(INCLUDE);}CONFIG.H
+{p:\Install\PDA;$(INCLUDE);}help.h
+p:\install\install.h
+p:\install\resource.h
+:TARGET.p:\lib\PDA_DEB.LIB
+:DEPENDENCY.
+p:\lib\PDA_DEB.dll

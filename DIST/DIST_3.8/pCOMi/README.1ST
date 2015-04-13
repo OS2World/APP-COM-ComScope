@@ -1,0 +1,101 @@
+Personal COMi Installation and Configuration
+
+  NOTE on interrupt sharing:
+    COMi supports shared interrupts on ISA serial adapter boards from several
+    manufactures.  Look in the on-line COMi User Guide under the heading 
+    "System and Adapter Support" for a list of tested adapters, and under
+    "Installing ISA Serial Adapters | Shared Interrupt Adapter Types" for a
+    description of the required features to support shared interrupts on an ISA
+    machine.  By default, a book object will be created for the COMi Users Guide
+    during the installation process.
+
+    There are no interrupt restrictions on MCA machines, though we do not
+    recommend installing more that eight devices on a single interrupt, or
+    sharing interrupts across COMi loads.
+
+To install the Personal COMi asynchronous serial device driver do one of the
+following:
+
+Method One:
+
+1. Open the OS/2 System folder
+
+2. Open the Drives folder
+
+3. Double click on the drive that contains the distribution diskette.
+
+4. Double click on the INSTALL.EXE icon.
+
+5. Once INSTALL is loaded, use the "Install..." menu item to setup the
+   installation for your system requirements and transfer the required
+   files to your system.
+
+    Select "Installation | Install..."
+
+6. Use the "Configuration | COMi..." menu item to configure the COMi 
+   device driver.  The configuration process has plenty of on-line help
+   to help with setting up COMi.
+
+7. Shutdown and re-boot your system.
+
+Method Two:
+
+1. Open an OS/2 command prompt session.
+
+2. Make the disk drive containing the distribution diskette the default drive.
+
+    Example:  [C:\]A: [ENTER)
+              (assuming the distribution diskette is in drive A:)
+
+3. Start INSTALL.EXE by typing INSTALL [ENTER]
+
+4. Follow the instructions from item five, above.
+
+Once installed, you may use INSTALL at any time to change the configuration
+of the Personal COMi device driver and any device controlled by COMi.  Any
+changes you make will require a re-boot to take effect.  Print spooler,
+COMscope, SafePage, and QuickPage support is not included with the Personal
+version of COMi
+
+Your distribution diskette contains the file IOCTL.C.  IOCTL.C
+contains "C" source code sample functions for most of the DosDevIOCtl
+functions defined for Category One Asynchronous Serial Devices as defined in
+the "Physical Device Driver Technical Reference".
+
+Personal COMi, COMi, and INSTALL are the property of OS/tools Incorporated and 
+are copyrighted (c) 1989-95 by OS/tools Incorporated with all rights reserved.
+
+The Personal version of COMi provides complete support for up to four
+additional serial devices.  You may use this device driver for your personal
+use, only.  You may not distribute this device driver commercially or as part
+of any commercial product.  An optional registration fee of $10.00 will
+entitle you to support and free updates of Personal COMi.  Upon registration
+you will be provided, upon request, with access to our BBS.  You will then
+be able to download the complete source code for a PM communications test and
+debug application. You will also be given access to the registered version of
+Personal COMi.  The registered version supports 16650 and 16654 UARTS.
+
+The Generally Available (GA) version of COMi supports up to 99 serial devices
+in a single machine.  It also supports COMscope, COMspool, SafePage, PageStar,
+and QuickPage.  COMi GA also has support for 16654 and 16750 UARTs and baud 
+rates to 460.8K BPS.
+
+We know nothing and are responsible for nothing, except for any increased
+productivity and/or pleasure brought about by the use of these programs.  This
+is the only disclaimer you have to read.
+
+For additional information about COMscope, COMspool, the COMi device
+driver, or other OS/tools products please contact:
+
+OS/tools Incorporated
+P.O.Box 246
+Gilroy, CA  95021
+Phone: (500)446-7257, FAX: (408)847-7480, BBS: (408)847-7484
+Internet: products@os-tools.com or URL: http://www.os-tools.com
+
+OS/tools, COMscope, COMspool, COMi, SafePage, and QuickPage are trademarks of
+OS/tools Incorporated.
+
+OS/2 is a trademark of International Business Machines, Incorporated.
+
+

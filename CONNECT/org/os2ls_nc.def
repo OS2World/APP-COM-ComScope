@@ -1,0 +1,11 @@
+LIBRARY OS2LS_NC
+
+DESCRIPTION 'OS/tools Aerial Client Messaging library'
+
+EXPORTS
+  InitCOM
+  SendRequest
+  StopCOM
+  EnableDebug
+
+

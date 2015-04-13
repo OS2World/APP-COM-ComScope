@@ -1,0 +1,63 @@
+
+.\sprintf_large.obj: \
+    p:\comi\sprintf_large.c
+
+.\RMhelp.obj: \
+    p:\comi\RMhelp.c
+
+.\Message.obj: \
+    p:\comi\Message.c
+
+.\IniAccess.obj: \
+    p:\comi\IniAccess.c
+
+.\Utility.obj: \
+    p:\comi\Utility.c
+
+.\va_large.obj: \
+    p:\comi\va_large.asm
+
+.\Util.obj: \
+    p:\comi\Util.asm
+
+.\Read.obj: \
+    p:\comi\Read.asm
+
+.\ProcessFlags.obj: \
+    p:\comi\ProcessFlags.asm
+
+.\PCI.obj: \
+    p:\comi\PCI.asm
+
+.\MCA.obj: \
+    p:\comi\MCA.asm
+
+.\IOCTL.obj: \
+    p:\comi\IOCTL.ASM
+
+.\Interrupt.obj: \
+    p:\comi\Interrupt.asm
+
+.\InitUtil.obj: \
+    p:\comi\InitUtil.asm
+
+.\Init.obj: \
+    p:\comi\Init.asm
+
+.\HdwTest.obj: \
+    p:\comi\HdwTest.asm
+
+.\ExtenFuncs.obj: \
+    p:\comi\ExtenFuncs.asm
+
+.\DataSegment.obj: \
+    p:\comi\DataSegment.asm
+
+.\C_Init.obj: \
+    p:\comi\C_Init.asm
+
+.\COMDD.obj: \
+    p:\comi\COMDD.ASM
+
+.\Write.obj: \
+    p:\comi\Write.asm

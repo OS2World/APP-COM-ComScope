@@ -1,0 +1,79 @@
+:TARGET.SUFFIXES
+:TARGET.SUFFIXES
+:DEPENDENCY..LIB .c .dll .obj 
+:TARGET.all
+:DEPENDENCY.
+.\\..\..\lib\\PROFDEB.LIB
+p:\profile\\..\lib\\PROFDEB.LIB
+:RULE..c.asm
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /DDEBUG=1 /Sp1 /Sd /Ss /Q /Tx /Fi /Si /Ti /Op- /W1 /Gm /Gd /Ge- /G4 /Gn /Tm /Ms /Gf /Gi /Ft- /Fa /C %s
+:RULE.{p:\profile}.c.asm
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /DDEBUG=1 /Sp1 /Sd /Ss /Q /Tx /Fi /Si /Ti /Op- /W1 /Gm /Gd /Ge- /G4 /Gn /Tm /Ms /Gf /Gi /Ft- /Fa /C %s
+:RULE.{p:\profile\debug}.c.asm
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /DDEBUG=1 /Sp1 /Sd /Ss /Q /Tx /Fi /Si /Ti /Op- /W1 /Gm /Gd /Ge- /G4 /Gn /Tm /Ms /Gf /Gi /Ft- /Fa /C %s
+:RULE..c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /DDEBUG=1 /Sp1 /Sd /Ss /Q /Tx /Fi /Si /Ti /Op- /W1 /Gm /Gd /Ge- /G4 /Gn /Tm /Ms /Gf /Gi /Ft- /Fa /C %s
+:RULE.{p:\profile}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /DDEBUG=1 /Sp1 /Sd /Ss /Q /Tx /Fi /Si /Ti /Op- /W1 /Gm /Gd /Ge- /G4 /Gn /Tm /Ms /Gf /Gi /Ft- /Fa /C %s
+:RULE.{p:\profile\debug}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /DDEBUG=1 /Sp1 /Sd /Ss /Q /Tx /Fi /Si /Ti /Op- /W1 /Gm /Gd /Ge- /G4 /Gn /Tm /Ms /Gf /Gi /Ft- /Fa /C %s
+:RULE..dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe /NOLOGO %|dpF\%|fF.LIB %s
+:RULE.{p:\profile}.dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe /NOLOGO %|dpF\%|fF.LIB %s
+:RULE.{p:\profile\debug}.dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe /NOLOGO %|dpF\%|fF.LIB %s
+:TARGET.p:\profile\\..\lib\PROFDEB.dll .\\..\..\lib\PROFDEB.dll
+:DEPENDENCY.
+.\profile.obj
+p:\profile\Profile.Res
+{$(LIB)}OS2LSRTL.lib
+{$(LIB)}OS2386.lib
+{$(LIB)}CPPOM30O.lib
+{$(LIB)}UTIL_DEB.lib
+.\\..\PROFDEB.def
+:ACTION.Link::Linker
+:COMMAND.
+icc.exe @<<
+ /Q /B" /de /nop      /noe /m /nod"
+ /Fe".\\..\..\lib\PROFDEB.dll" 
+ OS2LSRTL.lib 
+ OS2386.lib 
+ CPPOM30O.lib 
+ UTIL_DEB.lib 
+ .\\..\PROFDEB.def
+ .\profile.obj
+<<
+:ACTION.Bind::Resource Bind
+:COMMAND.
+rc.exe p:\profile\Profile.Res p:\profile\\..\lib\PROFDEB.dll
+:TARGET..\profile.asm .\profile.obj
+:DEPENDENCY.
+p:\profile\profile.c
+{p:\profile;$(INCLUDE);}COMMON.H
+{p:\profile;$(INCLUDE);}profile.h
+{p:\profile;$(INCLUDE);}UTILITY.H
+:TARGET..\\..\..\lib\\PROFDEB.LIB
+:DEPENDENCY.
+.\\..\..\lib\PROFDEB.dll
+:TARGET.p:\profile\\..\lib\\PROFDEB.LIB
+:DEPENDENCY.
+p:\profile\\..\lib\PROFDEB.dll

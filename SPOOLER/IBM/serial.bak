@@ -1,0 +1,109 @@
+PWB-GENERATED FILE: DO NOT MODIFY
+[shared-]
+	version=2
+	project="P:\SERIAL\IBM\serial.mak"
+	buildmode=3
+[edit-]
+	srch=
+	fSrchRe=0
+	rpl=
+	src=
+	fRplRe=0
+[pwb]
+	screen=60 80
+	winstyle=7
+	wnd=C 2 1 59 80
+[environ]
+	PATH=w:\v70\binp;w:\v60\masm\binp;c:\os2;
+	INCLUDE=w:\TOOLKIT30\SOM\INCLUDE;w:\TOOLKIT30\H;.;w:\TOOLKIT30\INC;
+	LIB=w:\TOOLKIT30\LIB;w:\TOOLKIT30\SOM\LIB;
+	HELPFILES=
+[build]
+    build: macro DEBUG "0"
+    build: macro PWBRMAKE "pwbrmake"
+    build: macro NMAKEBSC1 "set"
+    build: macro NMAKEBSC2 "nmake"
+    build: macro CC "cl"
+    build: macro CFLAGS_G "/W2 /Zp /ML /ALw /G2 /D_MT /BATCH"
+    build: macro CFLAGS_D "/Gs /Gi$(PROJ).mdt /Zi /Od /FPa"
+    build: macro CFLAGS_R "/Ot /Oi /Ol /Oe /Og /Gs /FPa"
+    build: macro ASM "ml"
+    build: macro AFLAGS_G "/Cx /W2 /WX"
+    build: macro AFLAGS_D "/Zi"
+    build: macro AFLAGS_R "/nologo"
+    build: macro MAPFILE_D "NUL"
+    build: macro MAPFILE_R "NUL"
+    build: macro LFLAGS_G "/STACK:8192 /NOI /BATCH"
+    build: macro LFLAGS_D "/CO /INC /FAR /PACKC /PACKD /PMTYPE:PM"
+    build: macro LFLAGS_R "/EXE /FAR /PACKC /PACKD /PMTYPE:PM"
+    build: macro LINKER "link"
+    build: macro ILINK "ilink"
+    build: macro LRF "echo > NUL"
+    build: macro RC "rc"
+    build: macro IMPLIB "implib"
+    build: macro LLIBS_R "/NOD:LLIBCA LLIBCDLL"
+    build: macro LLIBS_D "/NOD:LLIBCA LLIBCDLL"
+    build: all $(PROJ).dll
+    build: target $(PROJ).bsc pwbrmake
+    build: target $(PROJ).dll lrf_dll link_dll res_dll implib_dll
+    build: inference .c.sbr cc_c_sbr
+    build: inference .asm.sbr asm_asm_sbr
+    build: inference .c.obj cc_c_obj
+    build: inference .asm.obj asm_asm_obj
+    build: inference .h.inc h2inc_h_inc
+    build: inference .rc.res rc_rc_res
+    build: command pwbrmake "$(PWBRMAKE) @<<\n$(BRFLAGS) $(SBRS)\n<<"
+    build: command nmakebsc1 "$(NMAKEBSC1) MAKEFLAGS="
+    build: command nmakebsc2 "$(NMAKEBSC2) $(NMFLAGS) -f $(PROJFILE) $(PROJ).bsc"
+    build: release command cc_c_sbr "$(CC) /Zs $(CFLAGS_G) $(CFLAGS_R) /FR$@ $<"
+    build: debug command cc_c_sbr "$(CC) /Zs $(CFLAGS_G) $(CFLAGS_D) /FR$@ $<"
+    build: release command asm_asm_sbr "$(ASM) /Zs $(AFLAGS_G) $(AFLAGS_R) /FR$@ $<"
+    build: debug command asm_asm_sbr "$(ASM) /Zs $(AFLAGS_G) $(AFLAGS_D) /FR$@ $<"
+    build: release command cc_c_obj "$(CC) /c $(CFLAGS_G) $(CFLAGS_R) /Fo$@ $<"
+    build: debug command cc_c_obj "$(CC) /c $(CFLAGS_G) $(CFLAGS_D) /Fo$@ $<"
+    build: release command asm_asm_obj "$(ASM) /c $(AFLAGS_G) $(AFLAGS_R) /Fo$@ $<"
+    build: debug command asm_asm_obj "$(ASM) /c $(AFLAGS_G) $(AFLAGS_D) /Fo$@ $<"
+    build: release command h2inc_h_inc "$(H2INC) /c $(CFLAGS_G) $(CFLAGS_R) $<"
+    build: debug command h2inc_h_inc "$(H2INC) /c $(CFLAGS_G) $(CFLAGS_D) $<"
+    build: release command lrf_dll "$(LRF) @<<$(PROJ).lrf\n$(RT_OBJS: = +^\n) $(OBJS: = +^\n)\n$@\n$(MAPFILE_R)\n$(LLIBS_G: = +^\n) +\n$(LLIBS_R: = +^\n) +\n$(LIBS: = +^\n)\n$(DEF_FILE) $(LFLAGS_G) $(LFLAGS_R);\n<<"
+    build: debug command lrf_dll "$(LRF) @<<$(PROJ).lrf\n$(RT_OBJS: = +^\n) $(OBJS: = +^\n)\n$@\n$(MAPFILE_D)\n$(LLIBS_G: = +^\n) +\n$(LLIBS_D: = +^\n) +\n$(LIBS: = +^\n)\n$(DEF_FILE) $(LFLAGS_G) $(LFLAGS_D);\n<<"
+    build: release command link_dll "$(LINKER) @$(PROJ).lrf"
+    build: debug command link_dll "$(ILINK) -a -e \"$(LINKER) @$(PROJ).lrf\" $@"
+    build: command rc_dll "$(RC) $(RESS) $@"
+    build: command implib_dll "$(IMPLIB) $*.lib $@"
+    build: command rc_rc_res "$(RC) /r $< $@"
+    build: command run ""
+    build: command debug ""
+    build: include dependencies
+    build: include no system
+    build: include .c "^[ \t]*#[ \t]*include[ \t]*\"[ \t]*\\(\\:p\\)[ \t]*\"" case
+    build: include .c "^[ \t]*#[ \t]*include[ \t]*<[ \t]*\\(\\:p\\)[ \t]*>" case system
+    build: include .h "^[ \t]*#[ \t]*include[ \t]*\"[ \t]*\\(\\:p\\)[ \t]*\"" case
+    build: include .h "^[ \t]*#[ \t]*include[ \t]*<[ \t]*\\(\\:p\\)[ \t]*>" case system
+    build: include .asm "^[ \t]*include[ \t]+\\([^ \t]+\\)"
+    build: include .inc "^[ \t]*include[ \t]+\\([^ \t]+\\)"
+    build: include .rc "^[ \t]*rcinclude[ \t]+\\([^ \t]+\\)"
+    build: include .rc "^[ \t]*#[ \t]*include[ \t]*\"[ \t]*\\(\\:p\\)[ \t]*\""
+    build: include .rc "^[ \t]*#[ \t]*include[ \t]*<[ \t]*\\(\\:p\\)[ \t]*>" system
+    build: message "^SYS[0-9][0-9][0-9][0-9]:\\:b"
+    build: message "^NET[0-9][0-9][0-9][0-9]:\\:b"
+    build: message "^\\(\\{\\:p\\!<[^>]*>\\}\\) \\([0-9]+\\) \\([0-9]+\\)[ ]*:" file line col
+    build: message "^\\(\\:p\\):\\([0-9]+\\):" file line
+    build: message "^[^(]+(\\(\\:p\\)) : error L[0-9]+[ ]*: '_*\\([^']+\\)' : unresolved external" file token
+    build: message "^[^(]+(\\(\\:p\\)) : [^L]+L[124]" file
+    build: message "^LINK [^L]+L[124]"
+    build: message "^ILINK : [^L]+L[124]"
+    build: message "^\\(\\:p\\)(\\(\\:z\\))[ ]*: [^U]+U[124]" file line
+    build: message "^NMAKE : [^U]+U[124]"
+    build: message "^\\:p : [^U]+U[124]\\:d\\:d\\:d"
+    build: message "^\\(\\:p\\)(\\(\\:z\\)) : [^C]+C[124]" file line
+    build: message "^[^C]+C[124][0-9]+: "
+    build: message "^[^D]+D[124][0-9]+ : "
+    build: message "^\\(\\:p\\)(\\([0-9]+\\))[ \t]*:[ \t]*[^A]+A[12456]" file line
+    build: message "^\\(\\:p\\)(\\(\\:z\\)) : [^H]+HI[124]" file line
+    build: message "^[^H]+HI[124][0-9]+: "
+    build: message "^pwbrmake: [^U]+U[124]"
+    build: message "^BIND : [^U]+U[124]"
+    build: message "^\\(\\:p\\)(\\(\\:z\\)) RC:" file line
+    build: message "^RC: error"
+    build: language C

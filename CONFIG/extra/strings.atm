@@ -1,0 +1,18 @@
+#include "atom.h"
+
+STRINGTABLE PRELOAD MOVEABLE DISCARDABLE
+BEGIN
+  ATM_DOSOPEN, "Error Opening "
+  ATM_OEM_SEALEVEL_OTHER "Sealevel (no ID reg)"
+  ATM_OEM_SEALEVEL_SP "Sealevel (ID reg)"
+  ATM_OEM_SEALEVEL "Sealevel Systems"
+  ATM_OEM_COMTROL "Comtrol Hostess"
+  ATM_OEM_DIGIBOARD08 "DigiBoard PC/4-8"
+  ATM_OEM_DIGIBOARD16 "DigiBoard PC/16"
+  ATM_OEM_QUATECH "Quatech"
+  ATM_OEM_NEOTECH "Neotech"
+  ATM_OEM_CONNECTECH "Connect Tech"
+  ATM_OEM_GLOBETEK "Globetek"
+
+END
+

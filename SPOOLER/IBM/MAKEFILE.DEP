@@ -1,0 +1,36 @@
+# IBM Developer's Workframe/2 Make File Creation run at 22:21:33 on 04/16/95
+
+# Make File Creation run in directory:
+#   P:\SERIAL\IBM;
+
+# Assumed INCLUDE environment variable path:
+#   w:\TOOLKIT30\SOM\INCLUDE;
+#   w:\TOOLKIT30\H;
+#   P:\SERIAL\IBM;
+#   w:\TOOLKIT30\INC;
+#   W:\IBMCPP\INCLUDE;
+#   W:\IBMCPP\IBMCLASS;
+
+
+INCLUDE002=.
+INCLUDE002=$(INCLUDE002);$(INCLUDE)
+
+INCLUDE001=.
+INCLUDE001=$(INCLUDE001);$(INCLUDE)
+
+INCLUDE000=$(INCLUDE)
+
+
+serial.RES:  serial.rc  \
+   {$(INCLUDE002)}SERIAL.H  \
+   SERIAL.ICO  \
+   SERIAL.DLG  \
+   MAKEFILE
+
+serial.OBJ:  serial.c  \
+#  {$(INCLUDE000)}os2.h  \
+#  {$(INCLUDE000)}stdlib.h  \
+#  {$(INCLUDE000)}string.h  \
+   {$(INCLUDE001)}serial.h  \
+   {$(INCLUDE001)}port.h  \
+   MAKEFILE

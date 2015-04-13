@@ -1,0 +1,1618 @@
+Microsoft (R) Macro Assembler Version 6.00     		    08/24/02 23:27:26
+INIT.asm						     Page 1 - 1
+
+
+				;************************************************************************
+				;
+				; $Revision:   1.1  $
+				;
+				; $Log:   P:/archive/comi/INIT.ASv  $
+				;
+				;     Rev 1.1   28 Mar 1996 00:19:18   EMMETT
+				;  Added resource manager.  Began work on VDD support.
+				;
+				;     Rev 1.0   19 Feb 1996 11:03:06   EMMETT
+				;
+				;
+				;     Rev 1.8   18 Feb 1996 14:18:04   EMMETT
+				;  Added many features.  Notably:
+				;  Tracing application DosDevIOCtl function calls and packets.
+				;  Support for 16650 and 16750 UARTs.
+				;  Streamlined interrupt routine.
+				;
+				;     Rev 1.7   25 Apr 1995 22:16:36   EMMETT
+				;  Added Support for DigiBoard PC/16.  Changed interrupt Routine for better adapter independence.
+				;  Changed interrupt routine to allow user to select interrupting device selection algorithim.  Fixed
+				;  ABIOS interaction for better "non.INI" initialization in MCA machines.  Fixed various initialization
+				;  message strings.  COMscope and receive buffer are now allocated from system memory, allowing
+				;  a 32k (word) COMscope buffer and a 64k (byte) receive buffer.
+				;
+				;     Rev 1.6   03 Dec 1994 15:07:28   EMMETT
+				;  Changed segment names.  Streamlined ABIOS machine initialization.
+				;  Removed most of old "parse" init code.
+				;
+				;     Rev 1.5   28 Jun 1994 09:09:30   EMMETT
+				;  Added "clear all interrupts" to handle interrupt ID register problems when one or more ports
+				;  on an adapter were in an interrupt state at system reset time.
+				;
+				;     Rev 1.4   11 Jun 1994 10:37:40   EMMETT
+				;  Changed all references to "Mirror" to "COMscope".
+				;
+				;     Rev 1.3   07 Jun 1994 00:19:08   EMMETT
+				;  Added support for DigiBoard.
+				;  Added initialization support for OEM specific loads.
+				;  Fixed bug in StartWriteStream and ProcessModemSignals that caused handshaking problems.
+				;  Fixed hardware tests to set baud rate before testing interrupts.
+				;  Fixed hardware tests off switch to work only for retail version.
+				;
+				;     Rev 1.2   27 Apr 1994 22:56:22   EMMETT
+				;  FIxed ABIOS stuff to work better than before.
+				;
+				;     Rev 1.1   18 Apr 1994 23:18:06   EMMETT
+				;  Changed ABIOS processing and added ability to disallow a port to initialize.
+				;
+				;     Rev 1.0   16 Apr 1994 08:35:14   EMMETT
+				;  Initial version control archive.
+				;
+				;************************************************************************
+
+				  IFNDEF x16_BIT
+				.386P
+				  ELSE
+				  ENDIF
+				.NOLISTMACRO                   ;suppress macro expansion in listing
+
+				.XLIST
+				.LIST
+
+ 0000				RES_DATA SEGMENT
+
+				  IFDEF DEMO
+				    EXTRN wWriteCount                   :WORD
+				    EXTRN wWriteCountStart              :WORD
+				  ENDIF
+				    EXTRN wLastDeviceParmsOffset        :WORD
+				    EXTRN wClockRate                    :WORD
+				    EXTRN wClockRate2                   :WORD
+				    EXTRN device_hlp                    :DWORD
+				    EXTRN stDeviceParms                 :s_stDeviceParms
+				    EXTRN wMaxDeviceCount               :WORD
+				    EXTRN wSystemDebug                  :WORD
+				    EXTRN wLastEndOfData                :WORD
+				    EXTRN wDeviceCount                  :WORD
+				    EXTRN wDeviceOffsetTable            :WORD
+				    EXTRN abyPath                       :BYTE
+				    EXTRN wEndOfData                    :WORD
+				    EXTRN wBusType                      :WORD
+				    EXTRN byOEMtype                     :BYTE
+
+				  IFNDEF x16_BIT
+				    EXTRN IDCaccess                     :WORD
+				    EXTRN IDCaccessPM                   :DWORD
+				    EXTRN IDCaccessPDS                  :WORD
+				    EXTRN IDCdata                       :WORD
+				    EXTRN IDCdeviceName                 :BYTE
+				  ENDIF
+				    EXTRN wInitTimerCount               :WORD
+
+				    EXTRN bSharedInterrupts             :WORD
+				    EXTRN wIntIDregister                :WORD
+				    EXTRN ComAux                        :WORD
+				    EXTRN xComAux                       :WORD
+				    EXTRN wCOMiLoadNumber               :WORD
+
+				 IFDEF OEM
+				 ENDIF
+
+ 0000				RES_DATA ENDS
+
+ 0000				_DATA SEGMENT
+
+				.XLIST
+				.LIST
+				    EXTRN _szMessage                     :BYTE
+
+				    EXTRN _bUseDDdataSegment            :WORD
+				    EXTRN _astInstallParms              :WORD
+				    EXTRN _wLoadNumber                  :WORD
+				    EXTRN _wLoadCount                   :WORD
+				    EXTRN _ulRequiredBufferSpace        :DWORD
+				    EXTRN _ulAvailableBufferSpace       :DWORD
+				    EXTRN _wSelectorCount               :WORD
+				    EXTRN _bABIOSpresent                :WORD
+				    EXTRN _bPCI_BIOSpresent             :WORD
+
+				    EXTRN _abyCOMnumbers                :BYTE
+
+				    EXTRN _wDriverLoadCount             :WORD
+				    EXTRN _bTimerAvailable              :WORD
+
+				    EXTRN _StackPointer                 :WORD
+				    EXTRN _wLoadFlags                   :WORD
+				  IFNDEF x16_BIT
+				   IFDEF VDD_support
+				   ENDIF
+				  ENDIF
+				    EXTRN _bBadLoad                     :WORD
+				    EXTRN _bDebugDelay                  :WORD
+
+				    EXTRN _byLoadAdapterType            :BYTE
+				    EXTRN _abyString                    :BYTE
+				    EXTRN _wEndOfInitData               :WORD
+
+				    EXTRN _bDisableRM                   :WORD
+
+				  IFDEF COPY_PROTECT
+				  ENDIF
+
+				    EXTRN _wCurrentDevice               :WORD
+				    EXTRN _wDelayCount                  :WORD
+
+				    EXTRN _stConfigParms                :s_stConfigParms
+
+				    EXTRN _wInitTestPort                :WORD
+				    EXTRN _wInstallTryCount             :WORD
+				    EXTRN _bWaitForCR                   :WORD
+				    EXTRN _bWaitingKey                  :WORD
+
+				    EXTRN _bVerbose                     :WORD
+				    EXTRN _bDelay                       :WORD
+				    EXTRN _bPrintLocation               :WORD
+
+				    EXTRN _bPrimaryInit                 :WORD
+				    EXTRN _byIntIDregisterPreset        :BYTE
+
+				    EXTRN _ADFtable                     :WORD
+
+				  IFDEF VDD_support
+				  ENDIF
+
+				  IFDEF COPY_PROTECT
+				  ENDIF
+				    EXTRN _bIsTheFirst                  :WORD
+				    EXTRN _bContinueParse               :WORD
+
+				  IFDEF OEM
+				  ENDIF
+
+ 0000				_DATA ENDS
+
+ 0000				_TEXT SEGMENT
+
+				  IFNDEF NO_RESOURCE_MGR
+				;    EXTRN _RMHELP_CreateDriver          :FAR
+				    EXTRN _RMHELP_SetDevHelp            :FAR
+				;    EXTRN _RMHELP_GetPorts              :FAR
+				    EXTRN _RMHELP_PortDidntInstall      :FAR
+				    EXTRN _RMHELP_PortInitComplete      :FAR
+				  ENDIF
+				    EXTRN _GetIniInfo                   :FAR
+				    EXTRN _LoadHeadersFromABIOStable    :FAR
+				    EXTRN _BuildLIDtable                :FAR
+				  IFDEF OEM
+				  ENDIF
+
+
+ 0000				_TEXT ENDS
+
+ 0000				RES_CODE SEGMENT
+				    ASSUME CS:RCGROUP, ES:nothing, SS:nothing, DS:RDGROUP, GS:DGROUP
+
+ 0000 = 0000			BEGIN_INIT_CODE  EQU $
+				;-------------------------------------------------------------------------------
+				; Initialization procedurs are placed after BEGIN_INIT_CODE so they can go
+				; away once initialization has completed.
+				;-------------------------------------------------------------------------------
+				    EXTRN _GetLIDentry                  :FAR
+				  IFDEF VDD_support
+				  ENDIF
+				    EXTRN TestValidHDW                  :NEAR
+				    EXTRN TestMCA                       :NEAR
+				    EXTRN CalcBaudRate                  :NEAR
+
+				 IFDEF OEM
+				 ENDIF
+
+				  IFDEF x16_BIT
+				  ENDIF
+
+				    EXTRN PrintString                   :NEAR
+				    EXTRN DelayFunction                 :NEAR
+				    EXTRN InitTimer                     :NEAR
+				    EXTRN CalcDelay                     :NEAR
+				    EXTRN OutputProgress                :NEAR
+				    EXTRN binac_10                      :NEAR
+				    EXTRN GetCOMnumber                  :NEAR
+				    EXTRN binac                         :NEAR
+				    EXTRN ParseArguments                :NEAR
+				    EXTRN StorePath                     :NEAR
+
+				  IFNDEF x16_BIT
+				   IFDEF VDD_support
+				   ENDIF
+				    EXTRN SetRing0Access                :NEAR
+				    EXTRN _MemorySetup                  :NEAR
+				  ENDIF
+
+				  IFDEF COPY_PROTECT
+				  ENDIF
+
+ 0000				Location PROC NEAR
+
+ 0000  65: 83 3E 0000 E		        cmp     GS:_bPrintLocation,TRUE
+       01
+ 0006  75 38			        jne     exit
+
+ 0008  BB 0000 R		        lea     bx,BEGIN_INIT_CODE
+				  IFDEF VDD_support
+				  ENDIF
+				        INVOKE sprintf,ADDR _szMessage,0,ADDR _szCodeLocation_xxxxxxx,
+				               cs,bx,300,ds,wEndOfData,GS:_wEndOfInitData,wLastEndOfData
+ 000B  FF 36 0000 E	   *	    push   wLastEndOfData
+ 000F  65: FF 36 0000 E	   *	    push   gs:_wEndOfInitData
+ 0014  FF 36 0000 E	   *	    push   wEndOfData
+ 0018  1E		   *	    push   ds
+ 0019  68 012C		   *	    push   +0012Ch
+ 001C  53		   *	    push   bx
+ 001D  0E		   *	    push   cs
+ 001E  0F A8		   *	    push   gs
+ 0020  68 0000 E	   *	    push   OFFSET DGROUP: _szCodeLocation_xxxxxxx
+ 0023  6A 00		   *	    push   +00000h
+ 0025  0F A8		   *	    push   gs
+ 0027  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 002A  9A ---- 0000 E	   *	    call   sprintf
+ 002F  83 C4 18		   *	    add    sp, 00018h
+				        INVOKE PrintMessage,ADDR _szMessage,ax
+ 0032  50		   *	    push   ax
+ 0033  0F A8		   *	    push   gs
+ 0035  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 0038  9A ---- 0000 E	   *	    call   PrintMessage
+ 003D  83 C4 06		   *	    add    sp, 00006h
+ 0040				exit:
+ 0040  C3			        ret
+
+ 0041				Location ENDP
+
+				; AX contains strategy target upon entry
+
+ 0041				Init PROC NEAR C USES ES GS DI, oErrorCode:WORD
+
+				;        LOCAL bAutoConfig:WORD
+				        LOCAL pPacket:DWORD
+				;  int 3
+ 0041  55		   *	    push   bp
+ 0042  8B EC		   *	    mov    bp, sp
+ 0044  83 C4 FC		   *	    add    sp, 0FFFCh
+ 0047  06		   *	    push   es
+ 0048  0F A8		   *	    push   gs
+ 004A  57		   *	    push   di
+ 004B  89 7E FC			        mov     WORD PTR pPacket,di
+ 004E  8C C7			        mov     di,es
+ 0050  89 7E FE			        mov     WORD PTR pPacket + 2,di
+ 0053  C4 7E FC			        les     di,pPacket
+ 0056  26: 8B 5D 0E		        mov     bx,ES:[di].s_stPacket.InitParamPacket.DevHlpOffset
+ 005A  89 1E 0000 E		        mov     word ptr device_hlp,bx
+ 005E  26: 8B 5D 10		        mov     bx,ES:[di].s_stPacket.InitParamPacket.DevHlpOffset + 2
+ 0062  89 1E 0002 E		        mov     word ptr device_hlp + 2,bx
+
+				;  int 3
+				    SetGS     DGROUP
+
+ 006B  83 F8 FF			        cmp     ax,SPECIAL_STRATEGY
+ 006E  75 09			        jne     @f
+ 0070  65: C7 06 0000 E		        mov     GS:_bPrimaryInit,TRUE
+       0001
+ 0077  EB 26			        jmp     main_init
+ 0079				@@:
+ 0079  83 F8 FE			        cmp     ax,DUMMY_STRATEGY
+ 007C  0F 85 02AC		        jne     begin_device_init
+ 0080  65: 83 3E 0000 E		        cmp     GS:_bPrimaryInit,TRUE
+       01
+ 0086  75 17			        jne     main_init
+
+ 0088  65: A1 0000 E		        mov     ax,GS:_wEndOfInitData
+ 008C  C4 7E FC			        les     di,pPacket
+ 008F  26: 89 45 10		        mov     ES:[di].s_stPacket.InitDataPacket.DataEndOffset,ax
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 009C  E9 0A67			        jmp     set_end_of_code
+
+				;------------------------------------------------------------
+				; First entry into this COMi load.
+				;------------------------------------------------------------
+ 009F				main_init:
+				;  int  3
+ 009F  65: C7 06 0000 E		        mov     GS:_bIsTheFirst,TRUE  ; initialize variable
+       0001
+
+				  IFNDEF x16_BIT
+ 00A6  BB 0000 E		        lea     bx,OFFSET IDCdeviceName
+ 00A9  BF 0000 E		        lea     di,OFFSET IDCaccess
+ 00AC  BA 002A			        mov     dx,DevHlp_AttachDD
+ 00AF  FF 1E 0000 E		        call    device_hlp
+ 00B3  72 07			        jc      @f
+ 00B5  65: C7 06 0000 E		        mov     GS:_bIsTheFirst,FALSE ; this in NOT the first COMi load
+       0000
+ 00BC				@@:
+				  ENDIF
+
+ 00BC  C7 06 0000 E 0004	        mov     wBusType,BUSTYPE_ISA  ; initialize bus type to ISA
+
+				; Try to initialize timer to be used by init process
+ 00C2  B8 0000 E		        mov     ax,OFFSET InitTimer
+ 00C5  B2 1D			        mov     dl,DevHlp_SetTimer
+ 00C7  FF 1E 0000 E		        call    device_hlp
+ 00CB  72 07			        jc      @f
+ 00CD  65: C7 06 0000 E		        mov     GS:_bTimerAvailable,TRUE ; timer is initialized
+       0001
+ 00D4				@@:
+				; Process command line parameters and store driver path
+ 00D4  C4 7E FC			        les     di,pPacket
+ 00D7  26: C4 5D 12		        les     bx,ES:[di].s_stPacket.InitParamPacket.ArgumentPointer
+ 00DB  E8 0000 E		        call    StorePath
+
+				  IFDEF x16_BIT
+				  ENDIF
+
+ 00DE  E8 0000 E		        call    ParseArguments
+ 00E1  E8 FF1C			        call    Location
+				  IFDEF x16_BIT
+				  ENDIF
+
+				; RM environment must be set before any calls to RM functions
+				; and after command line is parsed so that we can know if we want to
+				; disable resource manager.
+
+				   IFNDEF NO_RESOURCE_MGR
+ 00E4  65: 83 3E 0000 E		        cmp     GS:_bDisableRM,TRUE
+       01
+ 00EA  74 18			        je      @f
+ 00EC  FF 36 0002 E		        push    WORD PTR [device_hlp + 2]
+ 00F0  FF 36 0000 E		        push    WORD PTR [device_hlp]
+				     SetDS    DGROUP                            ;push-pop
+ 00F8  9A ---- 0000 E		        call    _RMHELP_SetDevHelp
+ 00FD  83 C4 04			        add     sp,4
+				     SetDS    RDGROUP
+ 0104				@@:
+				   ENDIF
+				;  int 3
+				; If EXT-INITDELAY is a command line parameter then wait for
+				; kernal debugger break (^C from debug terminal).
+ 0104  B8 001E			        mov     ax,30
+ 0107  65: 83 3E 0000 E		        cmp     GS:_bDebugDelay,TRUE
+       01
+ 010D  75 16			        jne     AfterDebugDelay
+				;        jne     @f
+ 010F  B8 0000 E		        mov     ax,OFFSET _szDebugMessage
+ 0112  E8 0000 E		        call    PrintString
+ 0115  B8 001E			        mov     ax,30
+				;@@:
+ 0118  E8 0000 E		        call    CalcDelay
+				        Delay   ax
+
+ 0125				AfterDebugDelay::
+ 0125  B8 0000 E		        mov     ax,OFFSET _szCRonly
+ 0128  E8 0000 E		        call    PrintString
+				  IFNDEF x16_BIT
+ 012B  65: 83 3E 0000 E		        cmp     GS:_bIsTheFirst,TRUE
+       01
+				   IFDEF OEM
+				   ELSE
+ 0131  75 37			        jne     test_MCA
+				   ENDIF
+				   IFDEF VDD_support
+				   ENDIF ;VDD_support
+ 0133  65: 83 3E 0000 E		        cmp     GS:_bDebugDelay,TRUE
+       01
+ 0139  74 06			        je      @f
+ 013B  B8 0000 E		        mov     ax,OFFSET _szCR
+ 013E  E8 0000 E		        call    PrintString
+ 0141				@@:
+				        INVOKE sprintf,ADDR _szMessage,0,ADDR _szLogoMessage_s,OFFSET _szSubLogo,GS
+ 0141  0F A8		   *	    push   gs
+ 0143  68 0000 E	   *	    push   word  ptr OFFSET _szSubLogo
+ 0146  0F A8		   *	    push   gs
+ 0148  68 0000 E	   *	    push   OFFSET DGROUP: _szLogoMessage_s
+ 014B  6A 00		   *	    push   +00000h
+ 014D  0F A8		   *	    push   gs
+ 014F  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 0152  9A ---- 0000 E	   *	    call   sprintf
+ 0157  83 C4 0E		   *	    add    sp, 0000Eh
+				        INVOKE PrintMessage,ADDR _szMessage,ax
+ 015A  50		   *	    push   ax
+ 015B  0F A8		   *	    push   gs
+ 015D  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 0160  9A ---- 0000 E	   *	    call   PrintMessage
+ 0165  83 C4 06		   *	    add    sp, 00006h
+ 0168  EB 00			        jmp     test_MCA
+
+				   IFDEF OEM
+				   ENDIF
+
+ 016A				test_MCA:
+				  ENDIF ;NOT x16_BIT
+ 016A  E8 0000 E		        call    TestMCA
+				  IFNDEF x16_BIT
+ 016D  65: 83 3E 0000 E		        cmp     GS:_bABIOSpresent,TRUE
+       01
+ 0173  74 02			        je      MCA_build_LID_table
+
+				   IFDEF NoISAsupport
+				   ELSE
+ 0175  EB 20			        jmp     get_configuration
+				   ENDIF
+ 0177				MCA_build_LID_table:
+				;-------------------------------------------------------------------
+				; If this is the first COMi load then setup ring zero access and
+				; build LID table.  LID table is only built if machine is Micro Channel.
+				;-------------------------------------------------------------------
+ 0177  65: 83 3E 0000 E		        cmp     GS:_bIsTheFirst,TRUE
+       01
+				;        jne     test_PCI
+ 017D  75 18			        jne     get_configuration
+ 017F  E8 0000 E		        call    SetRing0Access
+				;        jc      test_PCI
+ 0182  72 13			        jc      get_configuration
+				    SetDS     DGROUP
+ 0188  9A ---- 0000 E		        call    _BuildLIDtable
+				    SetDS     RDGROUP
+
+ 0191  C7 06 0000 E 0002	        mov     wBusType,BUSTYPE_MCA
+				;        jmp     get_configuration
+
+				;test_PCI::
+				;        call    TestPCI
+				;        cmp     GS:_bPCI_BIOSpresent,TRUE
+				;        jne     get_configuration
+
+ 0197				get_configuration::
+				  IFDEF OEM
+				  ENDIF
+
+ 0197				ReadConfigFile::
+				;--------------------------------------------------------------
+				; Read INI file
+				;--------------------------------------------------------------
+				   SetDS      DGROUP
+ 019B  60			        pusha
+ 019C  0F A8			        push    gs
+ 019E  1E			        push    ds
+ 019F  89 26 0000 E		        mov     _StackPointer,sp
+ 01A3  9A ---- 0000 E		        call    _GetIniInfo
+ 01A8  1F			        pop     ds
+ 01A9  0F A9			        pop     gs
+ 01AB  61			        popa
+				   SetDS      RDGROUP
+				;---------------------------------------------------------------
+				; Test INI file results
+				;---------------------------------------------------------------
+ 01B0  65: A1 0000 E		        mov     ax,GS:_wLoadNumber
+ 01B4  A3 0000 E		        mov     wCOMiLoadNumber,ax
+
+				; Was valid INI file found?
+ 01B7  83 F8 FF			        cmp     ax,NO_INI_FILE
+ 01BA  75 35			        jne     test_INI_access
+ 01BC  65: 83 3E 0000 E		        cmp     GS:_bABIOSpresent,TRUE
+       01
+ 01C2  75 3F			        jne     bad_INI_file
+ 01C4  65: C7 06 0000 E		        mov     GS:_bVerbose,TRUE
+       0001
+
+				; Since no INI file was found, attempt to load configuration from ABIOS
+				   SetDS      DGROUP
+ 01CF  9A ---- 0000 E		        call    _LoadHeadersFromABIOStable
+				   SetDS      RDGROUP
+ 01D8  65: A1 0000 E		        mov     ax,GS:_wLoadCount
+ 01DC  0B C0			        or      ax,ax
+ 01DE  74 09			        jz      @f
+ 01E0  65: C7 06 0000 E		        mov     GS:_wDriverLoadCount,1
+       0001
+ 01E7  EB 2B			        jmp     continue_initialization
+ 01E9				@@:
+				; No INI file and no ABIOS ports found so abort load
+ 01E9  B8 0000 E		        mov     ax,OFFSET _szNoPortAvailable
+ 01EC  E8 0000 E		        call    PrintString
+ 01EF  EB 12			        jmp     bad_INI_file
+
+ 01F1				test_INI_access:
+				; Error messages for the following error conditions were displayed from
+				; within PRELOAD.C.
+
+				; Were any serial devices defined in INI file?
+ 01F1  65: 81 3E 0000 E		        cmp     GS:_wLoadNumber,NO_DEFINED_DEVICES
+       8000
+ 01F8  74 09			        je      bad_INI_file
+
+				; Test if INI file was invalid or corrupted
+ 01FA  65: 81 3E 0000 E		        cmp     GS:_wLoadNumber,FILE_ACCESS_ERROR
+       C000
+ 0201  75 11			        jne     continue_initialization
+
+ 0203				bad_INI_file:
+				; An error was found in INI file so cause pause to extend display of
+				; error messages then abort load
+				;        mov     ax,OFFSET _szWaitKeyMessage
+				;        call    PrintString
+ 0203  65: C7 06 0000 E		        mov     GS:_bWaitingKey,TRUE
+       0001
+ 020A  65: C7 06 0000 E		        mov     GS:_wDelayCount,1000
+       03E8
+				;        Delay   GS:_wDelayCount
+				;        lea     ax,_szCR
+				;        call    PrintString
+ 0211  E9 00ED			        jmp     abort_COMi_load_exit
+
+ 0214				continue_initialization::
+				; serial device were defined in INI file or by ABIOS
+				  ENDIF ;NOT x16_BIT
+				  IFDEF OEM
+				  ENDIF
+				  IFDEF DEMO
+				; If this is evaluation version then print evaluation message if required
+ 0214  83 FB 01			        cmp     bx,1
+ 0217  77 2C			        ja      no_eval_msg
+ 0219  F7 06 0000 E 4000	        test    wSystemDebug,SYS_DB_NO_EVAL_MESSAGE
+ 021F  75 24			        jnz     no_eval_msg
+ 0221  B8 0000 E		        mov     ax,OFFSET _szEvaluationMsg
+ 0224  E8 0000 E		        call    PrintString
+
+ 0227				eval_message:
+ 0227  B8 0000 E		        mov     ax,OFFSET _szWaitKeyMessage
+ 022A  E8 0000 E		        call    PrintString
+ 022D  65: C7 06 0000 E		        mov     GS:_bWaitingKey,TRUE
+       0001
+				        Delay   0ffffh
+ 023F  B8 0000 E		        mov     ax,OFFSET _szCR_2x
+ 0242  E8 0000 E		        call    PrintString
+
+ 0245				no_eval_msg:
+				  ENDIF
+				   IFNDEF x16_BIT
+				; Test if there is enough memory available in device driver data segment
+				; to accomodate all required buffers.  This variable is set in PRELOAD.C
+				; (GetIniInfo).
+ 0245  65: 83 3E 0000 E		        cmp     GS:_bUseDDdataSegment,TRUE
+       01
+ 024B  74 77			        je      calculate_delay_count
+
+				; There is not enough memory in device driver data segment, so allocate
+				; selectors and buffers
+ 024D  65: FF 36 0000 E		        push    GS:_wLoadCount
+ 0252  E8 0000 E		        call    _MemorySetup
+ 0255  58			        pop     ax
+ 0256  73 2E			        jnc     tell_resources
+
+				; There was an error allocating memory for COMi buffers, so print error message
+				; and abort load.
+ 0258  B8 0000 E		        mov     ax,OFFSET _szAllocError
+ 025B  E8 0000 E		        call    PrintString
+ 025E  B8 0000 E		        mov     ax,OFFSET _szWaitKeyMessage
+ 0261  E8 0000 E		        call    PrintString
+ 0264  65: C7 06 0000 E		        mov     GS:_bWaitingKey,TRUE
+       0001
+ 026B  65: C7 06 0000 E		        mov     GS:_wDelayCount,0ffffh
+       FFFF
+				        Delay   GS:_wDelayCount
+ 027E  B8 0000 E		        lea     ax,_szCR
+ 0281  E8 0000 E		        call    PrintString
+ 0284  EB 7B			        jmp     abort_COMi_load_exit
+
+ 0286				tell_resources:
+				; Display allocated resources used
+ 0286  66| 65: 8B 1E 0000 E	        mov     ebx,GS:_ulRequiredBufferSpace;
+ 028C  65: 8B 0E 0000 E		        mov     cx,GS:_wSelectorCount
+
+				        INVOKE sprintf,ADDR _szMessage,0,ADDR _szAllocBuffers_ululu,
+				                                           GS:_wSelectorCount,
+				                                           GS:_ulRequiredBufferSpace,
+				                                           GS:_ulAvailableBufferSpace
+ 0291  66| 65: FF 36 0000 E *	    push   gs:_ulAvailableBufferSpace
+ 0297  66| 65: FF 36 0000 E *	    push   gs:_ulRequiredBufferSpace
+ 029D  65: FF 36 0000 E	   *	    push   gs:_wSelectorCount
+ 02A2  0F A8		   *	    push   gs
+ 02A4  68 0000 E	   *	    push   OFFSET DGROUP: _szAllocBuffers_ululu
+ 02A7  6A 00		   *	    push   +00000h
+ 02A9  0F A8		   *	    push   gs
+ 02AB  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 02AE  9A ---- 0000 E	   *	    call   sprintf
+ 02B3  83 C4 14		   *	    add    sp, 00014h
+				        INVOKE PrintMessage,ADDR _szMessage,ax
+ 02B6  50		   *	    push   ax
+ 02B7  0F A8		   *	    push   gs
+ 02B9  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 02BC  9A ---- 0000 E	   *	    call   PrintMessage
+ 02C1  83 C4 06		   *	    add    sp, 00006h
+
+ 02C4				calculate_delay_count::
+				   ENDIF  ;x16_BIT
+				; Convert delay count seconds to timer ticks
+ 02C4  65: A1 0000 E		        mov     ax,GS:_wDelayCount
+ 02C8  E8 0000 E		        call    CalcDelay
+ 02CB  65: A3 0000 E		        mov     GS:_wDelayCount,ax
+				  IFDEF DEMO
+				; Initialize DEMO write counter
+ 02CF  A1 0000 E		        mov     ax,wWriteCountStart
+ 02D2  A3 0000 E		        mov     wWriteCount,ax
+				  ENDIF
+				; Set up exit variables
+ 02D5  65: A1 0000 E		        mov     ax,GS:_wEndOfInitData
+ 02D9  C4 7E FC			        les     di,pPacket
+ 02DC  26: 89 45 10		        mov     ES:[di].s_stPacket.InitDataPacket.DataEndOffset,ax
+
+				; If this is NOT the first COMi load then the "sloot$OS" device name was
+				; used to initialize this load.  In that case, we must cause that device name
+				; to be available for any subsequent load.
+ 02E0  65: 83 3E 0000 E		        cmp     GS:_bIsTheFirst,TRUE
+       01
+ 02E6  74 09			        je      @f
+
+				; Cause "sloot$SO" device to not be loaded
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 02F1				@@:
+				; If there are no devices to initialize then kill the timer and exit,
+				; otherwise just exit.
+ 02F1  65: A1 0000 E		        mov     ax,GS:_wLoadCount
+ 02F5  65: 3B 06 0000 E		        cmp     ax,GS:_wInstallTryCount
+ 02FA  0F 84 07F0		        je      kill_timer
+ 02FE  E9 0805			        jmp     set_end_of_code
+
+ 0301				abort_COMi_load_exit:
+				; Cause this COMi load to NOT be loaded
+ 0301  BB 0000 E		        lea     bx,xComAux
+ 0304  C7 07 FFFF		        mov     WORD PTR [bx],0ffffh
+ 0308  C7 47 02 FFFF		        mov     WORD PTR [bx + 2],0ffffh
+ 030D  65: A1 0000 E		        mov     ax,GS:_wEndOfInitData
+ 0311  C4 7E FC			        les     di,pPacket
+ 0314  26: 89 45 10		        mov     ES:[di].s_stPacket.InitDataPacket.DataEndOffset,ax
+ 0318  65: 83 3E 0000 E		        cmp     GS:_bIsTheFirst,TRUE
+       01
+ 031E  74 09			        je      @f
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 0329				@@:
+ 0329  E9 078C			        jmp     test_final_delay
+
+				;------------------------------------------------------------
+				; Entry for each device in this COMi load
+				;------------------------------------------------------------
+ 032C				begin_device_init::
+ 032C  A9 FF00			        test    ax,0ff00h  ; test if device is for COMscope access
+ 032F  74 24			        jz      device_init
+ 0331  8B D8			        mov     bx,ax
+ 0333  83 E3 0F			        and     bx,000fh
+ 0336  D1 E3			        shl     bx,1
+ 0338  83 BF 0000 E 00		        cmp     wDeviceOffsetTable[bx],ZERO
+ 033D  75 09			        jne     @f
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 0348				@@:
+ 0348  A1 0000 E		        mov     ax,wLastEndOfData
+ 034B  C4 7E FC			        les     di,pPacket
+ 034E  26: 89 45 10		        mov     ES:[di].s_stPacket.InitDataPacket.DataEndOffset,ax
+ 0352  E9 07B1			        jmp     set_end_of_code
+
+ 0355				device_init:
+				; We are initializing the clock variable here so that we won't advertise
+				; a modified clock rate unless there are devices to initialize.
+ 0355  65: A3 0000 E		        mov     GS:_wCurrentDevice,ax
+ 0359  83 F8 00			        cmp     ax,0
+ 035C  77 3E			        ja      start
+
+				; Initialize end of data and other variables
+ 035E  A1 0000 E		        mov     ax,wEndOfData
+ 0361  A3 0000 E		        mov     wLastEndOfData,ax
+ 0364  65: C7 06 0000 E		        mov     GS:_bBadLoad,FALSE
+       0000
+
+				; We are initializing the clock variable here so that we don't advertise
+				; a modified clock rate unless there are devices defined.
+ 036B  83 3E 0000 E 20		        cmp     wClockRate,DEFAULT_CLOCK_RATE
+ 0370  74 2A			        je      start
+ 0372  8B 1E 0000 E		        mov     bx,wClockRate
+				        INVOKE sprintf,ADDR _szMessage,0,ADDR _szClockRate_u,bx
+ 0376  53		   *	    push   bx
+ 0377  0F A8		   *	    push   gs
+ 0379  68 0000 E	   *	    push   OFFSET DGROUP: _szClockRate_u
+ 037C  6A 00		   *	    push   +00000h
+ 037E  0F A8		   *	    push   gs
+ 0380  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 0383  9A ---- 0000 E	   *	    call   sprintf
+ 0388  83 C4 0C		   *	    add    sp, 0000Ch
+				        INVOKE PrintMessage,ADDR _szMessage,ax
+ 038B  50		   *	    push   ax
+ 038C  0F A8		   *	    push   gs
+ 038E  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 0391  9A ---- 0000 E	   *	    call   PrintMessage
+ 0396  83 C4 06		   *	    add    sp, 00006h
+ 0399  E8 0000 E		        call    PrintString
+
+ 039C				start:
+ 039C  65: FF 06 0000 E		        inc     GS:_wInstallTryCount
+ 03A1  BE 00F0			        mov     si,TYPE s_stDeviceParms
+ 03A4  A1 0000 E		        mov     ax,wDeviceCount
+ 03A7  F7 E6			        mul     si
+ 03A9  8B F0			        mov     si,ax
+ 03AB  81 C6 0000 E		        add     si,OFFSET stDeviceParms
+ 03AF  BF 002A			        mov     di,TYPE s_stConfigParms
+ 03B2  65: A1 0000 E		        mov     ax,GS:_wCurrentDevice
+ 03B6  F7 E7			        mul     di
+ 03B8  8B F8			        mov     di,ax
+ 03BA  81 C7 0000 E		        add     di,OFFSET _stConfigParms  ; assume in DGROUP - GS = DGROUP
+
+ 03BE  65: 83 3E 0000 E		        cmp     GS:_bABIOSpresent,TRUE
+       01
+ 03C4  0F 85 00D2		        jne     test_user_disable
+				;------------------------------------------------
+				; Test for ABIOS access Logical Device override.
+
+				; Possible only when INI file present.
+				;------------------------------------------------
+ 03C8  65: 83 7D 06 FC		        cmp     GS:[di].s_stConfigParms.cwIObaseAddress,PORT_ADDRESS_INVALID
+ 03CD  75 29			        jne     @f
+ 03CF  E8 0000 E		        call    GetCOMnumber
+				        INVOKE sprintf,ADDR _szMessage,0,ADDR _szABIOSaddrInvalid_u,bx
+ 03D2  53		   *	    push   bx
+ 03D3  0F A8		   *	    push   gs
+ 03D5  68 0000 E	   *	    push   OFFSET DGROUP: _szABIOSaddrInvalid_u
+ 03D8  6A 00		   *	    push   +00000h
+ 03DA  0F A8		   *	    push   gs
+ 03DC  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 03DF  9A ---- 0000 E	   *	    call   sprintf
+ 03E4  83 C4 0C		   *	    add    sp, 0000Ch
+				        INVOKE PrintMessage,ADDR _szMessage,ax
+ 03E7  50		   *	    push   ax
+ 03E8  0F A8		   *	    push   gs
+ 03EA  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 03ED  9A ---- 0000 E	   *	    call   PrintMessage
+ 03F2  83 C4 06		   *	    add    sp, 00006h
+ 03F5  E9 00DB			        jmp     bad_device
+ 03F8				@@:
+ 03F8  65: 83 7D 06 FB		        cmp     GS:[di].s_stConfigParms.cwIObaseAddress,PORT_ADDRESS_TAKEN
+ 03FD  75 29			        jne     @f
+ 03FF  E8 0000 E		        call    GetCOMnumber
+				        INVOKE sprintf,ADDR _szMessage,0,ADDR _szABIOSaddrTaken_u,bx
+ 0402  53		   *	    push   bx
+ 0403  0F A8		   *	    push   gs
+ 0405  68 0000 E	   *	    push   OFFSET DGROUP: _szABIOSaddrTaken_u
+ 0408  6A 00		   *	    push   +00000h
+ 040A  0F A8		   *	    push   gs
+ 040C  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 040F  9A ---- 0000 E	   *	    call   sprintf
+ 0414  83 C4 0C		   *	    add    sp, 0000Ch
+				        INVOKE PrintMessage,ADDR _szMessage,ax
+ 0417  50		   *	    push   ax
+ 0418  0F A8		   *	    push   gs
+ 041A  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 041D  9A ---- 0000 E	   *	    call   PrintMessage
+ 0422  83 C4 06		   *	    add    sp, 00006h
+ 0425  E9 00AB			        jmp     bad_device
+ 0428				@@:
+				;------------------------------------------------
+				; Possible only without INI file.
+				;------------------------------------------------
+ 0428  65: 83 7D 06 FD		        cmp     GS:[di].s_stConfigParms.cwIObaseAddress,PORT_OWNED_BY_OTHER_DD
+ 042D  75 32			        jne     @f
+ 042F  65: 83 3E 0000 E		        cmp     GS:_wLoadNumber,NO_INI_FILE
+       FF
+ 0435  0F 84 00CF		        je      non_device
+ 0439  E8 0000 E		        call    GetCOMnumber
+				        INVOKE sprintf,ADDR _szMessage,0,ADDR _szABIOSname_u,bx
+ 043C  53		   *	    push   bx
+ 043D  0F A8		   *	    push   gs
+ 043F  68 0000 E	   *	    push   OFFSET DGROUP: _szABIOSname_u
+ 0442  6A 00		   *	    push   +00000h
+ 0444  0F A8		   *	    push   gs
+ 0446  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 0449  9A ---- 0000 E	   *	    call   sprintf
+ 044E  83 C4 0C		   *	    add    sp, 0000Ch
+				        INVOKE PrintMessage,ADDR _szMessage,ax
+ 0451  50		   *	    push   ax
+ 0452  0F A8		   *	    push   gs
+ 0454  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 0457  9A ---- 0000 E	   *	    call   PrintMessage
+ 045C  83 C4 06		   *	    add    sp, 00006h
+ 045F  EB 72			        jmp     bad_device
+ 0461				@@:
+				;------------------------------------------------
+				; Possible with or without INI file.
+				;------------------------------------------------
+ 0461  65: 83 7D 06 FE		        cmp     GS:[di].s_stConfigParms.cwIObaseAddress,PORT_LID_ALREADY_OWNED
+ 0466  75 32			        jne     test_user_disable
+ 0468  65: 83 3E 0000 E		        cmp     GS:_wLoadNumber,NO_INI_FILE
+       FF
+ 046E  0F 84 0096		        je      non_device
+ 0472  E8 0000 E		        call    GetCOMnumber
+				        INVOKE sprintf,ADDR _szMessage,0,ADDR _szABIOSowned_u,bx
+ 0475  53		   *	    push   bx
+ 0476  0F A8		   *	    push   gs
+ 0478  68 0000 E	   *	    push   OFFSET DGROUP: _szABIOSowned_u
+ 047B  6A 00		   *	    push   +00000h
+ 047D  0F A8		   *	    push   gs
+ 047F  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 0482  9A ---- 0000 E	   *	    call   sprintf
+ 0487  83 C4 0C		   *	    add    sp, 0000Ch
+				        INVOKE PrintMessage,ADDR _szMessage,ax
+ 048A  50		   *	    push   ax
+ 048B  0F A8		   *	    push   gs
+ 048D  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 0490  9A ---- 0000 E	   *	    call   PrintMessage
+ 0495  83 C4 06		   *	    add    sp, 00006h
+ 0498  EB 39			        jmp     bad_device
+
+ 049A				test_user_disable:
+				;------------------------------------------------
+				; Possible only when user set port address to 0xffff, to disable port access.
+				;------------------------------------------------
+ 049A  65: 83 7D 06 FF		        cmp     GS:[di].s_stConfigParms.cwIObaseAddress,PORT_USER_DISABLED
+ 049F  0F 85 0081		        jne     attempt_access
+ 04A3  65: 83 3E 0000 E		        cmp     GS:_bVerbose,TRUE
+       01
+ 04A9  75 5D			        jne     non_device
+ 04AB  E8 0000 E		        call    GetCOMnumber
+				        INVOKE sprintf,ADDR _szMessage,0,ADDR _szSkippedPort_u,bx
+ 04AE  53		   *	    push   bx
+ 04AF  0F A8		   *	    push   gs
+ 04B1  68 0000 E	   *	    push   OFFSET DGROUP: _szSkippedPort_u
+ 04B4  6A 00		   *	    push   +00000h
+ 04B6  0F A8		   *	    push   gs
+ 04B8  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 04BB  9A ---- 0000 E	   *	    call   sprintf
+ 04C0  83 C4 0C		   *	    add    sp, 0000Ch
+				        INVOKE PrintMessage,ADDR _szMessage,ax
+ 04C3  50		   *	    push   ax
+ 04C4  0F A8		   *	    push   gs
+ 04C6  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 04C9  9A ---- 0000 E	   *	    call   PrintMessage
+ 04CE  83 C4 06		   *	    add    sp, 00006h
+ 04D1  EB 35			        jmp     non_device
+
+ 04D3				bad_device:
+				  IFNDEF NO_RESOURCE_MGR
+				; Device is bad so remove it from Resource Manager lists.
+ 04D3  65: 83 3E 0000 E		        cmp     GS:_bDisableRM,TRUE
+       01
+ 04D9  74 18			        je      @f
+ 04DB  65: 8B 1E 0000 E		        mov     bx,GS:_wInstallTryCount
+ 04E0  4B			        dec     bx
+ 04E1  53			        push    bx
+ 04E2  50			        push    ax
+				   SetDS      DGROUP
+ 04E7  9A ---- 0000 E		        call    _RMHELP_PortDidntInstall
+				   SetDS      RDGROUP
+ 04F0  83 C4 04			        add     sp,4
+ 04F3				@@:
+				  ENDIF
+ 04F3  65: C7 06 0000 E		        mov     GS:_bWaitForCR,TRUE
+       0001
+ 04FA  65: C7 06 0000 E		        mov     GS:_wDelayCount,1000
+       03E8
+ 0501  65: C7 06 0000 E		        mov     GS:_bBadLoad,TRUE
+       0001
+
+ 0508				non_device::
+ 0508  BB 0000 E		        mov     bx,OFFSET _astInstallParms
+ 050B  65: 8B 07		        mov     ax,GS:[bx].s_stInstallParms.wLID
+ 050E  0B C0			        or      ax,ax
+ 0510  74 06			        jz      error_exit
+ 0512  B2 35			        mov     dl,DevHlp_FreeLIDEntry
+ 0514  FF 1E 0000 E		        call    device_hlp
+
+ 0518				error_exit:
+				        StoreError oErrorCode,ERROR_I24_GEN_FAILURE
+ 0521  E9 04DD			        jmp     init_exit
+				;---------------------------------------------------------------------
+				; Setup minimum device data and test if device is valid
+				;---------------------------------------------------------------------
+ 0524				attempt_access::
+				; Has an I/O base address been specified?
+ 0524  65: 83 7D 06 00		        cmp     GS:[di].s_stConfigParms.cwIObaseAddress,ZERO
+ 0529  74 06			        je      @f
+ 052B  65: 8B 55 06		        mov     dx,GS:[di].s_stConfigParms.cwIObaseAddress
+ 052F  EB 59			        jmp     set_IO_base_address
+ 0531				@@:
+ 0531  83 3E 0000 E 05		        cmp     wBusType, BUSTYPE_PCI
+ 0536  75 29			        jne     @f
+ 0538  E8 0000 E		        call    GetCOMnumber
+				        INVOKE sprintf,ADDR _szMessage,0,ADDR _szPCIerror_u,bx
+ 053B  53		   *	    push   bx
+ 053C  0F A8		   *	    push   gs
+ 053E  68 0000 E	   *	    push   OFFSET DGROUP: _szPCIerror_u
+ 0541  6A 00		   *	    push   +00000h
+ 0543  0F A8		   *	    push   gs
+ 0545  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 0548  9A ---- 0000 E	   *	    call   sprintf
+ 054D  83 C4 0C		   *	    add    sp, 0000Ch
+				        INVOKE PrintMessage,ADDR _szMessage,ax
+ 0550  50		   *	    push   ax
+ 0551  0F A8		   *	    push   gs
+ 0553  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 0556  9A ---- 0000 E	   *	    call   PrintMessage
+ 055B  83 C4 06		   *	    add    sp, 00006h
+ 055E  E9 FF72			        jmp     bad_device
+ 0561				@@:
+ 0561  E8 0000 E		        call    GetCOMnumber
+				        INVOKE sprintf,ADDR _szMessage,0,ADDR _szBaseAddrError_u,bx
+ 0564  53		   *	    push   bx
+ 0565  0F A8		   *	    push   gs
+ 0567  68 0000 E	   *	    push   OFFSET DGROUP: _szBaseAddrError_u
+ 056A  6A 00		   *	    push   +00000h
+ 056C  0F A8		   *	    push   gs
+ 056E  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 0571  9A ---- 0000 E	   *	    call   sprintf
+ 0576  83 C4 0C		   *	    add    sp, 0000Ch
+				        INVOKE PrintMessage,ADDR _szMessage,ax
+ 0579  50		   *	    push   ax
+ 057A  0F A8		   *	    push   gs
+ 057C  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 057F  9A ---- 0000 E	   *	    call   PrintMessage
+ 0584  83 C4 06		   *	    add    sp, 00006h
+ 0587  E9 FF49			        jmp     bad_device
+
+ 058A				set_IO_base_address:
+ 058A  89 54 3A			        mov     [si].s_stDeviceParms.wIObaseAddress,dx
+
+				; Has an interrupt level been specified?
+ 058D  65: 80 7D 20 00		        cmp     GS:[di].s_stConfigParms.cbyInterruptLevel,ZERO
+ 0592  74 06			        je      @f
+ 0594  65: 8A 45 20		        mov     al,GS:[di].s_stConfigParms.cbyInterruptLevel
+ 0598  EB 29			        jmp     set_interrupt_level
+ 059A				@@:
+ 059A  E8 0000 E		        call    GetCOMnumber
+				        INVOKE sprintf,ADDR _szMessage,0,ADDR _szInterruptLevelError_u,bx
+ 059D  53		   *	    push   bx
+ 059E  0F A8		   *	    push   gs
+ 05A0  68 0000 E	   *	    push   OFFSET DGROUP: _szInterruptLevelError_u
+ 05A3  6A 00		   *	    push   +00000h
+ 05A5  0F A8		   *	    push   gs
+ 05A7  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 05AA  9A ---- 0000 E	   *	    call   sprintf
+ 05AF  83 C4 0C		   *	    add    sp, 0000Ch
+				        INVOKE PrintMessage,ADDR _szMessage,ax
+ 05B2  50		   *	    push   ax
+ 05B3  0F A8		   *	    push   gs
+ 05B5  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 05B8  9A ---- 0000 E	   *	    call   PrintMessage
+ 05BD  83 C4 06		   *	    add    sp, 00006h
+ 05C0  E9 FF10			        jmp     bad_device
+
+ 05C3				set_interrupt_level:
+ 05C3  88 44 3E			        mov     [si].s_stDeviceParms.byInterruptLevel,al
+
+ 05C6  65: 8B 05		        mov     ax,GS:[di].s_stConfigParms.cwDeviceFlags1
+ 05C9  89 44 08			        mov     [si].s_stDeviceParms.wConfigFlags1,ax
+ 05CC  65: 8B 45 02		        mov     ax,GS:[di].s_stConfigParms.cwDeviceFlags2
+ 05D0  89 44 0A			        mov     [si].s_stDeviceParms.wConfigFlags2,ax
+
+ 05D3  F7 44 08 0001		        test    [si].s_stDeviceParms.wConfigFlags1,CFG_FLAG1_FORCE_4X_TEST
+ 05D8  74 06			        jz      @f
+ 05DA  65: 83 0E 0000 E		        or    GS:_wLoadFlags,LOAD_FLAG1_FORCE_4X_TEST
+       10
+				;        or      [si].s_stDeviceParms.wDeviceFlag2,DEV_FLAG2_FORCE_4X_TEST
+ 05E0				@@:
+				; Is special interrupt processing required because TI 16550B UART is present.
+ 05E0  F7 44 08 0008		        test    [si].s_stDeviceParms.wConfigFlags1,CFG_FLAG1_TIB_UART
+ 05E5  74 0B			        jz      @f
+
+				; Do not do special processing for other TI UARTs.  This is tested here in case ;;3.83i
+				; a type two adapter was selected during configuration and we find some other
+				; TI UART is actually being used.
+				; This won't prevent an explicit selection of this "feature" or the selection
+				; of a type two adapter type when no TI UART is present
+
+ 05E7  F7 44 04 000A		        test    [si].s_stDeviceParms.wDeviceFlag2,(DEV_FLAG2_16750_UART OR DEV_FLAG2_TI16550C_UART)
+ 05EC  75 04			        jnz     @f
+ 05EE  83 4C 04 10		        or      [si].s_stDeviceParms.wDeviceFlag2,DEV_FLAG2_TIB_UART
+ 05F2				@@:
+				; Set status register preload value
+ 05F2  65: C6 06 0000 E		        mov     GS:_byIntIDregisterPreset,0
+       00
+				    IFNDEF OEM
+				;        cmp     GS:byOEMtype,OEM_BOCA
+				;        je      @f
+ 05F8  65: 80 3E 0000 E		        cmp     GS:_byLoadAdapterType,HDWTYPE_DIGIBOARD
+       64
+ 05FE  75 06			        jne     not_DigiBoard
+				;@@:
+ 0600  65: C6 06 0000 E		        mov     GS:_byIntIDregisterPreset,0ffh
+       FF
+
+ 0606				not_DigiBoard:
+				    ELSEIFDEF DigiBoard
+				    ENDIF
+				; Test if valid hardware is available.
+ 0606  E8 0000 E		        call    TestValidHDW
+ 0609  0F 82 FEC6		        jc      bad_device
+
+ 060D				set_packet_size:
+				; Test read/write packet queue count request.
+ 060D  B0 06			        mov     al,DEFAULT_WRITE_PKT_QUEUE
+ 060F  65: 80 7D 1E 00		        cmp     GS:[di].s_stConfigParms.cbyMaxWritePktCount,ZERO
+ 0614  74 04			        je      @f
+ 0616  65: 8A 45 1E		        mov     al,GS:[di].s_stConfigParms.cbyMaxWritePktCount
+ 061A				@@:
+ 061A  88 44 2A			        mov     [si].s_stDeviceParms.byMaxWritePktCount,al
+
+ 061D  B0 06			        mov     al,DEFAULT_READ_PKT_QUEUE
+ 061F  65: 80 7D 1F 00		        cmp     GS:[di].s_stConfigParms.cbyMaxReadPktCount,ZERO
+ 0624  74 04			        je      @f
+ 0626  65: 8A 45 1F		        mov     al,GS:[di].s_stConfigParms.cbyMaxReadPktCount
+ 062A				@@:
+ 062A  88 44 2B			        mov     [si].s_stDeviceParms.byMaxReadPktCount,al
+
+				; Transmit buffer space is always allocated in device driver's data segment
+				; so we must determine if there is enough space available
+ 062D  66| 33 C0		        xor     eax,eax
+ 0630  B8 0100			        mov     ax,DEF_WRITE_BUFF_LEN
+ 0633  65: 83 7D 0A 00		        cmp     GS:[di].s_stConfigParms.cwWrtBufferLength,ZERO
+ 0638  74 0C			        je      @f
+ 063A  65: 8B 45 0A		        mov     ax,GS:[di].s_stConfigParms.cwWrtBufferLength
+ 063E  3D 0080			        cmp     ax,MIN_WRITE_BUFF_LEN
+ 0641  73 03			        jae     @f
+ 0643  B8 0080			        mov     ax,MIN_WRITE_BUFF_LEN
+ 0646				@@:
+ 0646  89 44 0C			        mov     [si].s_stDeviceParms.wWrtBufferLength,ax
+
+
+ 0649  03 06 0000 E		        add     ax,wLastEndOfData
+ 064D  72 70			        jc      segment_overflow
+ 064F  83 F8 FE			        cmp     ax,0fffeh
+
+ 0652  77 6B			        ja      segment_overflow
+				  IFNDEF x16_BIT
+ 0654  65: 83 3E 0000 E		        cmp     GS:_bUseDDdataSegment,TRUE
+       01
+ 065A  0F 84 008A		        je      set_thresholds
+
+				  ENDIF
+				; Test buffer length request if allocating memory for receive and/or COMscope
+				; buffers in the device driver's data segment.  If we aren't allocating memory
+				; in the device driver's data segment then we have already calculated
+				; required buffer space and compared to available buffer space.
+
+ 065E  66| BB 00001000		        mov     ebx,DEF_READ_BUFF_LEN      ; also zeros upper word of EBX
+ 0664  65: 83 7D 08 00		        cmp     GS:[di].s_stConfigParms.cwReadBufferLength,ZERO
+ 0669  74 13			        je      @f
+ 066B  65: 8B 5D 08		        mov     bx,GS:[di].s_stConfigParms.cwReadBufferLength
+ 066F  66| 81 FB 00000400	        cmp     ebx,MIN_READ_BUFF_LEN
+ 0676  73 06			        jae     @f
+ 0678  66| BB 00000400		        mov     ebx,MIN_READ_BUFF_LEN
+ 067E				@@:
+ 067E  66| 89 5C 10		        mov     [si].s_stDeviceParms.dwReadBufferLength,ebx
+
+ 0682  03 C3			        add     ax,bx
+ 0684  72 39			        jc      segment_overflow
+ 0686  83 F8 FE			        cmp     ax,0fffeh
+ 0689  77 34			        ja      segment_overflow
+
+				  IFNDEF NO_COMscope
+ 068B  65: F7 05 0040		        test    GS:[di].s_stConfigParms.cwDeviceFlags1,CFG_FLAG1_COMSCOPE
+ 0690  74 56			        jz      set_thresholds
+
+ 0692  66| BB 00002000		        mov     ebx,DEF_COMscope_BUFF_LEN  ; also zeros upper word of EBX
+ 0698  65: 83 7D 04 00		        cmp     GS:[di].s_stConfigParms.cwCOMscopeBuffLen,ZERO
+ 069D  74 13			        je      @f
+ 069F  65: 8B 5D 04		        mov     bx,GS:[di].s_stConfigParms.cwCOMscopeBuffLen
+ 06A3  66| 81 FB 00000400	        cmp     ebx,MIN_COMscope_BUFF_LEN
+ 06AA  73 06			        jae     @f
+ 06AC  66| BB 00000400		        mov     ebx,MIN_COMscope_BUFF_LEN
+ 06B2				@@:
+ 06B2  66| 89 5C 18		        mov     [si].s_stDeviceParms.dwCOMscopeBuffLen,ebx
+
+ 06B6  03 C3			        add     ax,bx
+ 06B8  72 05			        jc      segment_overflow
+ 06BA  83 F8 FE			        cmp     ax,0fffeh
+ 06BD  76 29			        jbe     set_thresholds
+
+				  ENDIF
+
+ 06BF				segment_overflow:
+ 06BF  E8 0000 E		        call    GetCOMnumber
+				        INVOKE sprintf,ADDR _szMessage,0,ADDR _szMemoryError_u,bx
+ 06C2  53		   *	    push   bx
+ 06C3  0F A8		   *	    push   gs
+ 06C5  68 0000 E	   *	    push   OFFSET DGROUP: _szMemoryError_u
+ 06C8  6A 00		   *	    push   +00000h
+ 06CA  0F A8		   *	    push   gs
+ 06CC  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 06CF  9A ---- 0000 E	   *	    call   sprintf
+ 06D4  83 C4 0C		   *	    add    sp, 0000Ch
+				        INVOKE PrintMessage,ADDR _szMessage,ax
+ 06D7  50		   *	    push   ax
+ 06D8  0F A8		   *	    push   gs
+ 06DA  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 06DD  9A ---- 0000 E	   *	    call   PrintMessage
+ 06E2  83 C4 06		   *	    add    sp, 00006h
+ 06E5  E9 FDEB			        jmp     bad_device
+
+ 06E8				set_thresholds::
+				;  Set handshaking thresholds
+ 06E8  B8 0020			        mov     ax,20h
+ 06EB  65: 83 7D 28 00		        cmp     GS:[di].s_stConfigParms.cwXoffThreshold,0
+ 06F0  74 07			        je      @f
+ 06F2  65: 8B 45 28		        mov     ax,GS:[di].s_stConfigParms.cwXoffThreshold
+ 06F6  89 44 48			        mov     [si].s_stDeviceParms.wDefXoffThreshold,ax
+ 06F9				@@:
+ 06F9  89 44 36			        mov     [si].s_stDeviceParms.wXoffThreshold,ax
+
+ 06FC  66| 8B 44 10		        mov     eax,[si].s_stDeviceParms.dwReadBufferLength
+ 0700  66| D1 E8		        shr     eax,1
+ 0703  65: 83 7D 26 00		        cmp     GS:[di].s_stConfigParms.cwXonHysteresis,0
+ 0708  74 0E			        je      @f
+ 070A  66| 8B 44 10		        mov     eax,[si].s_stDeviceParms.dwReadBufferLength
+ 070E  65: 2B 45 26		        sub     ax,GS:[di].s_stConfigParms.cwXonHysteresis
+ 0712  2B 44 36			        sub     ax,[si].s_stDeviceParms.wXoffThreshold
+ 0715  89 44 4A			        mov     [si].s_stDeviceParms.wDefXonThreshold,ax
+ 0718				@@:
+ 0718  89 44 34			        mov     [si].s_stDeviceParms.wXonThreshold,ax
+
+				  IFDEF this_junk ; these were tested and set in valid hardware tests
+				  ENDIF
+				; Setup defaults for DCB
+ 071B  65: 83 7D 16 00		        cmp     GS:[di].s_stConfigParms.cwRdTimeout,ZERO
+ 0720  74 07			        je      @f
+ 0722  65: 8B 45 16		        mov     ax,GS:[di].s_stConfigParms.cwRdTimeout
+ 0726  89 44 42			        mov     [si].s_stDeviceParms.wDefRdTimeout,ax
+ 0729				@@:
+ 0729  65: 83 7D 14 00		        cmp     GS:[di].s_stConfigParms.cwWrtTimeout,ZERO
+ 072E  74 07			        je      @f
+ 0730  65: 8B 45 14		        mov     ax,GS:[di].s_stConfigParms.cwWrtTimeout
+ 0734  89 44 40			        mov     [si].s_stDeviceParms. wDefWrtTimeout,ax
+ 0737				@@:
+ 0737  8B 54 3A			        mov     dx,[si].s_stDeviceParms.wIObaseAddress
+ 073A  83 C2 03			        add     dx,LINE_CTL_REG_OFFSET
+ 073D  B0 03			        mov     al,DEFAULT_LINE_CHARACTERISTICS
+
+ 073F  65: 80 7D 21 00		        cmp     GS:[di].s_stConfigParms.cbyLineCharacteristics,ZERO
+ 0744  74 06			        je      @f
+ 0746  65: 8A 45 21		        mov     al,GS:[di].s_stConfigParms.cbyLineCharacteristics
+ 074A  24 3F			        and     al,3fh
+ 074C				@@:
+				        OutByteDel bx
+ 0753  24 07			        and     al,LINE_CTL_WORD_LEN_MASK
+ 0755  3C 00			        cmp     al,LINE_CTL_WL5
+ 0757  75 06			        jne     @f
+ 0759  C6 44 3F 1F		        mov     [si].s_stDeviceParms.byDataLengthMask,01fh
+ 075D  EB 18			        jmp     do_def_baud
+ 075F				@@:
+ 075F  3C 01			        cmp     al,LINE_CTL_WL6
+ 0761  75 06			        jne     @f
+ 0763  C6 44 3F 3F		        mov     [si].s_stDeviceParms.byDataLengthMask,03fh
+ 0767  EB 0E			        jmp     do_def_baud
+ 0769				@@:
+ 0769  3C 02			        cmp     al,LINE_CTL_WL7
+ 076B  75 06			        jne     @f
+ 076D  C6 44 3F 7F		        mov     [si].s_stDeviceParms.byDataLengthMask,07fh
+ 0771  EB 04			        jmp     do_def_baud
+ 0773				@@:
+ 0773  C6 44 3F FF		        mov     [si].s_stDeviceParms.byDataLengthMask,0ffh
+
+ 0777				do_def_baud:
+				  IFNDEF x16_BIT
+ 0777  66| 65: 83 7D 18		        cmp     GS:[di].s_stConfigParms.cdwBaudRate,ZERO
+       00
+ 077D  74 41			        je      do_def_DCB_flags
+				  ELSE
+				  ENDIF
+				  IFNDEF x16_BIT
+ 077F  66| 65: 8B 45 18		        mov     eax,GS:[di].s_stConfigParms.cdwBaudRate
+				  ELSE
+				  ENDIF
+ 0784  8B C8			        mov     cx,ax
+ 0786  81 E1 7FFF		        and     cx,7fffh      ; limit minimum baud rate
+ 078A  F7 45 08 0080		        test    [di].s_stDeviceParms.wConfigFlags1,CFG_FLAG1_EXPLICIT_BAUD_DIVISOR
+ 078F  75 28			        jnz     store_baud
+				  IFNDEF x16_BIT
+ 0791  F7 44 08 0010		        test    [si].s_stDeviceParms.wConfigFlags1,CFG_FLAG1_NORMALIZE_BAUD
+ 0796  74 1C			        jz      @f
+				IFDEF this_junk
+				ELSE
+ 0798  80 BC 009E 01		        cmp     [si].s_stDeviceParms.xBaudMultiplier,1
+ 079D  76 15			        jbe     @f
+ 079F  66| 33 DB		        xor     ebx,ebx
+ 07A2  8A 9C 009E		        mov     bl,[si].s_stDeviceParms.xBaudMultiplier
+ 07A6  66| F7 E3		        mul     ebx
+ 07A9  66| 83 FA 00		        cmp     edx,0    ; test for overflow
+ 07AD  74 05			        je      @f
+ 07AF  66| 65: 8B 45 18		        mov     eax,GS:[di].s_stConfigParms.cdwBaudRate   ; messed up don't multiply (safety net)
+				ENDIF
+ 07B4				@@:
+				  ENDIF
+ 07B4  E8 0000 E		        call    CalcBaudRate
+ 07B7  72 07			        jc      do_def_DCB_flags
+
+ 07B9				store_baud:
+				  IFNDEF x16_BIT
+ 07B9  66| 89 44 26		        mov     [si].s_stDeviceParms.dwBaudRate,eax
+				  ELSE
+				  ENDIF
+ 07BD  89 4C 24			        mov     [si].s_stDeviceParms.wBaudRateDivisor,cx
+
+ 07C0				do_def_DCB_flags:
+ 07C0  65: 83 7D 0E 00		        cmp     GS:[di].s_stConfigParms.cwFlags1,ZERO
+ 07C5  74 07			        je      do_def_flags2
+ 07C7  65: 8A 45 0E		        mov     al,BYTE PTR GS:[di].s_stConfigParms.cwFlags1
+ 07CB  88 44 2C			        mov     [si].s_stDeviceParms.byFlag1,al
+
+ 07CE				do_def_flags2:
+ 07CE  C6 84 00A3 FF		        mov     [si].s_stDeviceParms.byFlag2Mask,0ffh
+ 07D3  80 A4 00A3 E3		        and     [si].s_stDeviceParms.byFlag2Mask,NOT (F2_ENABLE_BREAK_REPL OR \
+				                                                     F2_ENABLE_ERROR_REPL OR \
+				                                                     F2_ENABLE_NULL_STRIP)
+ 07D8  65: 83 7D 10 00		        cmp     GS:[di].s_stConfigParms.cwFlags2,ZERO
+ 07DD  74 2E			        je      do_def_flags3
+ 07DF  65: 8A 45 10		        mov     al,BYTE PTR GS:[di].s_stConfigParms.cwFlags2
+ 07E3  88 44 2D			        mov     [si].s_stDeviceParms.byFlag2,al
+ 07E6  65: F7 45 10 0010	        test    GS:[di].s_stConfigParms.cwFlags2,F2_ENABLE_BREAK_REPL
+ 07EC  74 05			        jz      @f
+ 07EE  80 8C 00A3 10		        or      [si].s_stDeviceParms.byFlag2Mask,F2_ENABLE_BREAK_REPL
+ 07F3				@@:
+ 07F3  65: F7 45 10 0004	        test    GS:[di].s_stConfigParms.cwFlags2,F2_ENABLE_ERROR_REPL
+ 07F9  74 05			        jz      @f
+ 07FB  80 8C 00A3 04		        or      [si].s_stDeviceParms.byFlag2Mask,F2_ENABLE_ERROR_REPL
+ 0800				@@:
+ 0800  65: F7 45 10 0008	        test    GS:[di].s_stConfigParms.cwFlags2,F2_ENABLE_NULL_STRIP
+ 0806  74 05			        jz      do_def_flags3
+ 0808  80 8C 00A3 08		        or      [si].s_stDeviceParms.byFlag2Mask,F2_ENABLE_NULL_STRIP
+
+ 080D				do_def_flags3:
+ 080D  65: 83 7D 12 00		        cmp     GS:[di].s_stConfigParms.cwFlags3,ZERO
+ 0812  74 0B			        je      do_def_characters
+ 0814  65: 8A 45 12		        mov     al,BYTE PTR GS:[di].s_stConfigParms.cwFlags3
+ 0818  88 84 00A4		        mov     [si].s_stDeviceParms.byDefFlag3,al
+ 081C  88 44 2E			        mov     [si].s_stDeviceParms.byFlag3,al
+
+ 081F				do_def_characters:
+ 081F  65: 80 7D 22 00		        cmp     GS:[di].s_stConfigParms.cbyErrorChar,ZERO
+ 0824  74 07			        je      @f
+ 0826  65: 8A 45 22		        mov     al,BYTE PTR GS:[di].s_stConfigParms.cbyErrorChar
+ 082A  88 44 46			        mov     [si].s_stDeviceParms.byDefErrorChar,al
+ 082D				@@:
+ 082D  65: 80 7D 23 00		        cmp     GS:[di].s_stConfigParms.cbyBreakChar,ZERO
+ 0832  74 07			        je      @f
+ 0834  65: 8A 45 23		        mov     al,BYTE PTR GS:[di].s_stConfigParms.cbyBreakChar
+ 0838  88 44 47			        mov     [si].s_stDeviceParms.byDefBreakChar,al
+ 083B				@@:
+ 083B  65: 80 7D 25 00		        cmp     GS:[di].s_stConfigParms.cbyXoffChar,ZERO
+ 0840  74 07			        je      @f
+ 0842  65: 8A 45 25		        mov     al,BYTE PTR GS:[di].s_stConfigParms.cbyXoffChar
+ 0846  88 44 45			        mov     [si].s_stDeviceParms.byDefXoffChar,al
+ 0849				@@:
+ 0849  65: 80 7D 24 00		        cmp     GS:[di].s_stConfigParms.cbyXonChar,ZERO
+ 084E  74 07			        je      do_def_FIFO_depth
+ 0850  65: 8A 45 24		        mov     al,BYTE PTR GS:[di].s_stConfigParms.cbyXonChar
+ 0854  88 44 44			        mov     [si].s_stDeviceParms.byDefXonChar,al
+
+ 0857				do_def_FIFO_depth::
+ 0857  B8 0001			        mov     ax,1
+ 085A  F7 44 04 2000		        test    [si].s_stDeviceParms.wDeviceFlag2,DEV_FLAG2_FIFO_AVAILABLE
+ 085F  0F 84 00C5		        jz      set_FIFO_depth
+				  IFNDEF x16_BIT
+ 0863  65: 83 7D 0C 00		        cmp     GS:[di].s_stConfigParms.cwTxFIFOdepth,ZERO
+ 0868  75 2C			        jne     set_user_FIFO_depth
+				  ENDIF
+ 086A  B8 0010			        mov     ax,MAX_16550_TX_DEPTH
+				        test_DeviceFlag2 DEV_FLAG2_16650_UART
+ 0872  74 06			        jz      try_16654
+ 0874  B8 0020			        mov     ax,MAX_16650_TX_DEPTH
+ 0877  E9 00AE			        jmp     set_FIFO_depth
+
+ 087A				try_16654:
+				        test_DeviceFlag2 DEV_FLAG2_16654_UART
+ 087F  74 06			        jz      try_16750
+ 0881  B8 0040			        mov     ax,MAX_16654_TX_DEPTH
+ 0884  E9 00A1			        jmp     set_FIFO_depth
+
+ 0887				try_16750:
+				        test_DeviceFlag2 DEV_FLAG2_16750_UART
+ 088C  0F 84 0098		        jz      set_FIFO_depth
+ 0890  B8 0040			        mov     ax,MAX_16750_TX_DEPTH
+ 0893  E9 0092			        jmp     set_FIFO_depth
+
+				  IFNDEF x16_BIT
+ 0896				set_user_FIFO_depth:
+ 0896  65: 8B 45 0C		        mov     ax,GS:[di].s_stConfigParms.cwTxFIFOdepth
+ 089A  F7 44 0A 4000		        test    [si].s_stDeviceParms.wConfigFlags2,CFG_FLAG2_EXPLICIT_TX_LOAD
+ 089F  75 4C			        jnz     set_explicit_TX_load
+ 08A1  83 F8 01			        cmp     ax,1
+ 08A4  0F 84 0080		        je      set_FIFO_depth
+				        test_DeviceFlag2 DEV_FLAG2_16650_UART
+ 08AD  74 19			        jz      test_16554
+
+ 08AF  83 F8 02			        cmp     ax,2
+ 08B2  75 05			        jne     test_16650_L3
+ 08B4  B8 0010			        mov     ax,16
+ 08B7  EB 6F			        jmp     set_FIFO_depth
+ 08B9				test_16650_L3:
+ 08B9  83 F8 03			        cmp     ax,3
+ 08BC  75 05			        jne     test_16650_L4
+ 08BE  B8 0018			        mov     ax,24
+ 08C1  EB 65			        jmp     set_FIFO_depth
+
+ 08C3				test_16650_L4:
+ 08C3  B8 0020			        mov     ax,32
+ 08C6  EB 60			        jmp     set_FIFO_depth
+
+ 08C8				test_16554:
+				        test_DeviceFlag2 (DEV_FLAG2_16654_UART OR DEV_FLAG2_16750_UART)
+ 08CD  74 19			        jz      set_16550
+
+ 08CF  83 F8 02			        cmp     ax,2
+ 08D2  75 05			        jne     test_64byteFIFO_L3
+ 08D4  B8 0020			        mov     ax,32
+ 08D7  EB 4F			        jmp     set_FIFO_depth
+ 08D9				test_64byteFIFO_L3:
+ 08D9  83 F8 03			        cmp     ax,3
+ 08DC  75 05			        jne     test_64byteFIFO_L4
+ 08DE  B8 0030			        mov     ax,48
+ 08E1  EB 45			        jmp     set_FIFO_depth
+
+ 08E3				test_64byteFIFO_L4:
+ 08E3  B8 0040			        mov     ax,64
+ 08E6  EB 40			        jmp     set_FIFO_depth
+
+ 08E8				set_16550:
+ 08E8  B8 0010			        mov     ax,16
+ 08EB  EB 3B			        jmp     set_FIFO_depth
+
+ 08ED				set_explicit_TX_load:
+				        test_DeviceFlag2 DEV_FLAG2_16650_UART
+ 08F2  74 0A			        jz      test_exp_16654
+ 08F4  83 F8 20			        cmp     ax,MAX_16650_TX_DEPTH
+ 08F7  76 2F			        jna     set_FIFO_depth
+ 08F9  B8 0020			        mov     ax,MAX_16650_TX_DEPTH
+ 08FC  EB 2A			        jmp     set_FIFO_depth
+
+ 08FE				test_exp_16654:
+				        test_DeviceFlag2 DEV_FLAG2_16654_UART
+ 0903  74 0A			        jz      test_exp_16750
+ 0905  83 F8 40			        cmp     ax,MAX_16654_TX_DEPTH
+ 0908  76 1E			        jna     set_FIFO_depth
+ 090A  B8 0040			        mov     ax,MAX_16654_TX_DEPTH
+ 090D  EB 19			        jmp     set_FIFO_depth
+
+ 090F				test_exp_16750:
+				        test_DeviceFlag2 DEV_FLAG2_16750_UART
+ 0914  74 0A			        jz      set_exp_16550
+ 0916  83 F8 40			        cmp     ax,MAX_16750_TX_DEPTH
+ 0919  76 0D			        jna     set_FIFO_depth
+ 091B  B8 0040			        mov     ax,MAX_16750_TX_DEPTH
+ 091E  EB 08			        jmp     set_FIFO_depth
+
+ 0920				set_exp_16550:
+ 0920  83 F8 10			        cmp     ax,MAX_16550_TX_DEPTH
+ 0923  76 03			        jna     set_FIFO_depth
+ 0925  B8 0010			        mov     ax,MAX_16550_TX_DEPTH
+				  ENDIF
+
+ 0928				set_FIFO_depth:
+ 0928  89 44 7A			        mov     [si].s_stDeviceParms.wUserTxFIFOdepth,ax
+
+ 092B				lock_LID::
+ 092B  65: 83 3E 0000 E		        cmp     GS:_bIsTheFirst,TRUE
+       01
+ 0931  75 24			        jne     clear_BIOS_data
+ 0933  65: 83 3E 0000 E		        cmp     GS:_bABIOSpresent,TRUE
+       01
+ 0939  75 1C			        jne     clear_BIOS_data
+ 093B  BB 0000 E		        mov     bx,OFFSET _astInstallParms
+ 093E  65: 8B 07		        mov     ax,GS:[bx].s_stInstallParms.wLID;
+ 0941  0B C0			        or      ax,ax
+ 0943  74 12			        jz      clear_BIOS_data
+				    SetDS     DGROUP            ; GetLIDentry get called from 'C' init code
+ 0949  1E			        push    ds
+ 094A  53			        push    bx
+ 094B  9A ---- 0000 E		        call    _GetLIDentry
+ 0950  83 C4 04			        add     sp,4
+				    SetDS     RDGROUP
+
+ 0957				clear_BIOS_data:
+
+				IFDEF this_junk
+				ENDIF
+
+ 0957				write_installed_message::
+ 0957  E8 0000 E		        call    OutputProgress
+
+				; If COMscpope and receive buffers are to be allocated in device driver's data
+				; segment then calculate end of data segment and read/write/COMscope buffer offsets
+
+				; since the buffer lengths are adjustable at initialization time, it is more
+				; efficient to adjust the read buffer length variable to fit the queue handling
+				; algorithims at initialization time, rather than at run time
+
+				; Memory requirements were calculated above when the device driver segment is to be used.
+
+ 095A  66| 33 C0		        xor     eax,eax
+ 095D  A1 0000 E		        mov     ax,wLastEndOfData
+
+ 0960  89 44 62			        mov     [si].s_stDeviceParms.oWriteBuffer,ax
+ 0963  03 44 0C			        add     ax,[si].s_stDeviceParms.wWrtBufferLength
+ 0966  89 44 0E			        mov     [si].s_stDeviceParms.wWrtBufferExtent,ax
+ 0969  FF 4C 0E			        dec     [si].s_stDeviceParms.wWrtBufferExtent        ;adj for zero base
+
+				; If it was determined in PRELOAD.C that there wasn't enough space available
+				; in the device driver's data segment then skip this, as the COMscope and receive
+				; buffers were defined in UTIL.ASM (MemorySetup).
+
+ 096C  65: 83 3E 0000 E		        cmp     GS:_bUseDDdataSegment,TRUE
+       01
+ 0972  75 4D			        jne     adjust_last_end_of_data
+
+				        OR_DeviceFlag2 DEV_FLAG2_USE_DD_DATA_SEGMENT
+
+ 0979  66| 89 84 0088		        mov     [si].s_stDeviceParms.oReadBuffer,eax
+ 097E  66| 89 84 0080		        mov     [si].s_stDeviceParms.dwReceiveQueueWritePointer,eax
+ 0983  66| 89 84 0084		        mov     [si].s_stDeviceParms.dwReceiveQueueReadPointer,eax
+ 0988  66| 03 44 10		        add     eax,[si].s_stDeviceParms.dwReadBufferLength
+ 098C  66| 89 44 14		        mov     [si].s_stDeviceParms.dwReadBufferExtent,eax
+ 0990  66| FF 4C 14		        dec     [si].s_stDeviceParms.dwReadBufferExtent       ;adj for zero base
+ 0994  C7 44 5C 0000		        mov     [si].s_stDeviceParms.wRdBuffSelector,RDGROUP
+
+				   IFNDEF NO_COMscope
+ 0999  65: F7 05 0040		        test    GS:[di].s_stConfigParms.cwDeviceFlags1,CFG_FLAG1_COMSCOPE
+ 099E  74 21			        jz      adjust_last_end_of_data
+
+ 09A0  66| 89 84 0094		        mov     [si].s_stDeviceParms.oCOMscopeBuff,eax
+ 09A5  66| 89 84 008C		        mov     [si].s_stDeviceParms.dwCOMscopeQWrtPtr,eax
+ 09AA  66| 89 84 0090		        mov     [si].s_stDeviceParms.dwCOMscopeQRdPtr,eax
+ 09AF  66| 03 44 18		        add     eax,[si].s_stDeviceParms.dwCOMscopeBuffLen
+ 09B3  66| 89 44 1C		        mov     [si].s_stDeviceParms.dwCOMscopeBuffExtent,eax
+ 09B7  66| 83 6C 1C 02		        sub     [si].s_stDeviceParms.dwCOMscopeBuffExtent,2   ;adj for zero base
+ 09BC  C7 44 5A 0000		        mov     [si].s_stDeviceParms.wCOMscopeSelector,RDGROUP
+
+				   ENDIF
+ 09C1				adjust_last_end_of_data::
+ 09C1  A3 0000 E		        mov     wLastEndOfData,ax
+ 09C4  89 36 0000 E		        mov     wLastDeviceParmsOffset,si
+
+ 09C8				set_end_of_data_segment::
+ 09C8  C4 7E FC			        les     di,pPacket
+ 09CB  26: 89 45 10		        mov     ES:[di].s_stPacket.InitDataPacket.DataEndOffset,ax
+
+ 09CF  FF 06 0000 E		        inc     wDeviceCount
+ 09D3  65: 8B 1E 0000 E		        mov     bx,GS:_wCurrentDevice
+ 09D8  D1 E3			        shl     bx,1
+ 09DA  89 B7 0000 E		        mov     wDeviceOffsetTable[bx],si
+
+				  IFNDEF NO_RESOURCE_MGR
+ 09DE  65: 83 3E 0000 E		        cmp     GS:_bDisableRM,TRUE
+       01
+ 09E4  74 1B			        je      @f
+ 09E6  8B 1E 0000 E		        mov     bx,wBusType
+ 09EA  53			        push    bx
+ 09EB  65: A1 0000 E		        mov     ax,GS:_wInstallTryCount
+ 09EF  48			        dec     ax
+ 09F0  50			        push    ax
+				     SetDS    DGROUP
+ 09F5  9A ---- 0000 E		        call    _RMHELP_PortInitComplete
+ 09FA  83 C4 04			        add     sp,4
+				     SetDS    RDGROUP
+ 0A01				@@:
+				  ENDIF
+ 0A01				init_exit::
+ 0A01  65: A1 0000 E		        mov     ax,GS:_wLoadCount
+ 0A05  0B C0			        or      ax,ax
+ 0A07  74 11			        jz      say_bad_load
+ 0A09  65: 3B 06 0000 E		        cmp     ax,GS:_wInstallTryCount
+ 0A0E  0F 85 00F4		        jne     set_end_of_code
+
+ 0A12				display_finals::
+ 0A12  65: 83 3E 0000 E		        cmp     GS:_bBadLoad,TRUE
+       01
+ 0A18  75 1B			        jne     @f
+
+ 0A1A				say_bad_load:
+ 0A1A  65: C7 06 0000 E		        mov     GS:_bWaitForCR,TRUE
+       0001
+ 0A21  65: C7 06 0000 E		        mov     GS:_bDelay,TRUE
+       0001
+ 0A28  65: C7 06 0000 E		        mov     GS:_wDelayCount,60
+       003C
+ 0A2F  B8 0000 E		        mov     ax,OFFSET _szFinalError
+ 0A32  E8 0000 E		        call    PrintString
+ 0A35				@@:
+ 0A35  65: 83 3E 0000 E		        cmp     GS:_bWaitForCR,TRUE
+       01
+ 0A3B  74 14			        je      test_copyright
+ 0A3D  65: 83 3E 0000 E		        cmp     GS:_bDelay,TRUE
+       01
+ 0A43  75 0C			        jne     test_copyright
+				        Delay   GS:_wDelayCount
+
+ 0A51				test_copyright:
+ 0A51  65: 83 3E 0000 E		        cmp     GS:_wLoadNumber,NO_INI_FILE
+       FF
+ 0A57  74 1C			        je      play_copyright
+ 0A59  65: A1 0000 E		        mov     ax,GS:_wLoadCount
+ 0A5D  83 3E 0000 E 00		        cmp     wMaxDeviceCount,0
+ 0A62  74 06			        je      test_last_load
+ 0A64  3B 06 0000 E		        cmp     ax,wMaxDeviceCount
+ 0A68  73 0B			        jae     play_copyright
+
+ 0A6A				test_last_load:
+ 0A6A  65: A1 0000 E		        mov     ax,GS:_wLoadNumber
+ 0A6E  65: 39 06 0000 E		        cmp     GS:_wDriverLoadCount,ax
+ 0A73  75 43			        jne     test_final_delay
+
+ 0A75				play_copyright:
+ 0A75  B8 0000 E		        mov     ax,OFFSET _szCopyright
+ 0A78  E8 0000 E		        call    PrintString
+ 0A7B  BB 0000 E		        mov     bx,OFFSET _szVersion
+
+				        INVOKE sprintf,ADDR _szMessage,0,ADDR _szVersionString_ss,bx,gs,OFFSET _szVerMod,gs
+ 0A7E  0F A8		   *	    push   gs
+ 0A80  68 0000 E	   *	    push   word  ptr OFFSET _szVerMod
+ 0A83  0F A8		   *	    push   gs
+ 0A85  53		   *	    push   bx
+ 0A86  0F A8		   *	    push   gs
+ 0A88  68 0000 E	   *	    push   OFFSET DGROUP: _szVersionString_ss
+ 0A8B  6A 00		   *	    push   +00000h
+ 0A8D  0F A8		   *	    push   gs
+ 0A8F  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 0A92  9A ---- 0000 E	   *	    call   sprintf
+ 0A97  83 C4 12		   *	    add    sp, 00012h
+				        INVOKE PrintMessage,ADDR _szMessage,ax
+ 0A9A  50		   *	    push   ax
+ 0A9B  0F A8		   *	    push   gs
+ 0A9D  68 0000 E	   *	    push   OFFSET DGROUP: _szMessage
+ 0AA0  9A ---- 0000 E	   *	    call   PrintMessage
+ 0AA5  83 C4 06		   *	    add    sp, 00006h
+ 0AA8  B8 001E			        mov     ax,30
+ 0AAB  E8 0000 E		        call    CalcDelay
+				        Delay   ax
+
+ 0AB8				test_final_delay:
+ 0AB8  65: 83 3E 0000 E		        cmp     GS:_bWaitForCR,TRUE
+       01
+ 0ABE  75 2E			        jne     kill_timer
+
+ 0AC0  83 3E 0000 E 00		        cmp     wDeviceCount,0
+ 0AC5  75 08			        jne     @f
+ 0AC7  65: 83 3E 0000 E		        cmp     GS:_bIsTheFirst,TRUE
+       01
+ 0ACD  75 1F			        jne     kill_timer
+ 0ACF				@@:
+ 0ACF  B8 0000 E		        mov     ax,OFFSET _szWaitKeyMessage
+ 0AD2  E8 0000 E		        call    PrintString
+ 0AD5  65: C7 06 0000 E		        mov     GS:_bWaitingKey,TRUE
+       0001
+				        Delay   GS:_wDelayCount
+ 0AE8  B8 0000 E		        mov     ax,OFFSET _szCR
+ 0AEB  E8 0000 E		        call    PrintString
+
+ 0AEE				kill_timer:
+ 0AEE  65: 83 3E 0000 E		        cmp     GS:_bTimerAvailable,TRUE
+       01
+ 0AF4  75 10			        jne     set_end_of_code
+ 0AF6  65: C7 06 0000 E		        mov     GS:_bTimerAvailable,FALSE
+       0000
+ 0AFD  B8 0000 E		        mov     ax,OFFSET InitTimer
+ 0B00  B2 1E			        mov     dl,DevHlp_ResetTimer
+ 0B02  FF 1E 0000 E		        call    device_hlp
+
+ 0B06				set_end_of_code:
+ 0B06  B8 0000 R		        lea     ax,BEGIN_INIT_CODE
+				   IFDEF VDD_support
+				   ENDIF
+ 0B09  C4 7E FC			        les     di,pPacket
+ 0B0C  26: 89 45 0E		        mov     word ptr ES:[di].s_stPacket.InitDataPacket.CodeEndOffset,ax
+
+				; clear other return parameters (as required by OS/2)
+
+ 0B10  33 C0			        xor     ax,ax
+ 0B12  26: 88 45 0D		        mov     ES:[di].s_stPacket.InitDataPacket.DeviceCount,al
+ 0B16  26: 89 45 12		        mov     WORD PTR ES:[di].s_stPacket.InitDataPacket.BPBoffset,ax
+ 0B1A  26: 89 45 14		        mov     WORD PTR ES:[di].s_stPacket.InitDataPacket.BPBoffset + 2,ax
+				        ret
+ 0B1E  5F		   *	    pop    di
+ 0B1F  0F A9		   *	    pop    gs
+ 0B21  07		   *	    pop    es
+ 0B22  8B E5		   *	    mov    sp, bp
+ 0B24  5D		   *	    pop    bp
+ 0B25  C3		   *	    ret    00000h
+
+ 0B26				Init ENDP
+
+ 0B26 = 0B26			INIT_CODE_END EQU $
+
+ 0B26				RES_CODE ENDS
+
+				     END
+

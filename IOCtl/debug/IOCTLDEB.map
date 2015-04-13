@@ -1,0 +1,142 @@
+
+ IOCTLDEB
+
+ Start         Length     Name                   Class
+ 0001:00000000 000000F0CH CODE32                 CODE 32-bit
+	at offset 00000000 00F0AH bytes from P:\ioctl\debug\ioctl.obj (p:\ioctl\ioctl.c)
+
+ 0002:00000000 000000000H CONST32_RO             CONST 32-bit
+
+ 0002:00000000 000000024H DATA32                 DATA 32-bit
+	at offset 00000000 00020H bytes from P:\ioctl\debug\ioctl.obj (p:\ioctl\ioctl.c)
+	at offset 00000020 00004H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\dllstub.asm)
+
+ 0002:00000024 000000000H CTOR_DTOR1             DATA 32-bit
+
+ 0002:00000024 000000000H CTOR_DTOR2             DATA 32-bit
+
+ 0002:00000024 000000000H CTOR_DTOR3             DATA 32-bit
+
+ 0002:00000024 000000000H EDC1                   EDC_CLASS 32-bit
+
+ 0002:00000024 000000000H EDC2                   EDC_CLASS 32-bit
+
+ 0002:00000024 000000000H EDC3                   EDC_CLASS 32-bit
+
+ 0002:00000024 000000004H BSS32                  BSS 32-bit
+	at offset 00000000 00004H bytes from P:\ioctl\debug\ioctl.obj (p:\ioctl\ioctl.c)
+
+
+ Origin   Group
+ 0000:0   FLAT
+ 0002:0   DGROUP
+
+ Address       Export                  Alias
+
+ 0001:000003A0 BreakOff                BreakOff
+ 0001:00000330 BreakOn                 BreakOn
+ 0001:00000B00 FlushComBuffer          FlushComBuffer
+ 0001:00000A90 ForceXoff               ForceXoff
+ 0001:00000A20 ForceXon                ForceXon
+ 0001:000008B3 GetBaudRate             GetBaudRate
+ 0001:00000960 GetBaudRates            GetBaudRates
+ 0001:000002C0 GetCOMerror             GetCOMerror
+ 0001:00000250 GetCOMevent             GetCOMevent
+ 0001:000001E0 GetCOMstatus            GetCOMstatus
+ 0001:00000C58 GetCountsSinceLast      GetCountsSinceLast
+ 0001:00000020 GetDCB                  GetDCB
+ 0001:00000B74 GetFIFOinfo             GetFIFOinfo
+ 0001:000007B4 GetLineCharacteristics  GetLineCharacteristics
+ 0001:000005F0 GetModemInputSignals    GetModemInputSignals
+ 0001:00000660 GetModemOutputSignals   GetModemOutputSignals
+ 0001:00000490 GetReceiveQueueCounts   GetReceiveQueueCounts
+ 0001:00000410 GetReceiveQueueLen      GetReceiveQueueLen
+ 0001:00000580 GetTransmitQueueCounts  GetTransmitQueueCounts
+ 0001:00000500 GetTransmitQueueLen     GetTransmitQueueLen
+ 0001:00000170 GetXmitStatus           GetXmitStatus
+ 0001:00000100 SendByteImmediate       SendByteImmediate
+ 0001:00000090 SendDCB                 SendDCB
+ 0001:00000820 SetBaudRate             SetBaudRate
+ 0001:00000BE6 SetFIFO                 SetFIFO
+ 0001:00000748 SetLineCharacteristics  SetLineCharacteristics
+ 0001:000006D0 SetModemSignals         SetModemSignals
+
+  Address         Publics by Name
+
+ 0001:000003A0       BreakOff
+ 0001:00000330       BreakOn
+ 0000:00000000  Imp  DosDevIOCtl          (DOSCALLS.284)
+ 0001:00000B00       FlushComBuffer
+ 0001:00000A90       ForceXoff
+ 0001:00000A20       ForceXon
+ 0001:000008B3       GetBaudRate
+ 0001:00000960       GetBaudRates
+ 0001:000002C0       GetCOMerror
+ 0001:00000250       GetCOMevent
+ 0001:000001E0       GetCOMstatus
+ 0001:00000C58       GetCountsSinceLast
+ 0001:00000020       GetDCB
+ 0001:00000B74       GetFIFOinfo
+ 0001:000007B4       GetLineCharacteristics
+ 0001:000005F0       GetModemInputSignals
+ 0001:00000660       GetModemOutputSignals
+ 0001:00000490       GetReceiveQueueCounts
+ 0001:00000410       GetReceiveQueueLen
+ 0001:00000580       GetTransmitQueueCounts
+ 0001:00000500       GetTransmitQueueLen
+ 0001:00000170       GetXmitStatus
+ 0001:00000100       SendByteImmediate
+ 0001:00000090       SendDCB
+ 0001:00000820       SetBaudRate
+ 0001:00000BE6       SetFIFO
+ 0001:00000748       SetLineCharacteristics
+ 0001:000006D0       SetModemSignals
+ 0000:00000000  Imp  WinLoadString        (PMWIN.781)
+ 0000:00000000  Imp  WinMessageBox        (PMWIN.789)
+ 0002:00000020       _dllentry
+ 0001:00000000       _DLL_InitTerm
+ 0002:00000024       _edata
+ 0002:00000028       _end
+ 0000:00000000  Imp  _fullDump            (OS2LSRTL.469)
+ 0000:00000000  Imp  _sprintfieee         (OS2LSRTL.32)
+
+  Address         Publics by Value
+
+ 0000:00000000  Imp  WinLoadString        (PMWIN.781)
+ 0000:00000000  Imp  _fullDump            (OS2LSRTL.469)
+ 0000:00000000  Imp  WinMessageBox        (PMWIN.789)
+ 0000:00000000  Imp  DosDevIOCtl          (DOSCALLS.284)
+ 0000:00000000  Imp  _sprintfieee         (OS2LSRTL.32)
+ 0001:00000000       _DLL_InitTerm
+ 0001:00000020       GetDCB
+ 0001:00000090       SendDCB
+ 0001:00000100       SendByteImmediate
+ 0001:00000170       GetXmitStatus
+ 0001:000001E0       GetCOMstatus
+ 0001:00000250       GetCOMevent
+ 0001:000002C0       GetCOMerror
+ 0001:00000330       BreakOn
+ 0001:000003A0       BreakOff
+ 0001:00000410       GetReceiveQueueLen
+ 0001:00000490       GetReceiveQueueCounts
+ 0001:00000500       GetTransmitQueueLen
+ 0001:00000580       GetTransmitQueueCounts
+ 0001:000005F0       GetModemInputSignals
+ 0001:00000660       GetModemOutputSignals
+ 0001:000006D0       SetModemSignals
+ 0001:00000748       SetLineCharacteristics
+ 0001:000007B4       GetLineCharacteristics
+ 0001:00000820       SetBaudRate
+ 0001:000008B3       GetBaudRate
+ 0001:00000960       GetBaudRates
+ 0001:00000A20       ForceXon
+ 0001:00000A90       ForceXoff
+ 0001:00000B00       FlushComBuffer
+ 0001:00000B74       GetFIFOinfo
+ 0001:00000BE6       SetFIFO
+ 0001:00000C58       GetCountsSinceLast
+ 0002:00000020       _dllentry
+ 0002:00000024       _edata
+ 0002:00000028       _end
+
+Program entry point at 0001:00000000

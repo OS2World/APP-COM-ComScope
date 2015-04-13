@@ -1,0 +1,60 @@
+COMi Quick Installation
+
+To install the COMi asynchronous serial device driver do one of the following:
+
+Method One:
+
+ 1. Open an OS/2 command prompt session.
+
+ 2. Make the disk drive containing the distribution diskette the default drive.
+
+     Example:  [C:\]A: <ENTER>
+               (assuming the distribution diskette is in drive A:)
+
+ 3. Start Quick Install by typing QINST <ENTER>
+
+Method Two:
+
+ 1. Open the OS/2 System folder
+
+ 2. Open the Drives folder
+
+ 3. Double click on the drive that contains the distribution diskette.
+
+ 4. Double click on the QINST.EXE icon.
+
+Quick Install transfers all required files, including a preconfigured 
+initialization file for COMi, and creates desktop objects for the
+COMi Users Guide and the COMi Configuration application.
+
+Once installed, you may use The "COMi Configuration" object located in the 
+"OStools Utilities" folder at any time to change the configuration of the COMi
+device driver and any device controlled by COMi, though any changes you make
+will require a re-boot to take effect.
+
+COMi and Quick Install are the property of OS/tools Incorporated and are 
+copyrighted (c) 1989-95 by OS/tools Incorporated with all rights reserved.
+
+These programs are licensed to you on a per CPU basis.  One license is
+required for each CPU on which they are installed.
+
+We know nothing and are responsible for nothing, except for any increased
+productivity and/or pleasure brought about by the use of these programs.  This
+is the only disclaimer you have to read.
+
+For additional information about SafePage, PageStar, QuickPage, COMscope,
+COMspool, the COMi device driver, or other OS/tools products please contact:
+
+OS/tools Incorporated
+1685 Branham Lane Suite OS/2
+San Jose, CA 95118-5226
+(408)269-9411 FAX (408)269-9434
+OR
+E-mail to products@os-tools.com on the internet or to 70314,3235 on CompuServe.
+
+OS/tools, SafePage, PageStar, QuickPage, OS/tools, COMscope, COMspool, and
+COMi are trademarks of OS/tools Incorporated.
+
+OS/2 is a trademark of International Business Machines, Incorporated.
+
+

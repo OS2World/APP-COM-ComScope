@@ -1,0 +1,90 @@
+COMi Installation and Configuration
+
+  NOTE on interrupt sharing:
+    COMi supports shared interrupts on ISA serial adapter boards from Sealevel
+    Systems, Comtrol Corporation, DigiBoard, and Quatech Incorporated, and some
+    other ISA serial adapters that have an interrupt ID register. See your
+    adapter's documentation to determine if it has the required capabilities
+    and how to set it up in a shared interrupt mode.
+
+    There are no interrupt restrictions on MCA machines, though we do not
+    recommend installing more that eight devices on a single interrupt, or
+    sharing interrupts across COMi loads.
+
+To install the COMi asynchronous serial device driver do one of the following:
+
+Method One:
+
+1. Open the OS/2 System folder
+
+2. Open the Drives folder
+
+3. Double click on the drive that contains the distribution diskette.
+
+4. Double click on the INSTALL.EXE icon.
+
+5. Once INSTALL is loaded, use the "Install Options" menu item to setup the
+   installation for your system requirements.
+
+    Select "Files" | "Install Options..."
+
+6. Transfer the files.
+
+    Select "Files" | "Transfer Files"
+
+7. Use the "Config COMi" menu to configure the COMi device driver.  Once in
+   the configuration program there will be on-line help to help with the
+   configuration process.
+
+8. Shutdown and re-boot your machine.
+
+Method Two:
+
+1. Open an OS/2 command prompt session.
+
+2. Make the disk drive containing the distribution diskette the default drive.
+
+    Example:  [C:\]A: [ENTER)
+
+              (assuming the distribution diskette is in drive A:)
+
+3. Start INSTALL.EXE by typing INSTALL [ENTER]
+
+4. Follow the instructions from item five, above.
+
+Once installed, you may use INSTALL at any time to change the configuration
+of the COMi device driver and any device controlled by COMi, though any
+changes you make will require a re-boot to take effect.  Print spooler port
+initialization can only be configured via a print objects setting notebook.
+
+Your distribution diskette contains one additional file.  IOCTL.C
+contains "C" source code sample functions for most of the DosDevIOCtl
+functions defined for Category One Asynchronous Serial Devices as defined in
+the "Physical Device Driver Technical Reference".
+
+COMi and INSTALL are the property of OS/tools Incorporated and are
+copyrighted (c) 1989-94 by OS/tools Incorporated with all rights reserved.
+
+These programs are licensed to you on a per CPU basis.  One license is
+required for each CPU on which they are installed.
+
+We know nothing and are responsible for nothing, except for any increased
+productivity and/or pleasure brought about by the use of these programs.  This
+is the only disclaimer you have to read.
+
+For additional information about COMscope, COMspool, the COMi device
+driver, or other OS/tools products please contact:
+
+OS/tools Incorporated
+1685 Branham Lane Suite OS/2
+San Jose, CA 95118-5226
+(408)269-9411 FAX (408)269-9434
+ OR
+Send mail to Compuserve ID 70324,3235
+
+OS/tools, COMscope, COMspool, and COMi are trademarks of OS/tools
+Incorporated.
+
+OS/2 is a trademark of International Business Machines, Incorporated.
+
+

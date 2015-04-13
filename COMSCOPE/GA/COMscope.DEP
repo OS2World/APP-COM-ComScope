@@ -1,0 +1,185 @@
+
+.\wincmd.obj: \
+    p:\COMscope\wincmd.c \
+    {p:\COMscope;$(INCLUDE);}COMscope.h \
+    {p:\COMscope;$(INCLUDE);}COMMON.H \
+    {p:\COMscope;$(INCLUDE);}COMDD.H \
+    {p:\COMscope;$(INCLUDE);}ioctl.h \
+    {p:\COMscope;$(INCLUDE);}utility.h \
+    {p:\COMscope;$(INCLUDE);}CONFIG.H \
+    {p:\COMscope;$(INCLUDE);}COMcontrol.h \
+    {p:\COMscope;$(INCLUDE);}profile.h \
+    {p:\COMscope;$(INCLUDE);}help.h \
+    {p:\COMscope;$(INCLUDE);}column.h \
+    {p:\COMscope;$(INCLUDE);}usermsg.h \
+    {p:\COMscope;$(INCLUDE);}resource.h \
+    {p:\COMscope;$(INCLUDE);}remote.h
+
+.\thread.obj: \
+    p:\COMscope\thread.c \
+    {p:\COMscope;$(INCLUDE);}COMscope.h \
+    {p:\COMscope;$(INCLUDE);}COMMON.H \
+    {p:\COMscope;$(INCLUDE);}COMDD.H \
+    {p:\COMscope;$(INCLUDE);}ioctl.h \
+    {p:\COMscope;$(INCLUDE);}utility.h \
+    {p:\COMscope;$(INCLUDE);}CONFIG.H \
+    {p:\COMscope;$(INCLUDE);}COMcontrol.h \
+    {p:\COMscope;$(INCLUDE);}profile.h \
+    {p:\COMscope;$(INCLUDE);}help.h \
+    {p:\COMscope;$(INCLUDE);}column.h \
+    {p:\COMscope;$(INCLUDE);}usermsg.h \
+    {p:\COMscope;$(INCLUDE);}resource.h \
+    {p:\COMscope;$(INCLUDE);}remote.h
+
+.\stat_dlg.obj: \
+    p:\COMscope\stat_dlg.c \
+    {p:\COMscope;$(INCLUDE);}COMscope.h \
+    {p:\COMscope;$(INCLUDE);}COMMON.H \
+    {p:\COMscope;$(INCLUDE);}COMDD.H \
+    {p:\COMscope;$(INCLUDE);}ioctl.h \
+    {p:\COMscope;$(INCLUDE);}utility.h \
+    {p:\COMscope;$(INCLUDE);}CONFIG.H \
+    {p:\COMscope;$(INCLUDE);}COMcontrol.h \
+    {p:\COMscope;$(INCLUDE);}profile.h \
+    {p:\COMscope;$(INCLUDE);}help.h \
+    {p:\COMscope;$(INCLUDE);}column.h \
+    {p:\COMscope;$(INCLUDE);}usermsg.h \
+    {p:\COMscope;$(INCLUDE);}resource.h
+
+.\search.obj: \
+    p:\COMscope\search.c \
+    {p:\COMscope;$(INCLUDE);}COMscope.h \
+    {p:\COMscope;$(INCLUDE);}COMMON.H \
+    {p:\COMscope;$(INCLUDE);}COMDD.H \
+    {p:\COMscope;$(INCLUDE);}ioctl.h \
+    {p:\COMscope;$(INCLUDE);}utility.h \
+    {p:\COMscope;$(INCLUDE);}CONFIG.H \
+    {p:\COMscope;$(INCLUDE);}COMcontrol.h \
+    {p:\COMscope;$(INCLUDE);}profile.h \
+    {p:\COMscope;$(INCLUDE);}help.h \
+    {p:\COMscope;$(INCLUDE);}column.h \
+    {p:\COMscope;$(INCLUDE);}usermsg.h \
+    {p:\COMscope;$(INCLUDE);}resource.h
+
+.\scroll.obj: \
+    p:\COMscope\scroll.c \
+    {p:\COMscope;$(INCLUDE);}COMscope.h \
+    {p:\COMscope;$(INCLUDE);}COMMON.H \
+    {p:\COMscope;$(INCLUDE);}COMDD.H \
+    {p:\COMscope;$(INCLUDE);}ioctl.h \
+    {p:\COMscope;$(INCLUDE);}utility.h \
+    {p:\COMscope;$(INCLUDE);}CONFIG.H \
+    {p:\COMscope;$(INCLUDE);}COMcontrol.h \
+    {p:\COMscope;$(INCLUDE);}profile.h \
+    {p:\COMscope;$(INCLUDE);}help.h \
+    {p:\COMscope;$(INCLUDE);}column.h \
+    {p:\COMscope;$(INCLUDE);}usermsg.h \
+    {p:\COMscope;$(INCLUDE);}resource.h
+
+.\init.obj: \
+    p:\COMscope\init.c \
+    {p:\COMscope;$(INCLUDE);}COMscope.h \
+    {p:\COMscope;$(INCLUDE);}COMMON.H \
+    {p:\COMscope;$(INCLUDE);}COMDD.H \
+    {p:\COMscope;$(INCLUDE);}ioctl.h \
+    {p:\COMscope;$(INCLUDE);}utility.h \
+    {p:\COMscope;$(INCLUDE);}CONFIG.H \
+    {p:\COMscope;$(INCLUDE);}COMcontrol.h \
+    {p:\COMscope;$(INCLUDE);}profile.h \
+    {p:\COMscope;$(INCLUDE);}help.h \
+    {p:\COMscope;$(INCLUDE);}column.h \
+    {p:\COMscope;$(INCLUDE);}usermsg.h \
+    {p:\COMscope;$(INCLUDE);}resource.h
+
+.\dialog.obj: \
+    p:\COMscope\dialog.c \
+    {p:\COMscope;$(INCLUDE);}COMscope.h \
+    {p:\COMscope;$(INCLUDE);}COMMON.H \
+    {p:\COMscope;$(INCLUDE);}COMDD.H \
+    {p:\COMscope;$(INCLUDE);}ioctl.h \
+    {p:\COMscope;$(INCLUDE);}utility.h \
+    {p:\COMscope;$(INCLUDE);}CONFIG.H \
+    {p:\COMscope;$(INCLUDE);}COMcontrol.h \
+    {p:\COMscope;$(INCLUDE);}profile.h \
+    {p:\COMscope;$(INCLUDE);}help.h \
+    {p:\COMscope;$(INCLUDE);}column.h \
+    {p:\COMscope;$(INCLUDE);}usermsg.h \
+    {p:\COMscope;$(INCLUDE);}resource.h \
+    {p:\COMscope;$(INCLUDE);}remote.h
+
+.\cs_help.obj: \
+    p:\COMscope\cs_help.c \
+    {p:\COMscope;$(INCLUDE);}COMscope.h \
+    {p:\COMscope;$(INCLUDE);}COMMON.H \
+    {p:\COMscope;$(INCLUDE);}COMDD.H \
+    {p:\COMscope;$(INCLUDE);}ioctl.h \
+    {p:\COMscope;$(INCLUDE);}utility.h \
+    {p:\COMscope;$(INCLUDE);}CONFIG.H \
+    {p:\COMscope;$(INCLUDE);}COMcontrol.h \
+    {p:\COMscope;$(INCLUDE);}profile.h \
+    {p:\COMscope;$(INCLUDE);}help.h \
+    {p:\COMscope;$(INCLUDE);}column.h \
+    {p:\COMscope;$(INCLUDE);}usermsg.h \
+    {p:\COMscope;$(INCLUDE);}resource.h
+
+.\csutil.obj: \
+    p:\COMscope\csutil.c \
+    {p:\COMscope;$(INCLUDE);}COMscope.h \
+    {p:\COMscope;$(INCLUDE);}COMMON.H \
+    {p:\COMscope;$(INCLUDE);}COMDD.H \
+    {p:\COMscope;$(INCLUDE);}ioctl.h \
+    {p:\COMscope;$(INCLUDE);}utility.h \
+    {p:\COMscope;$(INCLUDE);}CONFIG.H \
+    {p:\COMscope;$(INCLUDE);}COMcontrol.h \
+    {p:\COMscope;$(INCLUDE);}profile.h \
+    {p:\COMscope;$(INCLUDE);}help.h \
+    {p:\COMscope;$(INCLUDE);}column.h \
+    {p:\COMscope;$(INCLUDE);}usermsg.h \
+    {p:\COMscope;$(INCLUDE);}resource.h \
+    {p:\COMscope;$(INCLUDE);}remote.h
+
+.\comscope.obj: \
+    p:\COMscope\comscope.c \
+    {p:\COMscope;$(INCLUDE);}COMscope.h \
+    {p:\COMscope;$(INCLUDE);}COMMON.H \
+    {p:\COMscope;$(INCLUDE);}COMDD.H \
+    {p:\COMscope;$(INCLUDE);}ioctl.h \
+    {p:\COMscope;$(INCLUDE);}utility.h \
+    {p:\COMscope;$(INCLUDE);}CONFIG.H \
+    {p:\COMscope;$(INCLUDE);}COMcontrol.h \
+    {p:\COMscope;$(INCLUDE);}profile.h \
+    {p:\COMscope;$(INCLUDE);}help.h \
+    {p:\COMscope;$(INCLUDE);}column.h \
+    {p:\COMscope;$(INCLUDE);}usermsg.h \
+    {p:\COMscope;$(INCLUDE);}resource.h \
+    {p:\COMscope;$(INCLUDE);}remote.h
+
+.\column.obj: \
+    p:\COMscope\column.c \
+    {p:\COMscope;$(INCLUDE);}COMscope.h \
+    {p:\COMscope;$(INCLUDE);}COMMON.H \
+    {p:\COMscope;$(INCLUDE);}COMDD.H \
+    {p:\COMscope;$(INCLUDE);}ioctl.h \
+    {p:\COMscope;$(INCLUDE);}utility.h \
+    {p:\COMscope;$(INCLUDE);}CONFIG.H \
+    {p:\COMscope;$(INCLUDE);}COMcontrol.h \
+    {p:\COMscope;$(INCLUDE);}profile.h \
+    {p:\COMscope;$(INCLUDE);}help.h \
+    {p:\COMscope;$(INCLUDE);}column.h \
+    {p:\COMscope;$(INCLUDE);}usermsg.h \
+    {p:\COMscope;$(INCLUDE);}resource.h
+
+.\win_util.obj: \
+    p:\COMscope\win_util.c \
+    {p:\COMscope;$(INCLUDE);}COMscope.h \
+    {p:\COMscope;$(INCLUDE);}COMMON.H \
+    {p:\COMscope;$(INCLUDE);}COMDD.H \
+    {p:\COMscope;$(INCLUDE);}ioctl.h \
+    {p:\COMscope;$(INCLUDE);}utility.h \
+    {p:\COMscope;$(INCLUDE);}CONFIG.H \
+    {p:\COMscope;$(INCLUDE);}COMcontrol.h \
+    {p:\COMscope;$(INCLUDE);}profile.h \
+    {p:\COMscope;$(INCLUDE);}help.h \
+    {p:\COMscope;$(INCLUDE);}column.h \
+    {p:\COMscope;$(INCLUDE);}usermsg.h \
+    {p:\COMscope;$(INCLUDE);}resource.h

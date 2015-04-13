@@ -1,0 +1,10 @@
+
+.\comi.obj: \
+    P:\Install\pda\comi.c \
+    {P:\Install\pda;$(INCLUDE);}COMMON.H \
+    {P:\Install\pda;$(INCLUDE);}utility.h \
+    {P:\Install\pda;$(INCLUDE);}CONFIG.H \
+    {P:\Install\pda;$(INCLUDE);}help.h \
+    p:\install\install.h \
+    p:\install\resource.h \
+    PDA_DEB.mak

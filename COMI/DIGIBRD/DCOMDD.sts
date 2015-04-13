@@ -1,0 +1,122 @@
+PWB-GENERATED FILE: DO NOT MODIFY
+[shared-]
+	mark=cvp "P:\COMI\RESPONSE.C" 135 1 'E ALL "RESPONSE.C"!.135
+	mark=cvp "P:\COMI\RESPONSE.C" 178 1 'E ALL "RESPONSE.C"!.178
+	version=2
+	pmark="P:\COMi\PRELOAD.C" 299 20
+	project="P:\COMi\DCOMDD.MAK"
+	buildmode=3
+[edit-]
+	srch=byoemtype
+	fSrchRe=0
+	rpl=
+	src=
+	fRplRe=25088
+	file="P:\COMi\PRELOAD.C" 299 1 299 20
+[pwb]
+	screen=60 80
+	winstyle=7
+	wnd=C 2 1 59 80
+[environ]
+	INCLUDE=w:\v60\include;w:\v60\masm\include;w:\ddkx86\src\dev\resource\rsm_h;
+	LIB=p:\comi\lib;w:\v60\libp;w:\ddkx86\src\dev\resource\rmcalls
+	HELPFILES=
+[build]
+    build: macro DEBUG "1"
+    build: macro BRFLAGS " /Es /Em /Iu"
+    build: macro PWBRMAKE "pwbrmake"
+    build: macro NMAKEBSC1 "set"
+    build: macro NMAKEBSC2 "nmake"
+    build: macro BROWSE "0"
+    build: macro AFLAGS_G "/Cp /DDigiBoard /nologo /Sg /Zf /Zp1"
+    build: macro CFLAGS_G "/Alfw /G2 /DDigiBoard /Zp /BATCH /nologo /NT_TEXT"
+    build: macro CC "cl"
+    build: macro CFLAGS_D "/Od /Gs"
+    build: macro CFLAGS_R "/Od /Gs"
+    build: macro ASM "ml"
+    build: macro AFLAGS_D "/Sn /Zf /Fl"
+    build: macro AFLAGS_R "/Sn /Fl"
+    build: macro MAPFILE_D "$(PROJ).map"
+    build: macro MAPFILE_R "NUL"
+    build: macro LFLAGS_G " /NOI /NOE /NOD /STACK:0  /BATCH /nologo"
+    build: macro LFLAGS_D "/M /NOF /NOP"
+    build: macro LFLAGS_R "/NOF /NOP"
+    build: macro LINKER "link"
+    build: macro ILINK "ilink"
+    build: macro LRF "echo > NUL"
+    build: macro LLIBS_G "comddLE.lib doscalls.lib rmcalls.lib"
+    build: macro CVFLAGS "/50 /C\"n16\""
+    build: macro NMFLAGS "/nologo"
+    build: macro LLIBS_R ""
+    build: macro LLIBS_D ""
+    build: all $(PROJ).sys
+    build: target $(PROJ).bsc pwbrmake_bsc
+    build: target $(PROJ).sys lrf_sys linker_sys
+    build: inference .c.obj cc_c_obj
+    build: inference .c.sbr cc_c_sbr
+    build: inference .asm.obj asm_asm_obj
+    build: inference .asm.sbr asm_asm_sbr
+    build: command pwbrmake_bsc "$(PWBRMAKE) @<<\n$(BRFLAGS) $(SBRS)\n<<"
+    build: release command lrf_sys "$(LRF) @<<$(PROJ).lrf\n$(RT_OBJS: = +^\n) $(OBJS: = +^\n)\n$@\n$(MAPFILE_R)\n$(LLIBS_G: = +^\n) +\n$(LLIBS_R: = +^\n) +\n$(LIBS: = +^\n)\n$(DEF_FILE) $(LFLAGS_G) $(LFLAGS_R);\n<<"
+    build: debug command lrf_sys "$(LRF) @<<$(PROJ).lrf\n$(RT_OBJS: = +^\n) $(OBJS: = +^\n)\n$@\n$(MAPFILE_D)\n$(LLIBS_G: = +^\n) +\n$(LLIBS_D: = +^\n) +\n$(LIBS: = +^\n)\n$(DEF_FILE) $(LFLAGS_G) $(LFLAGS_D);\n<<"
+    build: release command linker_sys "$(LINKER) @$(PROJ).lrf"
+    build: debug command linker_sys "$(LINKER) @$(PROJ).lrf"
+    build: release command cc_c_obj "$(CC) /c $(CFLAGS_G) $(CFLAGS_R) /Fo$@ $<"
+    build: debug command cc_c_obj "$(CC) /c $(CFLAGS_G) $(CFLAGS_D) /Fo$@ $<"
+    build: release command cc_c_sbr "$(CC) /Zs $(CFLAGS_G) $(CFLAGS_R) /FR$@ $<"
+    build: debug command cc_c_sbr "$(CC) /Zs $(CFLAGS_G) $(CFLAGS_D) /FR$@ $<"
+    build: release command asm_asm_obj "$(ASM) /c $(AFLAGS_G) $(AFLAGS_R) /Fo$@ $<"
+    build: debug command asm_asm_obj "$(ASM) /c $(AFLAGS_G) $(AFLAGS_D) /Fo$@ $<"
+    build: release command asm_asm_sbr "$(ASM) /Zs $(AFLAGS_G) $(AFLAGS_R) /FR$@ $<"
+    build: debug command asm_asm_sbr "$(ASM) /Zs $(AFLAGS_G) $(AFLAGS_D) /FR$@ $<"
+    build: command run "$(PROJ).exe $(RUNFLAGS)"
+    build: command debug "CVP $(CVFLAGS) $(PROJ).exe $(RUNFLAGS)"
+    build: include dependencies
+    build: include no system
+    build: include .c "^[ \t]*#[ \t]*include[ \t]*\"[ \t]*\\(\\:p\\)[ \t]*\"" case
+    build: include .c "^[ \t]*#[ \t]*include[ \t]*<[ \t]*\\(\\:p\\)[ \t]*>" case system
+    build: include .h "^[ \t]*#[ \t]*include[ \t]*\"[ \t]*\\(\\:p\\)[ \t]*\"" case
+    build: include .h "^[ \t]*#[ \t]*include[ \t]*<[ \t]*\\(\\:p\\)[ \t]*>" case system
+    build: include .asm "^[ \t]*include[ \t]+\\([^ \t]+\\)"
+    build: include .inc "^[ \t]*include[ \t]+\\([^ \t]+\\)"
+    build: include .rc "^[ \t]*rcinclude[ \t]+\\([^ \t]+\\)"
+    build: include .rc "^[ \t]*#[ \t]*include[ \t]*\"[ \t]*\\(\\:p\\)[ \t]*\""
+    build: include .rc "^[ \t]*#[ \t]*include[ \t]*<[ \t]*\\(\\:p\\)[ \t]*>" system
+    build: include .asm "^[ \t]*include[ \t]+)" system
+    build: include .asm "^[ \t]*include[ \t]+([^ \t]+)"
+    build: include .asm "^[ \t]*include[ \t]+i:masminclude\\([^ \t]+\\)" system
+    build: include .asm "^[ \t]*INCLUDE[ \t]+\\([^ \t]+\\)" case
+    build: include .inc "^[ \t]*INCLUDE[ \t]+\\([^ \t]+\\)" case
+    build: message "^SYS[0-9][0-9][0-9][0-9]:\\:b"
+    build: message "^NET[0-9][0-9][0-9][0-9]:\\:b"
+    build: message "^\\(\\{\\:p\\!<[^>]*>\\}\\) \\([0-9]+\\) \\([0-9]+\\)[ ]*:" file line col
+    build: message "^\\(\\:p\\):\\([0-9]+\\):" file line
+    build: message "^[^(]+(\\(\\:p\\)) : error L[0-9]+[ ]*: '_*\\([^']+\\)' : unresolved external" file token
+    build: message "^[^(]+(\\(\\:p\\)) : [^L]+L[124]" file
+    build: message "^LINK [^L]+L[124]"
+    build: message "^ILINK : [^L]+L[124]"
+    build: message "^\\(\\:p\\)(\\(\\:z\\))[ ]*: [^U]+U[124]" file line
+    build: message "^NMAKE : [^U]+U[124]"
+    build: message "^\\:p : [^U]+U[124]\\:d\\:d\\:d"
+    build: message "^\\(\\:p\\)(\\(\\:z\\)) : [^C]+C[124]" file line
+    build: message "^[^C]+C[124][0-9]+: "
+    build: message "^[^D]+D[124][0-9]+ : "
+    build: message "^\\(\\:p\\)(\\([0-9]+\\))[ \t]*:[ \t]*[^A]+A[12456]" file line
+    build: message "^\\(\\:p\\)(\\(\\:z\\)) : [^H]+HI[124]" file line
+    build: message "^[^H]+HI[124][0-9]+: "
+    build: message "^pwbrmake: [^U]+U[124]"
+    build: message "^BIND : [^U]+U[124]"
+    build: message "^\\(\\:p\\)(\\(\\:z\\)) RC:" file line
+    build: message "^RC: error"
+    build: language None
+
+[debug-]
+	target="p:\comi\m16_bit\m16_bit.exe"
+[cvp]
+	wndstate=0 1 1 2 0 1 0 0 0 1 254
+	tilestate=1 42 0 80 0 0 0 67 0 8 0 30 0 0 37 0 12 254
+	command=use auto
+	command=n16
+	command=s1
+	command=oc-
+	command=of-

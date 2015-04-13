@@ -1,0 +1,50 @@
+DLGINCLUDE 1 "DIALOG.H"
+
+DLGTEMPLATE 5000 LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Badger Download", 5000, 15, 5, 243, 180, WS_VISIBLE
+    BEGIN
+        LTEXT           "Download File Path and File Name", -1, 4, 34, 156, 
+                        8
+        ENTRYFIELD      "", 5001, 5, 23, 230, 8, ES_MARGIN
+        DEFPUSHBUTTON   "OK", DID_OK, 6, 4, 31, 14
+        ENTRYFIELD      "", 5002, 84, 133, 14, 8, ES_MARGIN
+        LTEXT           "Direct", -1, 51, 132, 30, 8
+        PUSHBUTTON      "Cancel", DID_CANCEL, 40, 4, 40, 14
+        PUSHBUTTON      "Refresh", 5, 83, 4, 43, 14
+        LTEXT           "Dialup", -1, 139, 132, 32, 8
+        ENTRYFIELD      "", 5003, 176, 133, 14, 8, ES_MARGIN
+        LTEXT           "Master", -1, 148, 93, 35, 8
+        LTEXT           "Modem", -1, 146, 81, 37, 8
+        LTEXT           "TBOS", -1, 153, 69, 29, 8
+        LTEXT           "Terminal", -1, 140, 57, 43, 8
+        CONTROL         "", 5004, 187, 92, 43, 12, WC_SPINBUTTON, 
+                        SPBS_ALLCHARACTERS | SPBS_SERVANT | SPBS_JUSTDEFAULT | 
+                        WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL         "", 5005, 187, 80, 43, 12, WC_SPINBUTTON, 
+                        SPBS_ALLCHARACTERS | SPBS_SERVANT | SPBS_JUSTDEFAULT | 
+                        WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL         "", 5006, 187, 68, 43, 12, WC_SPINBUTTON, 
+                        SPBS_ALLCHARACTERS | SPBS_SERVANT | SPBS_JUSTDEFAULT | 
+                        WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        CONTROL         "", 5007, 187, 56, 43, 12, WC_SPINBUTTON, 
+                        SPBS_ALLCHARACTERS | SPBS_SERVANT | SPBS_JUSTDEFAULT | 
+                        WS_GROUP | WS_TABSTOP | WS_VISIBLE
+        GROUPBOX        "Baud Rates", -1, 132, 51, 106, 63
+        GROUPBOX        "Station Address Mode", 5010, 3, 84, 122, 40
+        AUTORADIOBUTTON "Fixed Internal", 5008, 9, 105, 74, 10, WS_TABSTOP
+        AUTORADIOBUTTON "Variable External BCD", 5011, 9, 96, 110, 10, 
+                        WS_TABSTOP
+        AUTORADIOBUTTON "Variable External HEX", 5012, 9, 87, 112, 10, 
+                        WS_TABSTOP
+        ENTRYFIELD      "", 5013, 97, 62, 20, 8, ES_MARGIN
+        LTEXT           "Command Sync", -1, 19, 61, 69, 8
+        LTEXT           "Momentary Toggle", -1, 7, 49, 86, 8
+        ENTRYFIELD      "", 5014, 97, 50, 20, 8, ES_MARGIN
+        GROUPBOX        "Timeouts -> 1 = 0.02 sec", 5015, 4, 44, 122, 37
+        CTEXT           "Badger Micro Remote Download Setup", -1, 0, 165, 
+                        243, 8
+        GROUPBOX        "Station Addresses (internal only)", 5016, 37, 128, 
+                        168, 28
+    END
+END

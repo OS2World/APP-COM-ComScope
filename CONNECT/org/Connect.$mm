@@ -1,0 +1,94 @@
+:TARGET.SUFFIXES
+:DEPENDENCY..c .obj .rc .res 
+:TARGET.all
+:DEPENDENCY.
+.\Connect.exe
+:RULE..rc.res
+:ACTION.Compile::Resource Compiler
+:COMMAND.
+rc.exe -r %s %|dpfF.RES
+:RULE.{p:\connect}.rc.res
+:ACTION.Compile::Resource Compiler
+:COMMAND.
+rc.exe -r %s %|dpfF.RES
+:RULE..c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Tl10 /DNO_COMDD_INCLUDE /Sp1 /Ss /Q /Wall /Ti /N40 /W2 /Gm /Gs /Gx /Fb /Ft- /C %s
+:RULE.{p:\connect}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Tl10 /DNO_COMDD_INCLUDE /Sp1 /Ss /Q /Wall /Ti /N40 /W2 /Gm /Gs /Gx /Fb /Ft- /C %s
+:TARGET..\Connect.exe
+:DEPENDENCY.
+.\request.obj
+.\response.obj
+.\connect.obj
+.\conn_dlg.obj
+.\data.obj
+.\connect.res
+{$(LIB)}os2ls_ut.lib
+{$(LIB)}connect.def
+Connect.mak
+:ACTION.Link::Linker
+:COMMAND.
+icc.exe @<<
+ /B" /de /pmtype:pm /optfunc /nologo /m"
+ /FeConnect.exe 
+ os2ls_ut.lib 
+ connect.def
+ .\request.obj
+ .\response.obj
+ .\connect.obj
+ .\conn_dlg.obj
+ .\data.obj
+<<
+:ACTION.Bind::Resource Bind
+:COMMAND.
+rc.exe .\connect.res Connect.exe
+:TARGET..\connect.res
+:DEPENDENCY.
+p:\connect\connect.rc
+{p:\connect;$(INCLUDE)}CONNECT.ICO
+{p:\connect;$(INCLUDE)}menu.h
+{p:\connect;$(INCLUDE)}conn_dlg.h
+Connect.mak
+:TARGET..\request.obj
+:DEPENDENCY.
+p:\connect\request.c
+{p:\connect;$(INCLUDE);}conn_dlg.h
+{p:\connect;$(INCLUDE);}menu.h
+{p:\connect;$(INCLUDE);}comm.h
+{p:\connect;$(INCLUDE);}connect.h
+Connect.mak
+:TARGET..\data.obj
+:DEPENDENCY.
+p:\connect\data.c
+{p:\connect;$(INCLUDE);}conn_dlg.h
+{p:\connect;$(INCLUDE);}menu.h
+{p:\connect;$(INCLUDE);}comm.h
+{p:\connect;$(INCLUDE);}connect.h
+Connect.mak
+:TARGET..\conn_dlg.obj
+:DEPENDENCY.
+p:\connect\conn_dlg.c
+{p:\connect;$(INCLUDE);}conn_dlg.h
+{p:\connect;$(INCLUDE);}comm.h
+{p:\connect;$(INCLUDE);}connect.h
+Connect.mak
+:TARGET..\connect.obj
+:DEPENDENCY.
+p:\connect\connect.c
+{p:\connect;$(INCLUDE);}conn_dlg.h
+{p:\connect;$(INCLUDE);}menu.h
+{p:\connect;$(INCLUDE);}comm.h
+{p:\connect;$(INCLUDE);}connect.h
+Connect.mak
+:TARGET..\response.obj
+:DEPENDENCY.
+p:\connect\response.c
+{p:\connect;$(INCLUDE);}conn_dlg.h
+{p:\connect;$(INCLUDE);}menu.h
+{p:\connect;$(INCLUDE);}comm.h
+{p:\connect;$(INCLUDE);}connect.h
+Connect.mak

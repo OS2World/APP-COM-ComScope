@@ -1,0 +1,116 @@
+
+ Start         Length     Name                   Class
+ 0001:00000000 000001F78H _TEXT                  CODE
+ 0002:00000000 000000368H _DATA                  DATA
+ 0002:00000368 000000006H _INIT_                 INITDATA
+ 0002:0000036E 000000000H _INITEND_              INITDATA
+ 0002:0000036E 000000000H _EXIT_                 EXITDATA
+ 0002:0000036E 000000000H _EXITEND_              EXITDATA
+ 0002:00000370 000000000H CONST                  CONST
+ 0002:00000370 0000000A8H _BSS                   BSS
+
+  Address         Publics by Name
+
+ 0001:00001B72  Idle set_terminate(void(*)())
+ 0001:00001C53  Idle set_unexpected(void(*)())
+ 0001:00001B68  Idle terminate()
+ 0001:00001C49  Idle unexpected()
+ 0001:00001CF2  Idle __GetPolymorphicDTC(void*,unsigned int)
+ 0001:00001B28       @__InitExceptBlock
+ 0001:00001690  Idle CloseProfile
+ 0001:00000DCA  Idle fnwpAppNameDlgProc
+ 0001:00000070  Idle fnwpManageConfigDlgProc
+ 0001:00001976  Idle GetProfileData
+ 0001:00001882  Idle GetProfileString
+ 0001:00001A4A  Idle GetProfileWindowPos
+ 0001:000012A3  Idle InitializeProfile
+ 0001:0000125B  Idle ManageProfile
+ 0001:000018EF  Idle SaveProfileData
+ 0001:00001805  Idle SaveProfileString
+ 0001:000019F9  Idle SaveProfileWindowPos
+ 0002:00000074  Idle _bDLLinUse
+ 0001:0000113C  Idle _DeleteProfileApps
+ 0001:00001AC5  Idle _DisplayHelpPanel
+ 0001:00000FD7  Idle _FillProfileListBox
+ 0001:00000000  Idle __acrtused
+ 0002:0000002B  Idle __c0_heaps
+ 0002:0000002F  Idle __c0_nheaps
+ 0001:00001B10       __chkstk
+ 0002:000002F8  Idle __DebuggerHookData
+ 0002:00000394       __DestructorCountPtr
+ 0001:00000058       __dllmain
+ 0001:00001D2E       __ExceptInit
+ 0002:000002F4  Idle __ExceptVarsSize
+ 0001:00001D1E       __GetExceptDLLinfo
+ 0001:00001E72  Idle __GetExceptDLLinfoInternal
+ 0001:00001EB0       __initstk
+ 0002:00000050  Idle __os2hmod
+ 0001:00001B98  Idle ___call_terminate
+ 0001:00001C79  Idle ___call_unexpected
+ 0002:00000290  Idle ___CPPexceptionList
+ 0002:000002A0  Idle ___debuggerHookDataP
+ 0002:00000298  Idle ___debuggerHookFN
+ 0002:0000029C  Idle ___debuggerWatchingP
+ 0002:00000294  Idle ___exceptFlags
+ 0002:000002BC  Idle ___exceptMemAllocVars
+ 0002:000002B8  Idle ___exceptStaticBuffP
+ 0002:00000398  Idle ___ExceptStaticXbuff
+ 0002:0000003B       ___isDLL
+ 0002:000002A4  Idle ___terminatePTR
+ 0002:000002B4  Idle ___throwExceptionName
+ 0002:000002AC  Idle ___throwFileName
+ 0002:000002B0  Idle ___throwLineNumber
+ 0002:000002A8  Idle ___unexpectdPTR
+
+  Address         Publics by Value
+
+ 0001:00000000  Idle __acrtused
+ 0001:00000058       __dllmain
+ 0001:00000070  Idle fnwpManageConfigDlgProc
+ 0001:00000DCA  Idle fnwpAppNameDlgProc
+ 0001:00000FD7  Idle _FillProfileListBox
+ 0001:0000113C  Idle _DeleteProfileApps
+ 0001:0000125B  Idle ManageProfile
+ 0001:000012A3  Idle InitializeProfile
+ 0001:00001690  Idle CloseProfile
+ 0001:00001805  Idle SaveProfileString
+ 0001:00001882  Idle GetProfileString
+ 0001:000018EF  Idle SaveProfileData
+ 0001:00001976  Idle GetProfileData
+ 0001:000019F9  Idle SaveProfileWindowPos
+ 0001:00001A4A  Idle GetProfileWindowPos
+ 0001:00001AC5  Idle _DisplayHelpPanel
+ 0001:00001B10       __chkstk
+ 0001:00001B28       @__InitExceptBlock
+ 0001:00001B68  Idle terminate()
+ 0001:00001B72  Idle set_terminate(void(*)())
+ 0001:00001B98  Idle ___call_terminate
+ 0001:00001C49  Idle unexpected()
+ 0001:00001C53  Idle set_unexpected(void(*)())
+ 0001:00001C79  Idle ___call_unexpected
+ 0001:00001CF2  Idle __GetPolymorphicDTC(void*,unsigned int)
+ 0001:00001D1E       __GetExceptDLLinfo
+ 0001:00001D2E       __ExceptInit
+ 0001:00001E72  Idle __GetExceptDLLinfoInternal
+ 0001:00001EB0       __initstk
+ 0002:0000002B  Idle __c0_heaps
+ 0002:0000002F  Idle __c0_nheaps
+ 0002:0000003B       ___isDLL
+ 0002:00000050  Idle __os2hmod
+ 0002:00000074  Idle _bDLLinUse
+ 0002:00000290  Idle ___CPPexceptionList
+ 0002:00000294  Idle ___exceptFlags
+ 0002:00000298  Idle ___debuggerHookFN
+ 0002:0000029C  Idle ___debuggerWatchingP
+ 0002:000002A0  Idle ___debuggerHookDataP
+ 0002:000002A4  Idle ___terminatePTR
+ 0002:000002A8  Idle ___unexpectdPTR
+ 0002:000002AC  Idle ___throwFileName
+ 0002:000002B0  Idle ___throwLineNumber
+ 0002:000002B4  Idle ___throwExceptionName
+ 0002:000002B8  Idle ___exceptStaticBuffP
+ 0002:000002BC  Idle ___exceptMemAllocVars
+ 0002:000002F4  Idle __ExceptVarsSize
+ 0002:000002F8  Idle __DebuggerHookData
+ 0002:00000394       __DestructorCountPtr
+ 0002:00000398  Idle ___ExceptStaticXbuff

@@ -1,0 +1,122 @@
+
+ Start         Length     Name                   Class
+ 0001:00000000 000000F50H _TEXT                  CODE
+ 0002:00000000 0000006D4H _DATA                  DATA
+ 0002:000006D4 000000000H _INIT_                 INITDATA
+ 0002:000006D4 000000000H _INITEND_              INITDATA
+ 0002:000006D4 000000000H _EXIT_                 EXITDATA
+ 0002:000006D4 000000000H _EXITEND_              EXITDATA
+ 0002:000006D4 000000000H CONST                  CONST
+ 0002:000006D4 00000090CH _BSS                   BSS
+
+  Address         Publics by Name
+
+ 0001:00000C1A  Idle set_terminate(void(*)())
+ 0001:00000CFB  Idle set_unexpected(void(*)())
+ 0001:00000C10  Idle terminate()
+ 0001:00000CF1  Idle unexpected()
+ 0001:00000D9A  Idle __GetPolymorphicDTC(void*,unsigned int)
+ 0001:00000BD0       @__InitExceptBlock
+ 0001:00000281  Idle SPLPDENUMPORT
+ 0001:00000716  Idle SPLPDGETPORTICON
+ 0001:0000045B  Idle SPLPDINITPORT
+ 0001:0000056B  Idle SPLPDINSTALLPORT
+ 0001:0000072F  Idle SPLPDQUERYPORT
+ 0001:0000096A  Idle SPLPDREMOVEPORT
+ 0001:00000787  Idle SPLPDSETPORT
+ 0001:00000A04  Idle SPLPDTERMPORT
+ 0002:00000B58  Idle _aszDeviceList
+ 0002:00000068  Idle _bSpoolerEnabled
+ 0001:00000A9B  Idle _CopyPortInfo
+ 0002:00000F58  Idle _hThisModule
+ 0001:00000058  Idle _Spl_MessageBox
+ 0002:000006D4  Idle _stCOMiCFG
+ 0002:00000F40  Idle _stPortInit
+ 0002:00000A54  Idle _szConfigLibPath
+ 0002:0000084C  Idle _szDriverIniPath
+ 0002:00000950  Idle _szDriverVersion
+ 0002:00000720  Idle _szMessage
+ 0002:0000006C  Idle _ulSignature
+ 0001:00000000  Idle __acrtused
+ 0002:0000002B  Idle __c0_heaps
+ 0002:0000002F  Idle __c0_nheaps
+ 0002:000006A0  Idle __DebuggerHookData
+ 0002:00000F5C       __DestructorCountPtr
+ 0001:0000007C       __dllmain
+ 0001:00000DD6       __ExceptInit
+ 0002:0000069C  Idle __ExceptVarsSize
+ 0001:00000DC6       __GetExceptDLLinfo
+ 0001:00000F1A  Idle __GetExceptDLLinfoInternal
+ 0002:00000050  Idle __os2hmod
+ 0001:00000C40  Idle ___call_terminate
+ 0001:00000D21  Idle ___call_unexpected
+ 0002:00000638  Idle ___CPPexceptionList
+ 0002:00000648  Idle ___debuggerHookDataP
+ 0002:00000640  Idle ___debuggerHookFN
+ 0002:00000644  Idle ___debuggerWatchingP
+ 0002:0000063C  Idle ___exceptFlags
+ 0002:00000664  Idle ___exceptMemAllocVars
+ 0002:00000660  Idle ___exceptStaticBuffP
+ 0002:00000F60  Idle ___ExceptStaticXbuff
+ 0002:0000003B       ___isDLL
+ 0002:0000064C  Idle ___terminatePTR
+ 0002:0000065C  Idle ___throwExceptionName
+ 0002:00000654  Idle ___throwFileName
+ 0002:00000658  Idle ___throwLineNumber
+ 0002:00000650  Idle ___unexpectdPTR
+
+  Address         Publics by Value
+
+ 0001:00000000  Idle __acrtused
+ 0001:00000058  Idle _Spl_MessageBox
+ 0001:0000007C       __dllmain
+ 0001:00000281  Idle SPLPDENUMPORT
+ 0001:0000045B  Idle SPLPDINITPORT
+ 0001:0000056B  Idle SPLPDINSTALLPORT
+ 0001:00000716  Idle SPLPDGETPORTICON
+ 0001:0000072F  Idle SPLPDQUERYPORT
+ 0001:00000787  Idle SPLPDSETPORT
+ 0001:0000096A  Idle SPLPDREMOVEPORT
+ 0001:00000A04  Idle SPLPDTERMPORT
+ 0001:00000A9B  Idle _CopyPortInfo
+ 0001:00000BD0       @__InitExceptBlock
+ 0001:00000C10  Idle terminate()
+ 0001:00000C1A  Idle set_terminate(void(*)())
+ 0001:00000C40  Idle ___call_terminate
+ 0001:00000CF1  Idle unexpected()
+ 0001:00000CFB  Idle set_unexpected(void(*)())
+ 0001:00000D21  Idle ___call_unexpected
+ 0001:00000D9A  Idle __GetPolymorphicDTC(void*,unsigned int)
+ 0001:00000DC6       __GetExceptDLLinfo
+ 0001:00000DD6       __ExceptInit
+ 0001:00000F1A  Idle __GetExceptDLLinfoInternal
+ 0002:0000002B  Idle __c0_heaps
+ 0002:0000002F  Idle __c0_nheaps
+ 0002:0000003B       ___isDLL
+ 0002:00000050  Idle __os2hmod
+ 0002:00000068  Idle _bSpoolerEnabled
+ 0002:0000006C  Idle _ulSignature
+ 0002:00000638  Idle ___CPPexceptionList
+ 0002:0000063C  Idle ___exceptFlags
+ 0002:00000640  Idle ___debuggerHookFN
+ 0002:00000644  Idle ___debuggerWatchingP
+ 0002:00000648  Idle ___debuggerHookDataP
+ 0002:0000064C  Idle ___terminatePTR
+ 0002:00000650  Idle ___unexpectdPTR
+ 0002:00000654  Idle ___throwFileName
+ 0002:00000658  Idle ___throwLineNumber
+ 0002:0000065C  Idle ___throwExceptionName
+ 0002:00000660  Idle ___exceptStaticBuffP
+ 0002:00000664  Idle ___exceptMemAllocVars
+ 0002:0000069C  Idle __ExceptVarsSize
+ 0002:000006A0  Idle __DebuggerHookData
+ 0002:000006D4  Idle _stCOMiCFG
+ 0002:00000720  Idle _szMessage
+ 0002:0000084C  Idle _szDriverIniPath
+ 0002:00000950  Idle _szDriverVersion
+ 0002:00000A54  Idle _szConfigLibPath
+ 0002:00000B58  Idle _aszDeviceList
+ 0002:00000F40  Idle _stPortInit
+ 0002:00000F58  Idle _hThisModule
+ 0002:00000F5C       __DestructorCountPtr
+ 0002:00000F60  Idle ___ExceptStaticXbuff

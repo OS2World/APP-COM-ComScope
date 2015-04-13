@@ -1,0 +1,4 @@
+COMscope Version 3.80a
+COMspool Version 2.20
+COMi Version 3.81
+

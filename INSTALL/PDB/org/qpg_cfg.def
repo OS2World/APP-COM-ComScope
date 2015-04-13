@@ -1,0 +1,11 @@
+;------------------------------------------------------------------;
+; QPG_CFG.DEF Program Module Definition File                      -;
+;                                                                 -;
+;  Copyright (c) OS/tools Incorporated 1995                       -;
+;------------------------------------------------------------------;
+LIBRARY QPG_CFG
+
+DESCRIPTION 'QuickPage Install/Config Library - (c) Copyright OS/tools Incorporated 1995'
+
+EXPORTS
+  InstallQuickPage

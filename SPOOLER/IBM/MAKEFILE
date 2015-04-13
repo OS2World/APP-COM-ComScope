@@ -1,0 +1,37 @@
+# IBM Developer's Workframe/2 Make File Creation run at 22:21:33 on 04/16/95
+
+# Make File Creation run in directory:
+#   P:\SERIAL\IBM;
+
+.SUFFIXES:
+
+.SUFFIXES: .c .cpp .cxx .rc
+
+ALL: SERIAL.DLL \
+     serial.RES
+
+SERIAL.DLL:  \
+  serial.OBJ \
+  serial.RES \
+  MAKEFILE
+   ICC.EXE @<<
+ /B" /de /w /m"
+ /Fe"SERIAL.exe" serial.def 
+serial.OBJ
+<<
+   RC serial.RES SERIAL.DLL
+  IMPLIB SERIAL.LIB SERIAL.DLL
+
+{.}.rc.res:
+   RC -r .\$*.RC
+
+{.}.c.obj:
+   ICC.EXE /Ss /Fi /Si /Ti /N50 /W1 /Rn /Ge- /Ft- /C   .\$*.c
+
+{.}.cpp.obj:
+   ICC.EXE /Ss /Fi /Si /Ti /N50 /W1 /Rn /Ge- /Ft- /C   .\$*.cpp
+
+{.}.cxx.obj:
+   ICC.EXE /Ss /Fi /Si /Ti /N50 /W1 /Rn /Ge- /Ft- /C   .\$*.cxx
+
+!include MAKEFILE.DEP

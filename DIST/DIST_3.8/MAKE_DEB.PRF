@@ -1,0 +1,74 @@
+This is a profile make file for COMi, COMscope, and COMspool
+[COMi]
+Driver=COMDD.SYS;
+Mod=R;
+OEM_type=0
+Files=2
+File_1=COMi.INF;
+File_2=CONFIG.HLP;
+Major=3
+Minor=31
+Date=950620
+Version=COMi version 3.33 R;
+ProgramSize=101562
+[PDR]
+Files=4
+File_1=IOCTLDEB.DLL;
+File_2=UTIL_DEB.DLL;
+File_3=CFG_DEB.DLL;
+File_4=C215MT.DLL;
+PDR Library=SPL_DEB.PDR;
+ProgramSize=14367
+[Libraries]
+Files=1
+File_1=PROFDEB.DLL;
+Base Files=4
+Base_file_1=IOCTLDEB.DLL;
+Base_file_2=UTIL_DEB.DLL;
+Base_file_3=CFG_DEB.DLL;
+Base_file_4=C215MT.DLL;
+ProgramSize=354275
+[COMscope]
+Major=3
+Minor=50
+Date=950530
+Version=COMscope version 3.50;
+Files=4
+File_1=COMscope.EXE;
+File_2=COMscope.HLP;
+File_3=COMscope.ICO;
+File_4=HEXFONTS.FON;
+ProgramSize=288902
+[Install]
+DD Config Help=CONFIG.HLP;
+DD Config Library=CFG_DEB.DLL;
+DD Config Function=InstallDevice;
+Transfer Library=PDA_INST.DLL;
+Transfer Function=InstallCOMi;
+Config Help=CONFIG.HLP;
+Version=OS/tools' Install version 2.00;
+Check Caption One=COMi Device Driver;
+Check Caption Two=COMscope;
+Check Caption Three=Print Spooler Utilities;
+Check Caption Four=Multi-session and other Utitlities;
+Check Caption Five=Install;
+Title=COMscope, COMspool, and COMi Installation;
+Config Name=COMi;
+Banner One=for;
+Banner Two=COMscope, COMspool, and the COMi Device Driver;
+License File=license.txt;
+License Caption=License Information:;
+Files=4
+File_1=INSTALL.EXE;
+File_2=INSTALL.HLP;
+File_3=INSTALL.ICO;
+File_4=PDA_INST.DLL;
+ProgramSize=95446
+[Utilities]
+Files=4
+File_1=SPLIT.EXE;
+File_2=SPLIT.C;
+File_3=IOCTL.C;
+File_4=CONTROL.EXE;
+ProgramSize=136127
+

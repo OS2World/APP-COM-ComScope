@@ -1,0 +1,7 @@
+LIBRARY  PDA_INST
+
+DESCRIPTION 'COMi installation DLL'
+
+EXPORTS
+  InstallCOMi
+  Uninstall

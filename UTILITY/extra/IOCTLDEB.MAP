@@ -1,0 +1,166 @@
+
+ Start         Length     Name                   Class
+ 0001:00000000 0000010C8H _TEXT                  CODE
+ 0002:00000000 000000164H _DATA                  DATA
+ 0002:00000164 000000006H _INIT_                 INITDATA
+ 0002:0000016A 000000000H _INITEND_              INITDATA
+ 0002:0000016A 000000000H _EXIT_                 EXITDATA
+ 0002:0000016A 000000000H _EXITEND_              EXITDATA
+ 0002:0000016C 000000000H CONST                  CONST
+ 0002:0000016C 000000084H _BSS                   BSS
+
+
+Detailed map of segments
+
+ 0001:00000000 00000055 C=CODE    S=_TEXT    G=(none)   M=clib\c02d.ASM ACBP=A9
+ 0001:00000058 00000C07 C=CODE    S=_TEXT    G=(none)   M=..\ioctl.c ACBP=A9
+ 0001:00000C60 00000017 C=CODE    S=_TEXT    G=(none)   M=..\common\chkstk.ASM ACBP=A9
+ 0001:00000C78 0000003F C=CODE    S=_TEXT    G=(none)   M=..\common\xxa.cpp ACBP=A9
+ 0001:00000CB8 00000340 C=CODE    S=_TEXT    G=(none)   M=..\common\xxv.cpp ACBP=A9
+ 0001:00001000 000000C8 C=CODE    S=_TEXT    G=(none)   M=clib\initstk.c ACBP=69
+ 0002:00000000 00000068 C=DATA    S=_DATA    G=DGROUP   M=clib\c02d.ASM ACBP=A9
+ 0002:00000068 00000020 C=DATA    S=_DATA    G=DGROUP   M=..\ioctl.c ACBP=A9
+ 0002:00000088 00000000 C=DATA    S=_DATA    G=DGROUP   M=..\common\chkstk.ASM ACBP=A9
+ 0002:00000088 00000004 C=DATA    S=_DATA    G=DGROUP   M=..\common\xxa.cpp ACBP=A9
+ 0002:0000008C 0000009C C=DATA    S=_DATA    G=DGROUP   M=..\common\xxv.cpp ACBP=A9
+ 0002:00000128 0000003C C=DATA    S=_DATA    G=DGROUP   M=clib\initstk.c ACBP=A9
+ 0002:00000164 00000000 C=INITDATA S=_INIT_   G=DGROUP   M=clib\c02d.ASM ACBP=49
+ 0002:00000164 00000006 C=INITDATA S=_INIT_   G=DGROUP   M=..\common\chkstk.ASM ACBP=49
+ 0002:0000016A 00000000 C=INITDATA S=_INITEND_ G=DGROUP   M=clib\c02d.ASM ACBP=49
+ 0002:0000016A 00000000 C=EXITDATA S=_EXIT_   G=DGROUP   M=clib\c02d.ASM ACBP=49
+ 0002:0000016A 00000000 C=EXITDATA S=_EXITEND_ G=DGROUP   M=clib\c02d.ASM ACBP=49
+ 0002:0000016C 00000000 C=CONST   S=CONST    G=DGROUP   M=clib\c02d.ASM ACBP=A9
+ 0002:0000016C 00000000 C=BSS     S=_BSS     G=DGROUP   M=clib\c02d.ASM ACBP=A9
+ 0002:0000016C 00000000 C=BSS     S=_BSS     G=DGROUP   M=..\ioctl.c ACBP=A9
+ 0002:0000016C 00000000 C=BSS     S=_BSS     G=DGROUP   M=..\common\chkstk.ASM ACBP=A9
+ 0002:0000016C 00000000 C=BSS     S=_BSS     G=DGROUP   M=..\common\xxa.cpp ACBP=A9
+ 0002:0000016C 00000084 C=BSS     S=_BSS     G=DGROUP   M=..\common\xxv.cpp ACBP=A9
+ 0002:000001F0 00000000 C=BSS     S=_BSS     G=DGROUP   M=clib\initstk.c ACBP=A9
+
+  Address         Publics by Name
+
+ 0001:00000CC2  Idle set_terminate(void(*)())
+ 0001:00000DA3  Idle set_unexpected(void(*)())
+ 0001:00000CB8  Idle terminate()
+ 0001:00000D99  Idle unexpected()
+ 0001:00000E42  Idle __GetPolymorphicDTC(void*,unsigned int)
+ 0001:00000C78       @__InitExceptBlock
+ 0001:0000034B  Idle BreakOff
+ 0001:000002F0  Idle BreakOn
+ 0001:0000097E  Idle FlushComBuffer
+ 0001:00000927  Idle ForceXoff
+ 0001:000008D0  Idle ForceXon
+ 0001:00000794  Idle GetBaudRate
+ 0001:00000829  Idle GetBaudRates
+ 0001:00000295  Idle GetCOMerror
+ 0001:0000023A  Idle GetCOMevent
+ 0001:000001DF  Idle GetCOMstatus
+ 0001:00000070  Idle GetDCB
+ 0001:000009E4  Idle GetFIFOinfo
+ 0001:000006BD  Idle GetLineCharacteristics
+ 0001:00000540  Idle GetModemInputSignals
+ 0001:0000059B  Idle GetModemOutputSignals
+ 0001:00000418  Idle GetReceiveQueueCounts
+ 0001:000003A6  Idle GetReceiveQueueLen
+ 0001:000004E5  Idle GetTransmitQueueCounts
+ 0001:00000473  Idle GetTransmitQueueLen
+ 0001:00000184  Idle GetXmitStatus
+ 0001:00000126  Idle SendByteImmediate
+ 0001:000000CB  Idle SendDCB
+ 0001:00000718  Idle SetBaudRate
+ 0001:00000A42  Idle SetFIFO
+ 0001:00000662  Idle SetLineCharacteristics
+ 0001:000005F6  Idle SetModemSignals
+ 0001:00000000  Idle __acrtused
+ 0002:0000002B  Idle __c0_heaps
+ 0002:0000002F  Idle __c0_nheaps
+ 0001:00000C60       __chkstk
+ 0002:000000F4  Idle __DebuggerHookData
+ 0002:0000016C       __DestructorCountPtr
+ 0001:00000058       __dllmain
+ 0001:00000E7E       __ExceptInit
+ 0002:000000F0  Idle __ExceptVarsSize
+ 0001:00000E6E       __GetExceptDLLinfo
+ 0001:00000FC2  Idle __GetExceptDLLinfoInternal
+ 0001:00001000       __initstk
+ 0002:00000050  Idle __os2hmod
+ 0001:00000CE8  Idle ___call_terminate
+ 0001:00000DC9  Idle ___call_unexpected
+ 0002:0000008C  Idle ___CPPexceptionList
+ 0002:0000009C  Idle ___debuggerHookDataP
+ 0002:00000094  Idle ___debuggerHookFN
+ 0002:00000098  Idle ___debuggerWatchingP
+ 0002:00000090  Idle ___exceptFlags
+ 0002:000000B8  Idle ___exceptMemAllocVars
+ 0002:000000B4  Idle ___exceptStaticBuffP
+ 0002:00000170  Idle ___ExceptStaticXbuff
+ 0002:0000003B       ___isDLL
+ 0002:000000A0  Idle ___terminatePTR
+ 0002:000000B0  Idle ___throwExceptionName
+ 0002:000000A8  Idle ___throwFileName
+ 0002:000000AC  Idle ___throwLineNumber
+ 0002:000000A4  Idle ___unexpectdPTR
+
+  Address         Publics by Value
+
+ 0001:00000000  Idle __acrtused
+ 0001:00000058       __dllmain
+ 0001:00000070  Idle GetDCB
+ 0001:000000CB  Idle SendDCB
+ 0001:00000126  Idle SendByteImmediate
+ 0001:00000184  Idle GetXmitStatus
+ 0001:000001DF  Idle GetCOMstatus
+ 0001:0000023A  Idle GetCOMevent
+ 0001:00000295  Idle GetCOMerror
+ 0001:000002F0  Idle BreakOn
+ 0001:0000034B  Idle BreakOff
+ 0001:000003A6  Idle GetReceiveQueueLen
+ 0001:00000418  Idle GetReceiveQueueCounts
+ 0001:00000473  Idle GetTransmitQueueLen
+ 0001:000004E5  Idle GetTransmitQueueCounts
+ 0001:00000540  Idle GetModemInputSignals
+ 0001:0000059B  Idle GetModemOutputSignals
+ 0001:000005F6  Idle SetModemSignals
+ 0001:00000662  Idle SetLineCharacteristics
+ 0001:000006BD  Idle GetLineCharacteristics
+ 0001:00000718  Idle SetBaudRate
+ 0001:00000794  Idle GetBaudRate
+ 0001:00000829  Idle GetBaudRates
+ 0001:000008D0  Idle ForceXon
+ 0001:00000927  Idle ForceXoff
+ 0001:0000097E  Idle FlushComBuffer
+ 0001:000009E4  Idle GetFIFOinfo
+ 0001:00000A42  Idle SetFIFO
+ 0001:00000C60       __chkstk
+ 0001:00000C78       @__InitExceptBlock
+ 0001:00000CB8  Idle terminate()
+ 0001:00000CC2  Idle set_terminate(void(*)())
+ 0001:00000CE8  Idle ___call_terminate
+ 0001:00000D99  Idle unexpected()
+ 0001:00000DA3  Idle set_unexpected(void(*)())
+ 0001:00000DC9  Idle ___call_unexpected
+ 0001:00000E42  Idle __GetPolymorphicDTC(void*,unsigned int)
+ 0001:00000E6E       __GetExceptDLLinfo
+ 0001:00000E7E       __ExceptInit
+ 0001:00000FC2  Idle __GetExceptDLLinfoInternal
+ 0001:00001000       __initstk
+ 0002:0000002B  Idle __c0_heaps
+ 0002:0000002F  Idle __c0_nheaps
+ 0002:0000003B       ___isDLL
+ 0002:00000050  Idle __os2hmod
+ 0002:0000008C  Idle ___CPPexceptionList
+ 0002:00000090  Idle ___exceptFlags
+ 0002:00000094  Idle ___debuggerHookFN
+ 0002:00000098  Idle ___debuggerWatchingP
+ 0002:0000009C  Idle ___debuggerHookDataP
+ 0002:000000A0  Idle ___terminatePTR
+ 0002:000000A4  Idle ___unexpectdPTR
+ 0002:000000A8  Idle ___throwFileName
+ 0002:000000AC  Idle ___throwLineNumber
+ 0002:000000B0  Idle ___throwExceptionName
+ 0002:000000B4  Idle ___exceptStaticBuffP
+ 0002:000000B8  Idle ___exceptMemAllocVars
+ 0002:000000F0  Idle __ExceptVarsSize
+ 0002:000000F4  Idle __DebuggerHookData
+ 0002:0000016C       __DestructorCountPtr
+ 0002:00000170  Idle ___ExceptStaticXbuff

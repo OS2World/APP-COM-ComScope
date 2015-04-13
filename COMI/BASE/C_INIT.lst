@@ -1,0 +1,249 @@
+Microsoft (R) Macro Assembler Version 6.00     		    08/24/02 23:27:15
+C_INIT.asm						     Page 1 - 1
+
+
+				;************************************************************************
+				;
+				; $Revision$
+				;
+				; $Log$
+				;  
+				;************************************************************************
+
+				.386P
+				.NOLISTMACRO
+
+				.XLIST
+				.LIST
+
+ 0000				RES_DATA SEGMENT
+
+				    EXTRN device_hlp            :DWORD
+				    EXTRN stABIOSrequestBlock  :s_stABIOSrequestBlock
+
+ 0000				RES_DATA ENDS
+
+ 0000				_DATA SEGMENT
+
+				    EXTRN _bABIOSpresent        :WORD
+				    EXTRN _Ring0Vector          :DWORD
+
+ 0000				_DATA ENDS
+
+ 0000				_TEXT SEGMENT
+				    ASSUME CS:SCGROUP
+
+				;WORD AttachDD(char szName[],DDENTRY *pstAttachDD)
+				; ASSUME DS = DGROUP, called from 'C' initialization code only
+ 0000				AttachDD PROC FAR C uses bx dx di ds, szName:WORD, pstAttachDD:WORD
+
+				;   int 3
+				     SetDS    RDGROUP
+				;        mov     ax,1
+ 000B  8B 7E 08			        mov     di,pstAttachDD
+ 000E  8B 5E 06			        mov     bx,szName
+ 0011  BA 002A			        mov     dx,DevHlp_AttachDD
+ 0014  FF 1E 0000 E		        call    device_hlp
+ 0018  72 02			        jc      exit
+ 001A  33 C0			        xor     ax,ax
+ 001C				exit:
+				        ret
+ 001C  1F		   *	    pop    ds
+ 001D  5F		   *	    pop    di
+ 001E  5A		   *	    pop    dx
+ 001F  5B		   *	    pop    bx
+ 0020  5D		   *	    pop    bp
+ 0021  CB		   *	    ret    00000h
+
+ 0022				AttachDD ENDP
+
+				;GetDeviceInterrupt(WORD wLID);
+
+				; ASSUME DS = DGROUP, called from 'C' initialization code only
+				; DS must point to DD data segment
+ 0022				GetDeviceInterrupt PROC FAR C USES bx dx si ds, wLID:WORD
+
+				     SetDS    RDGROUP
+ 002D  8B 46 06			        mov     ax,wLID
+ 0030  BE 0000 E		        mov     si,OFFSET stABIOSrequestBlock
+ 0033  C7 44 0C FFFF		        mov     [si].s_stABIOSrequestBlock.wReturnCode,0ffffh
+ 0038  89 44 02			        mov     [si].s_stABIOSrequestBlock.wLogicalID,ax
+ 003B  B2 36			        mov     dl,DevHlp_ABIOSCall
+ 003D  FF 1E 0000 E		        call    device_hlp
+ 0041  B8 0000			        mov     ax,0
+ 0044  72 03			        jc      exit
+
+ 0046  8A 44 10			        mov     al,[si].s_stABIOSrequestBlock.byHDWinterruptLevel
+ 0049				exit:
+				        ret
+ 0049  1F		   *	    pop    ds
+ 004A  5E		   *	    pop    si
+ 004B  5A		   *	    pop    dx
+ 004C  5B		   *	    pop    bx
+ 004D  5D		   *	    pop    bp
+ 004E  CB		   *	    ret    00000h
+
+ 004F				GetDeviceInterrupt ENDP  ; returns interrupt level in AX
+
+				;FreeLIDentry(WORD wLID);
+
+				; ASSUME DS = DGROUP, called from 'C' initialization code only
+ 004F				FreeLIDentry PROC FAR C uses bx dx ds, wLID:WORD
+
+				     SetDS    RDGROUP
+ 0059  8B 46 06			        mov     ax,wLID
+ 005C  B2 35			        mov     dl,DevHlp_FreeLIDEntry
+ 005E  FF 1E 0000 E		        call    device_hlp
+				        ret
+ 0062  1F		   *	    pop    ds
+ 0063  5A		   *	    pop    dx
+ 0064  5B		   *	    pop    bx
+ 0065  5D		   *	    pop    bp
+ 0066  CB		   *	    ret    00000h
+
+ 0067				FreeLIDentry ENDP ;returns error code or zero if no error
+
+				;WORD DeviceBlockLen(wLID);
+
+				; ASSUME DS = DGROUP, called from 'C' initialization code only
+ 0067				GetDeviceBlockLen PROC FAR C USES bx cx dx di ds gs, wLID:WORD
+
+				;  int 3
+				     SetDS    RDGROUP
+ 0075  8B 46 06			        mov     ax,wLID
+ 0078  BA 0038			        mov     dx,DevHlp_GetDeviceBlock
+ 007B  FF 1E 0000 E		        call    device_hlp
+ 007F  B8 0000			        mov     ax,0
+ 0082  72 0F			        jc      exit
+
+				     SetDS    DGROUP
+ 0088  83 EC 06			        sub     sp,6                    ;API expects to pop 12 words
+ 008B  51			        push    cx
+ 008C  52			        push    dx
+ 008D  6A 03			        push    GET_DEVBLK_LEN
+ 008F  FF 1E 0000 E		        call    DWORD PTR _Ring0Vector
+ 0093				exit:
+				        ret
+ 0093  0F A9		   *	    pop    gs
+ 0095  1F		   *	    pop    ds
+ 0096  5F		   *	    pop    di
+ 0097  5A		   *	    pop    dx
+ 0098  59		   *	    pop    cx
+ 0099  5B		   *	    pop    bx
+ 009A  5D		   *	    pop    bp
+ 009B  CB		   *	    ret    00000h
+
+ 009C				GetDeviceBlockLen ENDP
+
+				;WORD DeviceBlockOffset(WORD wLID);
+
+				; ASSUME DS = DGROUP, called from 'C' initialization code only
+ 009C				GetDeviceBlockOffset PROC FAR C USES bx cx dx di ds, wLID:WORD
+
+				    SetDS     RDGROUP
+ 00A8  8B 46 06			        mov     ax,wLID
+ 00AB  BA 0038			        mov     dx,DevHlp_GetDeviceBlock
+ 00AE  FF 1E 0000 E		        call    device_hlp
+ 00B2  B8 0000			        mov     ax,0
+ 00B5  72 02			        jc      exit
+
+ 00B7  8B C2			        mov     ax,dx
+ 00B9				exit:
+				        ret
+ 00B9  1F		   *	    pop    ds
+ 00BA  5F		   *	    pop    di
+ 00BB  5A		   *	    pop    dx
+ 00BC  59		   *	    pop    cx
+ 00BD  5B		   *	    pop    bx
+ 00BE  5D		   *	    pop    bp
+ 00BF  CB		   *	    ret    00000h
+
+ 00C0				GetDeviceBlockOffset ENDP
+
+				;WORD GetDeviceDefinition(DEVDEF *pstDevice);
+
+				; ASSUME DS = DGROUP, called from 'C' initialization code only
+ 00C0				GetDeviceAddress PROC FAR C USES bx cx dx di ds gs, wLID:WORD
+
+				;  int 3
+				     SetDS    RDGROUP
+ 00CE  8B 46 06			        mov     ax,wLID
+ 00D1  BA 0038			        mov     dx,DevHlp_GetDeviceBlock
+ 00D4  FF 1E 0000 E		        call    device_hlp
+ 00D8  B8 0000			        mov     ax,0
+ 00DB  72 0F			        jc      exit
+
+				     SetDS    DGROUP
+ 00E1  83 EC 06			        sub     sp,6                    ;API expects to pop 12 words
+ 00E4  51			        push    cx
+ 00E5  52			        push    dx
+ 00E6  6A 01			        push    GET_BASE_ADDR
+ 00E8  FF 1E 0000 E		        call    DWORD PTR _Ring0Vector
+ 00EC				exit:
+				        ret
+ 00EC  0F A9		   *	    pop    gs
+ 00EE  1F		   *	    pop    ds
+ 00EF  5F		   *	    pop    di
+ 00F0  5A		   *	    pop    dx
+ 00F1  59		   *	    pop    cx
+ 00F2  5B		   *	    pop    bx
+ 00F3  5D		   *	    pop    bp
+ 00F4  CB		   *	    ret    00000h
+
+ 00F5				GetDeviceAddress ENDP
+
+				;WORD GetKernalData(WORD wLID,WORD wSrcOffset,BYTE *pwDest,WORD wCount);
+
+				; ASSUME DS = DGROUP, called from 'C' initialization code only
+ 00F5				GetKernalData PROC FAR C USES bx cx dx di es ds gs, wLID:WORD, wSrcOffset:WORD, pwDest:WORD, wCount:WORD
+
+				;  int 3
+				     SetDS    RDGROUP
+ 0104  8B 46 06			        mov     ax,wLID
+ 0107  BA 0038			        mov     dx,DevHlp_GetDeviceBlock
+ 010A  FF 1E 0000 E		        call    device_hlp
+ 010E  B8 0000			        mov     ax,0
+ 0111  72 30			        jc      exit
+
+ 0113  51			        push    cx
+ 0114  8B C1			        mov     ax,cx
+ 0116  BA 005D			        mov     dx,DevHlp_GetDescInfo
+ 0119  FF 1E 0000 E		        call    device_hlp
+ 011D  59			        pop     cx
+ 011E  72 23			        jc      exit
+
+ 0120  8B 46 0C			        mov     ax,wCount
+ 0123  2B 56 08			        sub     dx,wSrcOffset
+ 0126  3B C2			        cmp     ax,dx
+ 0128  76 02			        jbe     @f
+ 012A  8B C2			        mov     ax,dx
+ 012C				@@:
+				     SetDS    DGROUP
+ 0130  50			        push    ax
+ 0131  50			        push    ax
+ 0132  1E			        push    ds
+ 0133  8B 46 0A			        mov     ax,pwDest
+ 0136  50			        push    ax
+ 0137  51			        push    cx
+ 0138  8B 46 08			        mov     ax,wSrcOffset
+ 013B  50			        push    ax
+ 013C  6A 05			        push    GET_KERNAL_DATA
+ 013E  FF 1E 0000 E		        call    DWORD PTR _Ring0Vector
+ 0142  58			        pop     ax
+ 0143				exit:
+				        ret
+ 0143  0F A9		   *	    pop    gs
+ 0145  1F		   *	    pop    ds
+ 0146  07		   *	    pop    es
+ 0147  5F		   *	    pop    di
+ 0148  5A		   *	    pop    dx
+ 0149  59		   *	    pop    cx
+ 014A  5B		   *	    pop    bx
+ 014B  5D		   *	    pop    bp
+ 014C  CB		   *	    ret    00000h
+
+ 014D				GetKernalData ENDP
+
+ 014D				_TEXT ENDS
+
+				  END

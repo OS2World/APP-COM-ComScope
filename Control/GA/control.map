@@ -1,0 +1,174 @@
+
+ CONTROL
+
+ Start         Length     Name                   Class
+ 0001:00000000 000001145H CODE32                 CODE 32-bit
+	at offset 00000000 00E6FH bytes from P:\control\ga\control.obj (p:\Control\control.c)
+	at offset 00000e70 000BEH bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\dde4strt.c)
+	at offset 00000f30 00007H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\cppinit.asm)
+	at offset 00000f38 001F8H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\setuparg.asm)
+	at offset 00001130 0000DH bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\sctdt.c)
+	at offset 00001140 00005H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\wctdt.c)
+
+ 0002:00000000 000000000H CONST32_RO             CONST 32-bit
+
+ 0002:00000000 0000008B8H DATA32                 DATA 32-bit
+	at offset 00000000 008A4H bytes from P:\control\ga\control.obj (p:\Control\control.c)
+	at offset 000008a4 00004H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\exeentry.asm)
+	at offset 000008a8 00010H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\setuparg.asm)
+
+ 0002:000008B8 000000000H CTOR_DTOR1             DATA 32-bit
+
+ 0002:000008B8 000000000H CTOR_DTOR2             DATA 32-bit
+
+ 0002:000008B8 000000000H CTOR_DTOR3             DATA 32-bit
+
+ 0002:000008B8 000000000H EDC1                   EDC_CLASS 32-bit
+
+ 0002:000008B8 000000018H EDC2                   EDC_CLASS 32-bit
+	at offset 00000000 0000CH bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\cppinit.asm)
+	at offset 0000000c 0000CH bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\setuparg.asm)
+
+ 0002:000008D0 000000000H EDC3                   EDC_CLASS 32-bit
+
+ 0002:000008D0 00000002CH BSS32                  BSS 32-bit
+	at offset 00000000 00024H bytes from P:\control\ga\control.obj (p:\Control\control.c)
+	at offset 00000024 00008H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\dde4strt.c)
+
+ 0002:000008FC 0000000D4H c_common               BSS 32-bit
+
+ 0002:000009D0 000008000H STACK32                STACK 32-bit
+	at offset 00000000 08000H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\exeentry.asm)
+
+
+ Origin   Group
+ 0000:0   FLAT
+ 0002:0   DGROUP
+
+  Address         Publics by Name
+
+ 0000:00000000  Imp  atoi                 (OS2LSRTL.109)
+ 0002:00000994       bAbort
+ 0000:00000000  Imp  DosCallNPipe         (DOSCALLS.240)
+ 0000:00000000  Imp  DosClose             (DOSCALLS.257)
+ 0000:00000000  Imp  DosCloseEventSem     (DOSCALLS.326)
+ 0000:00000000  Imp  DosConnectNPipe      (DOSCALLS.241)
+ 0000:00000000  Imp  DosCreateEventSem    (DOSCALLS.324)
+ 0000:00000000  Imp  DosCreateNPipe       (DOSCALLS.243)
+ 0000:00000000  Imp  DosDisConnectNPipe   (DOSCALLS.242)
+ 0000:00000000  Imp  DosExit              (DOSCALLS.234)
+ 0000:00000000  Imp  DosExitList          (DOSCALLS.296)
+ 0000:00000000  Imp  DosPeekNPipe         (DOSCALLS.244)
+ 0000:00000000  Imp  DosRead              (DOSCALLS.281)
+ 0000:00000000  Imp  DosResetEventSem     (DOSCALLS.327)
+ 0000:00000000  Imp  DosSetExceptionHandler (DOSCALLS.354)
+ 0000:00000000  Imp  DosSetNPipeSem       (DOSCALLS.251)
+ 0000:00000000  Imp  DosSetPriority       (DOSCALLS.236)
+ 0000:00000000  Imp  DosSleep             (DOSCALLS.229)
+ 0000:00000000  Imp  DosUnsetExceptionHandler (DOSCALLS.355)
+ 0000:00000000  Imp  DosWaitEventSem      (DOSCALLS.329)
+ 0000:00000000  Imp  DosWrite             (DOSCALLS.282)
+ 0000:00000000  Imp  exit                 (OS2LSRTL.106)
+ 0000:00000000  Imp  free                 (OS2LSRTL.88)
+ 0002:00000938       hCOMscopePipe
+ 0002:0000093C       iSurfaceCount
+ 0001:00000000       main
+ 0000:00000000  Imp  malloc               (OS2LSRTL.167)
+ 0002:00000900       rc
+ 0002:00000998       stBytesAvailable
+ 0002:0000099C       stPipe
+ 0002:00000940       szCOMscopePipe
+ 0002:000009A8       szPipeName
+ 0002:00000910       szPipeServer
+ 0002:000008FC       ulBytesRead
+ 0002:00000990       ulBytesWritten
+ 0002:00000904       ulPipeState
+ 0002:00000908       ulPostCount
+ 0002:000009A6       usExplicitCommand
+ 0002:000008F4       _argc
+ 0002:000008F8       _argv
+ 0000:00000000  Imp  _callback_opt_sys    (OS2LSRTL.273)
+ 0001:00000F30       _cppinit
+ 0000:00000000  Imp  _CRT_init            (OS2LSRTL.467)
+ 0000:00000000  Imp  _CRT_term            (OS2LSRTL.457)
+ 0000:00000000  Imp  _environ             (OS2LSRTL.396)
+ 0000:00000000  Imp  _exception_procinit  (OS2LSRTL.2)
+ 0001:00000E70       _exestart
+ 0000:00000000  Imp  _EXE_Exception       (OS2LSRTL.114)
+ 0000:00000000  Imp  _fpninit             (OS2LSRTL.380)
+ 0000:00000000  Imp  _fpreset             (OS2LSRTL.374)
+ 0000:00000000  Imp  _matherr             (OS2LSRTL.346)
+ 0000:00000000  Imp  _PrintErrMsg         (OS2LSRTL.41)
+ 0000:00000000  Imp  _printfieee          (OS2LSRTL.11)
+ 0001:00000F38       _setuparg
+ 0000:00000000  Imp  _sprintfieee         (OS2LSRTL.32)
+ 0000:00000000  Imp  _terminate           (OS2LSRTL.482)
+ 0001:00001130       __sctordtorInit
+ 0001:00001138       __sctordtorTerm
+ 0001:00001140       __wctordtorInit
+ 0001:00001144       __wctordtorTerm
+
+  Address         Publics by Value
+
+ 0000:00000000  Imp  DosRead              (DOSCALLS.281)
+ 0000:00000000  Imp  exit                 (OS2LSRTL.106)
+ 0000:00000000  Imp  free                 (OS2LSRTL.88)
+ 0000:00000000  Imp  _fpreset             (OS2LSRTL.374)
+ 0000:00000000  Imp  _matherr             (OS2LSRTL.346)
+ 0000:00000000  Imp  DosSleep             (DOSCALLS.229)
+ 0000:00000000  Imp  DosSetNPipeSem       (DOSCALLS.251)
+ 0000:00000000  Imp  _terminate           (OS2LSRTL.482)
+ 0000:00000000  Imp  DosCreateNPipe       (DOSCALLS.243)
+ 0000:00000000  Imp  DosExit              (DOSCALLS.234)
+ 0000:00000000  Imp  DosSetPriority       (DOSCALLS.236)
+ 0000:00000000  Imp  DosResetEventSem     (DOSCALLS.327)
+ 0000:00000000  Imp  DosConnectNPipe      (DOSCALLS.241)
+ 0000:00000000  Imp  DosCloseEventSem     (DOSCALLS.326)
+ 0000:00000000  Imp  malloc               (OS2LSRTL.167)
+ 0000:00000000  Imp  _callback_opt_sys    (OS2LSRTL.273)
+ 0000:00000000  Imp  DosWaitEventSem      (DOSCALLS.329)
+ 0000:00000000  Imp  DosCreateEventSem    (DOSCALLS.324)
+ 0000:00000000  Imp  DosDisConnectNPipe   (DOSCALLS.242)
+ 0000:00000000  Imp  _EXE_Exception       (OS2LSRTL.114)
+ 0000:00000000  Imp  atoi                 (OS2LSRTL.109)
+ 0000:00000000  Imp  DosUnsetExceptionHandler (DOSCALLS.355)
+ 0000:00000000  Imp  _environ             (OS2LSRTL.396)
+ 0000:00000000  Imp  DosExitList          (DOSCALLS.296)
+ 0000:00000000  Imp  DosClose             (DOSCALLS.257)
+ 0000:00000000  Imp  _sprintfieee         (OS2LSRTL.32)
+ 0000:00000000  Imp  DosPeekNPipe         (DOSCALLS.244)
+ 0000:00000000  Imp  DosCallNPipe         (DOSCALLS.240)
+ 0000:00000000  Imp  _printfieee          (OS2LSRTL.11)
+ 0000:00000000  Imp  DosWrite             (DOSCALLS.282)
+ 0000:00000000  Imp  _CRT_term            (OS2LSRTL.457)
+ 0000:00000000  Imp  _fpninit             (OS2LSRTL.380)
+ 0000:00000000  Imp  _PrintErrMsg         (OS2LSRTL.41)
+ 0000:00000000  Imp  _exception_procinit  (OS2LSRTL.2)
+ 0000:00000000  Imp  DosSetExceptionHandler (DOSCALLS.354)
+ 0000:00000000  Imp  _CRT_init            (OS2LSRTL.467)
+ 0001:00000000       main
+ 0001:00000E70       _exestart
+ 0001:00000F30       _cppinit
+ 0001:00000F38       _setuparg
+ 0001:00001130       __sctordtorInit
+ 0001:00001138       __sctordtorTerm
+ 0001:00001140       __wctordtorInit
+ 0001:00001144       __wctordtorTerm
+ 0002:000008F4       _argc
+ 0002:000008F8       _argv
+ 0002:000008FC       ulBytesRead
+ 0002:00000900       rc
+ 0002:00000904       ulPipeState
+ 0002:00000908       ulPostCount
+ 0002:00000910       szPipeServer
+ 0002:00000938       hCOMscopePipe
+ 0002:0000093C       iSurfaceCount
+ 0002:00000940       szCOMscopePipe
+ 0002:00000990       ulBytesWritten
+ 0002:00000994       bAbort
+ 0002:00000998       stBytesAvailable
+ 0002:0000099C       stPipe
+ 0002:000009A6       usExplicitCommand
+ 0002:000009A8       szPipeName
+
+Program entry point at 0001:00000E70

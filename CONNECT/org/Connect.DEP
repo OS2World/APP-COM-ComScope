@@ -1,0 +1,46 @@
+
+.\connect.res: \
+    p:\connect\connect.rc \
+    {p:\connect;$(INCLUDE)}CONNECT.ICO \
+    {p:\connect;$(INCLUDE)}menu.h \
+    {p:\connect;$(INCLUDE)}conn_dlg.h \
+    Connect.mak
+
+.\request.obj: \
+    p:\connect\request.c \
+    {p:\connect;$(INCLUDE);}conn_dlg.h \
+    {p:\connect;$(INCLUDE);}menu.h \
+    {p:\connect;$(INCLUDE);}comm.h \
+    {p:\connect;$(INCLUDE);}connect.h \
+    Connect.mak
+
+.\data.obj: \
+    p:\connect\data.c \
+    {p:\connect;$(INCLUDE);}conn_dlg.h \
+    {p:\connect;$(INCLUDE);}menu.h \
+    {p:\connect;$(INCLUDE);}comm.h \
+    {p:\connect;$(INCLUDE);}connect.h \
+    Connect.mak
+
+.\conn_dlg.obj: \
+    p:\connect\conn_dlg.c \
+    {p:\connect;$(INCLUDE);}conn_dlg.h \
+    {p:\connect;$(INCLUDE);}comm.h \
+    {p:\connect;$(INCLUDE);}connect.h \
+    Connect.mak
+
+.\connect.obj: \
+    p:\connect\connect.c \
+    {p:\connect;$(INCLUDE);}conn_dlg.h \
+    {p:\connect;$(INCLUDE);}menu.h \
+    {p:\connect;$(INCLUDE);}comm.h \
+    {p:\connect;$(INCLUDE);}connect.h \
+    Connect.mak
+
+.\response.obj: \
+    p:\connect\response.c \
+    {p:\connect;$(INCLUDE);}conn_dlg.h \
+    {p:\connect;$(INCLUDE);}menu.h \
+    {p:\connect;$(INCLUDE);}comm.h \
+    {p:\connect;$(INCLUDE);}connect.h \
+    Connect.mak

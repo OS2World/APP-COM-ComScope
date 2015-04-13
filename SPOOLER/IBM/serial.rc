@@ -1,0 +1,22 @@
+//#include <os2.h>
+#include "serial.h"
+
+POINTER SERIAL_ICON  LOADONCALL MOVEABLE DISCARDABLE  SERIAL.ICO
+
+STRINGTABLE
+BEGIN
+    PORT_ID_1		    "COM1"
+    PORT_DESC_1 	    "Serial port 1"
+    PORT_ID_2		    "COM2"
+    PORT_DESC_2 	    "Serial port 2"
+    PORT_ID_3		    "COM3"
+    PORT_DESC_3 	    "Serial port 3"
+    PORT_ID_4		    "COM4"
+    PORT_DESC_4 	    "Serial port 4"
+    ID_NUMBER_OF_DESC_LINES "1"
+    ID_FIRST_DESC_LINES     "Serial port driver"
+    PORT_ERR_TITLE	    "Port Driver Error"
+    PORT_HELP_TITLE	    "Serial Port Help"
+END
+
+rcinclude serial.dlg

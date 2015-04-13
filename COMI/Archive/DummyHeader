@@ -1,0 +1,508 @@
+;************************************************************************
+;
+; $Revision:   1.6  $
+;
+; $Log:   P:/archive/comi/data_seg.asv  $
+;  
+;     Rev 1.6   18 Feb 1996 14:17:48   EMMETT
+;  Added many features.  Notably:
+;  Tracing application DosDevIOCtl function calls and packets.
+;  Support for 16650 and 16750 UARTs.
+;  Streamlined interrupt routine.
+;  
+;     Rev 1.5   25 Apr 1995 22:16:22   EMMETT
+;  Added Support for DigiBoard PC/16.  Changed interrupt Routine for better adapter independence.
+;  Changed interrupt routine to allow user to select interrupting device selection algorithim.  Fixed
+;  ABIOS interaction for better "non.INI" initialization in MCA machines.  Fixed various initialization
+;  message strings.  COMscope and receive buffer are now allocated from system memory, allowing
+;  a 32k (word) COMscope buffer and a 64k (byte) receive buffer.
+;  
+;     Rev 1.4   03 Dec 1994 14:42:04   EMMETT
+;  Changed segment names to "C" standard.  Added various variable for initialization.
+;  
+;     Rev 1.3   22 Jul 1994 09:11:28   EMMETT
+;  Moved all "INCL_" lines for OS2.INC into COMDD.INC.
+;  
+;     Rev 1.2   28 Jun 1994 09:06:06   EMMETT
+;  Removed ".VER" includes and placed common version string.
+;  
+;     Rev 1.1   11 Jun 1994 10:37:52   EMMETT
+;  Changed all references to "Mirror" to "COMscope".
+;  
+;     Rev 1.0   07 Jun 1994 00:18:58   EMMETT
+;  Added support for DigiBoard.
+;  Added initialization support for OEM specific loads.
+;  Fixed bug in StartWriteStream and ProcessModemSignals that caused handshaking problems.
+;  Fixed hardware tests to set baud rate before testing interrupts.
+;  Fixed hardware tests off switch to work only for retail version.
+;  
+;************************************************************************
+
+TITLE OS/tools Multi-Port Device Driver
+SUBTITLE Data Definitions
+PAGE ,132
+;*
+;* FILE: DATA.ASM
+;*
+;* COPYRIGHT: (c) OS/tools Incorporated 1988-94.  All rights reserved.
+;*
+;*
+;*******************************************************************************
+
+  IFNDEF x16_BIT
+.386P
+  ELSE
+.286P
+  ENDIF
+.NOLISTMACRO                   ;suppress macro expansion in listing
+
+.XLIST                  ;suppress listing of INCLUDE files
+   INCLUDE .\SEGMENTS.INC
+   INCLUDE .\COMDD.INC
+   INCLUDE .\PACKET.INC
+   INCLUDE .\ABIOS.INC
+   INCLUDE .\DEVHLP.INC
+   INCLUDE .\DCB.INC
+   INCLUDE .\HDW.INC
+.LIST
+
+HeaderDeviceName EQU <"OS$tools">
+
+   EXTRN pDeviceStrategy        :FAR
+   EXTRN pCOMscopeStrategy      :FAR
+
+RES_DATA SEGMENT
+
+    ORG 0000
+
+;START_RESIDENT_OF_DATA   EQU   $
+
+_stAuxHeader LABEL BYTE
+ComAux            WORD   OFFSET xComAux
+ComAuxSeg         WORD   SEG xComAux
+  IFNDEF x16_BIT
+DevAttributes     WORD   DEV_ATT_COMI OR DEV_ATT_IDC
+  ELSE
+DevAttributes     WORD   DEV_ATT_COMI
+  ENDIF
+StrategyOffset    WORD   OFFSET AuxStrategy
+  IFNDEF SHARE
+IDCoffset         WORD   OFFSET nDDAttachFunction
+  ELSE
+IDCoffset         WORD   0
+  ENDIF
+DeviceName        BYTE   HeaderDeviceName
+ReservedWords     WORD   4 DUP (0)
+  IF DD_level GT 2
+DeviceCaps        DWORD  DEV_CAP_COMI
+  ENDIF
+
+_stDummyHeader LABEL BYTE
+xComAux           DWORD  -1
+xDevAttributes    WORD   DEV_ATT_COMI
+xStrategyOffset   WORD   OFFSET xAuxStrategy
+xIDCoffset        WORD   0
+xDeviceName       BYTE   'sloot$SO'
+xReservedWords    WORD   4 DUP (0)
+  IF DD_level GT 2
+xDeviceCaps       DWORD  DEV_CAP_COMI
+  ELSE
+;fill to keep following variable's location stable
+                  DWORD 0,0  ; for removed device capabilities strips
+  ENDIF
+dwSerialNumber   DWORD 0
+  IFDEF SHARE
+_wMaxPagerCount  WORD 0
+    IFDEF x16_BIT
+_wMaxDeviceCount WORD 0
+    ELSE
+_wMaxDeviceCount WORD 4
+    ENDIF
+  ELSEIFDEF OEM
+_wMaxPagerCount  WORD 0
+_wMaxDeviceCount WORD 0
+  ELSE
+_wMaxPagerCount  WORD 1
+_wMaxDeviceCount WORD 0
+  ENDIF
+
+  IFDEF x16_BIT
+_usDosIOdelayCount  WORD 3
+  ENDIF
+
+  IFDEF DigiBoard
+_byOEMtype      BYTE OEM_DIGIBOARD
+  ELSEIFDEF Quatech
+_byOEMtype      BYTE OEM_QUATECH
+  ELSEIFDEF Neotech
+_byOEMtype      BYTE OEM_NEOTECH
+  ELSEIFDEF Comtrol
+_byOEMtype      BYTE OEM_COMTROL
+  ELSEIFDEF Sealevel
+_byOEMtype      BYTE OEM_SEALEVEL
+  ELSEIFDEF ConnecTech
+_byOEMtype      BYTE OEM_CONNECTECH
+  ELSEIFDEF Globetek
+_byOEMtype      BYTE OEM_GLOBETEK
+  ELSE
+_byOEMtype      BYTE 0
+  ENDIF
+
+;------------------------- copy protection key ---------------------
+
+  IFDEF COPY_PROTECT
+_dwInstallMark  DWORD 1
+wInstallCount   WORD 1
+  ENDIF
+
+ResDeviceHelp  DWORD 0
+
+;.ERRNZ OFFSET RES_DATA:ComAux
+
+  ORG 0fff0h
+
+RES_DATA ENDS
+
+;--------------------- variables used at task time -----------------
+_DATA SEGMENT
+  IFNDEF x16_BIT
+VCOMaddress     DF 0
+
+; IDC variables
+
+wIDCsignature    WORD SIGNATURE
+wIDCbuffer       WORD 16 DUP (0)
+wPagerOpenCount  WORD 0
+
+; Set up IDC access in case this is the first load.
+; This is so that all calls to global (IDC) functions are the same
+; even for the first load, which will not need to use the IDC
+; interface to access the global functions
+
+IDCaccess       LABEL WORD
+IDCaccessRM     DWORD 0
+IDCaccessRDS    WORD  0
+IDCaccessPM     LABEL DWORD
+IDCaccessPMoff  WORD  OFFSET nDDAttachFunction
+IDCaccessPMseg  WORD  SEG nDDAttachFunction
+IDCaccessPDS    WORD  RES_DATA
+
+IDCdata         WORD  32 DUP(0)
+  ENDIF
+; other
+
+device_hlp      DWORD ?
+
+;wBusType        WORD BUSTYPE_ISA
+
+_bSharedInterrupts WORD TRUE
+
+wClockRate      WORD DEFAULT_CLOCK_RATE
+wClockRate2     WORD DEFAULT_CLOCK_RATE * 2
+
+wDriverLoadNumber WORD 0
+
+_wSystemDebug     WORD 0
+
+  IFDEF DEMO
+wWriteCountStart  WORD EVALUATION_WRITES
+wWriteCount       WORD EVALUATION_WRITES
+  ENDIF
+
+wIntRegistered  WORD 0
+wDeviceCount    WORD 0
+
+wTimerSeg  WORD 0
+wTimerOffset WORD 0
+
+_wLoadFlags     WORD 0
+
+wTimerAllocCount WORD 0
+
+_wCOMscopeStrategy WORD 0
+
+byLastModemOut BYTE 0
+
+wMaskTimerCount WORD 0
+abyInterruptCount BYTE 16 DUP(0)
+
+bOpenTrigger  BYTE FALSE
+bWriteTrigger BYTE FALSE
+bReadTrigger BYTE FALSE
+ulTriggersSinceReboot DWORD 0
+ IFDEF OEM
+_bOEMpresent WORD FALSE
+ ENDIF
+_wIntIDregister WORD 0
+_wOEMjumpEntry  WORD 0
+_wOEMjumpExit   WORD 0
+_wOEMjumpTest   WORD 0
+
+  EVEN
+wLastDeviceParmsOffset WORD 0ffffh
+
+stABIOSrequestBlock _stABIOSrequestBlock {}
+
+_wEndOfData      WORD 0
+
+dwInputData_Return DWORD 0
+
+_abyPath         BYTE CCHMAXPATH DUP(0)
+
+wDeviceIntOffsetTable WORD MAX_DEVICE DUP(0) ;stores device int params offset
+
+wDeviceOffsetTable WORD MAX_DEVICE DUP(0) ;stores device params offset
+
+  EVEN
+wEndOfResidentData WORD OFFSET END_OF_RES_DATA
+END_OF_RES_DATA EQU $
+
+_DeviceParms stDeviceParms MAX_DEVICE DUP(<>)
+
+;--------------------- variables used at initialization time -----------------
+
+PDD_VDD_name    BYTE "COMiVDD",0
+
+_bABIOSpresent   WORD TRUE
+_bIsTheFirst       WORD TRUE
+_wLoadNumber    WORD NO_INI_FILE
+wLastEndOfData  WORD 0
+stStackUsage _stStackUsage <>
+
+  IFNDEF NO_4x_CLOCK_SUPPORT
+dwTimerCounter  DWORD 0
+  ENDIF
+
+_dwDeviceStrategyOffset DWORD OFFSET pDeviceStrategy
+_dwCOMscopeStrategyOffset DWORD OFFSET pCOMscopeStrategy
+
+_pstDummyHeader
+wInitDebugFlags WORD 0
+
+_pDeviceParms DWORD 0
+_pStart DWORD 0
+_pPrevious DWORD 0
+_wDeviceStrategy WORD 0
+_wDCBcount WORD 0
+
+
+_wDriverLoadCount WORD 0
+
+bTimerAvailable WORD FALSE
+_stDefaultDevHeader _stDeviceHeader <>
+  IFNDEF x16_BIT
+IDCdeviceName      BYTE HeaderDeviceName,0
+awGDTselectors  WORD (MAX_DEVICE * 2) DUP(0)
+
+Ring0Vector      DWORD 0
+  ENDIF
+_wLID            WORD 0
+_LIDtable       _stLIDtable 8 dup({})
+
+_astInstallParms _stInstallParms MAX_DEVICE DUP({})
+
+wInstallTryCount WORD 0
+byIntIDregisterPreset  BYTE 0
+
+  IFDEF DigiBoard
+_byLoadOEMtype      BYTE OEM_DIGIBOARD
+  ELSEIFDEF Quatech
+_byLoadOEMtype      BYTE OEM_ONE
+  ELSEIFDEF Comtrol
+_byLoadOEMtype      BYTE OEM_TWO
+  ELSEIFDEF Sealevel
+_byLoadOEMtype      BYTE OEM_ONE
+  ELSEIFDEF ConnecTech
+_byLoadOEMtype      BYTE OEM_THREE
+  ELSEIFDEF Globetek
+_byLoadOEMtype      BYTE OEM_ONE
+  ELSE
+_byLoadOEMtype      BYTE 0
+  ENDIF
+
+_szDefaultPath   BYTE CCHMAXPATH dup(0)
+
+_abyCOMnumbers   BYTE MAX_DEVICE DUP(0)
+_wLoadCount      WORD 0;
+bPrimaryInit     WORD FALSE
+bDebugDelay      WORD FALSE
+
+_iIntIDindex     WORD 0
+StackPointer     WORD 0
+_iDataIndex      WORD 0
+_bIntIDavailable WORD 0
+_bContinueParse  WORD 0
+wCurrentDevice   WORD 0
+_wDelayCount     WORD DEFAULT_INIT_DELAY
+_bOUT1activate  WORD FALSE
+
+_astComDCB     LABEL BYTE
+stCommandParms _stConfigParms MAX_DEVICE DUP({})
+
+bBadLoad            WORD FALSE
+
+PreviousLID         WORD 0
+byPortNumber        BYTE 0
+wBufferLength       WORD 0
+_ulFilePosition     DWORD 0
+_abyNumber          BYTE 10 DUP(0)
+iCharCount          WORD 0
+iIndex              WORD 0
+iIncIndex           WORD 0
+abyTemp             BYTE 6 DUP(0)
+wTemp               WORD 0
+byTemp              BYTE 0
+wAccumulator        WORD 0
+bBase16             WORD 0
+wPower              WORD 0
+bWaitingKey         WORD FALSE
+bValidIntIDreg      WORD FALSE
+bValidInterrupt     WORD FALSE
+wInitTestPort       WORD 0
+
+_bVerbose           WORD FALSE
+_bDelay             WORD FALSE
+
+wInitTimerCount     WORD 0
+
+_stAttachDD _stAttachDDentry {}
+
+_astMCAportTable LABEL _stMCAportDef
+        WORD 03f8h                ;serial 1 = COM1
+        BYTE 04
+        WORD 02f8h                ;serial 2 = COM2
+        BYTE 03
+        WORD 3220h                ;serial 3 = COM3
+        BYTE 03
+        WORD 3228h                ;serial 4 = COM4
+        BYTE 03
+        WORD 4220h                ;serial 5 = COM5
+        BYTE 03
+        WORD 4228h                ;serial 6 = COM6
+        BYTE 03
+        WORD 5220h                ;serial 7 = COM7
+        BYTE 03
+        WORD 5228h                ;serial 8 = COM8
+        BYTE 03
+        WORD 0000
+        BYTE 00
+
+ADFtable LABEL WORD
+  IFDEF Globetek
+        WORD 6426h      ;M-1002
+  ENDIF
+  IFDEF Quatech
+        WORD 5fd8h      ;ES-2000
+        WORD 5fe0h      ;QS-1000
+        WORD 5fe3h      ;DS-2000
+        WORD 5fe6h      ;DS-1000
+        WORD 5fe7h      ;SCL-6100
+        WORD 5fe9h      ;SP-1050
+        WORD 5fech      ;QS-2000
+  ENDIF
+  IFDEF Neotech
+        WORD 678dh      ;MS4P
+        WORD 6789h      ;MS4CRJ
+        WORD 6788h      ;MS4B
+        WORD 6787h      ;MS4A
+        WORD 6780h      ;MS4
+        WORD 6781h      ;SS/1
+        WORD 6783h      ;SPC/1 SPC/1A
+        WORD 6784h      ;MSI/2
+        WORD 6785h      ;S485
+        WORD 678bh      ;MS/2
+        WORD 678ch      ;S2M100
+        WORD 6792h      ;SPM321
+        WORD 6795h      ;S1M200
+  ENDIF
+  IFDEF Sealevel
+        WORD 61d6h     ;MSA
+  ENDIF
+        WORD 0000
+
+  IFDEF COPY_PROTECT
+_abyConfigFile   BYTE "c:\config.sys",0
+
+_abyHiddenFile   BYTE "z"
+                 BYTE "6" OR 0c0h
+                 BYTE "5" OR 0c0h
+                 BYTE "6" OR 0c0h
+                 BYTE "6" OR 0c0h
+                 BYTE "9" OR 0c0h
+                 BYTE "7" OR 0c0h
+                 BYTE "8" OR 0c0h
+                 BYTE "." OR 0c0h
+                 BYTE "3" OR 0c0h
+                 BYTE "5" OR 0c0h
+                 BYTE "6" OR 0c0h
+                 BYTE 0
+  ENDIF
+
+w_IntRegistered    WORD 0
+
+_wDeviceCount WORD 0
+_bBreakInitialization WORD FALSE
+
+  IFNDEF x16_BIT
+_stConfigInfo _stConfigurationInfo {}
+_stConfigHeader _stConfigurationHeader {}
+_stDCBheader _stDeviceControlBlockHeader {}
+  ENDIF
+
+pString LABEL BYTE
+_abyString       BYTE 256 DUP(0)
+
+_bWaitForCR      WORD FALSE
+
+  IFDEF x16_BIT
+_wCOMstart              WORD 0
+_wCOMlast               WORD 0
+_iStartDevice           WORD 0
+_iEndDevice             WORD 0
+  ENDIF
+
+  IFNDEF x16_BIT
+_achASCII       BYTE 14 DUP(0)
+_ArgMarker      WORD 0
+_achDigitBuffer BYTE 14 DUP(0)
+_ulTemp         DWORD 0
+_wTemp          WORD 0
+_byTemp         BYTE 0
+
+_achASCIIdigits BYTE "0123456789ABCDEF"
+  ENDIF
+
+INCLUDE MESSAGE.DEF
+  IFDEF OEM
+INCLUDE OEM_MSG.DEF
+  ENDIF
+
+wEndOfInitData   WORD END_OF_INIT_DATA
+END_OF_INIT_DATA EQU $
+
+_abyFileBuffer BYTE 0c000h DUP(0)
+
+_DATA ENDS
+
+RES_CODE SEGMENT
+    ASSUME CS:CGROUP, ES:nothing, SS:nothing, DS:RES_DATA
+
+    EXTRN AuxStrategy:    FAR
+    EXTRN xAuxStrategy:   FAR
+
+RES_CODE ENDS
+
+_TEXT SEGMENT
+    ASSUME CS:C2GROUP, ES:nothing, SS:nothing, DS:_DATA
+
+  IFNDEF x16_BIT
+    EXTRN nDDAttachFunction:NEAR
+  ENDIF
+_main PROC
+__acrtused:
+    ret
+_main ENDP
+
+_TEXT ENDS
+
+ END

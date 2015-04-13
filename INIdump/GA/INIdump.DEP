@@ -1,0 +1,5 @@
+
+.\inidump.obj: \
+    p:\inidump\inidump.c \
+    {p:\inidump;$(INCLUDE);}COMMON.H \
+    {p:\inidump;$(INCLUDE);}COMDD.H

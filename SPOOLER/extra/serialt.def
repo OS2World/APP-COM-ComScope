@@ -1,0 +1,18 @@
+NAME    SERIAL_T
+
+DESCRIPTION 'OS/2 Presentation Manager SERIAL PORT .PDR test suite'
+
+STUB    'OS2STUB.EXE'
+
+PROTMODE
+
+IMPORTS
+   SplPdEnumPort
+   SplPdInitPort
+   SplPdInstallPort
+   SplPdGetPortIcon
+   SplPdQueryPort
+   SplPdSetPort
+   SplPdRemovePort
+   SplPdTermPort
+

@@ -1,0 +1,177 @@
+:TARGET.SUFFIXES
+:TARGET.SUFFIXES
+:DEPENDENCY..LIB .c .dll .obj 
+:TARGET.all
+:DEPENDENCY.
+p:\lib\COMi_CFG.LIB
+:RULE..c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Sp1 /Sd /Ss /Q /Fi /Si /O /W1 /Gm /Gd /Ge- /G4 /Gs /Gn /Ms /Gf /Gi /Ft- /C %s
+:RULE.{p:\config}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Sp1 /Sd /Ss /Q /Fi /Si /O /W1 /Gm /Gd /Ge- /G4 /Gs /Gn /Ms /Gf /Gi /Ft- /C %s
+:RULE.{p:\config\GA}.c.obj
+:ACTION.Compile::C++ Compiler
+:COMMAND.
+icc.exe /Sp1 /Sd /Ss /Q /Fi /Si /O /W1 /Gm /Gd /Ge- /G4 /Gs /Gn /Ms /Gf /Gi /Ft- /C %s
+:RULE..dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe /NOLOGO p:\lib\%|fF.LIB %s
+:RULE.{p:\config}.dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe /NOLOGO p:\lib\%|fF.LIB %s
+:RULE.{p:\config\GA}.dll.LIB
+:ACTION.Lib::Import Lib
+:COMMAND.
+implib.exe /NOLOGO p:\lib\%|fF.LIB %s
+:TARGET.p:\lib\COMi_CFG.dll
+:DEPENDENCY.
+.\dev_notebk.obj
+.\fifo_dlg.obj
+.\cfg_dev_dlg.obj
+.\cfg_dlg.obj
+.\cfg_hlp.obj
+.\cfg_prot_dlg.obj
+.\cfg_prot_hlp.obj
+.\comddini.obj
+.\ddbufdlg.obj
+p:\config\Config.Res
+{$(LIB)}OS2LSRTL.lib
+{$(LIB)}OS2386.lib
+{$(LIB)}CPPOM30O.lib
+{$(LIB)}OS2LS_UT.lib
+.\\..\COMi_CFG.def
+:ACTION.Link::Linker
+:COMMAND.
+icc.exe @<<
+ /Q /B" /nobase /nop /optfunc      /noe /m /nod"
+ /Fe"p:\lib\COMi_CFG.dll" 
+ OS2LSRTL.lib 
+ OS2386.lib 
+ CPPOM30O.lib 
+ OS2LS_UT.lib 
+ .\\..\COMi_CFG.def
+ .\dev_notebk.obj
+ .\fifo_dlg.obj
+ .\cfg_dev_dlg.obj
+ .\cfg_dlg.obj
+ .\cfg_hlp.obj
+ .\cfg_prot_dlg.obj
+ .\cfg_prot_hlp.obj
+ .\comddini.obj
+ .\ddbufdlg.obj
+<<
+:ACTION.Bind::Resource Bind
+:COMMAND.
+rc.exe p:\config\Config.Res p:\lib\COMi_CFG.dll
+:TARGET..\dev_notebk.obj
+:DEPENDENCY.
+p:\config\dev_notebk.c
+{p:\config;$(INCLUDE);}COMMON.H
+{p:\config;$(INCLUDE);}COMDD.H
+{p:\config;$(INCLUDE);}ioctl.h
+{p:\config;$(INCLUDE);}utility.h
+{p:\config;$(INCLUDE);}help.h
+{p:\config;$(INCLUDE);}COMi_CFG.h
+{p:\config;$(INCLUDE);}resource.h
+{p:\config;$(INCLUDE);}config.h
+{p:\config;$(INCLUDE);}linklist.h
+{p:\config;$(INCLUDE);}ComControl.h
+:TARGET..\ddbufdlg.obj
+:DEPENDENCY.
+p:\config\ddbufdlg.c
+{p:\config;$(INCLUDE);}COMMON.H
+{p:\config;$(INCLUDE);}COMDD.H
+{p:\config;$(INCLUDE);}ioctl.h
+{p:\config;$(INCLUDE);}utility.h
+{p:\config;$(INCLUDE);}help.h
+{p:\config;$(INCLUDE);}COMi_CFG.h
+{p:\config;$(INCLUDE);}resource.h
+{p:\config;$(INCLUDE);}config.h
+{p:\config;$(INCLUDE);}linklist.h
+:TARGET..\comddini.obj
+:DEPENDENCY.
+p:\config\comddini.c
+{p:\config;$(INCLUDE);}COMMON.H
+{p:\config;$(INCLUDE);}COMDD.H
+{p:\config;$(INCLUDE);}ioctl.h
+{p:\config;$(INCLUDE);}utility.h
+{p:\config;$(INCLUDE);}help.h
+{p:\config;$(INCLUDE);}COMi_CFG.h
+{p:\config;$(INCLUDE);}resource.h
+{p:\config;$(INCLUDE);}config.h
+{p:\config;$(INCLUDE);}linklist.h
+{p:\config;$(INCLUDE);}spool.h
+:TARGET..\cfg_prot_hlp.obj
+:DEPENDENCY.
+p:\config\cfg_prot_hlp.c
+{p:\config;$(INCLUDE);}COMMON.H
+{p:\config;$(INCLUDE);}COMDD.H
+{p:\config;$(INCLUDE);}ioctl.h
+{p:\config;$(INCLUDE);}utility.h
+{p:\config;$(INCLUDE);}resource.h
+:TARGET..\cfg_prot_dlg.obj
+:DEPENDENCY.
+p:\config\cfg_prot_dlg.c
+{p:\config;$(INCLUDE);}COMMON.H
+{p:\config;$(INCLUDE);}COMDD.H
+{p:\config;$(INCLUDE);}ioctl.h
+{p:\config;$(INCLUDE);}utility.h
+{p:\config;$(INCLUDE);}COMi_CFG.h
+{p:\config;$(INCLUDE);}resource.h
+{p:\config;$(INCLUDE);}config.h
+{p:\config;$(INCLUDE);}linklist.h
+:TARGET..\cfg_hlp.obj
+:DEPENDENCY.
+p:\config\cfg_hlp.c
+{p:\config;$(INCLUDE);}COMMON.H
+{p:\config;$(INCLUDE);}COMDD.H
+{p:\config;$(INCLUDE);}ioctl.h
+{p:\config;$(INCLUDE);}utility.h
+{p:\config;$(INCLUDE);}help.h
+{p:\config;$(INCLUDE);}COMi_CFG.h
+{p:\config;$(INCLUDE);}config.h
+{p:\config;$(INCLUDE);}linklist.h
+:TARGET..\cfg_dlg.obj
+:DEPENDENCY.
+p:\config\cfg_dlg.c
+{p:\config;$(INCLUDE);}COMMON.H
+{p:\config;$(INCLUDE);}COMDD.H
+{p:\config;$(INCLUDE);}ioctl.h
+{p:\config;$(INCLUDE);}utility.h
+{p:\config;$(INCLUDE);}help.h
+{p:\config;$(INCLUDE);}COMi_CFG.h
+{p:\config;$(INCLUDE);}resource.h
+{p:\config;$(INCLUDE);}config.h
+{p:\config;$(INCLUDE);}linklist.h
+:TARGET..\cfg_dev_dlg.obj
+:DEPENDENCY.
+p:\config\cfg_dev_dlg.c
+{p:\config;$(INCLUDE);}COMMON.H
+{p:\config;$(INCLUDE);}COMDD.H
+{p:\config;$(INCLUDE);}ioctl.h
+{p:\config;$(INCLUDE);}utility.h
+{p:\config;$(INCLUDE);}help.h
+{p:\config;$(INCLUDE);}COMi_CFG.h
+{p:\config;$(INCLUDE);}resource.h
+{p:\config;$(INCLUDE);}config.h
+{p:\config;$(INCLUDE);}linklist.h
+:TARGET..\fifo_dlg.obj
+:DEPENDENCY.
+p:\config\fifo_dlg.c
+{p:\config;$(INCLUDE);}COMMON.H
+{p:\config;$(INCLUDE);}COMDD.H
+{p:\config;$(INCLUDE);}ioctl.h
+{p:\config;$(INCLUDE);}utility.h
+{p:\config;$(INCLUDE);}help.h
+{p:\config;$(INCLUDE);}COMi_CFG.h
+{p:\config;$(INCLUDE);}resource.h
+{p:\config;$(INCLUDE);}config.h
+{p:\config;$(INCLUDE);}linklist.h
+:TARGET.p:\lib\COMi_CFG.LIB
+:DEPENDENCY.
+p:\lib\COMi_CFG.dll

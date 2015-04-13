@@ -1,0 +1,182 @@
+
+ Start         Length     Name                   Class
+ 0001:00000000 0000018CCH _TEXT                  CODE
+ 0002:00000000 0000005B8H _DATA                  DATA
+ 0002:000005B8 000000006H _INIT_                 INITDATA
+ 0002:000005BE 000000000H _INITEND_              INITDATA
+ 0002:000005BE 000000000H _EXIT_                 EXITDATA
+ 0002:000005BE 000000000H _EXITEND_              EXITDATA
+ 0002:000005C0 000000000H CONST                  CONST
+ 0002:000005C0 000001718H _BSS                   BSS
+ 0003:00000000 000001000H STACKBASE              
+ 0003:00001000 00000B000H _STACK                 STACK
+
+  Address         Publics by Name
+
+ 0001:00001596  Idle set_terminate(void(*)())
+ 0001:00001677  Idle set_unexpected(void(*)())
+ 0001:0000158C  Idle terminate()
+ 0001:0000166D  Idle unexpected()
+ 0001:00001716  Idle __GetPolymorphicDTC(void*,unsigned int)
+ 0001:0000154C       @__InitExceptBlock
+ 0001:00000294  Idle fnwpClient
+ 0001:00000F7E  Idle fnwpSelectPortDlg
+ 0002:00000928  Idle _achBuffer
+ 0001:00000E15  Idle _ClearScreen
+ 0001:0000131C  Idle _CopyProfile
+ 0002:00000924  Idle _eidError
+ 0001:000007B8  Idle _EnumeratePorts
+ 0001:00000D93  Idle _ErrorNotify
+ 0002:00000918  Idle _habAnchorBlock
+ 0002:00000078  Idle _hCom
+ 0002:00000914  Idle _hdcPs
+ 0002:0000192C  Idle _hMod
+ 0002:00000920  Idle _hwndClient
+ 0002:0000091C  Idle _hwndFrame
+ 0001:00000A9B  Idle _InitializePort
+ 0001:000009A6  Idle _InstallPort
+ 0002:000005C8  Idle _lcxBrdr
+ 0002:000005C4  Idle _lcxVSc
+ 0002:000005C0  Idle _lXScr
+ 0001:00000088       _main
+ 0001:00000E7E  Idle _Paint
+ 0001:00000CF9  Idle _PrintString
+ 0001:000006AA  Idle _QueryPort
+ 0001:0000119E  Idle _RecoverProfile
+ 0001:000008B1  Idle _RemovePort
+ 0001:00000587  Idle _SetupPort
+ 0002:000005D4  Idle _stCell
+ 0002:00001930  Idle _stPorts
+ 0002:000005E0  Idle _szDriverIniPath
+ 0002:000006E4  Idle _szErrorMessage
+ 0002:00000068  Idle _szEXEtitle
+ 0002:00000738  Idle _szMessage
+ 0002:0000007C  Idle _szModuleName
+ 0002:00000814  Idle _szPortDesc
+ 0002:00000800  Idle _szPortName
+ 0001:00000BCA  Idle _TerminatePort
+ 0002:00001928  Idle _ulItemCount
+ 0002:00001C50  Idle _ulPortCount
+ 0002:000005DC  Idle _ulWindowHeight
+ 0002:000005D8  Idle _ulWindowWidth
+ 0002:000005D2  Idle _usWndDepth
+ 0002:000005D0  Idle _usWndWidth
+ 0002:000005CE  Idle _wBackground
+ 0002:000005CC  Idle _wForeground
+ 0001:00000ED5  Idle _WndSize
+ 0001:00000038  Idle __acrtused
+ 0002:0000002B  Idle __c0_heaps
+ 0002:0000002F  Idle __c0_nheaps
+ 0002:00000584  Idle __DebuggerHookData
+ 0002:00001C54       __DestructorCountPtr
+ 0001:00001752       __ExceptInit
+ 0002:00000580  Idle __ExceptVarsSize
+ 0002:000004F8       __fmode
+ 0001:00001742       __GetExceptDLLinfo
+ 0001:00001896  Idle __GetExceptDLLinfoInternal
+ 0001:00001530       __initwild
+ 0001:000014A0       __matherr
+ 0001:000014E0       __matherrl
+ 0002:00000050  Idle __os2hmod
+ 0002:00000514       __setargv__
+ 0001:000015BC  Idle ___call_terminate
+ 0001:0000169D  Idle ___call_unexpected
+ 0002:0000051C  Idle ___CPPexceptionList
+ 0002:0000052C  Idle ___debuggerHookDataP
+ 0002:00000524  Idle ___debuggerHookFN
+ 0002:00000528  Idle ___debuggerWatchingP
+ 0002:00000520  Idle ___exceptFlags
+ 0002:00000548  Idle ___exceptMemAllocVars
+ 0002:00000544  Idle ___exceptStaticBuffP
+ 0002:00001C58  Idle ___ExceptStaticXbuff
+ 0002:0000003B       ___isDLL
+ 0002:00000530  Idle ___terminatePTR
+ 0002:00000540  Idle ___throwExceptionName
+ 0002:00000538  Idle ___throwFileName
+ 0002:0000053C  Idle ___throwLineNumber
+ 0002:00000534  Idle ___unexpectdPTR
+
+  Address         Publics by Value
+
+ 0001:00000038  Idle __acrtused
+ 0001:00000088       _main
+ 0001:00000294  Idle fnwpClient
+ 0001:00000587  Idle _SetupPort
+ 0001:000006AA  Idle _QueryPort
+ 0001:000007B8  Idle _EnumeratePorts
+ 0001:000008B1  Idle _RemovePort
+ 0001:000009A6  Idle _InstallPort
+ 0001:00000A9B  Idle _InitializePort
+ 0001:00000BCA  Idle _TerminatePort
+ 0001:00000CF9  Idle _PrintString
+ 0001:00000D93  Idle _ErrorNotify
+ 0001:00000E15  Idle _ClearScreen
+ 0001:00000E7E  Idle _Paint
+ 0001:00000ED5  Idle _WndSize
+ 0001:00000F7E  Idle fnwpSelectPortDlg
+ 0001:0000119E  Idle _RecoverProfile
+ 0001:0000131C  Idle _CopyProfile
+ 0001:000014A0       __matherr
+ 0001:000014E0       __matherrl
+ 0001:00001530       __initwild
+ 0001:0000154C       @__InitExceptBlock
+ 0001:0000158C  Idle terminate()
+ 0001:00001596  Idle set_terminate(void(*)())
+ 0001:000015BC  Idle ___call_terminate
+ 0001:0000166D  Idle unexpected()
+ 0001:00001677  Idle set_unexpected(void(*)())
+ 0001:0000169D  Idle ___call_unexpected
+ 0001:00001716  Idle __GetPolymorphicDTC(void*,unsigned int)
+ 0001:00001742       __GetExceptDLLinfo
+ 0001:00001752       __ExceptInit
+ 0001:00001896  Idle __GetExceptDLLinfoInternal
+ 0002:0000002B  Idle __c0_heaps
+ 0002:0000002F  Idle __c0_nheaps
+ 0002:0000003B       ___isDLL
+ 0002:00000050  Idle __os2hmod
+ 0002:00000068  Idle _szEXEtitle
+ 0002:00000078  Idle _hCom
+ 0002:0000007C  Idle _szModuleName
+ 0002:000004F8       __fmode
+ 0002:00000514       __setargv__
+ 0002:0000051C  Idle ___CPPexceptionList
+ 0002:00000520  Idle ___exceptFlags
+ 0002:00000524  Idle ___debuggerHookFN
+ 0002:00000528  Idle ___debuggerWatchingP
+ 0002:0000052C  Idle ___debuggerHookDataP
+ 0002:00000530  Idle ___terminatePTR
+ 0002:00000534  Idle ___unexpectdPTR
+ 0002:00000538  Idle ___throwFileName
+ 0002:0000053C  Idle ___throwLineNumber
+ 0002:00000540  Idle ___throwExceptionName
+ 0002:00000544  Idle ___exceptStaticBuffP
+ 0002:00000548  Idle ___exceptMemAllocVars
+ 0002:00000580  Idle __ExceptVarsSize
+ 0002:00000584  Idle __DebuggerHookData
+ 0002:000005C0  Idle _lXScr
+ 0002:000005C4  Idle _lcxVSc
+ 0002:000005C8  Idle _lcxBrdr
+ 0002:000005CC  Idle _wForeground
+ 0002:000005CE  Idle _wBackground
+ 0002:000005D0  Idle _usWndWidth
+ 0002:000005D2  Idle _usWndDepth
+ 0002:000005D4  Idle _stCell
+ 0002:000005D8  Idle _ulWindowWidth
+ 0002:000005DC  Idle _ulWindowHeight
+ 0002:000005E0  Idle _szDriverIniPath
+ 0002:000006E4  Idle _szErrorMessage
+ 0002:00000738  Idle _szMessage
+ 0002:00000800  Idle _szPortName
+ 0002:00000814  Idle _szPortDesc
+ 0002:00000914  Idle _hdcPs
+ 0002:00000918  Idle _habAnchorBlock
+ 0002:0000091C  Idle _hwndFrame
+ 0002:00000920  Idle _hwndClient
+ 0002:00000924  Idle _eidError
+ 0002:00000928  Idle _achBuffer
+ 0002:00001928  Idle _ulItemCount
+ 0002:0000192C  Idle _hMod
+ 0002:00001930  Idle _stPorts
+ 0002:00001C50  Idle _ulPortCount
+ 0002:00001C54       __DestructorCountPtr
+ 0002:00001C58  Idle ___ExceptStaticXbuff

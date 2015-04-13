@@ -1,0 +1,67 @@
+This is a profile make file for COMi and COMscope
+
+[COMi]
+Driver=COMDD.SYS;
+OEM_type=0
+Files=1
+File_1=COMi.INF;
+Version=COMi version 3.82;
+ProgramSize=96798
+[Libraries]
+Files=1
+File_1=CONFIG.HLP;
+Base Files=4
+Base_file_1=OS2LS_IO.DLL;
+Base_file_2=OS2LS_UT.DLL;
+Base_file_3=COMi_CFG.DLL;
+Base_file_4=OS2LSRTL.DLL;
+ProgramSize=421034
+
+[COMscope]
+Version=COMscope version 3.81;
+Files=6
+File_1=COMscope.EXE;
+File_2=COMscope.HLP;
+File_3=COMscope.ICO;
+File_4=HEXFONTS.FON;
+File_5=OS2LS_PR.DLL;
+File_6=COMi_CTL.DLL;
+ProgramSize=365112
+
+[Install]
+Apps Path=C:\COMM;
+Libs Path=C:\COMM;
+DD Config Help=CONFIG.HLP;
+DD Config Library=COMi_CFG;
+DD Config Function=InstallDevice;
+DD Name=COMi;
+Transfer Library=PDA_INST;
+Transfer Function=InstallCOMi;
+Version=OS/tools' Install version 2.20;
+Check Caption One=COMi Device Driver;
+Check Caption Two=COMscope;
+Check Caption Three=Print Spooler Utilities;
+Check Caption Four=Multi-session and other Utilities;
+Check Caption Five=Install;
+Title=COMscope and COMi Installation;
+Banner One=for;
+Banner Two=COMscope and the COMi Device Driver;
+License File=license.txt;
+License Caption=License Information:;
+Files=4
+File_1=INSTALL.EXE;
+File_2=INSTALL.HLP;
+File_3=INSTALL.ICO;
+File_4=PDA_INST.DLL;
+ProgramSize=73426
+
+[Utilities]
+Files=6
+File_1=SPLIT.EXE;
+File_2=SPLIT.C;
+File_3=IOCTL.C;
+File_4=IOCTL.H;
+File_5=CONTROL.EXE;
+File_6=INIDUMP.EXE;
+ProgramSize=138385
+

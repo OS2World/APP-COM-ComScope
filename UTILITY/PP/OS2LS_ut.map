@@ -1,0 +1,220 @@
+
+ OS2LS_UT
+
+ Start         Length     Name                   Class
+ 0001:00000000 000001CF0H CODE32                 CODE 32-bit
+	at offset 00000000 00703H bytes from P:\utility\PP\utility.obj (P:\utility\utility.C)
+	at offset 00000704 0108FH bytes from P:\utility\PP\cfg_sys.obj (P:\utility\cfg_sys.C)
+	at offset 00001794 00406H bytes from P:\utility\PP\list.obj (P:\utility\list.C)
+	at offset 00001b9c 00040H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\dllinit.c)
+	at offset 00001bdc 00111H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\ctordtor.c)
+
+ 0002:00000000 000000000H CONST32_RO             CONST 32-bit
+
+ 0002:00000000 000000930H DATA32                 DATA 32-bit
+	at offset 00000000 00928H bytes from P:\utility\PP\cfg_sys.obj (P:\utility\cfg_sys.C)
+	at offset 00000928 00004H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\dllstub.asm)
+	at offset 0000092c 00004H bytes from F:\IBMCPP\LIB\CPPOM30O.lib (D:\SwordCSD\crt\ctordtor.c)
+
+ 0002:00000930 000000000H CTOR_DTOR1             DATA 32-bit
+
+ 0002:00000930 000000000H CTOR_DTOR2             DATA 32-bit
+
+ 0002:00000930 000000000H CTOR_DTOR3             DATA 32-bit
+
+ 0002:00000930 000000000H EDC1                   EDC_CLASS 32-bit
+
+ 0002:00000930 000000000H EDC2                   EDC_CLASS 32-bit
+
+ 0002:00000930 000000000H EDC3                   EDC_CLASS 32-bit
+
+ 0002:00000930 000000000H BSS32                  BSS 32-bit
+
+ 0002:00000930 000000008H c_common               BSS 32-bit
+
+
+ Origin   Group
+ 0000:0   FLAT
+ 0002:0   DGROUP
+
+ Address       Export                  Alias
+
+ 0001:00001A98 AddListItem             AddListItem
+ 0001:00000C60 AdjustConfigFile        AdjustConfigFile
+ 0001:000013A8 AdjustConfigSys         AdjustConfigSys
+ 0001:000000CC AppendHLP               AppendHLP
+ 0001:00000164 AppendINI               AppendINI
+ 0001:00000070 AppendPath              AppendPath
+ 0001:000001FC AppendTMP               AppendTMP
+ 0001:00000000 AppendTripleDS          AppendTripleDS
+ 0001:00000294 ASCIItoBin              ASCIItoBin
+ 0001:00000420 CenterDlgBox            CenterDlgBox
+ 0001:000004D0 CheckButton             CheckButton
+ 0001:00000618 Checked                 Checked
+ 0001:00000704 CleanConfigSys          CleanConfigSys
+ 0001:000004A8 ControlEnable           ControlEnable
+ 0001:00001A14 DestroyList             DestroyList
+ 0001:00001800 FindListByteItem        FindListByteItem
+ 0001:000017CC FindListLongItem        FindListLongItem
+ 0001:00001844 FindListStringItem      FindListStringItem
+ 0001:00001794 FindListWordItem        FindListWordItem
+ 0001:00000640 GetFileName             GetFileName
+ 0001:00000508 GetLongIntDlgItem       GetLongIntDlgItem
+ 0001:00001834 GetNextListItem         GetNextListItem
+ 0001:00001B64 InitializeList          InitializeList
+ 0001:00000028 MakeDeviceName          MakeDeviceName
+ 0001:00000558 MenuItemCheck           MenuItemCheck
+ 0001:000005B8 MenuItemEnable          MenuItemEnable
+ 0001:0000048C MessageBox              MessageBox
+ 0001:00000398 RemoveLeadingSpaces     RemoveLeadingSpaces
+ 0001:0000195C RemoveListItem          RemoveListItem
+ 0001:00000378 RemoveSpaces            RemoveSpaces
+ 0001:000003CC RemoveSystemMenuItem    RemoveSystemMenuItem
+
+  Address         Publics by Name
+
+ 0001:00001A98       AddListItem
+ 0001:00000C60       AdjustConfigFile
+ 0001:000013A8       AdjustConfigSys
+ 0001:000000CC       AppendHLP
+ 0001:00000164       AppendINI
+ 0001:00000070       AppendPath
+ 0001:000001FC       AppendTMP
+ 0001:00000000       AppendTripleDS
+ 0001:00000294       ASCIItoBin
+ 0000:00000000  Imp  atol                 (OS2LSRTL.111)
+ 0000:00000000  Imp  calloc               (OS2LSRTL.165)
+ 0001:00000420       CenterDlgBox
+ 0001:000004D0       CheckButton
+ 0001:00000618       Checked
+ 0001:00000704       CleanConfigSys
+ 0001:000004A8       ControlEnable
+ 0001:00001A14       DestroyList
+ 0000:00000000  Imp  DosAllocMem          (DOSCALLS.299)
+ 0000:00000000  Imp  DosClose             (DOSCALLS.257)
+ 0000:00000000  Imp  DosCopy              (DOSCALLS.258)
+ 0000:00000000  Imp  DosFreeMem           (DOSCALLS.304)
+ 0000:00000000  Imp  DosOpen              (DOSCALLS.273)
+ 0000:00000000  Imp  DosQueryFileInfo     (DOSCALLS.279)
+ 0000:00000000  Imp  DosQuerySysInfo      (DOSCALLS.348)
+ 0000:00000000  Imp  DosRead              (DOSCALLS.281)
+ 0000:00000000  Imp  DosSetFileSize       (DOSCALLS.272)
+ 0000:00000000  Imp  DosWrite             (DOSCALLS.282)
+ 0001:00001800       FindListByteItem
+ 0001:000017CC       FindListLongItem
+ 0001:00001844       FindListStringItem
+ 0001:00001794       FindListWordItem
+ 0000:00000000  Imp  free                 (OS2LSRTL.88)
+ 0001:00000640       GetFileName
+ 0001:00000508       GetLongIntDlgItem
+ 0001:00001834       GetNextListItem
+ 0001:00001B64       InitializeList
+ 0001:00000028       MakeDeviceName
+ 0000:00000000  Imp  malloc               (OS2LSRTL.167)
+ 0001:00000558       MenuItemCheck
+ 0001:000005B8       MenuItemEnable
+ 0001:0000048C       MessageBox
+ 0001:00000398       RemoveLeadingSpaces
+ 0001:0000195C       RemoveListItem
+ 0001:00000378       RemoveSpaces
+ 0001:000003CC       RemoveSystemMenuItem
+ 0000:00000000  Imp  stricmp              (OS2LSRTL.355)
+ 0000:00000000  Imp  strnicmp             (OS2LSRTL.390)
+ 0000:00000000  Imp  WinEnableWindow      (PMWIN.735)
+ 0000:00000000  Imp  WinFileDlg           (PMCTLS.4)
+ 0000:00000000  Imp  WinMessageBox        (PMWIN.789)
+ 0000:00000000  Imp  WinQueryDlgItemText  (PMWIN.815)
+ 0000:00000000  Imp  WinQuerySysValue     (PMWIN.829)
+ 0000:00000000  Imp  WinQueryWindowPos    (PMWIN.837)
+ 0000:00000000  Imp  WinSendDlgItemMsg    (PMWIN.903)
+ 0000:00000000  Imp  WinSendMsg           (PMWIN.920)
+ 0000:00000000  Imp  WinSetWindowPos      (PMWIN.875)
+ 0000:00000000  Imp  WinWindowFromID      (PMWIN.899)
+ 0000:00000000  Imp  _CRT_init            (OS2LSRTL.467)
+ 0000:00000000  Imp  _CRT_term            (OS2LSRTL.457)
+ 0000:00000000  Imp  _ctype               (OS2LSRTL.220)
+ 0001:00001B9C       _DLL_InitTerm
+ 0000:00000000  Imp  _exception_dllinit   (OS2LSRTL.420)
+ 0000:00000000  Imp  _matherr             (OS2LSRTL.346)
+ 0000:00000000  Imp  _PGLOBAL_PTR         (OS2LSRTL.25)
+ 0000:00000000  Imp  _sprintfieee         (OS2LSRTL.32)
+ 0002:00000934       __ctordtorCurrent
+ 0002:00000930       __ctordtorEnd
+ 0001:00001C14       __ctordtorInit
+ 0002:00000930       __ctordtorStart
+ 0001:00001BDC       __ctordtorTerm
+
+  Address         Publics by Value
+
+ 0000:00000000  Imp  _ctype               (OS2LSRTL.220)
+ 0000:00000000  Imp  WinEnableWindow      (PMWIN.735)
+ 0000:00000000  Imp  DosCopy              (DOSCALLS.258)
+ 0000:00000000  Imp  DosFreeMem           (DOSCALLS.304)
+ 0000:00000000  Imp  WinSendMsg           (PMWIN.920)
+ 0000:00000000  Imp  DosSetFileSize       (DOSCALLS.272)
+ 0000:00000000  Imp  WinFileDlg           (PMCTLS.4)
+ 0000:00000000  Imp  stricmp              (OS2LSRTL.355)
+ 0000:00000000  Imp  free                 (OS2LSRTL.88)
+ 0000:00000000  Imp  _CRT_init            (OS2LSRTL.467)
+ 0000:00000000  Imp  malloc               (OS2LSRTL.167)
+ 0000:00000000  Imp  _CRT_term            (OS2LSRTL.457)
+ 0000:00000000  Imp  atol                 (OS2LSRTL.111)
+ 0000:00000000  Imp  WinWindowFromID      (PMWIN.899)
+ 0000:00000000  Imp  DosOpen              (DOSCALLS.273)
+ 0000:00000000  Imp  calloc               (OS2LSRTL.165)
+ 0000:00000000  Imp  DosClose             (DOSCALLS.257)
+ 0000:00000000  Imp  WinQueryDlgItemText  (PMWIN.815)
+ 0000:00000000  Imp  WinQueryWindowPos    (PMWIN.837)
+ 0000:00000000  Imp  WinQuerySysValue     (PMWIN.829)
+ 0000:00000000  Imp  DosAllocMem          (DOSCALLS.299)
+ 0000:00000000  Imp  strnicmp             (OS2LSRTL.390)
+ 0000:00000000  Imp  _PGLOBAL_PTR         (OS2LSRTL.25)
+ 0000:00000000  Imp  _matherr             (OS2LSRTL.346)
+ 0000:00000000  Imp  DosQueryFileInfo     (DOSCALLS.279)
+ 0000:00000000  Imp  _sprintfieee         (OS2LSRTL.32)
+ 0000:00000000  Imp  WinSendDlgItemMsg    (PMWIN.903)
+ 0000:00000000  Imp  DosQuerySysInfo      (DOSCALLS.348)
+ 0000:00000000  Imp  WinSetWindowPos      (PMWIN.875)
+ 0000:00000000  Imp  DosRead              (DOSCALLS.281)
+ 0000:00000000  Imp  DosWrite             (DOSCALLS.282)
+ 0000:00000000  Imp  WinMessageBox        (PMWIN.789)
+ 0000:00000000  Imp  _exception_dllinit   (OS2LSRTL.420)
+ 0001:00000000       AppendTripleDS
+ 0001:00000028       MakeDeviceName
+ 0001:00000070       AppendPath
+ 0001:000000CC       AppendHLP
+ 0001:00000164       AppendINI
+ 0001:000001FC       AppendTMP
+ 0001:00000294       ASCIItoBin
+ 0001:00000378       RemoveSpaces
+ 0001:00000398       RemoveLeadingSpaces
+ 0001:000003CC       RemoveSystemMenuItem
+ 0001:00000420       CenterDlgBox
+ 0001:0000048C       MessageBox
+ 0001:000004A8       ControlEnable
+ 0001:000004D0       CheckButton
+ 0001:00000508       GetLongIntDlgItem
+ 0001:00000558       MenuItemCheck
+ 0001:000005B8       MenuItemEnable
+ 0001:00000618       Checked
+ 0001:00000640       GetFileName
+ 0001:00000704       CleanConfigSys
+ 0001:00000C60       AdjustConfigFile
+ 0001:000013A8       AdjustConfigSys
+ 0001:00001794       FindListWordItem
+ 0001:000017CC       FindListLongItem
+ 0001:00001800       FindListByteItem
+ 0001:00001834       GetNextListItem
+ 0001:00001844       FindListStringItem
+ 0001:0000195C       RemoveListItem
+ 0001:00001A14       DestroyList
+ 0001:00001A98       AddListItem
+ 0001:00001B64       InitializeList
+ 0001:00001B9C       _DLL_InitTerm
+ 0001:00001BDC       __ctordtorTerm
+ 0001:00001C14       __ctordtorInit
+ 0002:00000930       __ctordtorEnd
+ 0002:00000930       __ctordtorStart
+ 0002:00000934       __ctordtorCurrent
+
+Program entry point at 0001:00001B9C

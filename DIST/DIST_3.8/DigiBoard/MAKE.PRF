@@ -1,0 +1,26 @@
+This is a profile make file for the DigiBoard version of COMi
+[COMi]
+Driver=DCOMDD.SYS;
+Mod=D;
+OEM_type=3
+Files=4
+File_1=CONFIG.EXE;
+File_2=CONFIG.HLP;
+File_3=CONFIG.ICO;
+File_4=COMi.INF;
+Config=CONFIG.EXE;
+ProgramSize=201300
+Major=3
+Minor=21
+Date=941120
+[Install]
+Title=COMi Device Driver Installation;
+Config Menu=Config COMi;
+Banner Two=for DigiBoard Serial Adapters;
+Banner One=Intalling COMi, Serial Device Driver;
+APP_files=3
+APP_file_1=INSTALL.EXE;
+APP_file_2=INSTALL.HLP;
+APP_file_2=INSTALL.ICO;
+ProgramSize=67708
+

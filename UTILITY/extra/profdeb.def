@@ -1,0 +1,16 @@
+LIBRARY    PROFDEB
+
+DESCRIPTION 'OS/2 Presentation Manager Profile Access'
+
+EXPORTS
+  ManageProfile
+  InitializeProfile
+  CloseProfile
+  SaveProfileString
+  GetProfileString
+  SaveProfileData
+  GetProfileData
+  GetProfileWindowPos
+  SaveProfileWindowPos
+
+

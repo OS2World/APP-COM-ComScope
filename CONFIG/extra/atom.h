@@ -1,0 +1,13 @@
+#define ATM_OEM_SEALEVEL_OTHER  3840
+#define ATM_OEM_SEALEVEL_SP     3841
+#define ATM_OEM_SEALEVEL        3842
+#define ATM_OEM_COMTROL         3843
+#define ATM_OEM_DIGIBOARD08     3844
+#define ATM_OEM_QUATECH         3845
+#define ATM_OEM_DIGIBOARD16     3846
+#define ATM_OEM_NEOTECH         3847
+#define ATM_OEM_CONNECTECH      3848
+#define ATM_OEM_GLOBETEK        3849
+#define ATM_DOSOPEN             3850
+
+
